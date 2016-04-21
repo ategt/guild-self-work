@@ -19,70 +19,67 @@ public class RockPaperScissorsStep2 {
         int userInput;
         int computerInput;
         int currentRound = 0;
-        
+
         System.out.println("How many rounds would you like to play?");
         int totalGameRounds = keyboard.nextInt();
-        
-        if ( totalGameRounds > 10 || totalGameRounds < 1){
+
+        if (totalGameRounds > 10 || totalGameRounds < 1) {
             System.out.println("Your input is not a valid range.");
-            totalGameRounds = 0;
         } else {
-            //currentRound = totalGameRounds; 
-        }
-        
-        for ( ; currentRound < totalGameRounds; currentRound++ ) {
-            System.out.println("What is your choice for this round?");
-            System.out.println("\t1) Rock\t2) Paper\t3) Scissors\t4)Quit");
-            System.out.println();
 
-            userInput = keyboard.nextInt();
+            for (; currentRound < totalGameRounds; currentRound++) {
+                System.out.println("What is your choice for this round?");
+                System.out.println("\t1) Rock\t2) Paper\t3) Scissors\t4)Quit");
+                System.out.println();
 
-            computerInput = (int) Math.ceil(Math.random() * 3);
+                userInput = keyboard.nextInt();
 
-            if (userInput == computerInput) {
-                System.out.println("Tie!");
-            } else {
+                computerInput = (int) Math.ceil(Math.random() * 3);
 
-                switch (userInput) {
-                    case 1:
-                        System.out.println("You played rock.");
+                if (userInput == computerInput) {
+                    System.out.println("Tie!");
+                } else {
 
-                        if (computerInput == 3) {
-                            System.out.println("Player wins.");
-                        } else {
-                            System.out.println("Player looses.");
-                        }
+                    switch (userInput) {
+                        case 1:
+                            System.out.println("You played rock.");
 
-                        break;
+                            if (computerInput == 3) {
+                                System.out.println("Player wins.");
+                            } else {
+                                System.out.println("Player looses.");
+                            }
 
-                    case 2:
-                        System.out.println("You played paper.");
+                            break;
 
-                        if (computerInput == 1) {
-                            System.out.println("Player wins.");
-                        } else {
-                            System.out.println("Player looses.");
-                        }
+                        case 2:
+                            System.out.println("You played paper.");
 
-                        break;
+                            if (computerInput == 1) {
+                                System.out.println("Player wins.");
+                            } else {
+                                System.out.println("Player looses.");
+                            }
 
-                    case 3:
-                        System.out.println("You played scissors.");
+                            break;
 
-                        if (computerInput == 2) {
-                            System.out.println("Player wins.");
-                        } else {
-                            System.out.println("Player looses.");
-                        }
+                        case 3:
+                            System.out.println("You played scissors.");
 
-                        break;
-                    case 4:
-                        System.out.println("You have choosen to quit.");
-                        break;
-                    default:
-                        System.out.println("Your choice was not a valid option.");
+                            if (computerInput == 2) {
+                                System.out.println("Player wins.");
+                            } else {
+                                System.out.println("Player looses.");
+                            }
+
+                            break;
+                        case 4:
+                            System.out.println("You have choosen to quit.");
+                            break;
+                        default:
+                            System.out.println("Your choice was not a valid option.");
+                    }
                 }
-
             }
 
         }
