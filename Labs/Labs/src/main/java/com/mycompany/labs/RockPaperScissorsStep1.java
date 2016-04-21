@@ -17,36 +17,17 @@ public class RockPaperScissorsStep1 {
 
         Scanner keyboard = new Scanner(System.in);
         int userInput;
+        int computerInput;
 
         do {
-
-            //for ( int i = 0 ; i < 24 ; i++){
-            int randomNum = (int) Math.ceil(Math.random() * 3);
-
-            System.out.print(randomNum);
-
-            switch (randomNum) {
-                case 1:
-                    System.out.print(" - Rock");
-                    break;
-                case 2:
-                    System.out.print(" - Paper");
-                    break;
-                case 3:
-                    System.out.print(" - Scissors");
-                    break;
-            }
-
-            System.out.println();
-            //}
-
-            int computerInput = randomNum;
 
             System.out.println("What is your choice for this round?");
             System.out.println("\t1) Rock\t2) Paper\t3) Scissors\t4)Quit");
             System.out.println();
 
             userInput = keyboard.nextInt();
+
+            computerInput = (int) Math.ceil(Math.random() * 3);
 
             if (userInput == computerInput) {
                 System.out.println("Tie!");
@@ -88,6 +69,8 @@ public class RockPaperScissorsStep1 {
                     case 4:
                         System.out.println("You have choosen to quit.");
                         break;
+                    default:
+                        System.out.println("Your choice was not a valid option.");
                 }
 
             }
