@@ -28,9 +28,9 @@ public class LittleQuiz {
         System.out.println("\t3) Juneau");
         System.out.println();
         
-        int userInput1 = keyboard.nextInt();
+        int userInput = keyboard.nextInt();
         
-        if ( userInput1 == 3 ){
+        if ( userInput == 3 ){
             System.out.println("That's right!\n");
             questionsCorrect++;
         } else {
@@ -42,9 +42,9 @@ public class LittleQuiz {
         System.out.println("2) no");
         System.out.println("");
         
-        int userInput2 = keyboard.nextInt();
+        userInput = keyboard.nextInt();
         
-        if ( userInput2 == 2 ){
+        if ( userInput == 2 ){
             System.out.println("That's right!\n");
             questionsCorrect++;
         } else {
@@ -57,9 +57,9 @@ public class LittleQuiz {
         System.out.println("\t3) 15/3");
         System.out.println("");
         
-        int userInput3 = keyboard.nextInt();
+        userInput = keyboard.nextInt();
         
-        if ( userInput3 == 2 ){
+        if ( userInput == 2 ){
             System.out.println("That's right!\n");
             questionsCorrect++;
         } else {
