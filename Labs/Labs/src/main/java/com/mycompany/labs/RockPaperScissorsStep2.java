@@ -11,7 +11,7 @@ import java.util.Scanner;
  *
  * @author apprentice
  */
-public class RockPaperScissorsStep1 {
+public class RockPaperScissorsStep2 {
 
     public static void main(String[] args) {
 
