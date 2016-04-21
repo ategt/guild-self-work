@@ -27,7 +27,7 @@ public class RockPaperScissorsStep2 {
 
             for (; currentRound < totalGameRounds; currentRound++) {
                 System.out.println("What is your choice for this round?");
-                System.out.println("\t1) Rock\t2) Paper\t3) Scissors\t4)Quit");
+                System.out.println("\t1) Rock\t2) Paper\t3) Scissors");
                 System.out.println();
 
                 userInput = keyboard.nextInt();
@@ -86,9 +86,6 @@ public class RockPaperScissorsStep2 {
                                 System.out.println("Player looses.");
                             }
 
-                            break;
-                        case 4:
-                            System.out.println("You have choosen to quit.");
                             break;
                         default:
                             System.out.println("Your choice was not a valid option.");

@@ -30,16 +30,17 @@ public class RockPaperScissorsStep3 {
 
         if (totalGameRounds <= 10 && totalGameRounds >= 1) {
 
-            while (currentRound < totalGameRounds) {
-                System.out.println("Current Score: Wins:" + wins + " Losses:" + losses + " Ties:" + ties);
+            //while (currentRound < totalGameRounds) {
+            for (; currentRound < totalGameRounds; currentRound++) {
                 System.out.println("What is your choice for this round?");
-                System.out.println("\t1) Rock\t2) Paper\t3) Scissors\t4)Quit");
+                System.out.println("\t1) Rock\t2) Paper\t3) Scissors");
                 System.out.println();
 
                 userInput = keyboard.nextInt();
 
-                computerInput = (int) Math.ceil(Math.random() * 3);
-
+                //computerInput = (int) Math.ceil(Math.random() * 3);
+                computerInput = 1;
+                
                 System.out.print("The computer played ");
 
                 switch (computerInput) {
@@ -108,13 +109,21 @@ public class RockPaperScissorsStep3 {
                             System.out.println("Your choice was not a valid option.");
                     }
                 }
+                System.out.println("Current Score: Wins:" + wins + " Losses:" + losses + " Ties:" + ties);
 
-                currentRound++;
+            }
 
+            if (wins > losses) {
+                System.out.println("Player is the overall winner.");
+            } else if (wins < losses) {
+                System.out.println("Computer is the overall winner.");
+            } else {
+                System.out.println("No overall winner.");
             }
 
         } else {
             System.out.println("Your input is not a valid range.");
         }
+
     }
 }
