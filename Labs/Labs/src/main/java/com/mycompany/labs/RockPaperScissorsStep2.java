@@ -18,8 +18,19 @@ public class RockPaperScissorsStep2 {
         Scanner keyboard = new Scanner(System.in);
         int userInput;
         int computerInput;
-
-        do {
+        int currentRound = 0;
+        
+        System.out.println("How many rounds would you like to play?");
+        int totalGameRounds = keyboard.nextInt();
+        
+        if ( totalGameRounds > 10 || totalGameRounds < 1){
+            System.out.println("Your input is not a valid range.");
+            totalGameRounds = 0;
+        } else {
+            //currentRound = totalGameRounds; 
+        }
+        
+        for ( ; currentRound < totalGameRounds; currentRound++ ) {
             System.out.println("What is your choice for this round?");
             System.out.println("\t1) Rock\t2) Paper\t3) Scissors\t4)Quit");
             System.out.println();
@@ -74,7 +85,7 @@ public class RockPaperScissorsStep2 {
 
             }
 
-        } while (userInput != 4);
+        }
 
     }
 }
