@@ -28,6 +28,22 @@ public class RockPaperScissorsStep1 {
 
             computerInput = (int) Math.ceil(Math.random() * 3);
 
+            System.out.print("The computer played ");
+
+            switch (computerInput) {
+                case 1:
+                    System.out.print("Rock");
+                    break;
+                case 2:
+                    System.out.print("Paper");
+                    break;
+                case 3:
+                    System.out.print("Scissors");
+                    break;
+            }
+
+            System.out.println(".");
+
             if (userInput == computerInput) {
                 System.out.println("Tie!");
             } else {

@@ -16,11 +16,11 @@ public class RockPaperScissorsStep3 {
     public static void main(String[] args) {
 
         Scanner keyboard = new Scanner(System.in);
-        
+
         int userInput;
         int computerInput;
         int currentRound = 0;
-        
+
         int wins = 0;
         int losses = 0;
         int ties = 0;
@@ -30,7 +30,7 @@ public class RockPaperScissorsStep3 {
 
         if (totalGameRounds <= 10 && totalGameRounds >= 1) {
 
-            for (; currentRound < totalGameRounds; currentRound++) {
+            while (currentRound < totalGameRounds) {
                 System.out.println("Current Score: Wins:" + wins + " Losses:" + losses + " Ties:" + ties);
                 System.out.println("What is your choice for this round?");
                 System.out.println("\t1) Rock\t2) Paper\t3) Scissors\t4)Quit");
@@ -40,6 +40,22 @@ public class RockPaperScissorsStep3 {
 
                 computerInput = (int) Math.ceil(Math.random() * 3);
 
+                System.out.print("The computer played ");
+
+                switch (computerInput) {
+                    case 1:
+                        System.out.print("Rock");
+                        break;
+                    case 2:
+                        System.out.print("Paper");
+                        break;
+                    case 3:
+                        System.out.print("Scissors");
+                        break;
+                }
+
+                System.out.println(".");
+
                 if (userInput == computerInput) {
                     System.out.println("Tie!");
                     ties++;
@@ -47,7 +63,7 @@ public class RockPaperScissorsStep3 {
 
                     switch (userInput) {
                         case 1:
-                            System.out.println("You played rock.");
+                            System.out.println("You played Rock.");
 
                             if (computerInput == 3) {
                                 System.out.println("Player wins.");
@@ -60,7 +76,7 @@ public class RockPaperScissorsStep3 {
                             break;
 
                         case 2:
-                            System.out.println("You played paper.");
+                            System.out.println("You played Paper.");
 
                             if (computerInput == 1) {
                                 System.out.println("Player wins.");
@@ -73,7 +89,7 @@ public class RockPaperScissorsStep3 {
                             break;
 
                         case 3:
-                            System.out.println("You played scissors.");
+                            System.out.println("You played Scissors.");
 
                             if (computerInput == 2) {
                                 System.out.println("Player wins.");
@@ -86,11 +102,15 @@ public class RockPaperScissorsStep3 {
                             break;
                         case 4:
                             System.out.println("You have choosen to quit.");
+                            currentRound = totalGameRounds + 1;
                             break;
                         default:
                             System.out.println("Your choice was not a valid option.");
                     }
                 }
+
+                currentRound++;
+
             }
 
         } else {

@@ -23,7 +23,7 @@ public class RockPaperScissorsStep2 {
         System.out.println("How many rounds would you like to play?");
         int totalGameRounds = keyboard.nextInt();
 
-        if (totalGameRounds < 10 && totalGameRounds > 1) {
+        if (totalGameRounds <= 10 && totalGameRounds >= 1) {
 
             for (; currentRound < totalGameRounds; currentRound++) {
                 System.out.println("What is your choice for this round?");
@@ -33,6 +33,22 @@ public class RockPaperScissorsStep2 {
                 userInput = keyboard.nextInt();
 
                 computerInput = (int) Math.ceil(Math.random() * 3);
+
+                System.out.print("The computer played ");
+
+                switch (computerInput) {
+                    case 1:
+                        System.out.print("Rock");
+                        break;
+                    case 2:
+                        System.out.print("Paper");
+                        break;
+                    case 3:
+                        System.out.print("Scissors");
+                        break;
+                }
+
+                System.out.println(".");
 
                 if (userInput == computerInput) {
                     System.out.println("Tie!");
