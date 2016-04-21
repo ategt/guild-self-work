@@ -75,7 +75,7 @@ public class InterestCalculator {
 
             System.out.println("At the begining of year " + yearNumber + " your starting balance would be " + currentBalance);
 
-            CurrentBalance * (1 + (QuarterlyInterestRate / 100))
+            //CurrentBalance * (1 + (QuarterlyInterestRate / 100))
             
             System.out.println("Total interest earned for this year: " + interestForCurrentYear);
 
