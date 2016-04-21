@@ -23,9 +23,7 @@ public class RockPaperScissorsStep2 {
         System.out.println("How many rounds would you like to play?");
         int totalGameRounds = keyboard.nextInt();
 
-        if (totalGameRounds > 10 || totalGameRounds < 1) {
-            System.out.println("Your input is not a valid range.");
-        } else {
+        if (totalGameRounds < 10 && totalGameRounds > 1) {
 
             for (; currentRound < totalGameRounds; currentRound++) {
                 System.out.println("What is your choice for this round?");
@@ -82,7 +80,8 @@ public class RockPaperScissorsStep2 {
                 }
             }
 
+        } else {
+            System.out.println("Your input is not a valid range.");
         }
-
     }
 }
