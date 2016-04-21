@@ -38,8 +38,8 @@ public class RockPaperScissorsStep3 {
 
                 userInput = keyboard.nextInt();
 
-                //computerInput = (int) Math.ceil(Math.random() * 3);
-                computerInput = 1;
+                computerInput = (int) Math.ceil(Math.random() * 3);
+                //computerInput = 1;
                 
                 System.out.print("The computer played ");
 
