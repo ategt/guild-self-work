@@ -35,39 +35,31 @@ public class Factorizer {
             }
         }
 
-        for (factorizedNumber = 1; factorizedNumber < 150; factorizedNumber++) {
+        for (int result = 1; result <= factorizedNumber; result++) {
+            if (factorizedNumber % result == 0) {
 
-            primeNumberHolder = 0;
-            perfectNumberHolder = 0;
+                primeNumberHolder++;
 
-            for (int result = 1; result <= factorizedNumber; result++) {
-                // System.out.println("Testing " + result);
-                if (factorizedNumber % result == 0) {
-                    //  System.out.println(result);
-
-                    primeNumberHolder++;
-
-                    if (result != factorizedNumber) {
-                        perfectNumberHolder += result;
-                    }
-
+                if (result != factorizedNumber) {
+                    perfectNumberHolder += result;
+                    System.out.println(result);
                 }
 
             }
 
-            //  System.out.println("perfectNumberHolder: " + perfectNumberHolder);
-            if (perfectNumberHolder == factorizedNumber) {
-                System.out.println(factorizedNumber + " is a perfect number.");
-            } else {
-                //System.out.println(factorizedNumber + " is not a perfect number.");
-            }
-
-            // System.out.println("primeNumberHolder: " + primeNumberHolder);
-            if (primeNumberHolder == 2) {
-                System.out.println(factorizedNumber + " is a prime number.");
-            } else {
-                // System.out.println(factorizedNumber + " is not a prime number.");
-            }
         }
+
+        if (perfectNumberHolder == factorizedNumber) {
+            System.out.println(factorizedNumber + " is a perfect number.");
+        } else {
+            System.out.println(factorizedNumber + " is not a perfect number.");
+        }
+
+        if (primeNumberHolder == 2) {
+            System.out.println(factorizedNumber + " is a prime number.");
+        } else {
+            System.out.println(factorizedNumber + " is not a prime number.");
+        }
+
     }
 }
