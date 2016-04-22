@@ -5,6 +5,8 @@
  */
 package com.mycompany.classroom;
 
+import java.util.Random;
+
 /**
  *
  * @author apprentice
@@ -12,6 +14,14 @@ package com.mycompany.classroom;
 public class ArrayTest {
 
     public static void main(String[] args) {
+
+//        java.util.Random random = new java.util.Random();
+//        
+//        for ( int i = 0 ; i < 30 ; i++ ){
+//            System.out.println("" + ( random.nextInt(2) + 1 ) );
+//        }
+//        
+
 
         // First min, max, and average without arrays.
         int gameScore1 = 2;
@@ -77,9 +87,12 @@ public class ArrayTest {
         // Now min, max and average without arrays.
         int[] gameCounter = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         int[] teamScore = new int[10];
+        
+        Random random = new Random();
 
         for (int i = 0; teamScore.length > i; i++) {
-            teamScore[i] = (int) Math.round(Math.random() * 50);
+            //teamScore[i] = (int) Math.round(Math.random() * 50);
+            teamScore[i] = random.nextInt(51);
         }
 
 //        for (int score : teamScore) {

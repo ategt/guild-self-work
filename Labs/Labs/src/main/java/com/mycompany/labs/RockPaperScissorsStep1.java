@@ -5,6 +5,7 @@
  */
 package com.mycompany.labs;
 
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -16,6 +17,8 @@ public class RockPaperScissorsStep1 {
     public static void main(String[] args) {
 
         Scanner keyboard = new Scanner(System.in);
+        Random random = new Random();
+
         int userInput;
         int computerInput;
 
@@ -26,7 +29,8 @@ public class RockPaperScissorsStep1 {
 
             userInput = keyboard.nextInt();
 
-            computerInput = (int) Math.ceil(Math.random() * 3);
+            //computerInput = (int) Math.ceil(Math.random() * 3);
+            computerInput = ( random.nextInt(3) + 1 );
 
             System.out.print("The computer played ");
 
