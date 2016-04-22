@@ -23,7 +23,7 @@ public class InterestCalculator {
         boolean validInterestRate = false;
 
         while (!validInterestRate) {
-            System.out.println("Please enter the annual interest rate.");
+            System.out.println("Please enter the annual interest rate as a percentage.");
             annualInterestRate = keyboard.nextFloat();
 
             if (annualInterestRate > 0) {
@@ -62,22 +62,36 @@ public class InterestCalculator {
             }
         }
 
+//        float annualInterestRate = 0;
+//        float initialInvestment = 0;
+//        float initialYears = 0;
         float yearNumber = 0;
         float currentBalance = initialInvestment;
         float interestForCurrentYear = 0;
+        float interestForCurrentQuarter = 0;
         //int currentQuarter = 0;
         int totalQuarters = Math.round(initialYears * 4);
-      
-        for (int currentQuarter = 0 ; currentQuarter < totalQuarters ; currentQuarter++) {
+        float quarterlyInterestRate = annualInterestRate / 4;
 
-            System.out.println("At the begining of year " + yearNumber + " your starting balance would be " + currentBalance);
+        for (int currentQuarter = 0; currentQuarter < totalQuarters; currentQuarter++) {
+
+            if (currentQuarter % 4 == 0) {
+                yearNumber = currentQuarter / 4;
+                System.out.println("At the begining of year " + yearNumber + " your starting balance would be " + Math.round(currentBalance));
+                interestForCurrentQuarter = 0;
+            }
 
             //CurrentBalance * (1 + (QuarterlyInterestRate / 100))
-            
-            System.out.println("Total interest earned for this year: " + interestForCurrentYear);
+            interestForCurrentQuarter = currentBalance * (1 + (quarterlyInterestRate / 100));
+            interestForCurrentYear = interestForCurrentQuarter;
+            currentBalance += interestForCurrentQuarter;
 
-            System.out.println("Balance at the end of the year: " + currentBalance);
+            System.out.println("Doing Quarter math here.");
 
+            if (currentQuarter % 4 == 3) {
+                System.out.println("Total interest earned for this year: " + Math.round(interestForCurrentYear));
+                System.out.println("Balance at the end of the year: " + Math.round(currentBalance));
+            }
         }
 
     }
