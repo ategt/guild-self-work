@@ -62,18 +62,35 @@ public class InterestCalculator {
             }
         }
 
+        int compoundingsPerYear = 12;
+
+        boolean validCompoundingsPerYear = false;
+
+        while (!validCompoundingsPerYear) {
+            System.out.println("How many times a year is this investment compounded?");
+            System.out.println(" 1) Yearly 4) Quarterly 12) Monthly");
+            compoundingsPerYear = keyboard.nextInt();
+
+            if (initialYears > 0) {
+                //System.out.println("That value is valid.");
+                validCompoundingsPerYear = true;
+            } else {
+                System.out.println("This value is invalid.");
+            }
+        }
+
         float yearNumber = 0;
         float currentBalance = initialInvestment;
         float interestForCurrentYear = 0;
         float interestForCurrentQuarter = 0;
-        int totalQuarters = Math.round(initialYears * 4);
-        float quarterlyInterestRate = annualInterestRate / 4;
+        int totalQuarters = Math.round(initialYears * compoundingsPerYear);
+        float quarterlyInterestRate = annualInterestRate / compoundingsPerYear;
 
         for (int currentQuarter = 0; currentQuarter < totalQuarters; currentQuarter++) {
 
-            if (currentQuarter % 4 == 0) {
-                yearNumber = currentQuarter / 4;
-                System.out.println("At the begining of year " + yearNumber + " your starting balance would be " + Math.round(currentBalance));
+            if (currentQuarter % compoundingsPerYear == 0) {
+                yearNumber = currentQuarter / compoundingsPerYear;
+                System.out.println("At the begining of year " + (yearNumber + 1) + " your starting balance would be " + Math.round(currentBalance));
                 interestForCurrentQuarter = 0;
             }
 
@@ -84,12 +101,11 @@ public class InterestCalculator {
             interestForCurrentYear += interestForCurrentQuarter;
             currentBalance += interestForCurrentQuarter;
 
-            if (currentQuarter % 4 == 3) {
+            if ((currentQuarter % compoundingsPerYear) == (compoundingsPerYear - 1)) {
                 System.out.println("Total interest earned for this year: " + Math.round(interestForCurrentYear));
                 System.out.println("Balance at the end of the year: " + Math.round(currentBalance));
                 System.out.println("");
             }
         }
-
     }
 }
