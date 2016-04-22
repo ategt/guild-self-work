@@ -18,52 +18,56 @@ public class Factorizer {
 
         boolean isValidNumber = false;
         int factorizedNumber = 0;
-        
+
         int primeNumberHolder = 0;
         int perfectNumberHolder = 0;
-        
+
         while (!isValidNumber) {
 
             System.out.println("Please enter an integer to be factored.");
             factorizedNumber = keyboard.nextInt();
-            
-            if ( factorizedNumber > 0 ){
+
+            if (factorizedNumber > 0) {
                 isValidNumber = true;
             } else {
                 isValidNumber = false;
                 System.out.println("That input is not supported by this program.");
             }
         }
-        
-        for ( int result = 1 ; result <= factorizedNumber ; result++  ){
-            System.out.println("Testing " + result);
-            if ( factorizedNumber % result == 0 ){
-                System.out.println(result);
-                
-                primeNumberHolder++;
-                
-                if ( result != factorizedNumber ) 
-                    perfectNumberHolder += result;
-                
+
+        for (factorizedNumber = 1; factorizedNumber < 150; factorizedNumber++) {
+
+            primeNumberHolder = 0;
+            perfectNumberHolder = 0;
+
+            for (int result = 1; result <= factorizedNumber; result++) {
+                // System.out.println("Testing " + result);
+                if (factorizedNumber % result == 0) {
+                    //  System.out.println(result);
+
+                    primeNumberHolder++;
+
+                    if (result != factorizedNumber) {
+                        perfectNumberHolder += result;
+                    }
+
+                }
+
             }
-            
-        }
-        
-        System.out.println("perfectNumberHolder: " + perfectNumberHolder);
-        
-        if ( perfectNumberHolder == factorizedNumber ){
-            System.out.println(factorizedNumber + " is a perfect number.");
-        } else {
-            System.out.println(factorizedNumber + " is not a perfect number.");
-        }
 
-        System.out.println("primeNumberHolder: " + primeNumberHolder);
-        
-        if ( primeNumberHolder == 2 ){
-            System.out.println(factorizedNumber + " is a prime number.");
-        } else {
-            System.out.println(factorizedNumber + " is not a prime number.");            
-        }
+            //  System.out.println("perfectNumberHolder: " + perfectNumberHolder);
+            if (perfectNumberHolder == factorizedNumber) {
+                System.out.println(factorizedNumber + " is a perfect number.");
+            } else {
+                //System.out.println(factorizedNumber + " is not a perfect number.");
+            }
 
+            // System.out.println("primeNumberHolder: " + primeNumberHolder);
+            if (primeNumberHolder == 2) {
+                System.out.println(factorizedNumber + " is a prime number.");
+            } else {
+                // System.out.println(factorizedNumber + " is not a prime number.");
+            }
+        }
     }
 }
