@@ -62,14 +62,10 @@ public class InterestCalculator {
             }
         }
 
-//        float annualInterestRate = 0;
-//        float initialInvestment = 0;
-//        float initialYears = 0;
         float yearNumber = 0;
         float currentBalance = initialInvestment;
         float interestForCurrentYear = 0;
         float interestForCurrentQuarter = 0;
-        //int currentQuarter = 0;
         int totalQuarters = Math.round(initialYears * 4);
         float quarterlyInterestRate = annualInterestRate / 4;
 
@@ -81,15 +77,12 @@ public class InterestCalculator {
                 interestForCurrentQuarter = 0;
             }
 
+            //   This is the formula from the Lab PDF.
             //CurrentBalance * (1 + (QuarterlyInterestRate / 100))
-            //interestForCurrentQuarter = currentBalance * (1 + (quarterlyInterestRate / 100));
-            
             interestForCurrentQuarter = currentBalance * (quarterlyInterestRate / 100);
-            
+
             interestForCurrentYear += interestForCurrentQuarter;
             currentBalance += interestForCurrentQuarter;
-
-            //System.out.println("Doing Quarter math here.");
 
             if (currentQuarter % 4 == 3) {
                 System.out.println("Total interest earned for this year: " + Math.round(interestForCurrentYear));
