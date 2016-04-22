@@ -67,10 +67,7 @@ public class InterestCalculator {
         float interestForCurrentYear = 0;
         //int currentQuarter = 0;
         int totalQuarters = Math.round(initialYears * 4);
-        
-        
-        
-
+      
         for (int currentQuarter = 0 ; currentQuarter < totalQuarters ; currentQuarter++) {
 
             System.out.println("At the begining of year " + yearNumber + " your starting balance would be " + currentBalance);
