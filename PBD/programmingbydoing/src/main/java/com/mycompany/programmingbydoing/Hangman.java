@@ -83,18 +83,16 @@ public class Hangman {
                 System.out.println("You only have " + (maxWrongGuesses - wrongGuesses) + " left!");
             } else {
                 System.out.println("You have guessed right!");
-                
+
                 for (int i = 0; i < charsInWord.length; i++) {
-                    if ( charsInWord[i] == charGuessed ){
-                        
+                    if (charsInWord[i] == charGuessed) {
+
                     }
                 }
-                
+
             }
 
             // If right fill in on display line thing.
-            
-            
             // Display everything
             if (wrongGuesses > maxWrongGuesses) {
                 keepPlaying = false;
