@@ -20,7 +20,7 @@ public class RockPaperScissorsStep4 {
 
         int userInput;
         int computerInput;
-        int currentRound = 0;
+       // int currentRound = 0;
         int totalGameRounds = 0;
 
         int wins = 0;
@@ -33,10 +33,15 @@ public class RockPaperScissorsStep4 {
 
             totalGameRounds = promptUserForAnInt("How many rounds would you like to play?", keyboard);
 
+            // reset wins and losses;
+            wins = 0;
+            losses = 0;
+            ties = 0;
+
             if (totalGameRounds <= 10 && totalGameRounds >= 1) {
 
                 //while (currentRound < totalGameRounds) {
-                for (; currentRound < totalGameRounds; currentRound++) {
+                for (int currentRound = 0; currentRound < totalGameRounds; currentRound++) {
 
                     userInput = promptUserForAnInt("What is your choice for this round?\n"
                             + "\t1) Rock\t2) Paper\t3) Scissors\n", keyboard);
