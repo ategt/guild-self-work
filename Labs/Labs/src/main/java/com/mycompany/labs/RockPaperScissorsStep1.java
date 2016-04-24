@@ -30,11 +30,10 @@ public class RockPaperScissorsStep1 {
             userInput = keyboard.nextInt();
 
             //computerInput = (int) Math.ceil(Math.random() * 3);
-            computerInput = ( random.nextInt(3) + 1 );
+            computerInput = (random.nextInt(3) + 1);
 
             System.out.println("The computer played " + returnRockPaperOrScissors(computerInput) + ".");
 
-           
             if (userInput == computerInput) {
                 System.out.println("Tie!");
             } else {
@@ -84,23 +83,23 @@ public class RockPaperScissorsStep1 {
         } while (userInput != 4);
 
     }
-    
-    public static String returnRockPaperOrScissors(int inputValue){
+
+    public static String returnRockPaperOrScissors(int inputValue) {
 
         String rockPaperOrScissors = "";
 
         switch (inputValue) {
-                case 1:
-                    rockPaperOrScissors = "Rock";
-                    break;
-                case 2:
-                    rockPaperOrScissors = "Paper";
-                    break;
-                case 3:
-                    rockPaperOrScissors = "Scissors";
-                    break;
-            }
+            case 1:
+                rockPaperOrScissors = "Rock";
+                break;
+            case 2:
+                rockPaperOrScissors = "Paper";
+                break;
+            case 3:
+                rockPaperOrScissors = "Scissors";
+                break;
+        }
         return rockPaperOrScissors;
-    }   
-    
+    }
+
 }
