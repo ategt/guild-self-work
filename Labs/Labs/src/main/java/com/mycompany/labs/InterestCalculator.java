@@ -15,9 +15,9 @@ public class InterestCalculator {
 
     public static void main(String[] args) {
 
-        float annualInterestRate = promptUser("Please enter the annual interest rate as a percentage.");
-        float initialInvestment = promptUser("Please enter the starting principle.");
-        float initialYears = promptUser("Please enter the time frame for this investment in years.");
+        float annualInterestRate = promptUserFloat("Please enter the annual interest rate as a percentage.");
+        float initialInvestment = promptUserFloat("Please enter the starting principle.");
+        float initialYears = promptUserFloat("Please enter the time frame for this investment in years.");
 
         int compoundingsPerYear = promptUserInt("How many times a year is this investment compounded?\n"
                 + " 1) Yearly 4) Quarterly 12) Monthly");
@@ -95,5 +95,6 @@ public class InterestCalculator {
         return userInput;
 
     }
+
 
 }
