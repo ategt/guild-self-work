@@ -54,7 +54,6 @@ public class LuckySevens {
                 maxAmountHeld = currentBalance;
                 rollNumberAtMaxAmountHeld = rollCounter;
             }
-
         }
 
         System.out.println("You are broke after " + --rollCounter + " rolls.\n");
