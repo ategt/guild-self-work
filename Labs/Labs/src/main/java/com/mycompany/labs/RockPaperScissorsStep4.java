@@ -5,6 +5,7 @@
  */
 package com.mycompany.labs;
 
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -40,7 +41,7 @@ public class RockPaperScissorsStep4 {
                     userInput = promptUserForAnInt("What is your choice for this round?\n"
                             + "\t1) Rock\t2) Paper\t3) Scissors\n", keyboard);
 
-                    computerInput = (int) Math.ceil(Math.random() * 3);
+                    computerInput = generateComputerInput();
                     //computerInput = 1;
 
                     System.out.println("The computer played " + returnRockPaperOrScissors(computerInput) + ".");
@@ -147,5 +148,15 @@ public class RockPaperScissorsStep4 {
         }
 
         return isPlayerAWinner;
+    }
+
+    public static int generateComputerInput() {
+        // Just in case I go nuts and decide to make an AI later.
+
+        Random random = new Random();
+
+        // (int) Math.ceil(Math.random() * 3)
+        //     computerInput = ( random.nextInt(3) + 1 );
+        return (random.nextInt(3) + 1);
     }
 }
