@@ -20,7 +20,7 @@ public class InterestCalculator {
         float initialYears = promptUserFloat("Please enter the time frame for this investment in years.");
 
         int compoundingsPerYear = promptUserInt("How many times a year is this investment compounded?\n"
-                + " 1) Yearly 4) Quarterly 12) Monthly");
+                + " 1) Yearly\n 4) Quarterly\n 12) Monthly\n 365) Daily");
 
         float yearNumber = 0;
         float currentBalance = initialInvestment;
@@ -43,7 +43,7 @@ public class InterestCalculator {
 
             interestForCurrentYear += interestForCurrentQuarter;
             currentBalance += interestForCurrentQuarter;
-
+            
             if ((currentQuarter % compoundingsPerYear) == (compoundingsPerYear - 1)) {
                 System.out.println("Total interest earned for this year: " + Math.round(interestForCurrentYear));
                 System.out.println("Balance at the end of the year: " + Math.round(currentBalance));
