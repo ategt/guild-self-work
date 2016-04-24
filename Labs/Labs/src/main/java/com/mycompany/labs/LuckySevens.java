@@ -38,17 +38,11 @@ public class LuckySevens {
         }
 
         int diceRoll = 0;
-        int dieOne = 0;
-        int dieTwo = 0;
         int rollCounter = 1;
 
         for (int currentBalance = startingBet; currentBalance > 0; rollCounter++) {
 
-            // Roll the virtual dice here.
-            dieOne = (int) Math.ceil(Math.random() * 6);
-            dieTwo = (int) Math.ceil(Math.random() * 6);
-
-            diceRoll = dieOne + dieTwo;
+            diceRoll = rollDice();
 
             if (diceRoll == 4) {
                 currentBalance += 4;
@@ -65,5 +59,18 @@ public class LuckySevens {
 
         System.out.println("You are broke after " + --rollCounter + " rolls.\n");
         System.out.println("You should have quit after " + rollNumberAtMaxAmountHeld + " rolls when you had $" + maxAmountHeld + ".");
+    }
+
+    public static int rollDice() {
+
+        int dieOne = 0;
+        int dieTwo = 0;
+
+        // Roll the virtual dice here.
+        dieOne = (int) Math.ceil(Math.random() * 6);
+        dieTwo = (int) Math.ceil(Math.random() * 6);
+
+        return dieOne + dieTwo;
+
     }
 }

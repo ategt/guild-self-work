@@ -14,70 +14,13 @@ import java.util.Scanner;
 public class InterestCalculator {
 
     public static void main(String[] args) {
-        Scanner keyboard = new Scanner(System.in);
 
-        float annualInterestRate = 0;
-        float initialInvestment = 0;
-        float initialYears = 0;
+        float annualInterestRate = promptUser("Please enter the annual interest rate as a percentage.");
+        float initialInvestment = promptUser("Please enter the starting principle.");
+        float initialYears = promptUser("Please enter the time frame for this investment in years.");
 
-        boolean validInterestRate = false;
-
-        while (!validInterestRate) {
-            System.out.println("Please enter the annual interest rate as a percentage.");
-            annualInterestRate = keyboard.nextFloat();
-
-            if (annualInterestRate > 0) {
-                //System.out.println("That rate is valid.");
-                validInterestRate = true;
-            } else {
-                System.out.println("This rate is invalid.");
-            }
-        }
-
-        boolean validInitialInvestment = false;
-
-        while (!validInitialInvestment) {
-            System.out.println("Please enter the starting principle.");
-            initialInvestment = keyboard.nextFloat();
-
-            if (initialInvestment > 0) {
-                //System.out.println("That value is valid.");
-                validInitialInvestment = true;
-            } else {
-                System.out.println("This value is invalid.");
-            }
-        }
-
-        boolean validInitialYears = false;
-
-        while (!validInitialYears) {
-            System.out.println("Please enter the time frame for this investment in years.");
-            initialYears = keyboard.nextFloat();
-
-            if (initialYears > 0) {
-                //System.out.println("That value is valid.");
-                validInitialYears = true;
-            } else {
-                System.out.println("This value is invalid.");
-            }
-        }
-
-        int compoundingsPerYear = 12;
-
-        boolean validCompoundingsPerYear = false;
-
-        while (!validCompoundingsPerYear) {
-            System.out.println("How many times a year is this investment compounded?");
-            System.out.println(" 1) Yearly 4) Quarterly 12) Monthly");
-            compoundingsPerYear = keyboard.nextInt();
-
-            if (initialYears > 0) {
-                //System.out.println("That value is valid.");
-                validCompoundingsPerYear = true;
-            } else {
-                System.out.println("This value is invalid.");
-            }
-        }
+        int compoundingsPerYear = promptUserInt("How many times a year is this investment compounded?\n"
+                + " 1) Yearly 4) Quarterly 12) Monthly");
 
         float yearNumber = 0;
         float currentBalance = initialInvestment;
@@ -108,4 +51,49 @@ public class InterestCalculator {
             }
         }
     }
+
+    public static float promptUserFloat(String promptString) {
+        Scanner keyboard = new Scanner(System.in);
+        float userInput = 0;
+
+        boolean validInitialInvestment = false;
+
+        while (!validInitialInvestment) {
+            System.out.println(promptString);
+            userInput = keyboard.nextFloat();
+
+            if (userInput > 0) {
+                //System.out.println("That value is valid.");
+                validInitialInvestment = true;
+            } else {
+                System.out.println("This value is invalid.");
+            }
+        }
+
+        return userInput;
+
+    }
+
+    public static int promptUserInt(String promptString) {
+        Scanner keyboard = new Scanner(System.in);
+        int userInput = 0;
+
+        boolean validInitialInvestment = false;
+
+        while (!validInitialInvestment) {
+            System.out.println(promptString);
+            userInput = keyboard.nextInt();
+
+            if (userInput > 0) {
+                //System.out.println("That value is valid.");
+                validInitialInvestment = true;
+            } else {
+                System.out.println("This value is invalid.");
+            }
+        }
+
+        return userInput;
+
+    }
+
 }
