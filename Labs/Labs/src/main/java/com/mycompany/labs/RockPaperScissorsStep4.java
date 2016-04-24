@@ -20,6 +20,7 @@ public class RockPaperScissorsStep4 {
         int userInput;
         int computerInput;
         int currentRound = 0;
+        int totalGameRounds = 0;
 
         int wins = 0;
         int losses = 0;
@@ -28,89 +29,36 @@ public class RockPaperScissorsStep4 {
         boolean keepPlaying = true;
 
         while (keepPlaying) {
-            System.out.println("How many rounds would you like to play?");
-            int totalGameRounds = keyboard.nextInt();
+
+            totalGameRounds = promptUserForAnInt("How many rounds would you like to play?", keyboard);
 
             if (totalGameRounds <= 10 && totalGameRounds >= 1) {
 
                 //while (currentRound < totalGameRounds) {
                 for (; currentRound < totalGameRounds; currentRound++) {
-                    System.out.println("What is your choice for this round?");
-                    System.out.println("\t1) Rock\t2) Paper\t3) Scissors");
-                    System.out.println();
 
-                    userInput = keyboard.nextInt();
+                    userInput = promptUserForAnInt("What is your choice for this round?\n"
+                            + "\t1) Rock\t2) Paper\t3) Scissors\n", keyboard);
 
                     computerInput = (int) Math.ceil(Math.random() * 3);
                     //computerInput = 1;
 
-                    System.out.print("The computer played ");
-
-                    switch (computerInput) {
-                        case 1:
-                            System.out.print("Rock");
-                            break;
-                        case 2:
-                            System.out.print("Paper");
-                            break;
-                        case 3:
-                            System.out.print("Scissors");
-                            break;
-                    }
-
-                    System.out.println(".");
+                    System.out.println("The computer played " + returnRockPaperOrScissors(computerInput) + ".");
+                    System.out.println("You played " + returnRockPaperOrScissors(userInput) + ".");
 
                     if (userInput == computerInput) {
                         System.out.println("Tie!");
                         ties++;
+                    } else if (userInput == 4) {
+                        System.out.println("You have choosen to quit.");
+                        currentRound = totalGameRounds + 1;
+
+                    } else if (isPlayerTheWinner(computerInput, userInput)) {
+                        System.out.println("Player wins.");
+                        wins++;
                     } else {
-
-                        switch (userInput) {
-                            case 1:
-                                System.out.println("You played Rock.");
-
-                                if (computerInput == 3) {
-                                    System.out.println("Player wins.");
-                                    wins++;
-                                } else {
-                                    System.out.println("Player looses.");
-                                    losses++;
-                                }
-
-                                break;
-
-                            case 2:
-                                System.out.println("You played Paper.");
-
-                                if (computerInput == 1) {
-                                    System.out.println("Player wins.");
-                                    wins++;
-                                } else {
-                                    System.out.println("Player looses.");
-                                    losses++;
-                                }
-
-                                break;
-
-                            case 3:
-                                System.out.println("You played Scissors.");
-
-                                if (computerInput == 2) {
-                                    System.out.println("Player wins.");
-                                    wins++;
-                                } else {
-                                    System.out.println("Player looses.");
-                                    losses++;
-                                }
-
-                                break;
-                            case 4:
-                                System.out.println("You have choosen to quit.");
-                                currentRound = totalGameRounds + 1;
-                                break;
-                            default:
-                                System.out.println("Your choice was not a valid option.");
-                        }
+                        System.out.println("Player looses.");
+                        losses++;
                     }
                     System.out.println("Current Score: Wins:" + wins + " Losses:" + losses + " Ties:" + ties);
 
@@ -127,16 +75,77 @@ public class RockPaperScissorsStep4 {
             } else {
                 System.out.println("Your input is not a valid range.");
             }
-            
+
             System.out.println("Would you like to play again?");
             System.out.println("Enter '1' to play again, anything else to exit.");
-            if ( keyboard.nextInt() == 1 ){
+            if (keyboard.nextInt() == 1) {
                 System.out.println("Playing again");
                 keepPlaying = true;
-            } else{
+            } else {
                 System.out.println("Thanks for playing!");
                 keepPlaying = false;
             };
         }
+    }
+
+    public static String returnRockPaperOrScissors(int inputValue) {
+
+        String rockPaperOrScissors = "";
+
+        switch (inputValue) {
+            case 1:
+                rockPaperOrScissors = "Rock";
+                break;
+            case 2:
+                rockPaperOrScissors = "Paper";
+                break;
+            case 3:
+                rockPaperOrScissors = "Scissors";
+                break;
+        }
+        return rockPaperOrScissors;
+    }
+
+    public static int promptUserForAnInt(String promptString, Scanner keyboard) {
+        System.out.println(promptString);
+        return keyboard.nextInt();
+    }
+
+    public static boolean isPlayerTheWinner(int computerInput, int userInput) {
+        boolean isPlayerAWinner = false;
+
+        switch (userInput) {
+            case 1:
+                if (computerInput == 3) {
+                    isPlayerAWinner = true;
+                } else {
+                    isPlayerAWinner = false;
+                }
+
+                break;
+
+            case 2:
+                if (computerInput == 1) {
+                    isPlayerAWinner = true;
+                } else {
+                    isPlayerAWinner = false;
+                }
+
+                break;
+
+            case 3:
+                if (computerInput == 2) {
+                    isPlayerAWinner = true;
+                } else {
+                    isPlayerAWinner = false;
+                }
+
+                break;
+            default:
+                System.out.println("Your choice was not a valid option.");
+
+        }
+
+        return isPlayerAWinner;
     }
 }

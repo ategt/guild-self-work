@@ -34,21 +34,7 @@ public class RockPaperScissorsStep1 {
 
             System.out.println("The computer played " + returnRockPaperOrScissors(computerInput) + ".");
 
-            
-            switch (computerInput) {
-                case 1:
-                    System.out.print("Rock");
-                    break;
-                case 2:
-                    System.out.print("Paper");
-                    break;
-                case 3:
-                    System.out.print("Scissors");
-                    break;
-            }
-
-            System.out.println(".");
-
+           
             if (userInput == computerInput) {
                 System.out.println("Tie!");
             } else {
@@ -116,4 +102,5 @@ public class RockPaperScissorsStep1 {
             }
         return rockPaperOrScissors;
     }   
+    
 }
