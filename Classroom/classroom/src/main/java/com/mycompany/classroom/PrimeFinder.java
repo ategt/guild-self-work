@@ -21,7 +21,7 @@ public class PrimeFinder {
         int numberOfTimesPlayed = 0;
         int totalPrimesFound = 0;
 
-        System.out.println("This program will find all of the prime numbers between 1 and the number that you enter.");
+        printDescription();
 
         boolean playAgain = true;
 
@@ -120,4 +120,8 @@ public class PrimeFinder {
         return isPrime;
     }
 
+    public static void printDescription(){
+                System.out.println("This program will find all of the prime numbers between 1 and the number that you enter.");
+    }
+    
 }

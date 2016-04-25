@@ -32,30 +32,14 @@ public class RockPaperScissorsStep3 {
 
             //while (currentRound < totalGameRounds) {
             for (; currentRound < totalGameRounds; currentRound++) {
-                System.out.println("What is your choice for this round?");
-                System.out.println("\t1) Rock\t2) Paper\t3) Scissors");
-                System.out.println();
+                userInput = getUserInput(keyboard);
 
-                userInput = keyboard.nextInt();
-
-                computerInput = (int) Math.ceil(Math.random() * 3);
-                //computerInput = 1;
+                computerInput = getComputerChoice();
                 
                 System.out.print("The computer played ");
 
-                switch (computerInput) {
-                    case 1:
-                        System.out.print("Rock");
-                        break;
-                    case 2:
-                        System.out.print("Paper");
-                        break;
-                    case 3:
-                        System.out.print("Scissors");
-                        break;
-                }
+                printRockPaperOrScissors(computerInput);
 
-                System.out.println(".");
 
                 if (userInput == computerInput) {
                     System.out.println("Tie!");
@@ -113,17 +97,54 @@ public class RockPaperScissorsStep3 {
 
             }
 
-            if (wins > losses) {
-                System.out.println("Player is the overall winner.");
-            } else if (wins < losses) {
-                System.out.println("Computer is the overall winner.");
-            } else {
-                System.out.println("No overall winner.");
-            }
+            printOverallOutcome(wins, losses);
 
         } else {
             System.out.println("Your input is not a valid range.");
         }
 
+    }
+
+    public static void printRockPaperOrScissors(int computerInput) {
+        switch (computerInput) {
+            case 1:
+                System.out.print("Rock");
+                break;
+            case 2:
+                System.out.print("Paper");
+                break;
+            case 3:
+                System.out.print("Scissors");
+                break;
+        }
+        
+                        System.out.println(".");
+
+    }
+
+    public static int getComputerChoice() {
+        int computerInput;
+        computerInput = (int) Math.ceil(Math.random() * 3);
+        //computerInput = 1;
+        return computerInput;
+    }
+
+    public static int getUserInput(Scanner keyboard) {
+        int userInput;
+        System.out.println("What is your choice for this round?");
+        System.out.println("\t1) Rock\t2) Paper\t3) Scissors");
+        System.out.println();
+        userInput = keyboard.nextInt();
+        return userInput;
+    }
+
+    public static void printOverallOutcome(int wins, int losses) {
+        if (wins > losses) {
+            System.out.println("Player is the overall winner.");
+        } else if (wins < losses) {
+            System.out.println("Computer is the overall winner.");
+        } else {
+            System.out.println("No overall winner.");
+        }
     }
 }

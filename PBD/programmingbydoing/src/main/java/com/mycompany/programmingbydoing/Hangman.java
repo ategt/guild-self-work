@@ -34,6 +34,14 @@ public class Hangman {
         int lengthOfWord = wordToGuess.length();
 
         char[] charsInWord = new char[lengthOfWord];
+        char[] charsToDisplay = new char[lengthOfWord];
+        
+        
+        // Build an array of blanks
+        for ( int i = 0; i < lengthOfWord ; i++ ){
+            charsToDisplay[i] = '_';
+            charsInWord[i] = 'z';        //Still here;
+        }
 
         int wrongGuesses = 0;
         int maxWrongGuesses = 6;
@@ -88,18 +96,22 @@ public class Hangman {
 
                 for (int i = 0; i < charsInWord.length; i++) {
                     if (charsInWord[i] == charGuessed) {
-
+                        
                     }
                 }
 
             }
 
             // If right fill in on display line thing.
-            // Display everything
+            
             if (wrongGuesses > maxWrongGuesses) {
                 keepPlaying = false;
             }
+            
+            
 
+            
+            // Display everything
         }
 
     }
