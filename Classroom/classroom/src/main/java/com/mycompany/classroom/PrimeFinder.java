@@ -18,6 +18,7 @@ public class PrimeFinder {
         Scanner keyboard = new Scanner(System.in);
 
         int primeNumberCounter = 0;
+        int numberOfTimesPlayed = 0;
 
         boolean playAgain = true;
 
@@ -26,6 +27,7 @@ public class PrimeFinder {
         while (playAgain) {
 
             primeNumberCounter = 0;
+            numberOfTimesPlayed++;
 
             int numberToTest = promptUserForAnInt("Please enter a number.", keyboard);
 
@@ -52,6 +54,8 @@ public class PrimeFinder {
             }
 
         }
+        
+        System.out.println( "Thank you for running this program. \nYou have looped through this program " + numberOfTimesPlayed + " times.");
 
     }
 
@@ -102,51 +106,4 @@ public class PrimeFinder {
         return isPrime;
     }
 
-    public static int codeFromFactorizer() {
-
-        //  boolean isValidNumber = false;
-        int factorizedNumber = 0;
-
-        int primeNumberHolder = 0;
-        //      int perfectNumberHolder = 0;
-
-//        while (!isValidNumber) {
-//
-//            System.out.println("Please enter an integer to be factored.");
-//            factorizedNumber = keyboard.nextInt();
-//
-//            if (factorizedNumber > 0) {
-//                isValidNumber = true;
-//            } else {
-//                isValidNumber = false;
-//                System.out.println("That input is not supported by this program.");
-//            }
-//        }
-//
-        for (int result = 1; result <= factorizedNumber; result++) {
-            if (factorizedNumber % result == 0) {
-
-                primeNumberHolder++;
-
-//                if (result != factorizedNumber) {
-//                    perfectNumberHolder += result;
-//                    System.out.println(result);
-//                }
-            }
-
-        }
-
-//        if (perfectNumberHolder == factorizedNumber) {
-//            System.out.println(factorizedNumber + " is a perfect number.");
-//        } else {
-//            System.out.println(factorizedNumber + " is not a perfect number.");
-//        }
-        if (primeNumberHolder == 2) {
-            System.out.println(factorizedNumber + " is a prime number.");
-        } else {
-            System.out.println(factorizedNumber + " is not a prime number.");
-        }
-        return 2;
-
-    }
 }
