@@ -64,6 +64,8 @@ public class Hangman {
                 }
 
             }
+            
+            
 
             // If wrong add to wrong letters.
             //      increment wrong counter.
