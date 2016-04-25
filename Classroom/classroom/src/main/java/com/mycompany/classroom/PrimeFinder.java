@@ -19,7 +19,8 @@ public class PrimeFinder {
 
         int primeNumberCounter = 0;
         int numberOfTimesPlayed = 0;
-
+        int totalPrimesFound = 0;
+        
         boolean playAgain = true;
 
         System.out.println("This program will find all of the prime numbers between 1 and the number that you enter.");
@@ -36,6 +37,7 @@ public class PrimeFinder {
 
                     System.out.println(x + " is a prime number.");
                     primeNumberCounter++;
+                    totalPrimesFound++;
                 } else {
                     //  System.out.println(x + " is not a prime number.");
                 }
@@ -55,7 +57,8 @@ public class PrimeFinder {
 
         }
         
-        System.out.println( "Thank you for running this program. \nYou have looped through this program " + numberOfTimesPlayed + " times.");
+        //System.out.println( "Thank you for running this program. \nYou have looped through this program " + numberOfTimesPlayed + " times.");
+        System.out.println( "Thank you for running this program. \nYou have found " + totalPrimesFound + " times.");
 
     }
 
