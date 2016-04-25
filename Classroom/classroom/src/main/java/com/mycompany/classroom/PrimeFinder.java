@@ -20,10 +20,10 @@ public class PrimeFinder {
         int primeNumberCounter = 0;
         int numberOfTimesPlayed = 0;
         int totalPrimesFound = 0;
-        
-        boolean playAgain = true;
 
         System.out.println("This program will find all of the prime numbers between 1 and the number that you enter.");
+
+        boolean playAgain = true;
 
         while (playAgain) {
 
@@ -32,34 +32,45 @@ public class PrimeFinder {
 
             int numberToTest = promptUserForAnInt("Please enter a number.", keyboard);
 
-            for (int x = 0; x <= numberToTest; x++) {
-                if (isNumberPrime(x)) {
-
-                    System.out.println(x + " is a prime number.");
-                    primeNumberCounter++;
-                    totalPrimesFound++;
-                } else {
-                    //  System.out.println(x + " is not a prime number.");
-                }
-
-            }
+            primeNumberCounter = generatePrimes(numberToTest, primeNumberCounter);
+            totalPrimesFound += primeNumberCounter;
 
             System.out.println(primeNumberCounter + " total prime numbers found.");
 
-            int exitNumber = promptUserForAnInt("Please enter '1' if you would like to run this program again,\n"
-                    + " enter any other number to exit.", keyboard);
+            playAgain = promptToPlayAgain(keyboard);
 
-            if (exitNumber == 1) {
-                playAgain = true;
+        }
+
+        //System.out.println( "Thank you for running this program. \nYou have looped through this program " + numberOfTimesPlayed + " times.");
+        System.out.println("Thank you for running this program. \nYou have found " + totalPrimesFound + " times.");
+
+    }
+
+    public static int generatePrimes(int numberToTest, int primeNumberCounter) {
+        for (int x = 0; x <= numberToTest; x++) {
+            if (isNumberPrime(x)) {
+
+                System.out.println(x + " is a prime number.");
+                primeNumberCounter++;
+                // totalPrimesFound++;
             } else {
-                playAgain = false;
+                //  System.out.println(x + " is not a prime number.");
             }
 
         }
-        
-        //System.out.println( "Thank you for running this program. \nYou have looped through this program " + numberOfTimesPlayed + " times.");
-        System.out.println( "Thank you for running this program. \nYou have found " + totalPrimesFound + " times.");
+        return primeNumberCounter;
+    }
 
+    public static boolean promptToPlayAgain(Scanner keyboard) {
+        boolean playAgain;
+        int exitNumber = promptUserForAnInt("Please enter '1' if you would like to run this program again,\n"
+                + " enter any other number to exit.", keyboard);
+        if (exitNumber == 1) {
+            playAgain = true;
+        } else {
+            playAgain = false;
+        }
+        return playAgain;
     }
 
     public static int promptUserForAnInt(String promptString, Scanner keyboard) {
