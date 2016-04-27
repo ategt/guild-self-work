@@ -13,53 +13,78 @@ import java.util.Scanner;
  */
 public class Factorizer {
 
-    public static void main(String[] args) {
-        Scanner keyboard = new Scanner(System.in);
+    int numberOfFactors = 0;
+    int sumOfFactors = 0;
 
-        boolean isValidNumber = false;
-        int factorizedNumber = 0;
+    public void run() {
+        ConsoleIO consoleIO = new ConsoleIO();
 
-        int primeNumberHolder = 0;
-        int perfectNumberHolder = 0;
+        numberOfFactors = 0;
+        sumOfFactors = 0;
 
-        while (!isValidNumber) {
+        int factorizedNumber = consoleIO.getUserIntInputRange("Please Enter A Number To Be Factorized:", 1, Integer.MAX_VALUE);
 
-            System.out.println("Please enter an integer to be factored.");
-            factorizedNumber = keyboard.nextInt();
+        factorizingCalculationsLoop(factorizedNumber, consoleIO);
 
-            if (factorizedNumber > 0) {
-                isValidNumber = true;
-            } else {
-                isValidNumber = false;
-                System.out.println("That input is not supported by this program.");
+        displayIsPerfectNumber(sumOfFactors, factorizedNumber, consoleIO);
+
+        displayIsPrimeNumber(numberOfFactors, consoleIO, factorizedNumber);
+
+    }
+
+    public void factorizingCalculationsLoop(int factorizedNumber, ConsoleIO consoleIO) {
+        for (int testNumber = 1; testNumber <= factorizedNumber; testNumber++) {
+            factorizingCalculations(factorizedNumber, testNumber, consoleIO);
+        }
+    }
+
+    public void factorizingCalculations(int factorizedNumber, int testNumber, ConsoleIO consoleIO) {
+        if (isNumberEvenlyDivisible(factorizedNumber, testNumber)) {
+
+            numberOfFactors++;
+
+            if (testNumber != factorizedNumber) {
+                sumOfFactors += testNumber;
+                consoleIO.printStringToConsole(testNumber + "");
             }
-        }
-
-        for (int result = 1; result <= factorizedNumber; result++) {
-            if (factorizedNumber % result == 0) {
-
-                primeNumberHolder++;
-
-                if (result != factorizedNumber) {
-                    perfectNumberHolder += result;
-                    System.out.println(result);
-                }
-
-            }
 
         }
+    }
 
-        if (perfectNumberHolder == factorizedNumber) {
-            System.out.println(factorizedNumber + " is a perfect number.");
+    
+    /** This method performs a modulus test on two numbers, divisor and dividend, to 
+     *  determine if one is evenly divisible by the other or not.
+     * This is defined as divisor divided by dividend with no remainder.
+     * 
+     * @param divisor
+     * @param dividend
+     * @return 
+     */
+    public static boolean isNumberEvenlyDivisible(int divisor, int dividend) {
+        return divisor % dividend == 0;
+    }
+
+    public void displayIsPrimeNumber(int numberOfFactors, ConsoleIO consoleIO, int factorizedNumber) {
+        if (isPrimeNumber(numberOfFactors)) {
+            consoleIO.printStringToConsole(factorizedNumber + " is a prime number.");
         } else {
-            System.out.println(factorizedNumber + " is not a perfect number.");
+            consoleIO.printStringToConsole(factorizedNumber + " is not a prime number.");
         }
+    }
 
-        if (primeNumberHolder == 2) {
-            System.out.println(factorizedNumber + " is a prime number.");
+    public void displayIsPerfectNumber(int sumOfFactors, int factorizedNumber, ConsoleIO consoleIO) {
+        if (isPerfectNumber(sumOfFactors, factorizedNumber)) {
+            consoleIO.printStringToConsole(factorizedNumber + " is a perfect number.");
         } else {
-            System.out.println(factorizedNumber + " is not a prime number.");
+            consoleIO.printStringToConsole(factorizedNumber + " is not a perfect number.");
         }
+    }
 
+    public static boolean isPrimeNumber(int numberOfFactors) {
+        return numberOfFactors == 2;
+    }
+
+    public static boolean isPerfectNumber(int sumOfFactors, int factorizedNumber) {
+        return sumOfFactors == factorizedNumber;
     }
 }
