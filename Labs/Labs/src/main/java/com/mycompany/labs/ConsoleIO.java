@@ -98,7 +98,7 @@ public class ConsoleIO {
      * @param choice
      * @return 
      */
-    public Number getAbstractUserInput(String prompt, int choice) throws NumberFormatException {
+    public Number getAbstractUserInput(String prompt, int choice) throws java.lang.NumberFormatException {
         Number input;
 
         String inputString = getUserStringInput(prompt);

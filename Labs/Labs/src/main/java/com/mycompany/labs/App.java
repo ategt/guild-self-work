@@ -10,10 +10,17 @@ package com.mycompany.labs;
  * @author apprentice
  */
 public class App {
+
     public static void main(String[] args) {
-        
-        LuckySevens ls = new LuckySevens();
-        ls.run();  // I do not have a run method yet.
-        
+
+        ConsoleIO consoleIO = new ConsoleIO();
+
+        int input = consoleIO.getAbstractUserInput("Enter something here.", 1).intValue();
+
+        System.out.println("Result: " + input);
+
+//        LuckySevens ls = new LuckySevens();
+//        ls.run();  // I do not have a run method yet.
+
     }
 }
