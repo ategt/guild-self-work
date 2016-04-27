@@ -90,6 +90,22 @@ public class ConsoleIO {
         return userFloatInput;
     }
 
+    
+    /** Returns a floating-point number between the range of minimumValue and maximumValue.
+     * The method will continue looping until the user enters a float in the valid range.
+     * 
+     * This method is an adapter for SM's getUserFloatMinMax method.
+     * 
+     * @param prompt
+     * @param minimumValue
+     * @param maximumValue
+     * @return 
+     */
+    public float getUserFloatRange(String prompt, float minimumValue, float maximumValue) {
+
+        return getUserFloatMinMax(prompt, minimumValue, maximumValue);
+    }
+
     public float getUserFloatMinMax(String prompt, float min, float max) {
 
         float userFloatInput = 0;
