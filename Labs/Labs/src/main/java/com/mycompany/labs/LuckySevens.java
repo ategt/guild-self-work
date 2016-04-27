@@ -13,7 +13,7 @@ import java.util.Scanner;
  */
 public class LuckySevens {
 
-    int startingBet = 0;
+   // int startingBet = 0;
     int maxAmountHeld = 0;
     int rollNumberAtMaxAmountHeld = 0;
 
@@ -21,16 +21,16 @@ public class LuckySevens {
 
         ConsoleIO consoleIO = new ConsoleIO();
 
-        startingBet = 0;
+        //int startingBet = 0;
         maxAmountHeld = 0;
         rollNumberAtMaxAmountHeld = 0;
 
-        startingBet = consoleIO.getUserIntInputRange("How many Dollars would you like to bet?",
+        int startingBet = consoleIO.getUserIntInputRange("How many Dollars would you like to bet?",
                 4, 15000, "Betting that amount does not seem like a good idea.");
 
         int rollCounter = 1;
 
-        rollCounter = luckySevensGameLoop(rollCounter);
+        rollCounter = luckySevensGameLoop(rollCounter, startingBet);
 
         printEndingMessage(rollCounter, consoleIO);
     }
@@ -40,7 +40,7 @@ public class LuckySevens {
         consoleIO.printStringToConsole("You should have quit after " + rollNumberAtMaxAmountHeld + " rolls when you had $" + maxAmountHeld + ".");
     }
 
-    public int luckySevensGameLoop(int rollCounter) {
+    public int luckySevensGameLoop(int rollCounter, int startingBet) {
         int diceRoll;
         for (int currentBalance = startingBet; currentBalance > 0; rollCounter++) {
 
