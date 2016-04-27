@@ -14,11 +14,13 @@ public class App {
     public static void main(String[] args) {
 
         ConsoleIO consoleIO = new ConsoleIO();
+        for (int x = 0; x < 20; x++) {
+            //int input = consoleIO.getUserInputValidationLoop("Enter something here.", 2).intValue();
 
-        int input = consoleIO.getAbstractUserInput("Enter something here.", 1).intValue();
-
-        System.out.println("Result: " + input);
-
+            
+            int input = consoleIO.getUserIntInputRange("Enter:", 3, 99);
+            System.out.println("Result: " + input);
+        }
 //        LuckySevens ls = new LuckySevens();
 //        ls.run();  // I do not have a run method yet.
 

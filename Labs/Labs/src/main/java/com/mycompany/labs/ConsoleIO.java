@@ -38,8 +38,7 @@ public class ConsoleIO {
 //
 //        return input;
 //    }
-    
-    
+
 //     public int getUserInputIntAbs(String prompt) {
 //        Number input = 0;
 //        //  Scanner keyboard = new Scanner(System.in);
@@ -59,7 +58,6 @@ public class ConsoleIO {
 //
 //        return input.intValue();
 //    }
-
     public int getUserInputInt(String prompt) {
         Number input = 0;
         int choice = 1;
@@ -68,14 +66,57 @@ public class ConsoleIO {
 
         return input.intValue();
     }
-
+    
+/**
+     * The method will call another method to ask the user for input and return
+     * a number Object which is parsed based on the second parameter.
+     *
+     * 1 - Integer 2 - Float 3 - Double
+     *
+     * Integer is the default.
+     *
+     * @param prompt
+     * @param choice
+     * @return
+     */
+    public Number getUserInputValidationLoop(String prompt, int choice) {
+        Number input = 0;
+        return getUserInputValidationLoop(input, prompt, choice);
+    }
+/**
+     * The method will ask the user for input and return
+     * a number Object which is parsed based on the second parameter.
+     *
+     * 1 - Integer 2 - Float 3 - Double
+     *
+     * Integer is the default.
+     *
+     * @param input
+     * @param prompt
+     * @param choice
+     * @return
+     */
     public Number getUserInputValidationLoop(Number input, String prompt, int choice) {
         boolean isValid = false;
+        String inputString;
+
         while (!isValid) {
 
             try {
-                
-                input = getAbstractUserInput(prompt, choice);
+
+                inputString = getUserStringInput(prompt);
+
+                switch (choice) {
+                    case 2:
+                        input = Float.parseFloat(inputString);
+                        break;
+                    case 3:
+                        input = Double.parseDouble(inputString);
+                        break;
+                    default:
+                        input = Integer.parseInt(inputString);
+                        break;
+                }
                 isValid = true;
             } catch (Exception ex) {
                 printStringToConsole("That value is not supported.");
@@ -84,43 +125,24 @@ public class ConsoleIO {
         return input;
     }
 
-    
-    /**The method will call another method to ask the user for input and
-     * return a number Object which is parsed based on the second parameter.
-     * 
-     *  1 - Integer
-     *  2 - Float
-     *  3 - Double
-     * 
+    /**
+     * The method will call another method to ask the user for input and return
+     * a number Object which is parsed based on the second parameter.
+     *
+     * 1 - Integer 2 - Float 3 - Double
+     *
      * Integer is the default.
-     * 
+     *
      * @param prompt
      * @param choice
-     * @return 
+     * @return
      */
-    public Number getAbstractUserInput(String prompt, int choice) throws java.lang.NumberFormatException {
-        Number input;
-
-        String inputString = getUserStringInput(prompt);
-
-        switch (choice) {
-            case 2:
-                input = Float.parseFloat(inputString);
-                break;
-            case 3:
-                input = Double.parseDouble(inputString);
-                break;
-            default:
-                input = Integer.parseInt(inputString);
-                break;
-        }
-
-        return input;
-    }
-
- //public Number getAbstractUserInput(String prompt, Number numberObject){
-    
-     
+//    public Number getAbstractUserInput(String prompt, int choice) throws java.lang.NumberFormatException {
+//        Number input;
+//
+//        return input;
+//    }
+    //public Number getAbstractUserInput(String prompt, Number numberObject){
     public int getUserIntInputRange(String prompt, int minValue, int maxValue, String errorMessage) {
         // Adapter to us SM's method and my phraseing.
         return getUserMinMax(prompt, minValue, maxValue, errorMessage);
@@ -174,8 +196,7 @@ public class ConsoleIO {
         return userStringInput;
     }
 
-    
-     public float getUserFloatInput(String prompt) {
+    public float getUserFloatInput(String prompt) {
         Number input = 0f;
         int choice = 2;
         //  Scanner keyboard = new Scanner(System.in);
@@ -183,9 +204,7 @@ public class ConsoleIO {
 
         return input.floatValue();
     }
-    
-    
-    
+
 //    public float getUserFloatInput(String prompt) {
 //        float input = 0;
 //
@@ -203,7 +222,6 @@ public class ConsoleIO {
 //        }
 //        return input;
 //    }
-
     /**
      * Returns a floating-point number between the range of minimumValue and
      * maximumValue. The method will continue looping until the user enters a
@@ -240,8 +258,7 @@ public class ConsoleIO {
         return userFloatInput;
     }
 
-    
-     public double getUserDoubleInput(String prompt) {
+    public double getUserDoubleInput(String prompt) {
         Number input = 0d;
         int choice = 3;
         //  Scanner keyboard = new Scanner(System.in);
@@ -249,11 +266,7 @@ public class ConsoleIO {
 
         return input.doubleValue();
     }
-    
-    
-    
-    
-    
+
 //    public double getUserDoubleInput(String prompt) {
 //        double input = 0;
 //
@@ -272,7 +285,6 @@ public class ConsoleIO {
 //
 //        return input;
 //    }
-
     public double getUserDoubleInputRange(String prompt, double min, double max) {
 
         return getUserDoubleMinMax(prompt, min, max);
