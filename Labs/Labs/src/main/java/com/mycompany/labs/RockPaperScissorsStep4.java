@@ -16,11 +16,15 @@ public class RockPaperScissorsStep4 {
 
     public static void main(String[] args) {
 
-        Scanner keyboard = new Scanner(System.in);
+        playRockPaperScissors();
+    }
 
+    public static void playRockPaperScissors() {
+        Scanner keyboard = new Scanner(System.in);
+        
         int userInput;
         int computerInput;
-       // int currentRound = 0;
+        // int currentRound = 0;
         int totalGameRounds = 0;
 
         int wins = 0;
@@ -49,8 +53,7 @@ public class RockPaperScissorsStep4 {
                     computerInput = generateComputerInput();
                     //computerInput = 1;
 
-                    System.out.println("The computer played " + returnRockPaperOrScissors(computerInput) + ".");
-                    System.out.println("You played " + returnRockPaperOrScissors(userInput) + ".");
+                    printWhoPlayedWhat(computerInput, userInput);
 
                     if (userInput == computerInput) {
                         System.out.println("Tie!");
@@ -66,17 +69,11 @@ public class RockPaperScissorsStep4 {
                         System.out.println("Player looses.");
                         losses++;
                     }
-                    System.out.println("Current Score: Wins:" + wins + " Losses:" + losses + " Ties:" + ties);
+                    printEndOfRoundMessage(wins, losses, ties);
 
                 }
 
-                if (wins > losses) {
-                    System.out.println("Player is the overall winner.");
-                } else if (wins < losses) {
-                    System.out.println("Computer is the overall winner.");
-                } else {
-                    System.out.println("No overall winner.");
-                }
+                printEndOfBoutMessage(wins, losses);
 
             } else {
                 System.out.println("Your input is not a valid range.");
@@ -92,6 +89,25 @@ public class RockPaperScissorsStep4 {
                 keepPlaying = false;
             };
         }
+    }
+
+    public static void printEndOfBoutMessage(int wins, int losses) {
+        if (wins > losses) {
+            System.out.println("Player is the overall winner.");
+        } else if (wins < losses) {
+            System.out.println("Computer is the overall winner.");
+        } else {
+            System.out.println("No overall winner.");
+        }
+    }
+
+    public static void printEndOfRoundMessage(int wins, int losses, int ties) {
+        System.out.println("Current Score: Wins:" + wins + " Losses:" + losses + " Ties:" + ties);
+    }
+
+    public static void printWhoPlayedWhat(int computerInput, int userInput) {
+        System.out.println("The computer played " + returnRockPaperOrScissors(computerInput) + ".");
+        System.out.println("You played " + returnRockPaperOrScissors(userInput) + ".");
     }
 
     public static String returnRockPaperOrScissors(int inputValue) {
