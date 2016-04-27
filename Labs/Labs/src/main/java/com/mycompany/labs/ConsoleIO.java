@@ -19,17 +19,108 @@ public class ConsoleIO {
         this.keyboard = new Scanner(System.in);
 
     }
+//
+//    public int getUserInputInt(String prompt) {
+//        int input = 0;
+//        //  Scanner keyboard = new Scanner(System.in);
+//
+//        boolean isValid = false;
+//
+//        while (!isValid) {
+//
+//            try {
+//                input = Integer.parseInt(getUserStringInput(prompt));
+//                isValid = true;
+//            } catch (Exception ex) {
+//
+//            }
+//        }
+//
+//        return input;
+//    }
+    
+    
+//     public int getUserInputIntAbs(String prompt) {
+//        Number input = 0;
+//        //  Scanner keyboard = new Scanner(System.in);
+//
+//        boolean isValid = false;
+//
+//        while (!isValid) {
+//
+//            try {
+//                
+//                input = getAbstractUserInput(prompt, 1);
+//                isValid = true;
+//            } catch (Exception ex) {
+//                printStringToConsole("That value is not supported.");
+//            }
+//        }
+//
+//        return input.intValue();
+//    }
 
     public int getUserInputInt(String prompt) {
-        int inputString = 0;
+        Number input = 0;
+        int choice = 1;
         //  Scanner keyboard = new Scanner(System.in);
+        input = getUserInputValidationLoop(input, prompt, choice);
 
-        System.out.println(prompt);
-        inputString = keyboard.nextInt();
-
-        return inputString;
+        return input.intValue();
     }
 
+    public Number getUserInputValidationLoop(Number input, String prompt, int choice) {
+        boolean isValid = false;
+        while (!isValid) {
+
+            try {
+                
+                input = getAbstractUserInput(prompt, choice);
+                isValid = true;
+            } catch (Exception ex) {
+                printStringToConsole("That value is not supported.");
+            }
+        }
+        return input;
+    }
+
+    
+    /**The method will call another method to ask the user for input and
+     * return a number Object which is parsed based on the second parameter.
+     * 
+     *  1 - Integer
+     *  2 - Float
+     *  3 - Double
+     * 
+     * Integer is the default.
+     * 
+     * @param prompt
+     * @param choice
+     * @return 
+     */
+    public Number getAbstractUserInput(String prompt, int choice) throws NumberFormatException {
+        Number input;
+
+        String inputString = getUserStringInput(prompt);
+
+        switch (choice) {
+            case 2:
+                input = Float.parseFloat(inputString);
+                break;
+            case 3:
+                input = Double.parseDouble(inputString);
+                break;
+            default:
+                input = Integer.parseInt(inputString);
+                break;
+        }
+
+        return input;
+    }
+
+ //public Number getAbstractUserInput(String prompt, Number numberObject){
+    
+     
     public int getUserIntInputRange(String prompt, int minValue, int maxValue, String errorMessage) {
         // Adapter to us SM's method and my phraseing.
         return getUserMinMax(prompt, minValue, maxValue, errorMessage);
@@ -79,27 +170,51 @@ public class ConsoleIO {
     public String getUserStringInput(String prompt) {
         String userStringInput;
         System.out.println(prompt);
-        userStringInput = keyboard.next();
+        userStringInput = keyboard.nextLine();
         return userStringInput;
     }
 
-    public float getUserFloatInput(String prompt) {
-        float userFloatInput;
-        System.out.println(prompt);
-        userFloatInput = keyboard.nextFloat();
-        return userFloatInput;
-    }
-
     
-    /** Returns a floating-point number between the range of minimumValue and maximumValue.
-     * The method will continue looping until the user enters a float in the valid range.
-     * 
+     public float getUserFloatInput(String prompt) {
+        Number input = 0f;
+        int choice = 2;
+        //  Scanner keyboard = new Scanner(System.in);
+        input = getUserInputValidationLoop(input, prompt, choice);
+
+        return input.floatValue();
+    }
+    
+    
+    
+//    public float getUserFloatInput(String prompt) {
+//        float input = 0;
+//
+//        boolean isValid = false;
+//
+//        while (!isValid) {
+//
+//            try {
+//
+//                input = Float.parseFloat(getUserStringInput(prompt));
+//                isValid = true;
+//            } catch (Exception ex) {
+//
+//            }
+//        }
+//        return input;
+//    }
+
+    /**
+     * Returns a floating-point number between the range of minimumValue and
+     * maximumValue. The method will continue looping until the user enters a
+     * float in the valid range.
+     *
      * This method is an adapter for SM's getUserFloatMinMax method.
-     * 
+     *
      * @param prompt
      * @param minimumValue
      * @param maximumValue
-     * @return 
+     * @return
      */
     public float getUserFloatRange(String prompt, float minimumValue, float maximumValue) {
 
@@ -125,12 +240,38 @@ public class ConsoleIO {
         return userFloatInput;
     }
 
-    public double getUserDoubleInput(String prompt) {
-        double userDoubleInput;
-        System.out.println(prompt);
-        userDoubleInput = keyboard.nextDouble();
-        return userDoubleInput;
+    
+     public double getUserDoubleInput(String prompt) {
+        Number input = 0d;
+        int choice = 3;
+        //  Scanner keyboard = new Scanner(System.in);
+        input = getUserInputValidationLoop(input, prompt, choice);
+
+        return input.doubleValue();
     }
+    
+    
+    
+    
+    
+//    public double getUserDoubleInput(String prompt) {
+//        double input = 0;
+//
+//        boolean isValid = false;
+//
+//        while (!isValid) {
+//
+//            try {
+//
+//                input = Double.parseDouble(getUserStringInput(prompt));
+//                isValid = true;
+//            } catch (Exception ex) {
+//
+//            }
+//        }
+//
+//        return input;
+//    }
 
     public double getUserDoubleInputRange(String prompt, double min, double max) {
 

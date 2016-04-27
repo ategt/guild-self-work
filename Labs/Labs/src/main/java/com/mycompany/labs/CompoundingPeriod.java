@@ -14,31 +14,40 @@ public class CompoundingPeriod {
     private float startingBalance;
     private float endingBalance;
     private float interestRate;
-    private float interestEarnedForCurrentPeriod;
+    private float interestEarned;
     private float totalInterestEarned;
 
     private boolean isBeginingOfYear;
     private boolean isEndOfYear;
-    
+
     private int sequenceNumber;
     private int compoundingsPerYear;
 
-    public CompoundingPeriod(float startingBalance, float interestRate, int sequenceNumber ){
+    CompoundingPeriod previousInstance;
+
+    public CompoundingPeriod(CompoundingPeriod previousInstance, float startingBalance, float interestRate, int sequenceNumber) {
         setStartingBalance(startingBalance);
         setInterestRate(interestRate);
         setSequenceNumber(sequenceNumber);
-        
-        
+        setPreviousInstance(previousInstance);
+
     }
-    
-    public String getPrettyBalance(){
+
+    public CompoundingPeriod(float startingBalance, float interestRate, int sequenceNumber) {
+        setStartingBalance(startingBalance);
+        setInterestRate(interestRate);
+        setSequenceNumber(sequenceNumber);
+
+    }
+
+    public String getPrettyBalance() {
         return "";
     }
-    
-    public String getPrettyInterest(){
+
+    public String getPrettyInterest() {
         return "";
     }
-    
+
     /**
      * @return the startingBalance
      */
@@ -57,6 +66,10 @@ public class CompoundingPeriod {
      * @return the endingBalance
      */
     public float getEndingBalance() {
+        if (endingBalance == 0) {
+            populateEmptyFields();
+        }
+
         return endingBalance;
     }
 
@@ -71,6 +84,10 @@ public class CompoundingPeriod {
      * @return the interestRate
      */
     public float getInterestRate() {
+        if (interestRate == 0) {
+            populateEmptyFields();
+        }
+
         return interestRate;
     }
 
@@ -81,32 +98,31 @@ public class CompoundingPeriod {
         this.interestRate = interestRate;
     }
 
-    /**
-     * @return the interestEarnedForCurrentPeriod
-     */
-    public float getInterestEarnedForCurrentPeriod() {
-        return interestEarnedForCurrentPeriod;
-    }
+    public void resetTotalInterestEarned() {
 
-    /**
-     * @param interestEarnedForCurrentPeriod the interestEarnedForCurrentPeriod
-     * to set
-     */
-    public void setInterestEarnedForCurrentPeriod(float interestEarnedForCurrentPeriod) {
-        this.interestEarnedForCurrentPeriod = interestEarnedForCurrentPeriod;
+        this.totalInterestEarned = getInterestEarned();
     }
 
     /**
      * @return the totalInterestEarned
      */
     public float getTotalInterestEarned() {
+
+        if (isIsBeginingOfYear()) {
+            resetTotalInterestEarned();
+        }
+
         return totalInterestEarned;
     }
 
+    public void 
+    
+    
     /**
      * @param totalInterestEarned the totalInterestEarned to set
      */
     public void setTotalInterestEarned(float totalInterestEarned) {
+
         this.totalInterestEarned = totalInterestEarned;
     }
 
@@ -142,6 +158,10 @@ public class CompoundingPeriod {
      * @return the sequenceNumber
      */
     public int getSequenceNumber() {
+        if (sequenceNumber == 0) {
+            populateEmptyFields();
+        }
+
         return sequenceNumber;
     }
 
@@ -152,23 +172,59 @@ public class CompoundingPeriod {
         this.sequenceNumber = sequenceNumber;
     }
 
-    
-    public void populateFields(){
-        
-        
-        interestearned = calculateInterestEarned(start,rate)
-                calculateEndingBalance(startingbalance, interestEarned)
-                totalinterestearned()
-                        
-                        isBeginingOfYear()
-                                isEndOfYear
-                
+    public float calculateInterestEarned(float balance, float rate) {
+        //float calculatedInterest = 0;
+        return balance * rate;
+    }
+
+    public float calculateEndingBalance(float balance, float interestEarned) {
+        return balance + interestEarned;
+    }
+
+    public float calculateEndingBalanceFromRate(float balance, float rate) {
+
+        return calculateEndingBalance(getStartingBalance(), calculateInterestEarned(getStartingBalance(), getInterestRate()));
+    }
+
+    public void populateEmptyFields() {
+
+        if (getInterestEarned() == 0) {
+            setInterestEarned(calculateInterestEarned(getStartingBalance(), getInterestRate()));
+        }
+
+        if (getEndingBalance() == 0) {
+            setEndingBalance(calculateEndingBalance(getStartingBalance(), getInterestEarned()));
+        }
+        //setTotalEarnedInterest();  // get the last object and add this periods interest to its total interest.
+
+        if (isBeginingOfYear(getSequenceNumber(), getCompoundingsPerYear()) == false) {
+            setIsBeginingOfYear(isBeginingOfYear(getSequenceNumber(), getCompoundingsPerYear()));
+        }
+
+        if (isEndOfYear(getSequenceNumber(), getCompoundingsPerYear()) == false) {
+            setIsEndOfYear(isEndOfYear(getSequenceNumber(), getCompoundingsPerYear()));
+        }
+
+    }
+
+    public boolean isBeginingOfYear(int sequenceNumber, int compoundingsPerYear) {
+        return (sequenceNumber % compoundingsPerYear == 0);
+
+    }
+
+    public boolean isEndOfYear(int sequenceNumber, int compoundingsPerYear) {
+
+        return (sequenceNumber % compoundingsPerYear) == (compoundingsPerYear - 1);
     }
 
     /**
      * @return the compoundingsPerYear
      */
     public int getCompoundingsPerYear() {
+        if (compoundingsPerYear == 0) {
+            populateEmptyFields();
+        }
+
         return compoundingsPerYear;
     }
 
@@ -177,5 +233,27 @@ public class CompoundingPeriod {
      */
     public void setCompoundingsPerYear(int compoundingsPerYear) {
         this.compoundingsPerYear = compoundingsPerYear;
+    }
+
+    /**
+     * @return the interestEarned
+     */
+    public float getInterestEarned() {
+        if (interestEarned == 0) {
+            populateEmptyFields();
+        }
+
+        return interestEarned;
+    }
+
+    /**
+     * @param interestEarned the interestEarned to set
+     */
+    public void setInterestEarned(float interestEarned) {
+        this.interestEarned = interestEarned;
+    }
+
+    public void setPreviousInstance(CompoundingPeriod previousInstance) {
+        this.previousInstance = previousInstance;
     }
 }
