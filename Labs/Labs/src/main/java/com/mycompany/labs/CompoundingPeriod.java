@@ -21,6 +21,7 @@ public class CompoundingPeriod {
     private boolean isEndOfYear;
     
     private int sequenceNumber;
+    private int compoundingsPerYear;
 
     public CompoundingPeriod(float startingBalance, float interestRate, int sequenceNumber ){
         setStartingBalance(startingBalance);
@@ -28,6 +29,14 @@ public class CompoundingPeriod {
         setSequenceNumber(sequenceNumber);
         
         
+    }
+    
+    public String getPrettyBalance(){
+        return "";
+    }
+    
+    public String getPrettyInterest(){
+        return "";
     }
     
     /**
@@ -143,4 +152,30 @@ public class CompoundingPeriod {
         this.sequenceNumber = sequenceNumber;
     }
 
+    
+    public void populateFields(){
+        
+        
+        interestearned = calculateInterestEarned(start,rate)
+                calculateEndingBalance(startingbalance, interestEarned)
+                totalinterestearned()
+                        
+                        isBeginingOfYear()
+                                isEndOfYear
+                
+    }
+
+    /**
+     * @return the compoundingsPerYear
+     */
+    public int getCompoundingsPerYear() {
+        return compoundingsPerYear;
+    }
+
+    /**
+     * @param compoundingsPerYear the compoundingsPerYear to set
+     */
+    public void setCompoundingsPerYear(int compoundingsPerYear) {
+        this.compoundingsPerYear = compoundingsPerYear;
+    }
 }
