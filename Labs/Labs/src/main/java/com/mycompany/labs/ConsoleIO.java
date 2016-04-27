@@ -19,33 +19,120 @@ public class ConsoleIO {
         this.keyboard = new Scanner(System.in);
 
     }
-    
-    
 
-    public int getUserInput(String prompt) {
+    public int getUserInputInt(String prompt) {
         int inputString = 0;
         //  Scanner keyboard = new Scanner(System.in);
 
         System.out.println(prompt);
-        inputString = keyboard.next();
+        inputString = keyboard.nextInt();
 
-        return inputStr;
+        return inputString;
     }
 
     public int getUserIntInputRange(String prompt, int minValue, int maxValue) {
-        int inputInt = 0;
-
-        Scanner keyboard = new Scanner(System.in);
-
-        System.out.println(prompt);
-
-        inputInt = keyboard.nextInt();
+        int inputInt = getUserMinMax(prompt, minValue, maxValue);
 
         return inputInt;
     }
 
-    public void printToConsole(String stringToPrint){
+    public int getUserMinMax(String prompt, int min, int max) {
+
+        int userIntInput = 0;
+        boolean isValid = false;
+
+        while (!isValid) {
+            userIntInput = this.getUserInputInt(prompt);
+            if (userIntInput >= min && userIntInput <= max) {
+                isValid = true;
+
+            } else {
+                isValid = false;
+                System.out.println("Number must be between " + min + " and " + max + ".");
+            }
+
+        }
+        return userIntInput;
+    }
+
+    public void printStringToConsole(String stringToPrint) {
+        printToConsole(stringToPrint);
+    }
+
+    public void printToConsole(String stringToPrint) {
         System.out.println(stringToPrint);
     }
     
+    
+    
+    
+    public String getUserStringInput(String prompt) {
+        String userStringInput;
+        System.out.println(prompt);
+        userStringInput = keyboard.next();
+        return userStringInput;
+    }
+
+    public float getUserFloatInput(String prompt) {
+        float userFloatInput;
+        System.out.println(prompt);
+        userFloatInput = keyboard.nextFloat();
+        return userFloatInput;
+    }
+public float getUserFloatMinMax(String prompt, float min, float max) {
+
+        float userFloatInput = 0;
+        boolean isValid = false;
+
+        while (!isValid) {
+            userFloatInput = this.getUserFloatInput(prompt);
+            if (userFloatInput >= min && userFloatInput <= max) {
+                isValid = true;
+
+            } else {
+                isValid = false;
+                System.out.println("Number must be between " + min + " and " + max + ".");
+            }
+
+        }
+        return userFloatInput;
+    }
+
+    public double getUserDoubleInput(String prompt) {
+        double userDoubleInput;
+        System.out.println(prompt);
+        userDoubleInput = keyboard.nextDouble();
+        return userDoubleInput;
+    }
+
+    public double getUserDoubleInputRange(String prompt, double min, double max) {
+        
+    return getUserDoubleMinMax(prompt, min,max);
+    }
+    
+    public double getUserDoubleRange(String prompt, double min, double max) {
+        
+    return getUserDoubleMinMax(prompt, min,max);
+    }
+    
+    public double getUserDoubleMinMax(String prompt, double min, double max) {
+
+        double userDoubleInput = 0.0d;
+        boolean isValid = false;
+
+        while (!isValid) {
+            userDoubleInput = this.getUserDoubleInput(prompt);
+            if (userDoubleInput >= min && userDoubleInput <= max) {
+                isValid = true;
+
+            } else {
+                isValid = false;
+                System.out.println("Number must be between " + min + " and " + max + ".");
+            }
+
+        }
+        return userDoubleInput;
+    }
+
+
 }
