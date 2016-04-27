@@ -33,6 +33,8 @@ public class FactorizorJUnitTest {
     //
     // @Test
     // public void hello() {}
+    
+    @Test
     public void testFactorizer() {
 
         Factorizer factorizer = new Factorizer();
