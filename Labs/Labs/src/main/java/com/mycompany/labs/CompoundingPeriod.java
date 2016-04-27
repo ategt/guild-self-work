@@ -10,16 +10,26 @@ package com.mycompany.labs;
  * @author apprentice
  */
 public class CompoundingPeriod {
+
     private float startingBalance;
     private float endingBalance;
     private float interestRate;
     private float interestEarnedForCurrentPeriod;
     private float totalInterestEarned;
-    
-    
+
     private boolean isBeginingOfYear;
     private boolean isEndOfYear;
+    
+    private int sequenceNumber;
 
+    public CompoundingPeriod(float startingBalance, float interestRate, int sequenceNumber ){
+        setStartingBalance(startingBalance);
+        setInterestRate(interestRate);
+        setSequenceNumber(sequenceNumber);
+        
+        
+    }
+    
     /**
      * @return the startingBalance
      */
@@ -70,7 +80,8 @@ public class CompoundingPeriod {
     }
 
     /**
-     * @param interestEarnedForCurrentPeriod the interestEarnedForCurrentPeriod to set
+     * @param interestEarnedForCurrentPeriod the interestEarnedForCurrentPeriod
+     * to set
      */
     public void setInterestEarnedForCurrentPeriod(float interestEarnedForCurrentPeriod) {
         this.interestEarnedForCurrentPeriod = interestEarnedForCurrentPeriod;
@@ -117,7 +128,19 @@ public class CompoundingPeriod {
     public void setIsEndOfYear(boolean isEndOfYear) {
         this.isEndOfYear = isEndOfYear;
     }
-    
-    
-    
+
+    /**
+     * @return the sequenceNumber
+     */
+    public int getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    /**
+     * @param sequenceNumber the sequenceNumber to set
+     */
+    public void setSequenceNumber(int sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
 }
