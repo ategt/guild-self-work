@@ -30,13 +30,26 @@ public class ConsoleIO {
         return inputString;
     }
 
-    public int getUserIntInputRange(String prompt, int minValue, int maxValue) {
-        int inputInt = getUserMinMax(prompt, minValue, maxValue);
+    public int getUserIntInputRange(String prompt, int minValue, int maxValue, String errorMessage) {
+        // Adapter to us SM's method and my phraseing.
+        return getUserMinMax(prompt, minValue, maxValue, errorMessage);
+    }
 
-        return inputInt;
+    public int getUserIntInputRange(String prompt, int minValue, int maxValue) {
+
+        // Adapter to us SM's method and my phrasing.
+        return getUserMinMax(prompt, minValue, maxValue);
+
     }
 
     public int getUserMinMax(String prompt, int min, int max) {
+
+        String defaultErrorMessage = "Number must be between " + min + " and " + max + ".";
+
+        return getUserMinMax(prompt, min, max, defaultErrorMessage);
+    }
+
+    public int getUserMinMax(String prompt, int min, int max, String errorMessage) {
 
         int userIntInput = 0;
         boolean isValid = false;
@@ -48,7 +61,7 @@ public class ConsoleIO {
 
             } else {
                 isValid = false;
-                System.out.println("Number must be between " + min + " and " + max + ".");
+                System.out.println(errorMessage);
             }
 
         }
@@ -62,10 +75,7 @@ public class ConsoleIO {
     public void printToConsole(String stringToPrint) {
         System.out.println(stringToPrint);
     }
-    
-    
-    
-    
+
     public String getUserStringInput(String prompt) {
         String userStringInput;
         System.out.println(prompt);
@@ -79,7 +89,8 @@ public class ConsoleIO {
         userFloatInput = keyboard.nextFloat();
         return userFloatInput;
     }
-public float getUserFloatMinMax(String prompt, float min, float max) {
+
+    public float getUserFloatMinMax(String prompt, float min, float max) {
 
         float userFloatInput = 0;
         boolean isValid = false;
@@ -106,15 +117,15 @@ public float getUserFloatMinMax(String prompt, float min, float max) {
     }
 
     public double getUserDoubleInputRange(String prompt, double min, double max) {
-        
-    return getUserDoubleMinMax(prompt, min,max);
+
+        return getUserDoubleMinMax(prompt, min, max);
     }
-    
+
     public double getUserDoubleRange(String prompt, double min, double max) {
-        
-    return getUserDoubleMinMax(prompt, min,max);
+
+        return getUserDoubleMinMax(prompt, min, max);
     }
-    
+
     public double getUserDoubleMinMax(String prompt, double min, double max) {
 
         double userDoubleInput = 0.0d;
@@ -133,6 +144,5 @@ public float getUserFloatMinMax(String prompt, float min, float max) {
         }
         return userDoubleInput;
     }
-
 
 }

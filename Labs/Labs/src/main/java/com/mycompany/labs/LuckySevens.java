@@ -13,63 +13,78 @@ import java.util.Scanner;
  */
 public class LuckySevens {
 
-    public static void main(String[] args) {
+    int startingBet = 0;
+    int maxAmountHeld = 0;
+    int rollNumberAtMaxAmountHeld = 0;
 
-        Scanner keyboard = new Scanner(System.in);
+    public void run() {
 
-        boolean isValidNumber = false;
+        ConsoleIO consoleIO = new ConsoleIO();
 
-        int startingBet = 0;
-        int maxAmountHeld = 0;
-        int rollNumberAtMaxAmountHeld = 0;
+        startingBet = 0;
+        maxAmountHeld = 0;
+        rollNumberAtMaxAmountHeld = 0;
 
-        while (!isValidNumber) {
+        startingBet = consoleIO.getUserIntInputRange("How many Dollars would you like to bet?",
+                4, 15000, "Betting that amount does not seem like a good idea.");
 
-            System.out.print("How many dollars do you have? ");
-            startingBet = keyboard.nextInt();
-            System.out.println("");
-
-            if (startingBet > 0) {
-                isValidNumber = true;
-            } else {
-                isValidNumber = false;
-                System.out.println("That input is not supported by this program.");
-            }
-        }
-
-        int diceRoll = 0;
         int rollCounter = 1;
 
+        rollCounter = luckySevensGameLoop(rollCounter);
+
+        printEndingMessage(rollCounter, consoleIO);
+    }
+
+    public void printEndingMessage(int rollCounter, ConsoleIO consoleIO) {
+        consoleIO.printStringToConsole("You are broke after " + --rollCounter + " rolls.\n");
+        consoleIO.printStringToConsole("You should have quit after " + rollNumberAtMaxAmountHeld + " rolls when you had $" + maxAmountHeld + ".");
+    }
+
+    public int luckySevensGameLoop(int rollCounter) {
+        int diceRoll;
         for (int currentBalance = startingBet; currentBalance > 0; rollCounter++) {
 
             diceRoll = rollDice();
 
-            if (diceRoll == 4) {
-                currentBalance += 4;
-            } else {
-                currentBalance -= 1;
-            }
+            currentBalance = adjustCurrentBalance(diceRoll, currentBalance);
 
-            if (currentBalance > maxAmountHeld) {
-                maxAmountHeld = currentBalance;
-                rollNumberAtMaxAmountHeld = rollCounter;
-            }
+            updateHighBalance(currentBalance, rollCounter);
         }
-
-        System.out.println("You are broke after " + --rollCounter + " rolls.\n");
-        System.out.println("You should have quit after " + rollNumberAtMaxAmountHeld + " rolls when you had $" + maxAmountHeld + ".");
+        return rollCounter;
     }
 
-    public static int rollDice() {
+    public void updateHighBalance(int currentBalance, int rollCounter) {
+        if (currentBalance > maxAmountHeld) {
+            maxAmountHeld = currentBalance;
+            rollNumberAtMaxAmountHeld = rollCounter;
+        }
+    }
 
-        int dieOne = 0;
-        int dieTwo = 0;
+    public int adjustCurrentBalance(int diceRoll, int currentBalance) {
+        if (isAWinner(diceRoll)) {
+            currentBalance += 4;
+        } else {
+            currentBalance -= 1;
+        }
+        return currentBalance;
+    }
+
+    public boolean isAWinner(int diceRoll) {
+        return (diceRoll == 7);
+    }
+
+    public int rollDice() {
 
         // Roll the virtual dice here.
-        dieOne = (int) Math.ceil(Math.random() * 6);
-        dieTwo = (int) Math.ceil(Math.random() * 6);
+        int dieOne = rollOneDie();
+        int dieTwo = rollOneDie();
 
         return dieOne + dieTwo;
+
+    }
+
+    public int rollOneDie() {
+        return (int) Math.ceil(Math.random() * 6);
 
     }
 }
