@@ -23,7 +23,8 @@ public class CompoundingPeriod {
     private int sequenceNumber;
     private int compoundingsPerYear;
 
-    CompoundingPeriod previousInstance;
+    private CompoundingPeriod previousInstance;
+    private CompoundingPeriod nextInstance;
 
     public CompoundingPeriod(CompoundingPeriod previousInstance, float startingBalance, float interestRate, int sequenceNumber) {
         setStartingBalance(startingBalance);
@@ -115,9 +116,7 @@ public class CompoundingPeriod {
         return totalInterestEarned;
     }
 
-    public void 
-    
-    
+    //public void 
     /**
      * @param totalInterestEarned the totalInterestEarned to set
      */
@@ -239,8 +238,9 @@ public class CompoundingPeriod {
      * @return the interestEarned
      */
     public float getInterestEarned() {
+
         if (interestEarned == 0) {
-            populateEmptyFields();
+            setInterestEarned(calculateInterestEarned(getStartingBalance(), getInterestRate()));
         }
 
         return interestEarned;
@@ -255,5 +255,26 @@ public class CompoundingPeriod {
 
     public void setPreviousInstance(CompoundingPeriod previousInstance) {
         this.previousInstance = previousInstance;
+    }
+
+    /**
+     * @return the previousInstance
+     */
+    public CompoundingPeriod getPreviousInstance() {
+        return previousInstance;
+    }
+
+    /**
+     * @return the nextInstance
+     */
+    public CompoundingPeriod getNextInstance() {
+        return nextInstance;
+    }
+
+    /**
+     * @param nextInstance the nextInstance to set
+     */
+    public void setNextInstance(CompoundingPeriod nextInstance) {
+        this.nextInstance = nextInstance;
     }
 }

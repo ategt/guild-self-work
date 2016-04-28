@@ -111,6 +111,12 @@ public class ConsoleIO {
 
     }
 
+    public int getUserIntInputPositive(String prompt) {
+        // Adapter to us SM's method and my phrasing.
+        return getUserMinMax(prompt, 0, Integer.MAX_VALUE);
+
+    }
+
     public int getUserMinMax(String prompt, int min, int max) {
 
         String defaultErrorMessage = "Number must be between " + min + " and " + max + ".";
