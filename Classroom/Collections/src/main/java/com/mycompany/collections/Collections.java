@@ -93,7 +93,17 @@ public class Collections {
             System.out.println(value);
 
         }
-
+        
+        
+        int arre[] = new int[6];
+        int [] arra = new int[6];
+       // int arrb[] arrb = new int[6];
+        //int arrc[] = int [6] new;
+        
+        
+        
+        
+        
     }
 
     private List<String> getStringList() {

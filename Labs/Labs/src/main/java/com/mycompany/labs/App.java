@@ -18,72 +18,76 @@ public class App {
 
         ConsoleIO consoleIO = new ConsoleIO();
 
-        StateCapitals2 stateCapitals = new StateCapitals2();
+       // StateCapitals2 stateCapitals = new StateCapitals2();
         
+       
+       EnhancedInterestCalculator eic = new EnhancedInterestCalculator();
+       eic.run();
+       
         
 //        int lowerLimit = consoleIO.getUserIntInputPositive("Please enter the lower limit for capital city population:");
 //        stateCapitals.printStatesCapitalsAndAttributes(lowerLimit);
+////        
 //        
-        
-        
-        
-         System.out.println("getFilteredCapitalsMap");
-        int lowerLimit = Integer.MAX_VALUE;
-        StateCapitals2 instance = new StateCapitals2();
-        Map expResult = null;
-        Map result = instance.getFilteredCapitalsMap(lowerLimit);
-
-        Set<String> keySet = result.keySet();
-
-        java.util.Map<String, Capital> filteredMap = instance.getFilteredCapitalsMap(lowerLimit);
-
-        Boolean testResult = true;
-
-        for (String key : keySet) {
-
-            if (filteredMap.get(key).getPopulation() > lowerLimit) {
-
-                testResult = false;
-
-            }
-        }
+//        
+//        
+//         System.out.println("getFilteredCapitalsMap");
+//        int lowerLimit = Integer.MAX_VALUE;
+//        StateCapitals2 instance = new StateCapitals2();
+//        Map expResult = null;
+//        Map result = instance.getFilteredCapitalsMap(lowerLimit);
+//
+//        Set<String> keySet = result.keySet();
+//
+//        java.util.Map<String, Capital> filteredMap = instance.getFilteredCapitalsMap(lowerLimit);
+//
+//        Boolean testResult = true;
+//
+//        for (String key : keySet) {
+//
+//            if (filteredMap.get(key).getPopulation() > lowerLimit) {
+//
+//                testResult = false;
+//
+//            }
+//        }
+//
+//       // assertTrue(testResult);
+//        System.out.println(testResult);
+//        
+//        lowerLimit = 5000000;
+//        filteredMap = instance.getFilteredCapitalsMap(lowerLimit);
+//
+//        testResult = true;
+//
+//        for (String key : keySet) {
+//
+//            if (filteredMap.get(key).getPopulation() > lowerLimit) {
+//
+//                testResult = false;
+//
+//            }
+//        }
+//
+//       // assertTrue(testResult);
+//        System.out.println(testResult);
+//
+//        lowerLimit = 70;
+//        filteredMap = instance.getFilteredCapitalsMap(lowerLimit);
+//
+//        testResult = true;
+//
+//        for (String key : keySet) {
+//
+//            if (filteredMap.get(key).getPopulation() > lowerLimit) {
+//
+//                testResult = false;
+//
+//            }
+//        }
 
        // assertTrue(testResult);
-        System.out.println(testResult);
-        
-        lowerLimit = 5000000;
-        filteredMap = instance.getFilteredCapitalsMap(lowerLimit);
-
-        testResult = true;
-
-        for (String key : keySet) {
-
-            if (filteredMap.get(key).getPopulation() > lowerLimit) {
-
-                testResult = false;
-
-            }
-        }
-
-       // assertTrue(testResult);
-        System.out.println(testResult);
-
-        lowerLimit = 70;
-        filteredMap = instance.getFilteredCapitalsMap(lowerLimit);
-
-        testResult = true;
-
-        for (String key : keySet) {
-
-            if (filteredMap.get(key).getPopulation() > lowerLimit) {
-
-                testResult = false;
-
-            }
-        }
-
-       // assertTrue(testResult);
-        System.out.println(testResult);
+        //System.out.println(testResult);
 
 //        stateCapitals.printStates();
 //

@@ -5,6 +5,8 @@
  */
 package com.mycompany.labs;
 
+import java.util.Locale;
+
 /**
  *
  * @author apprentice
@@ -26,6 +28,19 @@ public class CompoundingPeriod {
     private CompoundingPeriod previousInstance;
     private CompoundingPeriod nextInstance;
 
+    /**
+     * Constructor CompoundingPeriod(CompoundingPeriod PreviousInstance, float
+     * Starting Balance, Float Interest Rate, Int Sequence Number)
+     *
+     * @param previousInstance
+     * @param startingBalance
+     * @param interestRate
+     * @param sequenceNumber
+     */
+    public CompoundingPeriod(CompoundingPeriod previousInstance) {
+        setPreviousInstance(previousInstance);
+    }
+
     public CompoundingPeriod(CompoundingPeriod previousInstance, float startingBalance, float interestRate, int sequenceNumber) {
         setStartingBalance(startingBalance);
         setInterestRate(interestRate);
@@ -41,19 +56,59 @@ public class CompoundingPeriod {
 
     }
 
-    public String getPrettyBalance() {
-        return "";
+    public String getPrettyDollars(float balance) {
+
+        Locale locale = new Locale("en", "US");
+        java.text.NumberFormat currencyFormatter = java.text.NumberFormat.getCurrencyInstance(locale);
+        return currencyFormatter.format(balance);
+
+    }
+
+    public String getPrettyStartingBalance() {
+        return getPrettyStartingBalance(getStartingBalance());
+    }
+
+    public String getPrettyStartingBalance(float money) {
+
+        return getPrettyDollars(money);
+    }
+
+    public String getPrettyEndBalance() {
+        return getPrettyEndingBalance(getEndingBalance());
+    }
+
+    public String getPrettyEndingBalance(float money) {
+
+        return getPrettyDollars(money);
     }
 
     public String getPrettyInterest() {
-        return "";
+        return getPrettyInterest(getInterestEarned());
     }
 
+    public String getPrettyInterest(float money) {
+
+        return getPrettyDollars(money);
+    }
+
+//public void 
     /**
      * @return the startingBalance
      */
     public float getStartingBalance() {
+        if (startingBalance == 0) {
+            setStartingBalance(retrieveStartingBalance(previousInstance));
+        }
+
         return startingBalance;
+    }
+
+    public float retrieveStartingBalance() {
+        return retrieveStartingBalance(previousInstance);
+    }
+
+    public float retrieveStartingBalance(CompoundingPeriod previousInstance) {
+        return previousInstance.getEndingBalance();
     }
 
     /**
@@ -68,7 +123,7 @@ public class CompoundingPeriod {
      */
     public float getEndingBalance() {
         if (endingBalance == 0) {
-            populateEmptyFields();
+            setEndingBalance(calculateEndingBalance(getStartingBalance(), getInterestEarned()));
         }
 
         return endingBalance;
@@ -86,7 +141,7 @@ public class CompoundingPeriod {
      */
     public float getInterestRate() {
         if (interestRate == 0) {
-            populateEmptyFields();
+            setInterestRate(previousInstance.getInterestRate());
         }
 
         return interestRate;
@@ -113,10 +168,26 @@ public class CompoundingPeriod {
             resetTotalInterestEarned();
         }
 
+        if (totalInterestEarned == 0) {
+            setTotalInterestEarned(calculateTotalInterestEarned());
+        }
+
         return totalInterestEarned;
     }
 
-    //public void 
+    public float calculateTotalInterestEarned() {
+        return retrievePreviousTotalInterestEarned() + getInterestEarned();
+    }
+
+    public float retrievePreviousTotalInterestEarned() {
+        return retrievePreviousTotalInterestEarned(previousInstance);
+    }
+
+    public float retrievePreviousTotalInterestEarned(CompoundingPeriod previousInstance) {
+
+        return previousInstance.getTotalInterestEarned();
+    }
+
     /**
      * @param totalInterestEarned the totalInterestEarned to set
      */
@@ -157,11 +228,14 @@ public class CompoundingPeriod {
      * @return the sequenceNumber
      */
     public int getSequenceNumber() {
-        if (sequenceNumber == 0) {
-            populateEmptyFields();
+        if(sequenceNumber == 0 &&  previousInstance != null){
+            setSequenceNumber(calculateSequenceNumber());
         }
-
         return sequenceNumber;
+    }
+
+    public int calculateSequenceNumber() {
+        return previousInstance.getSequenceNumber() + 1;
     }
 
     /**
@@ -185,25 +259,22 @@ public class CompoundingPeriod {
         return calculateEndingBalance(getStartingBalance(), calculateInterestEarned(getStartingBalance(), getInterestRate()));
     }
 
+    @Deprecated
     public void populateEmptyFields() {
 
-        if (getInterestEarned() == 0) {
-            setInterestEarned(calculateInterestEarned(getStartingBalance(), getInterestRate()));
-        }
-
-        if (getEndingBalance() == 0) {
-            setEndingBalance(calculateEndingBalance(getStartingBalance(), getInterestEarned()));
-        }
+//        if (getInterestEarned() == 0) {
+//            setInterestEarned(calculateInterestEarned(getStartingBalance(), getInterestRate()));
+//        }
+//        if (getEndingBalance() == 0) {
+//            setEndingBalance(calculateEndingBalance(getStartingBalance(), getInterestEarned()));
+//        }
         //setTotalEarnedInterest();  // get the last object and add this periods interest to its total interest.
-
-        if (isBeginingOfYear(getSequenceNumber(), getCompoundingsPerYear()) == false) {
-            setIsBeginingOfYear(isBeginingOfYear(getSequenceNumber(), getCompoundingsPerYear()));
-        }
-
-        if (isEndOfYear(getSequenceNumber(), getCompoundingsPerYear()) == false) {
-            setIsEndOfYear(isEndOfYear(getSequenceNumber(), getCompoundingsPerYear()));
-        }
-
+//        if (isBeginingOfYear(getSequenceNumber(), getCompoundingsPerYear()) == false) {
+//            setIsBeginingOfYear(isBeginingOfYear(getSequenceNumber(), getCompoundingsPerYear()));
+//        }
+//        if (isEndOfYear(getSequenceNumber(), getCompoundingsPerYear()) == false) {
+//            setIsEndOfYear(isEndOfYear(getSequenceNumber(), getCompoundingsPerYear()));
+//        }
     }
 
     public boolean isBeginingOfYear(int sequenceNumber, int compoundingsPerYear) {
@@ -220,9 +291,6 @@ public class CompoundingPeriod {
      * @return the compoundingsPerYear
      */
     public int getCompoundingsPerYear() {
-        if (compoundingsPerYear == 0) {
-            populateEmptyFields();
-        }
 
         return compoundingsPerYear;
     }
