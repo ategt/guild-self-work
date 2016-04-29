@@ -15,6 +15,15 @@ public class Student {
     private int studentId;
     private String studentName;
 
+    public Student() {
+    }
+
+    public Student(java.util.ArrayList<Integer> QuizScores, int studentId, String studentName) {
+        this.QuizScores = QuizScores;
+        this.studentId = studentId;
+        this.studentName = studentName;
+    }
+
     public static java.util.HashMap<String, java.util.ArrayList<Integer>> loadStudentData() {
 
         java.util.HashMap<String, java.util.ArrayList<Integer>> scoreMap = new java.util.HashMap<>();
