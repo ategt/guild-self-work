@@ -7,6 +7,7 @@ package com.mycompany.labs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -25,7 +26,7 @@ public class StudentQuizScores {
     }
 
     public final void loadStudentData() {
-        scoreMap = Students.loadStudentData();
+        scoreMap = Student.loadStudentData();
 
     }
 
@@ -34,6 +35,7 @@ public class StudentQuizScores {
 
         while (keepRunning) {
 
+            //Print menu
             String menuString = "=Student Quiz Scores Main Menu=\n"
                     + "1. List Students\n"
                     + "2. Add Students\n"
@@ -46,8 +48,6 @@ public class StudentQuizScores {
                     + "9. Rename Student\n"
                     + "0. Exit\n";
 
-            //Print menu
-            //  consoleIo.printStringToConsole(menuString);
             //ask for input
             int input = consoleIo.getUserIntInputRange(menuString, 0, 9);
 
@@ -74,7 +74,7 @@ public class StudentQuizScores {
                     findHighestScore();
                     break;
                 case 8:
-                    fingLowestScore();
+                    findLowestScore();
                     break;
                 case 9:
                     renameStudent();
@@ -98,7 +98,6 @@ public class StudentQuizScores {
         int counter = 0;
 
         for (String key : keySet) {
-            // Integer value = scoreMap.get(key);
             counter++;
             studentList += counter + ") " + key + "\n";
             studentNumberMap.put(counter, key);
@@ -112,12 +111,10 @@ public class StudentQuizScores {
         String studentName = "";
         boolean containsThatName = true;
         while (containsThatName) {
-            //if (!containsThatName) {
             studentName = consoleIo.getUserStringInput("Please Enter A Students Name:");
 
             if (studentName.equals("1")) {
                 containsThatName = false;
-                //studentName = "";
             } else {
                 containsThatName = scoreMap.containsKey(studentName);
 
@@ -130,7 +127,6 @@ public class StudentQuizScores {
         }
 
         if (!studentName.equals("1")) {
-            //java.util.ArrayList<Integer> scoreList = scoreMap.get(studentName);
             java.util.ArrayList<Integer> scoreList = new java.util.ArrayList<>();
 
             if (scoreList != null) {
@@ -210,25 +206,9 @@ public class StudentQuizScores {
 
     public void listScores() {
 
-        java.util.HashMap<Integer, String> studentNumberMap = listStudents();
-
-        String studentName = consoleIo.getUserStringInput("\nPlease Enter A Student's Name or Number:");
-        boolean isNumber = false;
-        int studentNumber = 0;
-
-        try {
-            studentNumber = Integer.parseInt(studentName);
-            isNumber = true;
-        } catch (NumberFormatException numForEx) {
-
-        }
-
-        if (isNumber == true) {
-            studentName = studentNumberMap.get(studentNumber);
-        }
+        String studentName = askForNameOrNumber("\nPlease Enter A Student's Name or Number:");
 
         java.util.ArrayList<Integer> scoreList = scoreMap.get(studentName);
-        //java.util.ArrayList<Integer> scoreList = new java.util.ArrayList<>();
 
         if (scoreList != null) {
 
@@ -252,11 +232,11 @@ public class StudentQuizScores {
 
         java.util.ArrayList<Integer> scoreList = scoreMap.get(studentName);
         //java.util.ArrayList<Integer> scoreList = new java.util.ArrayList<>();
-        
+
         if (scoreList != null) {
 
-            int averageScore = arrayListAverager(scoreList);
-            consoleIo.printStringToConsole("Average Quiz Score For " + studentName + ":\n" + averageScore + " points");
+            float averageScore = arrayListAverager(scoreList);
+            consoleIo.printStringToConsole("Average Quiz Score For " + studentName + ":\n" + getRoundedFloat(averageScore) + " points");
 
         } else {
             consoleIo.printStringToConsole("Student Name \"" + studentName + "\" could not be found.");
@@ -264,14 +244,14 @@ public class StudentQuizScores {
 
     }
 
-    public int arrayListAverager(ArrayList<Integer> scoreList) {
+    public float arrayListAverager(ArrayList<Integer> scoreList) {
         int scoreCounter = 0;
         int totalPoints = 0;
         for (Integer score : scoreList) {
             totalPoints += score;
             scoreCounter++;
         }
-        int averageScore = totalPoints / scoreCounter;
+        float averageScore = totalPoints / scoreCounter;
         return averageScore;
     }
 
@@ -283,26 +263,32 @@ public class StudentQuizScores {
             totalClassScore.addAll(scoreMap.get(key));
         }
 
-        int classAverage = arrayListAverager(totalClassScore);
+        float classAverage = arrayListAverager(totalClassScore);
 
-        consoleIo.printStringToConsole("The Class Average is " + classAverage + " points.");
+        String classStringAverage = getRoundedFloat(classAverage);
+
+        consoleIo.printStringToConsole("The Class Average is " + classStringAverage + " points.");
 
     }
 
-    public void fingLowestScore() {
+    public String getRoundedFloat(float classAverage) {
+        java.text.DecimalFormat df = new java.text.DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        String classStringAverage = df.format(classAverage);
+        return classStringAverage;
+    }
+
+    public void findLowestScore() {
 
         Set<String> keySet = scoreMap.keySet();
-        //java.util.ArrayList<Integer> totalClassScore = new java.util.ArrayList<>();
 
         java.util.ArrayList<String> bottomStudents = new java.util.ArrayList<>();
-
-        java.util.HashMap<String, Integer> bottomMap = new java.util.HashMap<>();
 
         Integer bottomScore = determineTheLowestScore(keySet);
 
         determineWhoHasThatScore(keySet, bottomScore, bottomStudents);
 
-        countOccurancesOfScore(bottomStudents, bottomScore, bottomMap);
+        java.util.HashMap<String, Integer> bottomMap = countOccurancesOfScore(bottomStudents, bottomScore);
 
         String classLeaders = "The highest score was: " + bottomScore + "\n"
                 + "Students with this score and number of quizzes for each\n";
@@ -317,17 +303,14 @@ public class StudentQuizScores {
     public void findHighestScore() {
 
         Set<String> keySet = scoreMap.keySet();
-        java.util.ArrayList<Integer> totalClassScore = new java.util.ArrayList<>();
 
         java.util.ArrayList<String> topStudents = new java.util.ArrayList<>();
-
-        java.util.HashMap<String, Integer> topMap = new java.util.HashMap<>();
 
         Integer highestScore = determineTheHighestScore(keySet);
 
         determineWhoHasThatScore(keySet, highestScore, topStudents);
 
-        countOccurancesOfScore(topStudents, highestScore, topMap);
+        java.util.HashMap<String, Integer> topMap = countOccurancesOfScore(topStudents, highestScore);
 
         String classLeaders = "The highest score was: " + highestScore + "\n"
                 + "Students with this score and number of quizzes for each\n";
@@ -339,35 +322,36 @@ public class StudentQuizScores {
 
     }
 
-    public void countOccurancesOfScore(ArrayList<String> topStudents, Integer highestScore, HashMap<String, Integer> topMap) {
+    public java.util.HashMap<String, Integer> countOccurancesOfScore(ArrayList<String> topStudents, Integer highestScore) {
+        java.util.HashMap<String, Integer> bottomMap = new java.util.HashMap<>();
+
         for (String studentName : topStudents) {
             int occuranceCounter = 0;
             java.util.ArrayList<Integer> tempScore = scoreMap.get(studentName);
 
             for (Integer score : tempScore) {
-                if (score == highestScore) {
+                if (Objects.equals(score, highestScore)) {
                     occuranceCounter++;
                 }
             }
 
-            topMap.put(studentName, occuranceCounter);
+            bottomMap.put(studentName, occuranceCounter);
         }
+
+        return bottomMap;
+
     }
 
     public void determineWhoHasThatScore(Set<String> keySet, Integer highestScore, ArrayList<String> topStudents) {
-        // Iterate through Students
+        // Iterate through Student
         for (String key : keySet) {
 
             java.util.ArrayList<Integer> tempScore = scoreMap.get(key);
             boolean isTiedForLeader = false;
 
-            //java.util.ArrayList<Integer> topScores = new java.util.ArrayList<>();
-            // Iterate through scores for that student
             for (Integer score : tempScore) {
-                if (score == highestScore) {
-                    //highestScore = score;
+                if (Objects.equals(score, highestScore)) {
                     isTiedForLeader = true;
-                    //
                 }
             }
 
@@ -384,7 +368,6 @@ public class StudentQuizScores {
 
             java.util.ArrayList<Integer> tempScore = scoreMap.get(key);
 
-            //java.util.ArrayList<Integer> topScores = new java.util.ArrayList<>();
             for (Integer score : tempScore) {
                 if (score > highestScore) {
                     highestScore = score;
