@@ -153,7 +153,7 @@ public class ConsoleIO {
 
     public String getUserStringInput(String prompt) {
         printStringToConsole(prompt);
-        return keyboard.nextLine();
+        return keyboard.nextLine().replace("\n", "").trim();
     }
 
     public float getUserFloatInput(String prompt) {

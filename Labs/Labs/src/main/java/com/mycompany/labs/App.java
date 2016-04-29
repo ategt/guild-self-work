@@ -10,20 +10,24 @@ import java.util.Set;
 
 /**
  *
- * @author apprentice
+ * @author apprentice1
  */
 public class App {
 
     public static void main(String[] args) {
 
-        ConsoleIO consoleIO = new ConsoleIO();
-
-       // StateCapitals2 stateCapitals = new StateCapitals2();
         
-       
-       EnhancedInterestCalculator eic = new EnhancedInterestCalculator();
-       eic.run();
-       
+        new StudentQuizScores().run();
+        
+        
+//        ConsoleIO consoleIO = new ConsoleIO();
+//
+//       // StateCapitals2 stateCapitals = new StateCapitals2();
+//        
+//       
+//       EnhancedInterestCalculator eic = new EnhancedInterestCalculator();
+//       eic.run();
+//       
         
 //        int lowerLimit = consoleIO.getUserIntInputPositive("Please enter the lower limit for capital city population:");
 //        stateCapitals.printStatesCapitalsAndAttributes(lowerLimit);
