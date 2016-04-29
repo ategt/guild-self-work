@@ -56,6 +56,10 @@ public class CompoundingPeriod {
 
     }
 
+    
+    
+    
+    // Methods to return Numbers in formated dollar ammounts.
     public String getPrettyDollars(float balance) {
 
         Locale locale = new Locale("en", "US");
@@ -322,7 +326,7 @@ public class CompoundingPeriod {
     }
 
     public void setPreviousInstance(CompoundingPeriod previousInstance) {
-        this.previousInstance = previousInstance;
+        if (!this.equals(previousInstance)) this.previousInstance = previousInstance;
     }
 
     /**
@@ -343,6 +347,6 @@ public class CompoundingPeriod {
      * @param nextInstance the nextInstance to set
      */
     public void setNextInstance(CompoundingPeriod nextInstance) {
-        this.nextInstance = nextInstance;
+               if (!this.equals(nextInstance)) this.nextInstance = nextInstance;
     }
 }
