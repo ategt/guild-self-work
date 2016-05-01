@@ -42,7 +42,9 @@ public class BlackJack {
 
             consoleIo.printStringToConsole("Your new balance is $" + balance);
 
-            if (1 == consoleIo.getUserIntInputRange("Would you like to play again?\n Please Enter\"1\" for yes and \"2\" for no.", 1, 2)) {
+            if (balance < 1){
+                keepPlaying = false;
+            } else if (1 == consoleIo.getUserIntInputRange("Would you like to play again?\n Please Enter \"1\" for yes and \"2\" for no.", 1, 2)) {
                 keepPlaying = true;
             } else {
                 keepPlaying = false;
@@ -194,10 +196,52 @@ public class BlackJack {
         calculateTotalPoints(dealer);
 
         consoleIo.printStringToConsole("Your cards are: " + hand.getHandValue() + " for a total of " + hand.getTotalPoints());
-        //consoleIo.printStringToConsole("The Dealer has: " + dealer.getHandValue() + " for a total of " + dealer.getTotalPoints());
+        
+        displayDealerStatus(consoleIo, dealer);
 
     }
 
+    public void displayDealerStatus(ConsoleIO consoleIo, Hand dealer) {
+        java.util.ArrayList<Card> dealerHand = dealer.getHand();
+        boolean allCardsShowing = true;    
+        int cardsShowing = 0;
+        int cardsHidden = 0;
+        
+        for ( Card card : dealerHand ){
+            if (card.isFaceUp() == false) {
+                allCardsShowing = false;
+                cardsHidden++;
+            } else {
+                cardsShowing++;
+            }
+            
+        }
+
+        if (allCardsShowing){
+            consoleIo.printStringToConsole("The Dealer has: " + dealer.getHandValue() + " for a total of " + dealer.getTotalPoints());
+        } else {
+            
+            String dealerStatus = "The Dealer has " + cardsShowing;
+                if (cardsShowing == 1 ) {
+                    dealerStatus += " card ";
+                }else{
+                    dealerStatus += " cards ";
+                }
+                
+                dealerStatus += "showing and " + cardsHidden;
+                
+                if (cardsHidden == 1){
+                    dealerStatus += " card hidden.";
+                }else{
+                    dealerStatus += " cards hidden.";
+                }
+                
+                
+            consoleIo.printStringToConsole(dealerStatus);
+        }
+    }
+
+    
     public int convertToPoints(int cardValue, boolean aceHigh) {
         int value = 0;
 
