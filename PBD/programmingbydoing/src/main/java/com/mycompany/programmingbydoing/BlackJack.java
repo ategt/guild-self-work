@@ -98,7 +98,6 @@ public class BlackJack {
 
     public void calculateTotalPoints(Hand hand) {
         //System.out.println("You have " + hand.getHand().size() + " cards.");
-        
 
         // Calculate points with Ace as 11.
         int points = 0;
@@ -112,23 +111,18 @@ public class BlackJack {
         }
         handValue = handValue.substring(0, handValue.length() - 1);
 
-        int aceHighTotalPoints = totalPoints;
-        String aceHighHandValue = handValue;
-        
-        if (totalPoints > 21){
-        // Recalculate points with Ace as 1.
-        points = 0;
-        totalPoints = 0;
-        handValue = "";
-        for (Card yourCard : hand.getHand()) {
-            points = convertToPoints(yourCard.getCardNumber(), false);
-            totalPoints += points;
-            handValue += points + ",";
-        }
-        handValue = handValue.substring(0, handValue.length() - 1);
+        if (totalPoints > 21) {
+            // Recalculate points with Ace as 1.
+            points = 0;
+            totalPoints = 0;
+            handValue = "";
+            for (Card yourCard : hand.getHand()) {
+                points = convertToPoints(yourCard.getCardNumber(), false);
+                totalPoints += points;
+                handValue += points + ",";
+            }
+            handValue = handValue.substring(0, handValue.length() - 1);
 
-        int aceLowTotalPoints = totalPoints;
-        String aceLowHandValue = handValue;
         }
 
         //System.out.println("Your cards are: " + handValue + " for a total of " + totalPoints);
