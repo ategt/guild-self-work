@@ -23,15 +23,15 @@ public class BlackJack {
         int hands = 0;
         int winningHands = 0;
         int losingHands = 0;
-        
+
         consoleIo.printStringToConsole("You are starting out with $100.");
         while (keepPlaying) {
             int bet = consoleIo.getUserIntInputRange("How much would you like to bet?: ", 1, balance);
 
             boolean winner = playAHandOfBlackJack(consoleIo);
-            
+
             hands++;
-            
+
             if (winner) {
                 balance += bet;
                 winningHands++;
@@ -49,7 +49,7 @@ public class BlackJack {
             }
 
         }
-        
+
         displayEndingMessage(consoleIo, hands, winningHands, losingHands);
 
     }
@@ -61,6 +61,9 @@ public class BlackJack {
     }
 
     public boolean playAHandOfBlackJack(ConsoleIO consoleIo) {
+
+        consoleIo.printStringToConsole("\n\n");
+
         boolean winner = false;
         DeckOfCards deck = new DeckOfCards();
         deck.shuffle();
@@ -98,7 +101,6 @@ public class BlackJack {
                 displayStatus(dealer, player, consoleIo);
 
                 if (player.getTotalPoints() > 21) {
-                    consoleIo.printStringToConsole("You have gone over 21.");
                     keepPlaying = false;
                 }
             } else {
@@ -121,6 +123,13 @@ public class BlackJack {
 
         }
 
+        winner = applyWinOrLoseLogic(player, consoleIo, dealer);
+
+        return winner;
+    }
+
+    public boolean applyWinOrLoseLogic(Hand player, ConsoleIO consoleIo, Hand dealer) {
+        boolean winner;
         if (player.getTotalPoints() > 21) {
             consoleIo.printStringToConsole("You have gone over 21.");
             winner = false;
@@ -141,12 +150,10 @@ public class BlackJack {
                 winner = false;
             }
         }
-
         return winner;
     }
 
     public void calculateTotalPoints(Hand hand) {
-        //consoleIo.printStringToConsole("You have " + hand.getHand().size() + " cards.");
 
         // Calculate points with Ace as 11.
         int points = 0;
@@ -160,9 +167,6 @@ public class BlackJack {
         }
         handValue = handValue.substring(0, handValue.length() - 1);
 
-        
-        System.out.println("Total points high: " + totalPoints);
-        
         if (totalPoints > 21) {
             // Recalculate points with Ace as 1.
             points = 0;
@@ -174,18 +178,11 @@ public class BlackJack {
                 handValue += points + ",";
             }
             handValue = handValue.substring(0, handValue.length() - 1);
-        System.out.println("Total points low: " + totalPoints);
 
         }
 
-        System.out.println("Using Total points: " + totalPoints);
-
-        //consoleIo.printStringToConsole("Your cards are: " + handValue + " for a total of " + totalPoints);
         hand.setHandValue(handValue);
         hand.setTotalPoints(totalPoints);
-        //hand.setPoints(points);
-        //return totalPoints;
-
     }
 
     public void displayStatus(Hand dealer, Hand hand, ConsoleIO consoleIo) {
@@ -193,22 +190,12 @@ public class BlackJack {
         consoleIo.printStringToConsole("________________________________________");
         consoleIo.printStringToConsole(hand.sketch());
         consoleIo.printStringToConsole("You have " + hand.getHand().size() + " cards.");
-//        int points = 0;
-//        int totalPoints = 0;
-//        String handValue = "";
-//        for (Card yourCard : hand.getHand()) {
-//            points = convertToPoints(yourCard.getCardNumber());
-//            totalPoints += points;
-//            handValue += points + ",";
-//        }
-//        handValue = handValue.substring(0, handValue.length() - 2);
         calculateTotalPoints(hand);
         calculateTotalPoints(dealer);
 
         consoleIo.printStringToConsole("Your cards are: " + hand.getHandValue() + " for a total of " + hand.getTotalPoints());
         consoleIo.printStringToConsole("The Dealer has: " + dealer.getHandValue() + " for a total of " + dealer.getTotalPoints());
 
-        //return hand.getTotalPoints();
     }
 
     public int convertToPoints(int cardValue, boolean aceHigh) {
@@ -226,72 +213,6 @@ public class BlackJack {
             }
         }
         return value;
-    }
-
-    public static void main(String[] args) {
-        new BlackJack().run();
-
-//        DeckOfCards deck = new DeckOfCards();
-//
-//        Hand hand = new Hand();
-//
-//        for (int i = 0; i < 5; i++) {
-//            hand.add(deck.draw());
-//        }
-//
-//        consoleIo.printStringToConsole(hand.sketch());
-//        consoleIo.printStringToConsole(deck.cardsRemaining() + " cards remaining.");
-//
-//        deck.shuffle();
-//
-//        hand = new Hand();
-//
-//        for (int i = 0; i < 5; i++) {
-//            hand.add(deck.draw());
-//        }
-//
-//        consoleIo.printStringToConsole(hand.sketch());
-//        System.out.print("     ");
-//        for (Card card : hand.getHand()) {
-//            System.out.print(card.getCardNumber() + "          ");
-//        }
-//        consoleIo.printStringToConsole("");
-//        consoleIo.printStringToConsole(hand.getHand().size() + " cards in hand.");
-//        consoleIo.printStringToConsole(deck.cardsRemaining() + " cards remaining.");
-//
-//        
-//        Card card = deck.draw();
-//        Card card2 = deck.draw();
-//        Card card3 = deck.draw();
-//        Card card4 = deck.draw();
-//        
-//        consoleIo.printStringToConsole("Card Value: " + card.getCardValue());
-//        consoleIo.printStringToConsole("Card Number: " + card.getCardNumber());
-//        consoleIo.printStringToConsole("Card Face: " + card.getCardFace());
-//        consoleIo.printStringToConsole("Card Unicode: " + card.getCardUnicodeValue());
-//
-//        consoleIo.printStringToConsole("Card String: " + card.getCardString());
-//
-//        String[] cardSketch = card.sketchCard();
-//        String[] tableSketch = new String[5];
-//        
-//        for (int x = 0 ; x < 5 ; x++){
-//            tableSketch[x] = card.sketchCard()[x] + " " + card2.sketchCard()[x] + " " + card3.sketchCard()[x] + " " + card4.sketchCard()[x];
-//        }
-//        
-//        for (String cardLine : cardSketch) {
-//            consoleIo.printStringToConsole(cardLine);
-//            //tableSketch
-//        }
-// 
-//        consoleIo.printStringToConsole("");
-//        
-//        for (String cardLine : tableSketch) {
-//            consoleIo.printStringToConsole(cardLine);
-//            //tableSketch
-//        }
-//
-// 
     }
 
 }
