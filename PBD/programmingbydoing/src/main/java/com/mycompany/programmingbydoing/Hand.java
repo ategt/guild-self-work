@@ -13,11 +13,17 @@ public class Hand {
 
     private java.util.ArrayList<Card> hand = new java.util.ArrayList<>();
 
+    private int points = 0;
+    private int totalPoints = 0;
+    private String handValue = "";
+
+    
+    
     public void add(Card card) {
         hand.add(card);
     }
-    
-    public java.util.ArrayList<Card> getHand(){
+
+    public java.util.ArrayList<Card> getHand() {
         return hand;
     }
 
@@ -29,6 +35,13 @@ public class Hand {
         return hand.remove(card);
     }
 
+    public void flipAllCardsUp(){
+        
+        for (Card card : hand){
+            card.setFaceUp(true);
+        }
+    }
+    
     public String sketch() {
 
         String tableDrawing = "";
@@ -50,6 +63,48 @@ public class Hand {
         }
         return tableDrawing;
 
+    }
+
+    /**
+     * @return the points
+     */
+    public int getPoints() {
+        return points;
+    }
+
+    /**
+     * @param points the points to set
+     */
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    /**
+     * @return the totalPoints
+     */
+    public int getTotalPoints() {
+        return totalPoints;
+    }
+
+    /**
+     * @param totalPoints the totalPoints to set
+     */
+    public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
+    }
+
+    /**
+     * @return the handValue
+     */
+    public String getHandValue() {
+        return handValue;
+    }
+
+    /**
+     * @param handValue the handValue to set
+     */
+    public void setHandValue(String handValue) {
+        this.handValue = handValue;
     }
 
 }
