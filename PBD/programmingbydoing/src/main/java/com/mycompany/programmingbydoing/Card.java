@@ -16,6 +16,8 @@ public class Card {
     private final char CLUB = '\u2663';
     private final char HEART = '\u2764';
 
+    private boolean faceUp;
+    
     private int cardValue;
     private int cardNumber;
     private int suitNumber;
@@ -32,40 +34,54 @@ public class Card {
 
     private void generateCard(int value) {
         this.cardValue = value;
-        System.out.println("Card Value: " + cardValue);
+        //System.out.println("Card Value: " + cardValue);
         this.suitNumber = generateSuitNumber(value);
-        System.out.println("Suit Number: " + suitNumber);
+        //System.out.println("Suit Number: " + suitNumber);
         this.cardSuit = generateSuit(suitNumber);
-        System.out.println("CardSuit: " + cardSuit);
+        //System.out.println("CardSuit: " + cardSuit);
         this.cardNumber = generateNumber(value);
-        System.out.println("CardNumber: " + cardNumber);
+        //System.out.println("CardNumber: " + cardNumber);
         this.cardCode = generateCode(cardNumber, cardSuit);
-        System.out.println("CardCode:" + cardCode);
+        //System.out.println("CardCode:" + cardCode);
         this.cardUnicodeValue = generateUnicodeValue(cardNumber, suitNumber);
-        System.out.println("UnicodeValue: " + cardUnicodeValue);
+        //System.out.println("UnicodeValue: " + cardUnicodeValue);
         this.cardFace = generateCardFace(cardNumber);
         this.cardUnicodeSuit = generateUnicodeSuit(suitNumber);
-        System.out.println("UnicodeSuit: " + cardUnicodeSuit);
-        System.out.println("CardFace: " + cardFace);
+        //System.out.println("UnicodeSuit: " + cardUnicodeSuit);
+        //System.out.println("CardFace: " + cardFace);
         this.cardString = generateCardString(cardFace, cardUnicodeSuit);
-        System.out.println("CardString: " + cardString);
-        System.out.println("");
+        //System.out.println("CardString: " + cardString);
+        //System.out.println("");
+        faceUp = true;
     }
 
     public String[] sketchCard() {
+        return sketchCard(isFaceUp());
+    }
+
+    public String[] sketchCard(boolean faceUp) {
         String[] cardLines = new String[5];
 
         cardLines[0] = "+--------+";
-        cardLines[1] = "| " + cardString;
-        int lengthOfLineOne = cardLines[1].length();
-        for (int x = lengthOfLineOne; x < 9; x++) {
-            cardLines[1] += " ";
+//        if (faceUp) {
+//
+//        }
+        if (faceUp) {
+            cardLines[1] = "| " + cardString;
+            int lengthOfLineOne = cardLines[1].length();
+            for (int x = lengthOfLineOne; x < 9; x++) {
+                cardLines[1] += " ";
+            }
+            cardLines[1] += "|";
+            cardLines[2] = "|        |";
+            cardLines[3] = cardLines[2];
+        } else {
+            cardLines[2] = "|XXXXXXXX|";
+            cardLines[1] = cardLines[2];
+            //cardLines[3] = "|   SG   |";
+            cardLines[3] = "|XX SG XX|";
         }
-        cardLines[1] += "|";
-        cardLines[2] = "|        |";
-        cardLines[3] = cardLines[2];
         cardLines[4] = cardLines[2];
-
         return cardLines;
     }
 
@@ -233,7 +249,7 @@ public class Card {
      * @return the cardNumber
      */
     public int getCardNumber() {
-        return cardNumber+1;
+        return cardNumber + 1;
     }
 
     /**
@@ -291,6 +307,20 @@ public class Card {
 
     public String getCardString() {
         return cardString;
+    }
+
+    /**
+     * @return the faceUp
+     */
+    public boolean isFaceUp() {
+        return faceUp;
+    }
+
+    /**
+     * @param faceUp the faceUp to set
+     */
+    public void setFaceUp(boolean faceUp) {
+        this.faceUp = faceUp;
     }
 
 }

@@ -16,6 +16,10 @@ public class Hand {
     public void add(Card card) {
         hand.add(card);
     }
+    
+    public java.util.ArrayList<Card> getHand(){
+        return hand;
+    }
 
     public void clear() {
         hand.clear();
@@ -28,29 +32,21 @@ public class Hand {
     public String sketch() {
 
         String tableDrawing = "";
-        //String[] cardSketch = card.sketchCard();
         String[] tableSketch = new String[5];
 
         for (int x = 0; x < tableSketch.length; x++) {
+
+            tableSketch[x] = "";
 
             for (Card card : hand) {
                 tableSketch[x] += card.sketchCard()[x] + " ";
 
             }
 
-            //tableSketch[x] = card.sketchCard()[x] + " " + card2.sketchCard()[x] + " " + card3.sketchCard()[x] + " " + card4.sketchCard()[x];
         }
 
-//        for (String cardLine : cardSketch) {
-//            System.out.println(cardLine);
-//            //tableSketch
-//        }
-// 
-//        System.out.println("");
         for (String cardLine : tableSketch) {
             tableDrawing += cardLine.trim() + "\n";
-            //System.out.println(cardLine);
-            //tableSketch
         }
         return tableDrawing;
 

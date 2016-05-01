@@ -45,6 +45,10 @@ public class DeckOfCards {
         deck = newDeck;
 
     }
+    
+    public int cardsRemaining(){
+        return deck.size();
+    }
 
     public void discard(Card card) {
 
