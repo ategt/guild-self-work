@@ -21,7 +21,7 @@ public class BlackJack {
         DeckOfCards deck = new DeckOfCards();
         deck.shuffle();
 
-        Hand hand = new Hand();
+        Hand player = new Hand();
 
         // Draw two cards for the dealer and place one face up.
         Hand dealer = new Hand();
@@ -37,23 +37,23 @@ public class BlackJack {
         System.out.println("The dealer drew two cards.");
 
         // Draw two cards for player.
-        hand.add(deck.draw());
+        player.add(deck.draw());
 
-        hand.add(deck.draw());
+        player.add(deck.draw());
 
         System.out.println("You have drawn two cards.");
 
-        int totalPoints = displayStatus(dealer, hand);
+        displayStatus(dealer, player);
         boolean keepPlaying = true;
 
         while (keepPlaying) {
             int inputHitOrStay = consoleIo.getUserIntInputRange("Would you like to hit or stay?\n \"1\" to hit, \"2\" to stay.", 1, 2);
 
             if (inputHitOrStay == 1) {
-                hand.add(deck.draw());
-                totalPoints = displayStatus(dealer, hand);
+                player.add(deck.draw());
+                displayStatus(dealer, player);
 
-                if (totalPoints > 21) {
+                if (player.getTotalPoints() > 21) {
                     System.out.println("You have gone over 21.");
                     keepPlaying = false;
                 }
@@ -64,29 +64,30 @@ public class BlackJack {
         }
 
         // Check to see if the player has lost.
-        if (totalPoints <= 21) {
+        if (player.getTotalPoints() <= 21) {
             // If not the extremely simple 'AI' dealer will keep drawing cards until he gets to sixteen or more.
             System.out.println("It is now the dealers turn.");
+            dealer.flipAllCardsUp();
              while (dealer.getTotalPoints()<16){
                  dealer.add(deck.draw());
                  calculateTotalPoints(dealer);
              }
 
-                totalPoints = displayStatus(dealer, hand);
+                displayStatus(dealer, player);
 
         }
         
-        if ( hand.getTotalPoints() > 21 ){
+        if ( player.getTotalPoints() > 21 ){
             System.out.println("You have gone over 21.");
             
         } else if ( dealer.getTotalPoints() > 21){
             System.out.println("The House has gone over 21.  You Win.");
-        } else if ( dealer.getTotalPoints() < hand.getTotalPoints()) {
-            System.out.println("You have " + hand.getTotalPoints() + " and the house has " + dealer.getTotalPoints() + ".");
+        } else if ( dealer.getTotalPoints() < player.getTotalPoints()) {
+            System.out.println("You have " + player.getTotalPoints() + " and the house has " + dealer.getTotalPoints() + ".");
             System.out.println("You have won.");
         } else {
-            System.out.println("You have " + hand.getTotalPoints() + " and the house has " + dealer.getTotalPoints() + ".");
-            if (hand.getTotalPoints() == dealer.getTotalPoints()){
+            System.out.println("You have " + player.getTotalPoints() + " and the house has " + dealer.getTotalPoints() + ".");
+            if (player.getTotalPoints() == dealer.getTotalPoints()){
                 System.out.println("In a tie, the house wins.");
             }else{
                 System.out.println("The house wins.");
@@ -114,7 +115,7 @@ public class BlackJack {
 
     }
 
-    public int displayStatus(Hand dealer, Hand hand) {
+    public void displayStatus(Hand dealer, Hand hand) {
         System.out.println(dealer.sketch());
         System.out.println("________________________________________");
         System.out.println(hand.sketch());
@@ -135,7 +136,7 @@ public class BlackJack {
         System.out.println("The Dealer has: " + dealer.getHandValue() + " for a total of " + dealer.getTotalPoints());
         
         
-        return hand.getTotalPoints();
+        //return hand.getTotalPoints();
     }
 
     public int convertToPoints(int cardValue) {
