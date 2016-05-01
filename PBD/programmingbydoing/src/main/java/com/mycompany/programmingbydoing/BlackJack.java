@@ -15,9 +15,53 @@ public class BlackJack {
 
         ConsoleIO consoleIo = new ConsoleIO();
 
-        System.out.println("Welcome to BlackJack.");
-        System.out.println("");
+        consoleIo.printStringToConsole("Welcome to BlackJack.");
+        consoleIo.printStringToConsole("");
 
+        boolean keepPlaying = true;
+        int balance = 100;
+        int hands = 0;
+        int winningHands = 0;
+        int losingHands = 0;
+        
+        consoleIo.printStringToConsole("You are starting out with $100.");
+        while (keepPlaying) {
+            int bet = consoleIo.getUserIntInputRange("How much would you like to bet?: ", 1, balance);
+
+            boolean winner = playAHandOfBlackJack(consoleIo);
+            
+            hands++;
+            
+            if (winner) {
+                balance += bet;
+                winningHands++;
+            } else {
+                balance -= bet;
+                losingHands++;
+            }
+
+            consoleIo.printStringToConsole("Your new balance is $" + balance);
+
+            if (1 == consoleIo.getUserIntInputRange("Would you like to play again?\n Please Enter\"1\" for yes and \"2\" for no.", 1, 2)) {
+                keepPlaying = true;
+            } else {
+                keepPlaying = false;
+            }
+
+        }
+        
+        displayEndingMessage(consoleIo, hands, winningHands, losingHands);
+
+    }
+
+    public void displayEndingMessage(ConsoleIO consoleIo, int hands, int winningHands, int losingHands) {
+        consoleIo.printStringToConsole("You have choosen to leave the table after " + hands + " hands.");
+        consoleIo.printStringToConsole("You won " + winningHands + " and lost " + losingHands + "");
+        consoleIo.printStringToConsole("Thanks for playing.");
+    }
+
+    public boolean playAHandOfBlackJack(ConsoleIO consoleIo) {
+        boolean winner = false;
         DeckOfCards deck = new DeckOfCards();
         deck.shuffle();
 
@@ -34,16 +78,16 @@ public class BlackJack {
         card.setFaceUp(false);
         dealer.add(card);
 
-        System.out.println("The dealer drew two cards.");
+        consoleIo.printStringToConsole("The dealer drew two cards.");
 
         // Draw two cards for player.
         player.add(deck.draw());
 
         player.add(deck.draw());
 
-        System.out.println("You have drawn two cards.");
+        consoleIo.printStringToConsole("You have drawn two cards.");
 
-        displayStatus(dealer, player);
+        displayStatus(dealer, player, consoleIo);
         boolean keepPlaying = true;
 
         while (keepPlaying) {
@@ -51,14 +95,14 @@ public class BlackJack {
 
             if (inputHitOrStay == 1) {
                 player.add(deck.draw());
-                displayStatus(dealer, player);
+                displayStatus(dealer, player, consoleIo);
 
                 if (player.getTotalPoints() > 21) {
-                    System.out.println("You have gone over 21.");
+                    consoleIo.printStringToConsole("You have gone over 21.");
                     keepPlaying = false;
                 }
             } else {
-                System.out.println("You have choosen to stay.");
+                consoleIo.printStringToConsole("You have choosen to stay.");
                 keepPlaying = false;
             }
         }
@@ -66,38 +110,43 @@ public class BlackJack {
         // Check to see if the player has lost.
         if (player.getTotalPoints() <= 21) {
             // If not the extremely simple 'AI' dealer will keep drawing cards until he gets more points than the player.
-            System.out.println("It is now the dealers turn.");
+            consoleIo.printStringToConsole("It is now the dealers turn.");
             dealer.flipAllCardsUp();
             while (dealer.getTotalPoints() < player.getTotalPoints()) {
                 dealer.add(deck.draw());
                 calculateTotalPoints(dealer);
             }
 
-            displayStatus(dealer, player);
+            displayStatus(dealer, player, consoleIo);
 
         }
 
         if (player.getTotalPoints() > 21) {
-            System.out.println("You have gone over 21.");
-
+            consoleIo.printStringToConsole("You have gone over 21.");
+            winner = false;
         } else if (dealer.getTotalPoints() > 21) {
-            System.out.println("The House has gone over 21.  You Win.");
+            consoleIo.printStringToConsole("The House has gone over 21.  You Win.");
+            winner = true;
         } else if (dealer.getTotalPoints() < player.getTotalPoints()) {
-            System.out.println("You have " + player.getTotalPoints() + " and the house has " + dealer.getTotalPoints() + ".");
-            System.out.println("You have won.");
+            consoleIo.printStringToConsole("You have " + player.getTotalPoints() + " and the house has " + dealer.getTotalPoints() + ".");
+            consoleIo.printStringToConsole("You have won.");
+            winner = true;
         } else {
-            System.out.println("You have " + player.getTotalPoints() + " and the house has " + dealer.getTotalPoints() + ".");
+            consoleIo.printStringToConsole("You have " + player.getTotalPoints() + " and the house has " + dealer.getTotalPoints() + ".");
             if (player.getTotalPoints() == dealer.getTotalPoints()) {
-                System.out.println("In a tie, the house wins.");
+                consoleIo.printStringToConsole("In a tie, the house wins.");
+                winner = false;
             } else {
-                System.out.println("The house wins.");
+                consoleIo.printStringToConsole("The house wins.");
+                winner = false;
             }
         }
 
+        return winner;
     }
 
     public void calculateTotalPoints(Hand hand) {
-        //System.out.println("You have " + hand.getHand().size() + " cards.");
+        //consoleIo.printStringToConsole("You have " + hand.getHand().size() + " cards.");
 
         // Calculate points with Ace as 11.
         int points = 0;
@@ -111,6 +160,9 @@ public class BlackJack {
         }
         handValue = handValue.substring(0, handValue.length() - 1);
 
+        
+        System.out.println("Total points high: " + totalPoints);
+        
         if (totalPoints > 21) {
             // Recalculate points with Ace as 1.
             points = 0;
@@ -122,10 +174,13 @@ public class BlackJack {
                 handValue += points + ",";
             }
             handValue = handValue.substring(0, handValue.length() - 1);
+        System.out.println("Total points low: " + totalPoints);
 
         }
 
-        //System.out.println("Your cards are: " + handValue + " for a total of " + totalPoints);
+        System.out.println("Using Total points: " + totalPoints);
+
+        //consoleIo.printStringToConsole("Your cards are: " + handValue + " for a total of " + totalPoints);
         hand.setHandValue(handValue);
         hand.setTotalPoints(totalPoints);
         //hand.setPoints(points);
@@ -133,11 +188,11 @@ public class BlackJack {
 
     }
 
-    public void displayStatus(Hand dealer, Hand hand) {
-        System.out.println(dealer.sketch());
-        System.out.println("________________________________________");
-        System.out.println(hand.sketch());
-        System.out.println("You have " + hand.getHand().size() + " cards.");
+    public void displayStatus(Hand dealer, Hand hand, ConsoleIO consoleIo) {
+        consoleIo.printStringToConsole(dealer.sketch());
+        consoleIo.printStringToConsole("________________________________________");
+        consoleIo.printStringToConsole(hand.sketch());
+        consoleIo.printStringToConsole("You have " + hand.getHand().size() + " cards.");
 //        int points = 0;
 //        int totalPoints = 0;
 //        String handValue = "";
@@ -150,8 +205,8 @@ public class BlackJack {
         calculateTotalPoints(hand);
         calculateTotalPoints(dealer);
 
-        System.out.println("Your cards are: " + hand.getHandValue() + " for a total of " + hand.getTotalPoints());
-        System.out.println("The Dealer has: " + dealer.getHandValue() + " for a total of " + dealer.getTotalPoints());
+        consoleIo.printStringToConsole("Your cards are: " + hand.getHandValue() + " for a total of " + hand.getTotalPoints());
+        consoleIo.printStringToConsole("The Dealer has: " + dealer.getHandValue() + " for a total of " + dealer.getTotalPoints());
 
         //return hand.getTotalPoints();
     }
@@ -184,8 +239,8 @@ public class BlackJack {
 //            hand.add(deck.draw());
 //        }
 //
-//        System.out.println(hand.sketch());
-//        System.out.println(deck.cardsRemaining() + " cards remaining.");
+//        consoleIo.printStringToConsole(hand.sketch());
+//        consoleIo.printStringToConsole(deck.cardsRemaining() + " cards remaining.");
 //
 //        deck.shuffle();
 //
@@ -195,14 +250,14 @@ public class BlackJack {
 //            hand.add(deck.draw());
 //        }
 //
-//        System.out.println(hand.sketch());
+//        consoleIo.printStringToConsole(hand.sketch());
 //        System.out.print("     ");
 //        for (Card card : hand.getHand()) {
 //            System.out.print(card.getCardNumber() + "          ");
 //        }
-//        System.out.println("");
-//        System.out.println(hand.getHand().size() + " cards in hand.");
-//        System.out.println(deck.cardsRemaining() + " cards remaining.");
+//        consoleIo.printStringToConsole("");
+//        consoleIo.printStringToConsole(hand.getHand().size() + " cards in hand.");
+//        consoleIo.printStringToConsole(deck.cardsRemaining() + " cards remaining.");
 //
 //        
 //        Card card = deck.draw();
@@ -210,12 +265,12 @@ public class BlackJack {
 //        Card card3 = deck.draw();
 //        Card card4 = deck.draw();
 //        
-//        System.out.println("Card Value: " + card.getCardValue());
-//        System.out.println("Card Number: " + card.getCardNumber());
-//        System.out.println("Card Face: " + card.getCardFace());
-//        System.out.println("Card Unicode: " + card.getCardUnicodeValue());
+//        consoleIo.printStringToConsole("Card Value: " + card.getCardValue());
+//        consoleIo.printStringToConsole("Card Number: " + card.getCardNumber());
+//        consoleIo.printStringToConsole("Card Face: " + card.getCardFace());
+//        consoleIo.printStringToConsole("Card Unicode: " + card.getCardUnicodeValue());
 //
-//        System.out.println("Card String: " + card.getCardString());
+//        consoleIo.printStringToConsole("Card String: " + card.getCardString());
 //
 //        String[] cardSketch = card.sketchCard();
 //        String[] tableSketch = new String[5];
@@ -225,14 +280,14 @@ public class BlackJack {
 //        }
 //        
 //        for (String cardLine : cardSketch) {
-//            System.out.println(cardLine);
+//            consoleIo.printStringToConsole(cardLine);
 //            //tableSketch
 //        }
 // 
-//        System.out.println("");
+//        consoleIo.printStringToConsole("");
 //        
 //        for (String cardLine : tableSketch) {
-//            System.out.println(cardLine);
+//            consoleIo.printStringToConsole(cardLine);
 //            //tableSketch
 //        }
 //
