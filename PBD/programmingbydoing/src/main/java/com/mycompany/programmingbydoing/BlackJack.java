@@ -65,31 +65,31 @@ public class BlackJack {
 
         // Check to see if the player has lost.
         if (player.getTotalPoints() <= 21) {
-            // If not the extremely simple 'AI' dealer will keep drawing cards until he gets to sixteen or more.
+            // If not the extremely simple 'AI' dealer will keep drawing cards until he gets more points than the player.
             System.out.println("It is now the dealers turn.");
             dealer.flipAllCardsUp();
-             while (dealer.getTotalPoints()<16){
-                 dealer.add(deck.draw());
-                 calculateTotalPoints(dealer);
-             }
+            while (dealer.getTotalPoints() < player.getTotalPoints()) {
+                dealer.add(deck.draw());
+                calculateTotalPoints(dealer);
+            }
 
-                displayStatus(dealer, player);
+            displayStatus(dealer, player);
 
         }
-        
-        if ( player.getTotalPoints() > 21 ){
+
+        if (player.getTotalPoints() > 21) {
             System.out.println("You have gone over 21.");
-            
-        } else if ( dealer.getTotalPoints() > 21){
+
+        } else if (dealer.getTotalPoints() > 21) {
             System.out.println("The House has gone over 21.  You Win.");
-        } else if ( dealer.getTotalPoints() < player.getTotalPoints()) {
+        } else if (dealer.getTotalPoints() < player.getTotalPoints()) {
             System.out.println("You have " + player.getTotalPoints() + " and the house has " + dealer.getTotalPoints() + ".");
             System.out.println("You have won.");
         } else {
             System.out.println("You have " + player.getTotalPoints() + " and the house has " + dealer.getTotalPoints() + ".");
-            if (player.getTotalPoints() == dealer.getTotalPoints()){
+            if (player.getTotalPoints() == dealer.getTotalPoints()) {
                 System.out.println("In a tie, the house wins.");
-            }else{
+            } else {
                 System.out.println("The house wins.");
             }
         }
@@ -98,15 +98,39 @@ public class BlackJack {
 
     public void calculateTotalPoints(Hand hand) {
         //System.out.println("You have " + hand.getHand().size() + " cards.");
+        
+
+        // Calculate points with Ace as 11.
         int points = 0;
         int totalPoints = 0;
         String handValue = "";
+
         for (Card yourCard : hand.getHand()) {
-            points = convertToPoints(yourCard.getCardNumber());
+            points = convertToPoints(yourCard.getCardNumber(), true);
             totalPoints += points;
             handValue += points + ",";
         }
-        handValue = handValue.substring(0, handValue.length() - 2);
+        handValue = handValue.substring(0, handValue.length() - 1);
+
+        int aceHighTotalPoints = totalPoints;
+        String aceHighHandValue = handValue;
+        
+        if (totalPoints > 21){
+        // Recalculate points with Ace as 1.
+        points = 0;
+        totalPoints = 0;
+        handValue = "";
+        for (Card yourCard : hand.getHand()) {
+            points = convertToPoints(yourCard.getCardNumber(), false);
+            totalPoints += points;
+            handValue += points + ",";
+        }
+        handValue = handValue.substring(0, handValue.length() - 1);
+
+        int aceLowTotalPoints = totalPoints;
+        String aceLowHandValue = handValue;
+        }
+
         //System.out.println("Your cards are: " + handValue + " for a total of " + totalPoints);
         hand.setHandValue(handValue);
         hand.setTotalPoints(totalPoints);
@@ -134,12 +158,11 @@ public class BlackJack {
 
         System.out.println("Your cards are: " + hand.getHandValue() + " for a total of " + hand.getTotalPoints());
         System.out.println("The Dealer has: " + dealer.getHandValue() + " for a total of " + dealer.getTotalPoints());
-        
-        
+
         //return hand.getTotalPoints();
     }
 
-    public int convertToPoints(int cardValue) {
+    public int convertToPoints(int cardValue, boolean aceHigh) {
         int value = 0;
 
         if (cardValue > 10) {
@@ -148,8 +171,10 @@ public class BlackJack {
             value = cardValue;
         }
 
-        if (cardValue == 1) {
-            value = 11;
+        if (aceHigh) {
+            if (cardValue == 1) {
+                value = 11;
+            }
         }
         return value;
     }
