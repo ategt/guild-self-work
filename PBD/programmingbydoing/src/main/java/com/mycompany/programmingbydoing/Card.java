@@ -45,8 +45,9 @@ public class Card {
         System.out.println("UnicodeValue: " + cardUnicodeValue);
         this.cardFace = generateCardFace(cardNumber);
         this.cardUnicodeSuit = generateUnicodeSuit(suitNumber);
+        System.out.println("UnicodeSuit: " + cardUnicodeSuit);
         System.out.println("CardFace: " + cardFace);
-        this.cardString = generateCardString(cardFace, cardUnicodeValue);
+        this.cardString = generateCardString(cardFace, cardUnicodeSuit);
         System.out.println("CardString: " + cardString);
         System.out.println("");
     }
@@ -56,7 +57,7 @@ public class Card {
 
         cardLines[0] = "+--------+";
         cardLines[1] = "| " + cardString;
-        int lengthOfLineOne = 10 - cardLines[1].length();
+        int lengthOfLineOne = cardLines[1].length();
         for (int x = lengthOfLineOne; x < 9; x++) {
             cardLines[1] += " ";
         }
@@ -232,7 +233,7 @@ public class Card {
      * @return the cardNumber
      */
     public int getCardNumber() {
-        return cardNumber;
+        return cardNumber+1;
     }
 
     /**
