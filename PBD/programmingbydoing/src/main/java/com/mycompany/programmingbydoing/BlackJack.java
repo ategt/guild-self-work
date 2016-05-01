@@ -194,7 +194,7 @@ public class BlackJack {
         calculateTotalPoints(dealer);
 
         consoleIo.printStringToConsole("Your cards are: " + hand.getHandValue() + " for a total of " + hand.getTotalPoints());
-        consoleIo.printStringToConsole("The Dealer has: " + dealer.getHandValue() + " for a total of " + dealer.getTotalPoints());
+        //consoleIo.printStringToConsole("The Dealer has: " + dealer.getHandValue() + " for a total of " + dealer.getTotalPoints());
 
     }
 

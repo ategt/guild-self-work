@@ -34,24 +34,14 @@ public class Card {
 
     private void generateCard(int value) {
         this.cardValue = value;
-        //System.out.println("Card Value: " + cardValue);
         this.suitNumber = generateSuitNumber(value);
-        //System.out.println("Suit Number: " + suitNumber);
         this.cardSuit = generateSuit(suitNumber);
-        //System.out.println("CardSuit: " + cardSuit);
         this.cardNumber = generateNumber(value);
-        //System.out.println("CardNumber: " + cardNumber);
         this.cardCode = generateCode(cardNumber, cardSuit);
-        //System.out.println("CardCode:" + cardCode);
         this.cardUnicodeValue = generateUnicodeValue(cardNumber, suitNumber);
-        //System.out.println("UnicodeValue: " + cardUnicodeValue);
         this.cardFace = generateCardFace(cardNumber);
         this.cardUnicodeSuit = generateUnicodeSuit(suitNumber);
-        //System.out.println("UnicodeSuit: " + cardUnicodeSuit);
-        //System.out.println("CardFace: " + cardFace);
         this.cardString = generateCardString(cardFace, cardUnicodeSuit);
-        //System.out.println("CardString: " + cardString);
-        //System.out.println("");
         faceUp = true;
     }
 
@@ -63,9 +53,6 @@ public class Card {
         String[] cardLines = new String[5];
 
         cardLines[0] = "+--------+";
-//        if (faceUp) {
-//
-//        }
         if (faceUp) {
             cardLines[1] = "| " + cardString;
             int lengthOfLineOne = cardLines[1].length();
@@ -78,7 +65,6 @@ public class Card {
         } else {
             cardLines[2] = "|XXXXXXXX|";
             cardLines[1] = cardLines[2];
-            //cardLines[3] = "|   SG   |";
             cardLines[3] = "|XX SG XX|";
         }
         cardLines[4] = cardLines[2];
