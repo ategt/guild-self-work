@@ -33,10 +33,13 @@ public class DeckOfCards {
 
         java.util.ArrayList<Card> newDeck = new java.util.ArrayList<>();
 
-        for (int x = 0; x < deck.size(); x++) {
+        //for (int x = 0; x < deck.size(); x++) {
+        while (deck.size() > 0) {
 
             Integer randomCard = random.nextInt(deck.size());
-            newDeck.add(deck.get(randomCard));
+            Card card = deck.get(randomCard);
+            newDeck.add(card);
+            deck.remove(card);
         }
 
         deck = newDeck;
@@ -48,10 +51,9 @@ public class DeckOfCards {
         deck.add(card);
     }
 
-    public Card draw(){
-        
+    public Card draw() {
+
         return deck.remove(0);
     }
-    
-    
+
 }

@@ -11,12 +11,20 @@ package com.mycompany.programmingbydoing;
  */
 public class Card {
 
+    private final char SPADE = '\u2660';
+    private final char DIAMOND = '\u2666';
+    private final char CLUB = '\u2663';
+    private final char HEART = '\u2764';
+
     private int cardValue;
     private int cardNumber;
     private int suitNumber;
     private String cardSuit;
     private String cardCode;
-    private String cardASCIIValue;
+    private String cardUnicodeValue;
+    private String cardUnicodeSuit;
+    private String cardFace;
+    private String cardString;
 
     public Card(int value) {
         generateCard(value);
@@ -24,33 +32,114 @@ public class Card {
 
     private void generateCard(int value) {
         this.cardValue = value;
+        System.out.println("Card Value: " + cardValue);
         this.suitNumber = generateSuitNumber(value);
+        System.out.println("Suit Number: " + suitNumber);
         this.cardSuit = generateSuit(suitNumber);
+        System.out.println("CardSuit: " + cardSuit);
         this.cardNumber = generateNumber(value);
+        System.out.println("CardNumber: " + cardNumber);
         this.cardCode = generateCode(cardNumber, cardSuit);
-        this.cardASCIIValue = generateASCIIValue(cardNumber, cardSuit);
+        System.out.println("CardCode:" + cardCode);
+        this.cardUnicodeValue = generateUnicodeValue(cardNumber, suitNumber);
+        System.out.println("UnicodeValue: " + cardUnicodeValue);
+        this.cardFace = generateCardFace(cardNumber);
+        this.cardUnicodeSuit = generateUnicodeSuit(suitNumber);
+        System.out.println("CardFace: " + cardFace);
+        this.cardString = generateCardString(cardFace, cardUnicodeValue);
+        System.out.println("CardString: " + cardString);
+        System.out.println("");
     }
 
-    
-    
-    public String generateASCIIValue() {
-        return generateASCIIValue(cardNumber, suitNumber);
-    }
-    
-    public String getASCIISuit(){
-        return getASCIISuit(suitNumber);
-    }
-    public String getASCIISuit(int suitNumber){
-        String asciiSuit = "";
+    public String[] sketchCard() {
+        String[] cardLines = new String[5];
 
-        return asciiSuit;
+        cardLines[0] = "+--------+";
+        cardLines[1] = "| " + cardString;
+        int lengthOfLineOne = 10 - cardLines[1].length();
+        for (int x = lengthOfLineOne; x < 9; x++) {
+            cardLines[1] += " ";
+        }
+        cardLines[1] += "|";
+        cardLines[2] = "|        |";
+        cardLines[3] = cardLines[2];
+        cardLines[4] = cardLines[2];
+
+        return cardLines;
     }
-    
-    public String generateASCIIValue(int cardNumber, int suitNumber) {
-        
-        
-        
-        return  
+
+    public String generateCardString() {
+        return generateCardString(cardFace, cardUnicodeSuit);
+    }
+
+    public String generateCardString(String cardFace, String cardUnicodeSuit) {
+        return cardFace + "" + cardUnicodeSuit;
+    }
+
+    public String generateCardFace() {
+        return generateCardFace(cardNumber);
+    }
+
+    public String generateCardFace(int number) {
+        String returnString = "???????";
+
+        switch (number) {
+            case 0:
+                returnString = "A";
+                break;
+            case 1:
+                returnString = "2";
+                break;
+            case 2:
+                returnString = "3";
+                break;
+            case 3:
+                returnString = "4";
+                break;
+            case 4:
+                returnString = "5";
+                break;
+            case 5:
+                returnString = "6";
+                break;
+            case 6:
+                returnString = "7";
+                break;
+            case 7:
+                returnString = "8";
+                break;
+            case 8:
+                returnString = "9";
+                break;
+            case 9:
+                returnString = "10";
+                break;
+            case 10:
+                returnString = "J";
+                break;
+            case 11:
+                returnString = "Q";
+                break;
+            case 12:
+                returnString = "K";
+                break;
+
+        }
+
+        return returnString;
+    }
+
+    public String generateUnicodeValue() {
+        return generateUnicodeValue(cardNumber, suitNumber);
+    }
+
+    public String generateUnicodeSuit() {
+        return generateUnicodeSuit(suitNumber);
+    }
+
+    public String generateUnicodeValue(int cardNumber, int suitNumber) {
+
+        return cardNumber + "" + generateUnicodeSuit(suitNumber);
     }
 
     private String generateCode(int cardNumber, String cardSuit) {
@@ -65,25 +154,47 @@ public class Card {
         return number;
     }
 
-    private String generateSuit(){
-        return generateSuit(suitNumber);
-    }
-    private String generateSuit(Integer suitNumber) {
-        String newSuit;
-
+    public String generateUnicodeSuit(int suitNumber) {
+        Character unicodeSuit = '\u0000';
 
         switch (suitNumber) {
             case 0:
-                newSuit = "Clubs";
+                unicodeSuit = SPADE;
                 break;
             case 1:
-                newSuit = "Hearts";
+                unicodeSuit = DIAMOND;
                 break;
             case 2:
-                newSuit = "Diamonds";
+                unicodeSuit = CLUB;
                 break;
             case 3:
+                unicodeSuit = HEART;
+                break;
+
+        }
+
+        return unicodeSuit.toString();
+    }
+
+    private String generateSuit() {
+        return generateSuit(suitNumber);
+    }
+
+    private String generateSuit(Integer suitNumber) {
+        String newSuit;
+
+        switch (suitNumber) {
+            case 0:
                 newSuit = "Spades";
+                break;
+            case 1:
+                newSuit = "Diamonds";
+                break;
+            case 2:
+                newSuit = "Clubs";
+                break;
+            case 3:
+                newSuit = "Hearts";
                 break;
             default:
                 newSuit = "Joker";
@@ -92,8 +203,8 @@ public class Card {
 
         return newSuit;
     }
-    
-    public int generateSuitNumber(){
+
+    public int generateSuitNumber() {
         return generateSuitNumber(cardValue);
     }
 
@@ -162,15 +273,23 @@ public class Card {
     /**
      * @return the cardASCIIValue
      */
-    public String getCardASCIIValue() {
-        return cardASCIIValue;
+    public String getCardUnicodeValue() {
+        return cardUnicodeValue;
     }
 
     /**
      * @param cardASCIIValue the cardASCIIValue to set
      */
-    private void setCardASCIIValue(String cardASCIIValue) {
-        this.cardASCIIValue = cardASCIIValue;
+    private void setCardUnicodeValue(String cardASCIIValue) {
+        this.cardUnicodeValue = cardASCIIValue;
+    }
+
+    public String getCardFace() {
+        return cardFace;
+    }
+
+    public String getCardString() {
+        return cardString;
     }
 
 }
