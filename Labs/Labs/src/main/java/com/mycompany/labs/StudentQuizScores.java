@@ -8,6 +8,7 @@ package com.mycompany.labs;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
+import java.io.*;
 
 /**
  *
@@ -20,12 +21,74 @@ public class StudentQuizScores {
     //java.util.HashMap<Integer, Student> studentIdMap = new java.util.HashMap<>();
     java.util.ArrayList<Student> studentIdList = new java.util.ArrayList<>();
     java.util.HashMap<String, Student> nameToStudentMap = new java.util.HashMap<>();
+File file = new File("testScoreData.txt");
 
     ConsoleIO consoleIo = new ConsoleIO();
 
     public StudentQuizScores() {
         loadStudentData();
     }
+
+
+	public void saveTextFile(){
+	return saveTextFile(studentIdList);
+	}
+	
+	public void saveTextFile(java.util.ArrayList<Student> studentIdList){
+	try {
+	//File file = new File("testScoreData.txt");
+	
+	Bufferedwriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+	for (Student student : studentIdList){
+	if ( student != null) {
+
+		String dataForFiling = getStudentId() + "\t" + student.getStudentName() + "\t";
+		String scores = "[";
+		for (Integer score : student.getQuizScores()){
+			scores += score + ",";
+		}
+		scores += "]";
+		scores = scores.replace(",]","]");
+		dataForFiling += scores;
+
+	bufferedWriter.write(dataForFiling + "\n");
+
+	}
+	}
+	
+
+
+	} catch (IOException ex){
+		System.out.println("Something went wrong during the writing process.");
+		ex.printStackTrace();
+	} finally {
+		bufferedWriter.close();
+	}
+	
+
+}
+
+public String readTextFile(){
+String returnString = "";
+try {
+
+BufferedReader reader = new BufferedReader(new FileReader(file));
+
+String line = null;
+while((line = reader.readLine()) != null){
+
+returnString += line + "\n";
+
+
+}
+reader.close();
+}catch ( IOException ex ) {
+System.out.println("Something went wrong!");
+ex.printStackTrace();
+
+}
+
+}
 
     public final void loadStudentData() {
 
@@ -142,6 +205,7 @@ public class StudentQuizScores {
                     break;
                 case 0:
                     keepRunning = false;
+		saveTextFile();
                     break;
                 default:
                     consoleIo.printStringToConsole("If you are see this message, something is wrong\n"
