@@ -7,6 +7,7 @@ package com.mycompany.studentquizscores.dao;
 
 import com.mycompany.studentquizscores.dto.Student;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -27,9 +28,14 @@ public class StudentDao {
     // CRUD
     private List<Student> students = new ArrayList();
     private int nextId = 1;
+    private File studentsDataFile = new File("studentsDataFile.txt");
 
     public StudentDao() {
         students = decode();
+        if (students == null ){
+            students = new ArrayList();
+            System.out.println("The list was empty, making a new one.");
+        }
         nextId = determineNextId();
 
     }
@@ -99,7 +105,7 @@ public class StudentDao {
         String nameAndNumber = "";
 
         for (Student myStudent : students) {
-            nameAndNumber += myStudent.getId() + "\t" + myStudent.getFirstName() + "\n";
+            nameAndNumber += myStudent.getId() + "\t" + myStudent.getStudentName() + "\n";
 
         }
 
@@ -125,16 +131,14 @@ public class StudentDao {
         final String TOKEN = "::";
 
         try {
-            PrintWriter out = new PrintWriter(new FileWriter("students.txt"));
+            PrintWriter out = new PrintWriter(new FileWriter(studentsDataFile));
 
             for (Student myStudent : students) {
                 out.print(myStudent.getId());
                 out.print(TOKEN);
-                out.print(myStudent.getFirstName());
+                out.print(myStudent.getStudentName());
                 out.print(TOKEN);
-                out.print(myStudent.getLastName());
-                out.print(TOKEN);
-                out.print(myStudent.getCohort());
+                out.print(myStudent.getStudentName());
                 out.println("");
             }
 
@@ -142,7 +146,7 @@ public class StudentDao {
             out.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StudentDao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -154,7 +158,7 @@ public class StudentDao {
         final String TOKEN = "::";
 
         try {
-            Scanner sc = new Scanner(new BufferedReader(new FileReader("students.txt")));
+            Scanner sc = new Scanner(new BufferedReader(new FileReader(studentsDataFile)));
 
             while (sc.hasNextLine()) {
                 String currentLine = sc.nextLine();
@@ -166,15 +170,13 @@ public class StudentDao {
                 int id = Integer.parseInt(stringParts[0]);
                 student.setId(id);
 
-                student.setFirstName(fixNull(stringParts[1]));
+                student.setStudentName(fixNull(stringParts[1]));
 
-                String lastName = stringParts[2];
-
-                lastName = fixNull(lastName);
-
-                student.setLastName(lastName);
-
-                student.setCohort(fixNull(stringParts[3]));
+//                String lastName = stringParts[2];
+//
+//                lastName = fixNull(lastName);
+//
+//                student.setLastName(lastName);
 
                 studentList.add(student);
 
@@ -183,7 +185,7 @@ public class StudentDao {
             sc.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StudentDao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return studentList;

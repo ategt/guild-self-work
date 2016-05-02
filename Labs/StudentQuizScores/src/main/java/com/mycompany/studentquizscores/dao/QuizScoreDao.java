@@ -29,11 +29,18 @@ public class QuizScoreDao {
     private int nextId = 1;
     File quizScoresFile = new File("QuizScoresData.txt");
 
-    public QuizScoreDao(){
+    public QuizScoreDao() {
+
         quizScores = decode();
+
+        if (quizScores == null) {
+            quizScores = new ArrayList();
+            System.out.println("The list was empty, making a new one.");
+        }
+
         nextId = determineNextId();
     }
-    
+
     public QuizScore create(QuizScore quizScore) {
         quizScore.setId(nextId);
         nextId++;
@@ -109,9 +116,23 @@ public class QuizScoreDao {
     private void encode() {
 
         final String TOKEN = "::";
-
+        File testFile = quizScoresFile;
         try {
-            PrintWriter out = new PrintWriter(new FileWriter(quizScoresFile));
+            if (testFile.exists()) {
+                String absolutePath = testFile.getAbsolutePath();
+                String name = testFile.getName();
+
+                for (int counter = 0; counter < 10; counter++) {
+                    testFile = new File(absolutePath.replace(name, name + counter));
+
+                    //counter++;
+                    if (testFile.exists()) {
+                        break;
+                    }
+                }
+            }
+
+            PrintWriter out = new PrintWriter(new FileWriter(testFile));
 
             for (QuizScore quizScore : quizScores) {
 
@@ -149,7 +170,14 @@ public class QuizScoreDao {
                 int id = Integer.parseInt(stringParts[0]);
                 quizScore.setId(id);
 
-                quizScore.setQuizScore(Integer.parseInt(stringParts[1]));
+                int score = -1;
+                try {
+                    score = Integer.parseInt(stringParts[1]);
+                }catch(NumberFormatException numFrmEx){
+                    
+                }
+                
+                quizScore.setQuizScore(score);
 
                 quizScores.add(quizScore);
             }
@@ -157,11 +185,11 @@ public class QuizScoreDao {
             sc.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(QuizScoreDao.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QuizScoreDao.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         return quizScoreList;
     }
-
 
 }
