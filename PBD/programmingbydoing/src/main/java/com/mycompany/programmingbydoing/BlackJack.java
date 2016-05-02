@@ -70,56 +70,24 @@ public class BlackJack {
         DeckOfCards deck = new DeckOfCards();
         deck.shuffle();
 
+        // Establish the user as a player.
         Hand player = new Hand();
 
-        // Draw two cards for the dealer and place one face up.
+        // Establish the dealer as the other player - the House.
         Hand dealer = new Hand();
 
-        Card card = deck.draw();
-        card.setFaceUp(true);
-        dealer.add(card);
-
-        card = deck.draw();
-        card.setFaceUp(false);
-        dealer.add(card);
-
-        consoleIo.printStringToConsole("The dealer drew two cards.");
-
-        // Draw two cards for player.
-        player.add(deck.draw());
-
-        player.add(deck.draw());
-
-        consoleIo.printStringToConsole("You have drawn two cards.");
+        setUpTheGame(deck, dealer, consoleIo, player);
 
         displayStatus(dealer, player, consoleIo);
         boolean keepPlaying = true;
 
         while (keepPlaying) {
-            int inputHitOrStay = consoleIo.getUserIntInputRange("Would you like to hit or stay?\n \"1\" to hit, \"2\" to stay.", 1, 2);
-
-            if (inputHitOrStay == 1) {
-                player.add(deck.draw());
-                displayStatus(dealer, player, consoleIo);
-
-                if (player.getTotalPoints() > 21) {
-                    keepPlaying = false;
-                }
-            } else {
-                consoleIo.printStringToConsole("You have choosen to stay.");
-                keepPlaying = false;
-            }
+            keepPlaying = playersTurn(consoleIo, player, deck, dealer, keepPlaying);
         }
 
         // Check to see if the player has lost.
         if (player.getTotalPoints() <= 21) {
-            // If not the extremely simple 'AI' dealer will keep drawing cards until he gets more points than the player.
-            consoleIo.printStringToConsole("It is now the dealers turn.");
-            dealer.flipAllCardsUp();
-            while (dealer.getTotalPoints() < player.getTotalPoints()) {
-                dealer.add(deck.draw());
-                calculateTotalPoints(dealer);
-            }
+            dealerAI(consoleIo, dealer, player, deck);
 
             displayStatus(dealer, player, consoleIo);
 
@@ -128,6 +96,50 @@ public class BlackJack {
         winner = applyWinOrLoseLogic(player, consoleIo, dealer);
 
         return winner;
+    }
+
+    public void setUpTheGame(DeckOfCards deck, Hand dealer, ConsoleIO consoleIo, Hand player) {
+        Card card = deck.draw();
+        card.setFaceUp(true);
+        dealer.add(card);
+        
+        card = deck.draw();
+        card.setFaceUp(false);
+        dealer.add(card);
+        
+        consoleIo.printStringToConsole("The dealer drew two cards.");
+        
+        // Draw two cards for player.
+        player.add(deck.draw());
+        player.add(deck.draw());
+        
+        consoleIo.printStringToConsole("You have drawn two cards.");
+    }
+
+    public boolean playersTurn(ConsoleIO consoleIo, Hand player, DeckOfCards deck, Hand dealer, boolean keepPlaying) {
+        int inputHitOrStay = consoleIo.getUserIntInputRange("Would you like to hit or stay?\n \"1\" to hit, \"2\" to stay.", 1, 2);
+        if (inputHitOrStay == 1) {
+            player.add(deck.draw());
+            displayStatus(dealer, player, consoleIo);
+            
+            if (player.getTotalPoints() > 21) {
+                keepPlaying = false;
+            }
+        } else {
+            consoleIo.printStringToConsole("You have choosen to stay.");
+            keepPlaying = false;
+        }
+        return keepPlaying;
+    }
+
+    public void dealerAI(ConsoleIO consoleIo, Hand dealer, Hand player, DeckOfCards deck) {
+        // If not the extremely simple 'AI' dealer will keep drawing cards until he gets more points than the player.
+        consoleIo.printStringToConsole("It is now the dealers turn.");
+        dealer.flipAllCardsUp();
+        while (dealer.getTotalPoints() < player.getTotalPoints()) {
+            dealer.add(deck.draw());
+            calculateTotalPoints(dealer);
+        }
     }
 
     public boolean applyWinOrLoseLogic(Hand player, ConsoleIO consoleIo, Hand dealer) {
