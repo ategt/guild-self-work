@@ -38,6 +38,14 @@ public class StudentQuizScores {
     public void populateStudentIdMap(java.util.HashMap<String, java.util.ArrayList<Integer>> scoreMap) {
         Set<String> keySet = scoreMap.keySet();
 
+        //java.util.ArrayList<Student> tempStudentList = new java.util.ArrayList<>(150);
+
+        for (int x = 0; x < 205; x++) {
+            Student student = null;
+           // tempStudentList.add(student);
+            studentIdList.add(student);
+        }
+
         //int studentId = 100;
         int studentId;
 
@@ -49,8 +57,14 @@ public class StudentQuizScores {
             Student newStudent = new Student(scoreMap.get(key), studentId, key);
             //studentIdMap.(studentId, newStudent);
             studentIdList.add(studentId, newStudent);
+            //tempStudentList.add(studentId, newStudent);
+            //tempStudentList.add(studentId, newStudent);
+            //tempStudentList.add(studentId, newStudent);
+            //tempStudentList.add(newStudent);
 
         }
+
+        //studentIdList.addAll(100, tempStudentList);
 
     }
 
@@ -63,10 +77,14 @@ public class StudentQuizScores {
         Integer newId = 99;
 
         //studentIdMap.get
-        //for (Integer key : keySet) {
-        for (Student student : studentIdMap) {
-            if (newId <= student.getStudentId()) {
-                newId = student.getStudentId() + 1;
+        //for (Integer key : keySet) {ud
+        if (studentIdMap.size() > 0) {
+            for (Student student : studentIdMap) {
+                if (student != null) {
+                    if (newId <= student.getStudentId()) {
+                        newId = student.getStudentId() + 1;
+                    }
+                }
             }
         }
 
@@ -120,7 +138,7 @@ public class StudentQuizScores {
                     findLowestScore();
                     break;
                 case 9:
-                    //renameStudent();
+                    renameStudent();
                     break;
                 case 0:
                     keepRunning = false;
@@ -154,18 +172,24 @@ public class StudentQuizScores {
         // java.util.HashMap<Integer, String> studentNumberMap = new java.util.HashMap<>();
         java.util.ArrayList<Student> studentCounterList = new java.util.ArrayList<>();
 
-        String studentList = "Student Names:\n";
+        
+        
+        String studentList = "Student Names:  ID Number:\n";
         int counter = 0;
         for (Student student : studentIdList) {
-            //for (Integer key : keySet) {
-            // for (int counter = 1; counter < studentIdList.size(); counter++) {
-            counter++;
-            studentList += counter + ") " + student.getStudentName() + " - \t" + student.getStudentId() + "\n";
-            studentCounterList.add(counter, student);
-            //returnedMap.put(student.getStudentName(), student);
-            //reMapNameToStudent(String name, Student student)
-            //studentArrayList.add(counter, studentIdList.get(counter));
-            //studentNumberMap.put(counter, key);
+            studentCounterList.add(null);
+            if (student != null) {
+
+                //for (Integer key : keySet) {
+                // for (int counter = 1; counter < studentIdList.size(); counter++) {
+                counter++;
+                studentList += counter + ") " + student.getStudentName() + " - \t" + student.getStudentId() + "\n";
+                studentCounterList.add(counter, student);
+                //returnedMap.put(student.getStudentName(), student);
+                //reMapNameToStudent(String name, Student student)
+                //studentArrayList.add(counter, studentIdList.get(counter));
+                //studentNumberMap.put(counter, key);
+            }
         }
 
         consoleIo.printStringToConsole(studentList);
@@ -183,10 +207,11 @@ public class StudentQuizScores {
     public void reBuildNameToStudentMap(java.util.ArrayList<Student> studentIdList) {
 
         for (Student student : studentIdList) {
+            if (student != null) {
 
-            nameToStudentMap.put(student.getStudentName(), student);
+                nameToStudentMap.put(student.getStudentName(), student);
+            }
         }
-
     }
 
     @Deprecated
@@ -228,7 +253,7 @@ public class StudentQuizScores {
 
         Student newStudent = new Student(scoreKeeper, newStudentId, studentName);
 
-        studentIdList.add(newStudent);
+        studentIdList.add(newStudentId, newStudent);
         reBuildNameToStudentMap();
 
     }
@@ -297,16 +322,23 @@ public class StudentQuizScores {
         return scoreKeeper;
     }
 
-//    public void renameStudent() {
-//        
-//        
-//        String studentName = askForNameOrNumber("Please Enter A Student's Name Or Number To Rename:");
-//
-//        String newName = consoleIo.getUserStringInput("What would you like \"" + studentName + "\" to be changed to?");
-//        java.util.ArrayList<Integer> valueList = scoreMap.remove(studentName);
-//        scoreMap.put(newName, valueList);
-//
-//    }
+    public void renameStudent() {
+        
+        
+        //String studentName = askForNameOrNumber("Please Enter A Student's Name Or Number To Rename:");
+        Student student = advancedAskForStudent("Please Enter A Student's Name Or Number To Rename:");
+
+        
+        String newName = consoleIo.getUserStringInput("What would you like \"" + student.getStudentName() + "\" to be changed to?");
+        //java.util.ArrayList
+        //java.util.ArrayList<Integer> valueList = scoreMap.remove(studentName);
+        //java.util.ArrayList<Integer> valueList = studentIdList.remove(st);
+        
+        //scoreMap.put(newName, valueList);
+
+        student.setStudentName(newName);
+        
+    }
     public void removeStudent() {
 
         Student student = advancedAskForStudent("Please Enter A Student's Name Or Number To Remove:");
@@ -465,9 +497,11 @@ public class StudentQuizScores {
 
         //for (String key : keySet) {
         for (Student student : studentIdList) {
-            totalClassScore.addAll(student.getQuizScores());
-        }
+            if (student != null) {
 
+                totalClassScore.addAll(student.getQuizScores());
+            }
+        }
         float classAverage = arrayListAverager(totalClassScore);
 
         String classStringAverage = getRoundedFloat(classAverage);
@@ -493,12 +527,14 @@ public class StudentQuizScores {
         java.util.ArrayList<Student> bottomStudents = determineWhoHasThatScore(bottomScore);
 
         //java.util.HashMap<String, Integer> topMap = countOccurancesOfScore(topStudents, highestScore);
-        String classLeaders = "The highest score was: " + bottomScore + "\n"
+        String classLeaders = "The lowest score was: " + bottomScore + "\n"
                 + "Students with this score and number of quizzes for each\n";
         for (Student student : bottomStudents) {
-            classLeaders += student.getStudentName() + " - \t" + enumerateOccurancesOfScore(bottomScore, student) + "\n";
-        }
+            if (student != null) {
 
+                classLeaders += student.getStudentName() + " - \t" + enumerateOccurancesOfScore(bottomScore, student) + "\n";
+            }
+        }
         consoleIo.printStringToConsole(classLeaders);
 
     }
@@ -516,25 +552,22 @@ public class StudentQuizScores {
         String classLeaders = "The highest score was: " + highestScore + "\n"
                 + "Students with this score and number of quizzes for each\n";
         for (Student student : topStudents) {
-            classLeaders += student.getStudentName() + " - \t" + enumerateOccurancesOfScore(highestScore, student) + "\n";
-        }
+            if (student != null) {
 
+                classLeaders += student.getStudentName() + " - \t" + enumerateOccurancesOfScore(highestScore, student) + "\n";
+            }
+        }
         consoleIo.printStringToConsole(classLeaders);
 
     }
 
-    
-    
     //public java.util.HashMap<Student, Integer> countOccurancesOfScore(Integer selectScore, ArrayList<Student> Students) {
-    
-    
-    
-    
-    
-    /** This method counts the occurences of a select score across the entire class.
-     * 
+    /**
+     * This method counts the occurences of a select score across the entire
+     * class.
+     *
      * @param selectScore
-     * @return 
+     * @return
      */
     public int countOccurancesOfScore(Integer selectScore) {
         return countOccurancesOfScore(selectScore, studentIdList);
@@ -552,16 +585,17 @@ public class StudentQuizScores {
         int occuranceCounter = 0;
 
         for (Student student : students) {
-            //int occuranceCounter = 0;
-            java.util.ArrayList<Integer> tempScore = student.getQuizScores();
-            //scoreMap.get(studentName);
+            if (student != null) {
+                //int occuranceCounter = 0;
+                java.util.ArrayList<Integer> tempScore = student.getQuizScores();
+                //scoreMap.get(studentName);
 
-            for (Integer score : tempScore) {
-                if (Objects.equals(score, selectScore)) {
-                    occuranceCounter++;
+                for (Integer score : tempScore) {
+                    if (Objects.equals(score, selectScore)) {
+                        occuranceCounter++;
+                    }
                 }
             }
-
             //bottomMap.put(studentName, occuranceCounter);
         }
 
@@ -626,18 +660,20 @@ public class StudentQuizScores {
 
 // Iterate through Student
         for (Student student : students) {
+            if (student != null) {
 
-            java.util.ArrayList<Integer> tempScore = student.getQuizScores();
-            boolean isTiedForLeader = false;
+                java.util.ArrayList<Integer> tempScore = student.getQuizScores();
+                boolean isTiedForLeader = false;
 
-            for (Integer score : tempScore) {
-                if (Objects.equals(score, inputScore)) {
-                    isTiedForLeader = true;
+                for (Integer score : tempScore) {
+                    if (Objects.equals(score, inputScore)) {
+                        isTiedForLeader = true;
+                    }
                 }
-            }
 
-            if (isTiedForLeader) {
-                selectStudents.add(student);
+                if (isTiedForLeader) {
+                    selectStudents.add(student);
+                }
             }
         }
         return selectStudents;
@@ -691,12 +727,14 @@ public class StudentQuizScores {
         //for (String key : keySet) {
 
         for (Student student : studentIdList) {
+            if (student != null) {
 
-            java.util.ArrayList<Integer> tempScore = student.getQuizScores();
+                java.util.ArrayList<Integer> tempScore = student.getQuizScores();
 
-            for (Integer score : tempScore) {
-                if (score < lowestScore) {
-                    lowestScore = score;
+                for (Integer score : tempScore) {
+                    if (score < lowestScore) {
+                        lowestScore = score;
+                    }
                 }
             }
         }
@@ -713,12 +751,14 @@ public class StudentQuizScores {
         //for (String key : keySet) {
 
         for (Student student : studentIdList) {
+            if (student != null) {
 
-            java.util.ArrayList<Integer> tempScore = student.getQuizScores();
+                java.util.ArrayList<Integer> tempScore = student.getQuizScores();
 
-            for (Integer score : tempScore) {
-                if (score < highestScore) {
-                    highestScore = score;
+                for (Integer score : tempScore) {
+                    if (score > highestScore) {
+                        highestScore = score;
+                    }
                 }
             }
         }
