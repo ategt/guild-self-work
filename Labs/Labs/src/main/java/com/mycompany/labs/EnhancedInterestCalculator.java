@@ -6,7 +6,6 @@
 package com.mycompany.labs;
 
 import static com.mycompany.labs.InterestCalculator.calculateYearNumber;
-import java.util.ArrayList;
 
 /**
  *
@@ -25,7 +24,7 @@ public class EnhancedInterestCalculator {
         int compoundingsPerYear = consoleIO.getUserIntInputRange("How many times a year is this investment compounded?\n"
                 + " 1) Yearly\n 4) Quarterly\n 12) Monthly\n 365) Daily", 0, Integer.MAX_VALUE);
 
-        java.util.ArrayList<CompoundingPeriod> periodList = buildCompoundingPeriodList(annualInterestRate, compoundingsPerYear, initialYears, initialInvestment);
+        java.util.List<CompoundingPeriod> periodList = buildCompoundingPeriodList(annualInterestRate, compoundingsPerYear, initialYears, initialInvestment);
 
         for (CompoundingPeriod instance : periodList) {
             consoleIO.printStringToConsole(instance.getSequenceNumber() + ") Starting Balance: " + instance.getPrettyStartingBalance()
@@ -36,8 +35,8 @@ public class EnhancedInterestCalculator {
 
     }
 
-    public java.util.ArrayList<CompoundingPeriod> buildCompoundingPeriodList(float annualInterestRate, int compoundingsPerYear, float initialYears, float initialInvestment) {
-        java.util.ArrayList<CompoundingPeriod> periodList = new java.util.ArrayList<>();
+    public java.util.List<CompoundingPeriod> buildCompoundingPeriodList(float annualInterestRate, int compoundingsPerYear, float initialYears, float initialInvestment) {
+        java.util.List<CompoundingPeriod> periodList = new java.util.ArrayList<>();
 
         float interestRateForCompoundingPeriod = calculateInterestRateForCompoundingPeriod(annualInterestRate, compoundingsPerYear);
 
@@ -81,7 +80,4 @@ public class EnhancedInterestCalculator {
         consoleIO.printStringToConsole("At the begining of year " + (yearNumber + 1) + " your starting balance would be " + Math.round(currentBalance));
     }
 
-    
-    
-    
 }

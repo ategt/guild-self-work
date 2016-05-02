@@ -11,24 +11,24 @@ package com.mycompany.labs;
  */
 public class Student {
 
-    private java.util.ArrayList<Integer> QuizScores;
+    private java.util.List<Integer> QuizScores;
     private int studentId;
     private String studentName;
 
     public Student() {
     }
 
-    public Student(java.util.ArrayList<Integer> QuizScores, int studentId, String studentName) {
+    public Student(java.util.List<Integer> QuizScores, int studentId, String studentName) {
         this.QuizScores = QuizScores;
         this.studentId = studentId;
         this.studentName = studentName;
     }
 
-    public static java.util.HashMap<String, java.util.ArrayList<Integer>> loadStudentData() {
+    public static java.util.HashMap<String, java.util.List<Integer>> loadStudentData() {
 
-        java.util.HashMap<String, java.util.ArrayList<Integer>> scoreMap = new java.util.HashMap<>();
+        java.util.HashMap<String, java.util.List<Integer>> scoreMap = new java.util.HashMap<>();
 
-        java.util.ArrayList<Integer> scoreList = new java.util.ArrayList<>();
+        java.util.List<Integer> scoreList = new java.util.ArrayList<>();
         scoreList.add(95);
         scoreList.add(100);
         scoreList.add(85);
@@ -84,14 +84,14 @@ public class Student {
     /**
      * @return the QuizScores
      */
-    public java.util.ArrayList<Integer> getQuizScores() {
+    public java.util.List<Integer> getQuizScores() {
         return QuizScores;
     }
 
     /**
      * @param QuizScores the QuizScores to set
      */
-    public void setQuizScores(java.util.ArrayList<Integer> QuizScores) {
+    public void setQuizScores(java.util.List<Integer> QuizScores) {
         this.QuizScores = QuizScores;
     }
 

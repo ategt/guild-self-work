@@ -56,9 +56,6 @@ public class CompoundingPeriod {
 
     }
 
-    
-    
-    
     // Methods to return Numbers in formated dollar ammounts.
     public String getPrettyDollars(float balance) {
 
@@ -232,7 +229,7 @@ public class CompoundingPeriod {
      * @return the sequenceNumber
      */
     public int getSequenceNumber() {
-        if(sequenceNumber == 0 &&  previousInstance != null){
+        if (sequenceNumber == 0 && previousInstance != null) {
             setSequenceNumber(calculateSequenceNumber());
         }
         return sequenceNumber;
@@ -250,7 +247,6 @@ public class CompoundingPeriod {
     }
 
     public float calculateInterestEarned(float balance, float rate) {
-        //float calculatedInterest = 0;
         return balance * rate;
     }
 
@@ -261,24 +257,6 @@ public class CompoundingPeriod {
     public float calculateEndingBalanceFromRate(float balance, float rate) {
 
         return calculateEndingBalance(getStartingBalance(), calculateInterestEarned(getStartingBalance(), getInterestRate()));
-    }
-
-    @Deprecated
-    public void populateEmptyFields() {
-
-//        if (getInterestEarned() == 0) {
-//            setInterestEarned(calculateInterestEarned(getStartingBalance(), getInterestRate()));
-//        }
-//        if (getEndingBalance() == 0) {
-//            setEndingBalance(calculateEndingBalance(getStartingBalance(), getInterestEarned()));
-//        }
-        //setTotalEarnedInterest();  // get the last object and add this periods interest to its total interest.
-//        if (isBeginingOfYear(getSequenceNumber(), getCompoundingsPerYear()) == false) {
-//            setIsBeginingOfYear(isBeginingOfYear(getSequenceNumber(), getCompoundingsPerYear()));
-//        }
-//        if (isEndOfYear(getSequenceNumber(), getCompoundingsPerYear()) == false) {
-//            setIsEndOfYear(isEndOfYear(getSequenceNumber(), getCompoundingsPerYear()));
-//        }
     }
 
     public boolean isBeginingOfYear(int sequenceNumber, int compoundingsPerYear) {
@@ -326,7 +304,9 @@ public class CompoundingPeriod {
     }
 
     public void setPreviousInstance(CompoundingPeriod previousInstance) {
-        if (!this.equals(previousInstance)) this.previousInstance = previousInstance;
+        if (!this.equals(previousInstance)) {
+            this.previousInstance = previousInstance;
+        }
     }
 
     /**
@@ -347,6 +327,8 @@ public class CompoundingPeriod {
      * @param nextInstance the nextInstance to set
      */
     public void setNextInstance(CompoundingPeriod nextInstance) {
-               if (!this.equals(nextInstance)) this.nextInstance = nextInstance;
+        if (!this.equals(nextInstance)) {
+            this.nextInstance = nextInstance;
+        }
     }
 }
