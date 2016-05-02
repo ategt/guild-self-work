@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.labs;
+package com.mycompany.studentquizscores;
 
+import com.mycompany.studentquizscores.dto.Student;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
