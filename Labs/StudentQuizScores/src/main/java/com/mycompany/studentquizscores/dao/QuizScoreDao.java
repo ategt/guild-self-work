@@ -95,6 +95,11 @@ public class QuizScoreDao {
         encode();
 
     }
+    
+    public List<QuizScore> getList(){
+        
+        return quizScores;
+    }
 
     public int size() {
         return quizScores.size();
@@ -116,23 +121,23 @@ public class QuizScoreDao {
     private void encode() {
 
         final String TOKEN = "::";
-        File testFile = quizScoresFile;
+        //File testFile = quizScoresFile;
         try {
-            if (testFile.exists()) {
-                String absolutePath = testFile.getAbsolutePath();
-                String name = testFile.getName();
+//            if (testFile.exists()) {
+//                String absolutePath = testFile.getAbsolutePath();
+//                String name = testFile.getName();
+//
+//                for (int counter = 0; counter < 10; counter++) {
+//                    testFile = new File(absolutePath.replace(name, name + counter));
+//
+//                    //counter++;
+//                    if (testFile.exists()) {
+//                        break;
+//                    }
+//                }
+//            }
 
-                for (int counter = 0; counter < 10; counter++) {
-                    testFile = new File(absolutePath.replace(name, name + counter));
-
-                    //counter++;
-                    if (testFile.exists()) {
-                        break;
-                    }
-                }
-            }
-
-            PrintWriter out = new PrintWriter(new FileWriter(testFile));
+            PrintWriter out = new PrintWriter(new FileWriter(quizScoresFile));
 
             for (QuizScore quizScore : quizScores) {
 
@@ -169,6 +174,7 @@ public class QuizScoreDao {
 
                 int id = Integer.parseInt(stringParts[0]);
                 quizScore.setId(id);
+                
 
                 int score = -1;
                 try {
@@ -179,7 +185,7 @@ public class QuizScoreDao {
                 
                 quizScore.setQuizScore(score);
 
-                quizScores.add(quizScore);
+                quizScoreList.add(quizScore);
             }
 
             sc.close();
@@ -190,6 +196,19 @@ public class QuizScoreDao {
         }
 
         return quizScoreList;
+    }
+    
+    public float getAverageQuizScore(){
+       // float averageScore = 0f;
+        float totalPoints = 0f;
+        float totalQuizes = 0f;
+        
+        for ( QuizScore quizScore : quizScores ){
+            totalPoints += quizScore.getQuizScore();
+            totalQuizes++;
+         }
+        
+        return ( totalPoints / totalQuizes );
     }
 
 }

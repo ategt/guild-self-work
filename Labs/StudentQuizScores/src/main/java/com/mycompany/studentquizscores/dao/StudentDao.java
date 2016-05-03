@@ -5,6 +5,7 @@
  */
 package com.mycompany.studentquizscores.dao;
 
+import com.mycompany.studentquizscores.dto.QuizScore;
 import com.mycompany.studentquizscores.dto.Student;
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -29,10 +31,17 @@ public class StudentDao {
     private List<Student> students = new ArrayList();
     private int nextId = 1;
     private File studentsDataFile = new File("studentsDataFile.txt");
+    QuizScoreDao quizScoreDao;
 
     public StudentDao() {
+        this(new QuizScoreDao());
+    }
+
+    public StudentDao(QuizScoreDao quizScoreDao) {
+
+        this.quizScoreDao = quizScoreDao;
         students = decode();
-        if (students == null ){
+        if (students == null) {
             students = new ArrayList();
             System.out.println("The list was empty, making a new one.");
         }
@@ -101,15 +110,9 @@ public class StudentDao {
         return students.size();
     }
 
-    public String getNameAndNumber() {
-        String nameAndNumber = "";
+    public List<Student> getList() {
 
-        for (Student myStudent : students) {
-            nameAndNumber += myStudent.getId() + "\t" + myStudent.getStudentName() + "\n";
-
-        }
-
-        return nameAndNumber;
+        return students;
     }
 
     private int determineNextId() {
@@ -129,6 +132,7 @@ public class StudentDao {
     private void encode() {
 
         final String TOKEN = "::";
+        final String TOKENB = ":||:";
 
         try {
             PrintWriter out = new PrintWriter(new FileWriter(studentsDataFile));
@@ -137,9 +141,15 @@ public class StudentDao {
                 out.print(myStudent.getId());
                 out.print(TOKEN);
                 out.print(myStudent.getStudentName());
+
                 out.print(TOKEN);
-                out.print(myStudent.getStudentName());
-                out.println("");
+
+                if (myStudent.getQuizScores() != null) {
+                    if (myStudent.getQuizScores().size() > 0) {
+                        encodeQuizScoreIds(myStudent, out, TOKENB);
+                    }
+                }
+              out.println("");
             }
 
             out.flush();
@@ -151,11 +161,25 @@ public class StudentDao {
 
     }
 
+    private void encodeQuizScoreIds(Student myStudent, PrintWriter out, final String TOKENB) {
+        for (QuizScore quizScore : myStudent.getQuizScores()) {
+            if (quizScore != null) {
+                if (quizScore.getId() != null) {
+                    out.print(quizScore.getId());
+                    out.print(TOKENB);
+
+                }
+            }
+        }
+    }
+
     private List<Student> decode() {
 
         List<Student> studentList = new ArrayList<>();
 
         final String TOKEN = "::";
+        final String TOKENB = ":||:";
+        
 
         try {
             Scanner sc = new Scanner(new BufferedReader(new FileReader(studentsDataFile)));
@@ -172,12 +196,42 @@ public class StudentDao {
 
                 student.setStudentName(fixNull(stringParts[1]));
 
+                if (quizScoreDao == null) {
+                    quizScoreDao = new QuizScoreDao();
+                }
+
+                List<QuizScore> scoreList = student.getQuizScores();
+                if (scoreList == null) {
+                    scoreList = new ArrayList();
+                    student.setQuizScores(scoreList);
+                }
+
+                for (String part : stringParts) {
+                    if (part.contains(TOKENB)) {
+                        for (String scoreIdString : part.split(Pattern.quote(TOKENB))) {
+                            Integer scoreId = null;
+                            try {
+                                scoreId = Integer.parseInt(scoreIdString);
+                            } catch (NumberFormatException numFmtEx) {
+
+                            }
+                            if (scoreId != null) {
+                                scoreList.add(quizScoreDao.get(scoreId));
+                            }
+                        }
+                    }
+                }
+
+//                if (myStudent.getQuizScores() != null) {
+//                    if (myStudent.getQuizScores().size() > 0) {
+//                        encodeQuizScoreIds(myStudent, out, TOKENB);
+//                    }
+//                }
 //                String lastName = stringParts[2];
 //
 //                lastName = fixNull(lastName);
 //
 //                student.setLastName(lastName);
-
                 studentList.add(student);
 
             }
