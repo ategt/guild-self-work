@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 public class StudentQuizScoresController {
 
-    ConsoleIO consoleIo = new ConsoleIO();
+    private ConsoleIO consoleIo = new ConsoleIO();
     private QuizScoreDao quizScoreDao = new QuizScoreDao();
     private StudentDao studentDao = new StudentDao(quizScoreDao);
 
@@ -166,7 +166,7 @@ public class StudentQuizScoresController {
 
     }
 
-    public String getNameAndNumber(List<Student> students) {
+    private String getNameAndNumber(List<Student> students) {
         String nameAndNumber = "";
 
         for (Student myStudent : students) {
@@ -200,7 +200,7 @@ public class StudentQuizScoresController {
 
     }
 
-    public void viewAverage() {
+    private void viewAverage() {
 
         int id = consoleIo.getUserIntInputRange(getNameAndNumber(studentDao.getList()) + "Please enter student's number.", 0, Integer.MAX_VALUE);
         Student myStudent = studentDao.get(id);
@@ -224,7 +224,7 @@ public class StudentQuizScoresController {
 
     }
 
-    public void viewClassAverage() {
+    private void viewClassAverage() {
         java.util.List<QuizScore> totalClassScore = new java.util.ArrayList<>();
 
         for (Student student : studentDao.getList()) {
@@ -242,7 +242,7 @@ public class StudentQuizScoresController {
 
     }
 
-    public void findLowestScore() {
+    private void findLowestScore() {
 
         Integer bottomScore = determineTheLowestScore();
 
@@ -260,7 +260,7 @@ public class StudentQuizScoresController {
 
     }
 
-    public Integer determineTheHighestScore() {
+    private Integer determineTheHighestScore() {
         // Find the highest Score
         Integer highestScore = 0;
 
@@ -279,7 +279,7 @@ public class StudentQuizScoresController {
         return highestScore;
     }
 
-    public Integer determineTheLowestScore() {
+    private Integer determineTheLowestScore() {
         // Find the lowest Score
         Integer lowestScore = 0;
 
@@ -298,7 +298,7 @@ public class StudentQuizScoresController {
         return lowestScore;
     }
 
-    public void findHighestScore() {
+    private void findHighestScore() {
 
         Integer highestScore = determineTheHighestScore();
 
@@ -316,7 +316,7 @@ public class StudentQuizScoresController {
 
     }
 
-    public List<Student> determineWhoHasThatScore(int inputScore) {
+    private List<Student> determineWhoHasThatScore(int inputScore) {
         List<Student> selectStudents = new ArrayList<>();
 
         // Iterate through Student
@@ -340,7 +340,7 @@ public class StudentQuizScoresController {
         return selectStudents;
     }
 
-    public int enumerateOccurancesOfScore(Integer selectScore, Student student) {
+    private int enumerateOccurancesOfScore(Integer selectScore, Student student) {
 
         int occuranceCounter = 0;
 
@@ -354,7 +354,7 @@ public class StudentQuizScoresController {
 
     }
 
-    public void renameStudent() {
+    private void renameStudent() {
 
         int id = consoleIo.getUserIntInputRange(getNameAndNumber(studentDao.getList()) + "Please enter student's number.", 0, Integer.MAX_VALUE);
         Student myStudent = studentDao.get(id);
@@ -370,7 +370,7 @@ public class StudentQuizScoresController {
 
     }
 
-    public float listAverager(List<QuizScore> scoreList) {
+    private float listAverager(List<QuizScore> scoreList) {
         int scoreCounter = 0;
         int totalPoints = 0;
         for (QuizScore quizScore : scoreList) {
@@ -381,7 +381,7 @@ public class StudentQuizScoresController {
         return averageScore;
     }
 
-    public String getRoundedFloat(float classAverage) {
+    private String getRoundedFloat(float classAverage) {
         java.text.DecimalFormat df = new java.text.DecimalFormat();
         df.setMaximumFractionDigits(2);
         String classStringAverage = df.format(classAverage);
