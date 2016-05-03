@@ -5,6 +5,7 @@
  */
 package com.mycompany.studentquizscores;
 
+import com.mycompany.studentquizscores.controllers.ConsoleIO;
 import com.mycompany.studentquizscores.dto.Student;
 import java.util.ArrayList;
 import java.util.Objects;

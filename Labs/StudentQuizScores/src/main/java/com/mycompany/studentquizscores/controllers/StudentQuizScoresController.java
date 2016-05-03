@@ -5,7 +5,6 @@
  */
 package com.mycompany.studentquizscores.controllers;
 
-import com.mycompany.studentquizscores.ConsoleIO;
 import com.mycompany.studentquizscores.dao.QuizScoreDao;
 import com.mycompany.studentquizscores.dao.StudentDao;
 import com.mycompany.studentquizscores.dto.QuizScore;
