@@ -150,7 +150,6 @@ public class StudentQuizScoresController {
             if (scores == null) {
                 scores = new ArrayList();
                 student.setQuizScores(scores);
-                //System.out.println(scores);
             }
 
             scores.add(quizScore);
@@ -208,9 +207,6 @@ public class StudentQuizScoresController {
 
         if (myStudent != null) {
 
-            //        Student student = advancedAskForStudent();
-            //
-            //        java.util.List<Integer> scoreList = student.getQuizScores();
             List<QuizScore> scoreList = myStudent.getQuizScores();
 
             if (scoreList != null) {
@@ -265,7 +261,7 @@ public class StudentQuizScoresController {
     }
 
     public Integer determineTheHighestScore() {
-        // Find the lowest Score
+        // Find the highest Score
         Integer highestScore = 0;
 
         for (Student student : studentDao.getList()) {
@@ -360,7 +356,6 @@ public class StudentQuizScoresController {
 
     public void renameStudent() {
 
-        //Student student = advancedAskForStudent("Please Enter A Student's Name Or Number To Rename:");
         int id = consoleIo.getUserIntInputRange(getNameAndNumber(studentDao.getList()) + "Please enter student's number.", 0, Integer.MAX_VALUE);
         Student myStudent = studentDao.get(id);
 

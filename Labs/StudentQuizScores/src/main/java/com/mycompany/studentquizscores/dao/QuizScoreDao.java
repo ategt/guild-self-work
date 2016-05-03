@@ -121,21 +121,7 @@ public class QuizScoreDao {
     private void encode() {
 
         final String TOKEN = "::";
-        //File testFile = quizScoresFile;
         try {
-//            if (testFile.exists()) {
-//                String absolutePath = testFile.getAbsolutePath();
-//                String name = testFile.getName();
-//
-//                for (int counter = 0; counter < 10; counter++) {
-//                    testFile = new File(absolutePath.replace(name, name + counter));
-//
-//                    //counter++;
-//                    if (testFile.exists()) {
-//                        break;
-//                    }
-//                }
-//            }
 
             PrintWriter out = new PrintWriter(new FileWriter(quizScoresFile));
 
@@ -199,7 +185,6 @@ public class QuizScoreDao {
     }
     
     public float getAverageQuizScore(){
-       // float averageScore = 0f;
         float totalPoints = 0f;
         float totalQuizes = 0f;
         

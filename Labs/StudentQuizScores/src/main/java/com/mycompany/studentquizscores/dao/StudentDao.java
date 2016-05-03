@@ -149,7 +149,7 @@ public class StudentDao {
                         encodeQuizScoreIds(myStudent, out, TOKENB);
                     }
                 }
-              out.println("");
+                out.println("");
             }
 
             out.flush();
@@ -179,7 +179,6 @@ public class StudentDao {
 
         final String TOKEN = "::";
         final String TOKENB = ":||:";
-        
 
         try {
             Scanner sc = new Scanner(new BufferedReader(new FileReader(studentsDataFile)));
@@ -222,16 +221,6 @@ public class StudentDao {
                     }
                 }
 
-//                if (myStudent.getQuizScores() != null) {
-//                    if (myStudent.getQuizScores().size() > 0) {
-//                        encodeQuizScoreIds(myStudent, out, TOKENB);
-//                    }
-//                }
-//                String lastName = stringParts[2];
-//
-//                lastName = fixNull(lastName);
-//
-//                student.setLastName(lastName);
                 studentList.add(student);
 
             }
