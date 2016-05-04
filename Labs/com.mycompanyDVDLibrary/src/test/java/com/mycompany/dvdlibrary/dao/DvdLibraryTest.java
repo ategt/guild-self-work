@@ -37,7 +37,8 @@ public class DvdLibraryTest {
     public void testCreate() {
         System.out.println("create");
         Dvd address = new Dvd();
-        DvdLibrary instance = new DvdLibrary(true);
+        NoteDao noteDao = new NoteDao();
+        DvdLibrary instance = new DvdLibrary(true, noteDao);
         Dvd expResult = address;
         Dvd result = instance.create(address);
         assertEquals(expResult, result);
@@ -59,34 +60,35 @@ public class DvdLibraryTest {
      * Test of getAllAddresses method, of class DvdLibrary.
      */
     @Test
-    public void testGetAllAddresses() {
-        System.out.println("getAllAddresses");
-        DvdLibrary instance = new DvdLibrary(true);
+    public void testGetAllDvds() {
+        System.out.println("getAllDvds");
+        NoteDao noteDao = new NoteDao();
+        DvdLibrary instance = new DvdLibrary(true, noteDao);
         
-        Dvd addressOne = new Dvd();
-        Dvd addressTwo = new Dvd();
-        Dvd addressThree = new Dvd();
+        Dvd dvdOne = new Dvd();
+        Dvd dvdTwo = new Dvd();
+        Dvd dvdThree = new Dvd();
         
-        instance.create(addressOne);
-        instance.create(addressTwo);
-        instance.create(addressThree);
+        instance.create(dvdOne);
+        instance.create(dvdTwo);
+        instance.create(dvdThree);
         
-        assertTrue(instance.getAllAddresses().contains(addressTwo));
+        assertTrue(instance.getAllDvds().contains(dvdTwo));
         
-        instance.delete(addressOne);
-        instance.delete(addressTwo);
-        instance.delete(addressThree);
+        instance.delete(dvdOne);
+        instance.delete(dvdTwo);
+        instance.delete(dvdThree);
         
         int expSizeResult = 3;
         int sizeResult = instance.size();
         assertEquals(expSizeResult, sizeResult);
         
-        String lastName = "Steve";
-        List<Dvd> result = instance.searchByLastName(lastName);
+        String title = "SpongeBob";
+        List<Dvd> result = instance.searchByTitle(title);
         assertEquals(true, result.isEmpty());
 
-        lastName = "Jones";
-        result = instance.searchByLastName(lastName);
+        title = "Jones";
+        result = instance.searchByTitle(title);
         assertEquals(false, result.isEmpty());
         assertEquals(2, result.size());
     }

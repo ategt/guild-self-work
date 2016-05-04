@@ -60,7 +60,7 @@ public class DvdLibraryController {
                     findByTitle();
                     break;
                 case 6:
-                    findById();
+                    editById();
                     break;
                 case 0:
                     choseToExit = true;
@@ -77,15 +77,14 @@ public class DvdLibraryController {
 
     public void removeDvd() {
 
-        listAllDvds()
-        );
+        listAllDvds();
 
         int input = consoleIo.getUserIntInputPositive("Please Enter A DVD ID Number To Delete:");
 
         Dvd dvd = dvdLibrary.get(input);
 
         if (dvd != null) {
-            consoleIo.printStringToConsole(dvd.toString());
+            consoleIo.printStringToConsole(convertToString(dvd));
             consoleIo.printStringToConsole("Are you sure you want to delete this dvd?");
             String confirm = consoleIo.getUserStringInput("Press \"1\" to continue or anything else to abort:");
 
@@ -99,23 +98,23 @@ public class DvdLibraryController {
         }
     }
 
-    public void showBookSize() {
+    public void showDvdLibrarySize() {
         consoleIo.printStringToConsole("  " + dvdLibrary.size() + " Entries in DVD Library.");
     }
 
-    public void listAllAddresses() {
+    public void listAllDvds() {
         for (Dvd dvd : dvdLibrary.getAllDvds()) {
 
-            String dvdString = dvd.toString();
-
+            String dvdString = dvd.getTitle() + "\n";
+            
             consoleIo.printStringToConsole(dvdString);
         }
 
     }
 
-    public void findByLastName() {
+    public void findByTitle() {
 
-        listAllAddresses();
+        listAllDvds();
         String lastNameToFind = consoleIo.getUserStringInput("Please Enter A Last Name To Find:");
 
         String dvdString = "";
@@ -132,7 +131,7 @@ public class DvdLibraryController {
             if (editInput != null && foundAddresses.get(0) != null) {
                 if (editInput.equalsIgnoreCase("Y")) {
                     Dvd dvdToEdit = foundAddresses.get(0);
-                    editAddress(dvdToEdit);
+                    editDvdInfo(dvdToEdit);
                     dvdLibrary.update(dvdToEdit);
 
                 }
@@ -224,19 +223,17 @@ public class DvdLibraryController {
 
                     note.setNoteString(inputString);
                     noteDao.create(note);
-                    
+
                     List<Note> notes = dvd.getNotes();
-                    
-                    if ( notes == null ){
+
+                    if (notes == null) {
                         notes = new ArrayList();
                     }
-                    
+
                     notes.add(note);
                 }
 
             }
-            
-            
 
         }
 
@@ -257,140 +254,42 @@ public class DvdLibraryController {
         return releaseDate;
     }
 
-    public void editAddress(Dvd dvd) {
-        if (dvd != null) {
-            consoleIo.printStringToConsole("To Delete an Existing Entry, Enter a Dash \"-\".");
-            consoleIo.printStringToConsole("You May Leave Lines Empty And Return To Edit Them Later.");
+    public Dvd inputDvd() {
+        Dvd newDvd = new Dvd();
 
-            String firstName = consoleIo.getUserStringInput("Please Enter First Name:");
-            if (firstName.equalsIgnoreCase("")) {
+        editDvdInfo(newDvd);
 
-            } else if (firstName.equalsIgnoreCase("-")) {
-                firstName = null;
-                dvd.setFirstName(firstName);
-            } else {
-                dvd.setFirstName(firstName);
-
-            }
-
-            String inputString = consoleIo.getUserStringInput("Please Enter Last Name:");
-
-            if (inputString.equalsIgnoreCase("")) {
-                inputString = null;
-            } else if (inputString.equalsIgnoreCase("-")) {
-                inputString = null;
-                dvd.setLastName(inputString);
-
-            } else {
-
-                dvd.setLastName(inputString);
-            }
-
-            inputString = consoleIo.getUserStringInput("What type of dvd is this?:");
-
-            if (inputString.equalsIgnoreCase("")) {
-                inputString = null;
-            } else if (inputString.equalsIgnoreCase("-")) {
-                inputString = null;
-                dvd.setLastName(inputString);
-            } else {
-                dvd.setType(inputString);
-
-            }
-
-            inputString = consoleIo.getUserStringInput("Please Enter PO Box:");
-
-            if (inputString.equalsIgnoreCase("")) {
-                inputString = null;
-            } else if (inputString.equalsIgnoreCase("-")) {
-                inputString = null;
-                dvd.setLastName(inputString);
-            } else {
-                dvd.setPoBox(inputString);
-
-            }
-
-            inputString = consoleIo.getUserStringInput("Please Enter Street Address:");
-
-            if (inputString.equalsIgnoreCase("")) {
-                inputString = null;
-            } else if (inputString.equalsIgnoreCase("-")) {
-                inputString = null;
-                dvd.setLastName(inputString);
-            } else {
-                dvd.setStreetAddress(inputString);
-
-            }
-
-            inputString = consoleIo.getUserStringInput("Please Enter City:");
-
-            if (inputString.equalsIgnoreCase("")) {
-                inputString = null;
-            } else if (inputString.equalsIgnoreCase("-")) {
-                inputString = null;
-                dvd.setLastName(inputString);
-            } else {
-                dvd.setCity(inputString);
-
-            }
-
-            inputString = consoleIo.getUserStringInput("Please Enter State:");
-
-            if (inputString.equalsIgnoreCase("")) {
-                inputString = null;
-            } else if (inputString.equalsIgnoreCase("-")) {
-                inputString = null;
-                dvd.setLastName(inputString);
-            } else {
-                dvd.setState(inputString);
-
-            }
-
-            inputString = consoleIo.getUserStringInput("Please Enter Zip Code:");
-
-            if (inputString.equalsIgnoreCase("")) {
-                inputString = null;
-            } else if (inputString.equalsIgnoreCase("-")) {
-                inputString = null;
-                dvd.setLastName(inputString);
-            } else {
-                dvd.setZipcode(inputString);
-
-            }
-
-            inputString = consoleIo.getUserStringInput("Please Enter Country:");
-
-            if (inputString.equalsIgnoreCase("")) {
-                inputString = null;
-            } else if (inputString.equalsIgnoreCase("-")) {
-                inputString = null;
-                dvd.setLastName(inputString);
-            } else {
-                dvd.setCountry(inputString);
-
-            }
-
-        }
-    }
-
-    public Dvd inputAddress() {
-        Dvd newAddress = new Dvd();
-
-        editAddress(newAddress);
-
-        return newAddress;
+        return newDvd;
     }
 
     private void editById() {
-        listAllAddresses();
+        listAllDvds();
 
         int idNumber = consoleIo.getUserIntInputPositive("Please Enter An ID Number To Find:");
 
         Dvd dvdToEdit = dvdLibrary.get(idNumber);
 
-        editAddress(dvdToEdit);
+        editDvdInfo(dvdToEdit);
         dvdLibrary.update(dvdToEdit);
 
+    }
+
+    private String convertToString(Dvd dvd) {
+
+        String dvdInfo = dvd.getId() + ") " + dvd.getTitle() + "\n";
+        dvdInfo += "Release Date: " + dvd.getReleaseDate() + "\n";
+        dvdInfo += "Director's Name: " + dvd.getDirectorsName() + "\n";
+        dvdInfo += "Studio: " + dvd.getStudio() + "\n";
+        dvdInfo += "Rating: " + dvd.getMPAA() + "\n";
+
+        if (dvd.getNotes() != null) {
+            dvdInfo += "Notes:";
+            for (Note note : dvd.getNotes()) {
+                dvdInfo += "  " + note.getNoteString() + "\n";
+            }
+        }
+
+        return dvdInfo;
     }
 
 }

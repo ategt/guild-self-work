@@ -32,7 +32,7 @@ public class DvdLibrary {
     int nextId = 1;
     File dvdLibraryFile = new File("dvdData.txt");
     NoteDao noteDao;
-    
+
     public DvdLibrary(NoteDao noteDao) {
         this(false, noteDao);
     }
@@ -40,7 +40,7 @@ public class DvdLibrary {
     protected DvdLibrary(boolean isATest, NoteDao noteDao) {
 
         this.noteDao = noteDao;
-        
+
         if (isATest) {
             dvdLibraryFile = new File("testDvdData.txt");
         }
@@ -140,7 +140,7 @@ public class DvdLibrary {
 
         final String TOKEN = "::";
         final String TOKENB = ":||:";
-        
+
         try {
 
             PrintWriter out = new PrintWriter(new FileWriter(dvdLibraryFile));
@@ -161,17 +161,17 @@ public class DvdLibrary {
                 out.print(TOKEN);
                 out.print(dvd.getId());
 
-                for (com.mycompany.dvdlibrary.dto.Note note : dvd.getNotes()){
-                    out.print(note.getId());
-                    out.print(TOKENB);
+                List<Note> notes = dvd.getNotes();
+
+                if (notes != null) {
+                    for (com.mycompany.dvdlibrary.dto.Note note : notes) {
+                        out.print(note.getId());
+                        out.print(TOKENB);
+                    }
                 }
-                
-                
-                
+
                 out.println("");
-                
-                
-                
+
             }
 
             out.flush();
@@ -211,7 +211,7 @@ public class DvdLibrary {
                 dvd.setStudio(fixNull(stringParts[5]));
 
                 List<Note> notes = new ArrayList();
-                
+
                 for (String part : stringParts) {
                     if (part.contains(TOKENB)) {
                         for (String noteIdString : part.split(Pattern.quote(TOKENB))) {
@@ -229,7 +229,7 @@ public class DvdLibrary {
                 }
 
                 dvd.setNotes(notes);
-                
+
                 dvdList.add(dvd);
             }
 
@@ -247,7 +247,7 @@ public class DvdLibrary {
         List<Dvd> soughtDvd = new ArrayList();
 
         for (Dvd dvd : dvdList) {
-            if (dvd.getTitle()!= null && title != null) {
+            if (dvd.getTitle() != null && title != null) {
                 if (dvd.getTitle().compareToIgnoreCase(title) == 0) {
                     soughtDvd.add(dvd);
                 }
