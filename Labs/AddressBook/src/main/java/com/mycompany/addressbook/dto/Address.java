@@ -174,7 +174,7 @@ public class Address {
             addressString += " " + lastName;
         }
 
-        if (lastName != null || lastName != null) {
+        if ((firstName != null || lastName != null)) {
             addressString += "\n";
         }
 
@@ -187,7 +187,7 @@ public class Address {
         if (streetAddress != null) {
             addressString += "   " + streetAddress + "\n";
         }
-        //if (!(city == null && state == null && zipcode == null)) {
+
         if (city != null || state != null || zipcode != null) {
             addressString += "   ";
 
@@ -205,7 +205,6 @@ public class Address {
 
             addressString += "\n";
 
-            //addressString += "   " + city + ", " + state + ", " + zipcode + "\n";
         }
         if (country != null) {
             addressString += "   " + country + "\n";

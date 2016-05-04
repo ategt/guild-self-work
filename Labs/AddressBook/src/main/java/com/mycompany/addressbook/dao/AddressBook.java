@@ -74,13 +74,17 @@ public class AddressBook {
 
     public void update(Address address) {
 
-        for (Address myAddress : addresses) {
-            if (myAddress.getId() == address.getId()) {
-                addresses.remove(myAddress);
-                addresses.add(address);
+        Address foundAddress = null;
+        
+        for (Address currentAddress : addresses) {
+            if (currentAddress.getId() == address.getId()) {
+                foundAddress = currentAddress;
+                break;
             }
 
         }
+                addresses.remove(foundAddress);
+                addresses.add(address);
 
         encode();
 

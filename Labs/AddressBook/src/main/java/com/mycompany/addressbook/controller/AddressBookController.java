@@ -30,9 +30,10 @@ public class AddressBookController {
                     + "3. Address Book Size\n"
                     + "4. List Addresses\n"
                     + "5. Find Address by Last Name\n"
+                    + "6. Find Address by ID Number\n"
                     + "0. Exit\n";
 
-            int userChoice = consoleIo.getUserIntInputRange(mainMenu, 0, 5);
+            int userChoice = consoleIo.getUserIntInputRange(mainMenu, 0, 6);
 
             switch (userChoice) {
                 case 1:
@@ -49,6 +50,9 @@ public class AddressBookController {
                     break;
                 case 5:
                     findByLastName();
+                    break;
+                case 6:
+                    editById();
                     break;
                 case 0:
                     choseToExit = true;
@@ -116,9 +120,12 @@ public class AddressBookController {
 
         if (foundAddresses.size() == 1) {
             String editInput = consoleIo.getUserStringInput("Would You Like To Edit This Address?\n Press \"Y\" to edit.");
-            if (editInput != null) {
+            if (editInput != null && foundAddresses.get(0) != null) {
                 if (editInput.equalsIgnoreCase("Y")) {
-                    editAddress(foundAddresses.get(0));
+                    Address addressToEdit = foundAddresses.get(0);
+                    editAddress(addressToEdit);
+                    addressBook.update(addressToEdit);
+
                 }
             }
         }
@@ -127,9 +134,15 @@ public class AddressBookController {
 
     public void editAddress(Address address) {
         if (address != null) {
+            consoleIo.printStringToConsole("To Delete an Existing Entry, Enter a Dash \"-\".");
+            consoleIo.printStringToConsole("You May Leave Lines Empty And Return To Edit Them Later.");
+
             String firstName = consoleIo.getUserStringInput("Please Enter First Name:");
             if (firstName.equalsIgnoreCase("")) {
 
+            } else if (firstName.equalsIgnoreCase("-")) {
+                firstName = null;
+                address.setFirstName(firstName);
             } else {
                 address.setFirstName(firstName);
 
@@ -139,6 +152,10 @@ public class AddressBookController {
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
+            } else if (inputString.equalsIgnoreCase("-")) {
+                inputString = null;
+                address.setLastName(inputString);
+
             } else {
 
                 address.setLastName(inputString);
@@ -148,6 +165,9 @@ public class AddressBookController {
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
+            } else if (inputString.equalsIgnoreCase("-")) {
+                inputString = null;
+                address.setLastName(inputString);
             } else {
                 address.setType(inputString);
 
@@ -157,6 +177,9 @@ public class AddressBookController {
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
+            } else if (inputString.equalsIgnoreCase("-")) {
+                inputString = null;
+                address.setLastName(inputString);
             } else {
                 address.setPoBox(inputString);
 
@@ -166,6 +189,9 @@ public class AddressBookController {
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
+            } else if (inputString.equalsIgnoreCase("-")) {
+                inputString = null;
+                address.setLastName(inputString);
             } else {
                 address.setStreetAddress(inputString);
 
@@ -175,6 +201,9 @@ public class AddressBookController {
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
+            } else if (inputString.equalsIgnoreCase("-")) {
+                inputString = null;
+                address.setLastName(inputString);
             } else {
                 address.setCity(inputString);
 
@@ -184,6 +213,9 @@ public class AddressBookController {
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
+            } else if (inputString.equalsIgnoreCase("-")) {
+                inputString = null;
+                address.setLastName(inputString);
             } else {
                 address.setState(inputString);
 
@@ -193,6 +225,9 @@ public class AddressBookController {
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
+            } else if (inputString.equalsIgnoreCase("-")) {
+                inputString = null;
+                address.setLastName(inputString);
             } else {
                 address.setZipcode(inputString);
 
@@ -202,10 +237,14 @@ public class AddressBookController {
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
+            } else if (inputString.equalsIgnoreCase("-")) {
+                inputString = null;
+                address.setLastName(inputString);
             } else {
                 address.setCountry(inputString);
 
             }
+
         }
     }
 
@@ -215,6 +254,18 @@ public class AddressBookController {
         editAddress(newAddress);
 
         return newAddress;
+    }
+
+    private void editById() {
+        listAllAddresses();
+
+        int idNumber = consoleIo.getUserIntInputPositive("Please Enter An ID Number To Find:");
+
+        Address addressToEdit = addressBook.get(idNumber);
+
+        editAddress(addressToEdit);
+        addressBook.update(addressToEdit);
+
     }
 
 }
