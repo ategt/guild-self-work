@@ -12,7 +12,7 @@ import com.mycompany.addressbook.dto.Address;
  *
  * @author apprentice
  */
-public class AdddressBookController {
+public class AddressBookController {
 
     ConsoleIO consoleIo = new ConsoleIO();
     AddressBook addressBook = new AddressBook();
@@ -21,6 +21,7 @@ public class AdddressBookController {
 
         boolean choseToExit = false;
         while (!choseToExit) {
+
             String mainMenu = "== Main Menu == \n"
                     + "1. Add Address\n"
                     + "2. Remove Address\n"
@@ -62,17 +63,71 @@ public class AdddressBookController {
 
     public void removeAddress() {
 
+        listAllAddresses();
+
+        int input = consoleIo.getUserIntInputPositive("Please Enter An Address ID Number To Delete:");
+
+        Address address = addressBook.get(input);
+
+        if (address != null) {
+            consoleIo.printStringToConsole(address.toString());
+            consoleIo.printStringToConsole("Are you sure you want to delete this address?");
+            String confirm = consoleIo.getUserStringInput("Press \"1\" to continue or anything else to abort:");
+
+            if (confirm.equals("1")) {
+                addressBook.delete(address);
+            } else {
+                consoleIo.printStringToConsole(" No Action Was Performed.");
+            }
+        } else {
+                consoleIo.printStringToConsole(" That Address Could Not Be Found In The Records.");
+        }
     }
 
     public void showBookSize() {
-
+        consoleIo.printStringToConsole("  " + addressBook.size() + " Entries in address book.");
     }
 
     public void listAllAddresses() {
+        for (Address address : addressBook.getAllAddresses()) {
+
+            //String addressString = addressToString(address);
+            String addressString = address.toString();
+
+            consoleIo.printStringToConsole(addressString);
+        }
 
     }
 
+//    private String addressToString(Address address) {
+//        String addressString = ""
+//                + address.getId() + ")"
+//                + "   " + address.getFirstName() + " " + address.getLastName() + "\n"
+//                + "   " + address.getType() + "\n"
+//                + "   " + address.getPoBox() + "\n"
+//                + "   " + address.getStreetAddress() + "\n"
+//                + "   " + address.getCity() + ", " + address.getState() + ", " + address.getZipcode() + "\n"
+//                + "   " + address.getCountry() + "\n"
+//                + " \n";
+//        return addressString;
+//    }
     public void findByLastName() {
+
+        listAllAddresses();
+        String lastNameToFind = consoleIo.getUserStringInput("Please Enter A Last Name To Find:");
+
+        String addressString = "";
+
+        for (Address address : addressBook.getAllAddresses()) {
+
+            if (address.getLastName().equalsIgnoreCase(lastNameToFind)) {
+                //addressString += addressToString(address);
+                addressString += address;
+            }
+
+        }
+
+        consoleIo.printStringToConsole(addressString);
 
     }
 
@@ -80,37 +135,38 @@ public class AdddressBookController {
 
         String firstName = consoleIo.getUserStringInput("Please Enter First Name:");
         address.setFirstName(firstName);
-        
+
         String inputString = consoleIo.getUserStringInput("Please Enter Last Name:");
         address.setLastName(inputString);
 
+        inputString = consoleIo.getUserStringInput("What type of address is this?:");
+        address.setType(inputString);
+
         inputString = consoleIo.getUserStringInput("Please Enter PO Box:");
         address.setPoBox(inputString);
-        
+
         inputString = consoleIo.getUserStringInput("Please Enter Street Address:");
         address.setStreetAddress(inputString);
-        
+
         inputString = consoleIo.getUserStringInput("Please Enter City:");
         address.setCity(inputString);
-        
+
         inputString = consoleIo.getUserStringInput("Please Enter State:");
         address.setState(inputString);
-        
+
         inputString = consoleIo.getUserStringInput("Please Enter Zip Code:");
         address.setZipcode(inputString);
-        
+
         inputString = consoleIo.getUserStringInput("Please Enter Country:");
         address.setCountry(inputString);
-        
-        
-        
+
     }
 
     public Address inputAddress() {
         Address newAddress = new Address();
-        
+
         editAddress(newAddress);
-        
+
         return newAddress;
     }
 

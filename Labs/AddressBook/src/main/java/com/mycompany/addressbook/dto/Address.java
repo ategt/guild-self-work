@@ -162,9 +162,30 @@ public class Address {
         this.id = id;
     }
 
-    
-    
-    
-    
-    
+    @Override
+    public String toString() {
+        String addressString = ""
+                + id + ")";
+        if (type != null) {
+            addressString += "   " + firstName + " " + lastName + "\n";
+        }
+        if (type != null) {
+            addressString += "   " + type + "\n";
+        }
+        if (type != null) {
+            addressString += "   " + poBox + "\n";
+        }
+        if (type != null) {
+            addressString += "   " + streetAddress + "\n";
+        }
+        if (type != null) {
+            addressString += "   " + city + ", " + state + ", " + zipcode + "\n";
+        }
+        if (type != null) {
+            addressString += "   " + country + "\n";
+        }
+        addressString += " \n";
+        return addressString;
+    }
+
 }

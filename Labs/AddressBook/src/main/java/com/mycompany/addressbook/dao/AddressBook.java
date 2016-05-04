@@ -185,15 +185,15 @@ public class AddressBook {
                 int id = Integer.parseInt(stringParts[0]);
                 address.setId(id);
 
-                address.setFirstName(stringParts[1]);
-                address.setLastName(stringParts[2]);
-                address.setType(stringParts[3]);
-                address.setStreetAddress(stringParts[4]);
-                address.setState(stringParts[5]);
-                address.setCity(stringParts[6]);
-                address.setCountry(stringParts[7]);
-                address.setPoBox(stringParts[8]);
-                address.setZipcode(stringParts[9]);
+                address.setFirstName(fixNull(stringParts[1]));
+                address.setLastName(fixNull(stringParts[2]));
+                address.setType(fixNull(stringParts[3]));
+                address.setStreetAddress(fixNull(stringParts[4]));
+                address.setState(fixNull(stringParts[5]));
+                address.setCity(fixNull(stringParts[6]));
+                address.setCountry(fixNull(stringParts[7]));
+                address.setPoBox(fixNull(stringParts[8]));
+                address.setZipcode(fixNull(stringParts[9]));
 
                 addressList.add(address);
             }
@@ -222,6 +222,12 @@ public class AddressBook {
         }
 
         return soughtAddress;
+    }
+    
+    public String fixNull(String input){
+        if (input.equalsIgnoreCase("null"))
+                input = null;
+        return input;
     }
 
 }
