@@ -215,7 +215,6 @@ public class AddressBook {
             if (address.getLastName() != null && lastName != null) {
                 if (address.getLastName().compareToIgnoreCase(lastName) == 0) {
                     soughtAddress.add(address);
-
                 }
             }
         }

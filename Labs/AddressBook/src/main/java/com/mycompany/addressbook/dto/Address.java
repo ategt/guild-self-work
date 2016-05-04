@@ -166,9 +166,18 @@ public class Address {
     public String toString() {
         String addressString = ""
                 + id + ")";
-        if ( firstName != null && lastName != null ) {
-            addressString += "   " + firstName + " " + lastName + "\n";
+        if (firstName != null) {
+            addressString += "   " + firstName;
         }
+
+        if (lastName != null) {
+            addressString += " " + lastName;
+        }
+
+        if (lastName != null || lastName != null) {
+            addressString += "\n";
+        }
+
         if (type != null) {
             addressString += "   " + type + "\n";
         }
@@ -178,8 +187,25 @@ public class Address {
         if (streetAddress != null) {
             addressString += "   " + streetAddress + "\n";
         }
-        if (city != null && state != null && zipcode != null )  {
-            addressString += "   " + city + ", " + state + ", " + zipcode + "\n";
+        //if (!(city == null && state == null && zipcode == null)) {
+        if (city != null || state != null || zipcode != null) {
+            addressString += "   ";
+
+            if (city != null) {
+                addressString += city + ", ";
+            }
+
+            if (state != null) {
+                addressString += state + ", ";
+            }
+
+            if (zipcode != null) {
+                addressString += zipcode;
+            }
+
+            addressString += "\n";
+
+            //addressString += "   " + city + ", " + state + ", " + zipcode + "\n";
         }
         if (country != null) {
             addressString += "   " + country + "\n";
