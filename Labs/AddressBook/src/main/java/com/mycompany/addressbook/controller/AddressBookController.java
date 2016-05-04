@@ -91,7 +91,6 @@ public class AddressBookController {
     public void listAllAddresses() {
         for (Address address : addressBook.getAllAddresses()) {
 
-            //String addressString = addressToString(address);
             String addressString = address.toString();
 
             consoleIo.printStringToConsole(addressString);
@@ -99,18 +98,6 @@ public class AddressBookController {
 
     }
 
-//    private String addressToString(Address address) {
-//        String addressString = ""
-//                + address.getId() + ")"
-//                + "   " + address.getFirstName() + " " + address.getLastName() + "\n"
-//                + "   " + address.getType() + "\n"
-//                + "   " + address.getPoBox() + "\n"
-//                + "   " + address.getStreetAddress() + "\n"
-//                + "   " + address.getCity() + ", " + address.getState() + ", " + address.getZipcode() + "\n"
-//                + "   " + address.getCountry() + "\n"
-//                + " \n";
-//        return addressString;
-//    }
     public void findByLastName() {
 
         listAllAddresses();
@@ -121,7 +108,6 @@ public class AddressBookController {
         for (Address address : addressBook.getAllAddresses()) {
 
             if (address.getLastName().equalsIgnoreCase(lastNameToFind)) {
-                //addressString += addressToString(address);
                 addressString += address;
             }
 
@@ -134,30 +120,39 @@ public class AddressBookController {
     public void editAddress(Address address) {
 
         String firstName = consoleIo.getUserStringInput("Please Enter First Name:");
+        if (firstName.equalsIgnoreCase("")) firstName = null;
         address.setFirstName(firstName);
 
         String inputString = consoleIo.getUserStringInput("Please Enter Last Name:");
+        if (inputString.equalsIgnoreCase("")) inputString = null;
         address.setLastName(inputString);
 
         inputString = consoleIo.getUserStringInput("What type of address is this?:");
+        if (inputString.equalsIgnoreCase("")) inputString = null;
         address.setType(inputString);
 
         inputString = consoleIo.getUserStringInput("Please Enter PO Box:");
+        if (inputString.equalsIgnoreCase("")) inputString = null;
         address.setPoBox(inputString);
 
         inputString = consoleIo.getUserStringInput("Please Enter Street Address:");
+        if (inputString.equalsIgnoreCase("")) inputString = null;
         address.setStreetAddress(inputString);
 
         inputString = consoleIo.getUserStringInput("Please Enter City:");
+        if (inputString.equalsIgnoreCase("")) inputString = null;
         address.setCity(inputString);
 
         inputString = consoleIo.getUserStringInput("Please Enter State:");
+        if (inputString.equalsIgnoreCase("")) inputString = null;
         address.setState(inputString);
 
         inputString = consoleIo.getUserStringInput("Please Enter Zip Code:");
+        if (inputString.equalsIgnoreCase("")) inputString = null;
         address.setZipcode(inputString);
 
         inputString = consoleIo.getUserStringInput("Please Enter Country:");
+        if (inputString.equalsIgnoreCase("")) inputString = null;
         address.setCountry(inputString);
 
     }

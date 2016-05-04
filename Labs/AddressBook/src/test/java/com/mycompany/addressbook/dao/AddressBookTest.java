@@ -17,14 +17,14 @@ import static org.junit.Assert.*;
  * @author apprentice
  */
 public class AddressBookTest {
-
+    
     public AddressBookTest() {
     }
-
+    
     @Before
     public void setUp() {
     }
-
+    
     @After
     public void tearDown() {
     }
@@ -40,7 +40,7 @@ public class AddressBookTest {
         Address expResult = address;
         Address result = instance.create(address);
         assertEquals(expResult, result);
-
+        
         int id = result.getId();
         assertTrue(result.getId() != 0);
         assertTrue(result.getId() >= instance.size());
@@ -48,7 +48,10 @@ public class AddressBookTest {
         // Test get method.
         Address returnedAddress = instance.get(id);
         assertEquals(returnedAddress, result);
+        instance.delete(address);
 
+        returnedAddress = instance.get(id);
+        assertEquals(returnedAddress, null);
     }
 
     /**
@@ -63,23 +66,28 @@ public class AddressBookTest {
         Address addressTwo = new Address();
         Address addressThree = new Address();
         
-        
-        
         instance.create(addressOne);
         instance.create(addressTwo);
         instance.create(addressThree);
         
         assertTrue(instance.getAllAddresses().contains(addressTwo));
-
+        
+        instance.delete(addressOne);
+        instance.delete(addressTwo);
+        instance.delete(addressThree);
+        
         int expSizeResult = 3;
         int sizeResult = instance.size();
         assertEquals(expSizeResult, sizeResult);
-
-
-
+        
         String lastName = "Steve";
         List<Address> result = instance.searchByLastName(lastName);
-        assertEquals(null, result);
-    }
+        assertEquals(true, result.isEmpty());
 
+        lastName = "Jones";
+        result = instance.searchByLastName(lastName);
+        assertEquals(false, result.isEmpty());
+        assertEquals(2, result.size());
+    }
+    
 }

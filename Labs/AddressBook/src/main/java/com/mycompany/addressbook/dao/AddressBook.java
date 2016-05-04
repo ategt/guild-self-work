@@ -214,7 +214,6 @@ public class AddressBook {
         for (Address address : addresses) {
             if (address.getLastName() != null && lastName != null) {
                 if (address.getLastName().compareToIgnoreCase(lastName) == 0) {
-                    //if (lastName.compareToIgnoreCase(address.getLastName()) == 0) {
                     soughtAddress.add(address);
 
                 }
@@ -225,9 +224,13 @@ public class AddressBook {
     }
     
     public String fixNull(String input){
-        if (input.equalsIgnoreCase("null"))
+        String returnValue = null;
+        if (input.trim().equalsIgnoreCase("null"))
                 input = null;
-        return input;
+        else if (input.trim().equalsIgnoreCase(""))
+            input = null;
+        else returnValue = input;
+        return returnValue;
     }
 
 }

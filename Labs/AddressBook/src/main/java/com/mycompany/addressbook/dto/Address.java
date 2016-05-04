@@ -166,25 +166,25 @@ public class Address {
     public String toString() {
         String addressString = ""
                 + id + ")";
-        if (type != null) {
+        if ( firstName != null && lastName != null ) {
             addressString += "   " + firstName + " " + lastName + "\n";
         }
         if (type != null) {
             addressString += "   " + type + "\n";
         }
-        if (type != null) {
+        if (poBox != null) {
             addressString += "   " + poBox + "\n";
         }
-        if (type != null) {
+        if (streetAddress != null) {
             addressString += "   " + streetAddress + "\n";
         }
-        if (type != null) {
+        if (city != null && state != null && zipcode != null )  {
             addressString += "   " + city + ", " + state + ", " + zipcode + "\n";
         }
-        if (type != null) {
+        if (country != null) {
             addressString += "   " + country + "\n";
         }
-        addressString += " \n";
+
         return addressString;
     }
 
