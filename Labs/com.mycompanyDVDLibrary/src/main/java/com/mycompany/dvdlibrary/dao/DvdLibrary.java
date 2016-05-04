@@ -204,8 +204,18 @@ public class DvdLibrary {
                 int id = Integer.parseInt(stringParts[0]);
                 dvd.setId(id);
 
+                
+                
                 dvd.setTitle(fixNull(stringParts[1]));
-                dvd.setReleaseDate(new Date(fixNull(stringParts[2])));
+
+                dvd.setReleaseDate(fixNull(stringParts[2]));
+                
+//                
+//                String releaseDate = fixNull(stringParts[2]);
+//                if (releaseDate != null) {
+//                    dvd.setReleaseDate(new Date(releaseDate));
+//                }
+
                 dvd.setMPAA(fixNull(stringParts[3]));
                 dvd.setDirectorsName(fixNull(stringParts[4]));
                 dvd.setStudio(fixNull(stringParts[5]));

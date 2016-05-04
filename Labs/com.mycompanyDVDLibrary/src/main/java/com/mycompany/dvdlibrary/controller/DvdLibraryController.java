@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -105,10 +106,12 @@ public class DvdLibraryController {
     public void listAllDvds() {
         for (Dvd dvd : dvdLibrary.getAllDvds()) {
 
-            String dvdString = dvd.getTitle() + "\n";
+            String dvdString = dvd.getId() + ") " + dvd.getTitle();
             
             consoleIo.printStringToConsole(dvdString);
         }
+
+        consoleIo.printStringToConsole("");
 
     }
 
@@ -143,11 +146,11 @@ public class DvdLibraryController {
     public void editDvdInfo(Dvd dvd) {
         if (dvd != null) {
 
-            consoleIo.printStringToConsole("To Delete an Existing Entry, Enter a Dash \"-\".");
-            consoleIo.printStringToConsole("You May Leave Lines Empty And Return To Edit Them Later.");
-            consoleIo.printStringToConsole("Lines Left Blank Will Not Overwrite Existing Information.\n");
+//            consoleIo.printStringToConsole("To Delete an Existing Entry, Enter a Dash \"-\".");
+//            consoleIo.printStringToConsole("You May Leave Lines Empty And Return To Edit Them Later.");
+//            consoleIo.printStringToConsole("Lines Left Blank Will Not Overwrite Existing Information.\n");
 
-            String title = consoleIo.getUserStringInput("Please DVD Title:");
+            String title = consoleIo.getUserStringInput("Please Enter a DVD Title:");
             if (title.equalsIgnoreCase("")) {
 
             } else if (title.equalsIgnoreCase("-")) {
@@ -179,7 +182,8 @@ public class DvdLibraryController {
                 inputString = null;
                 dvd.setReleaseDate(null);
             } else {
-                dvd.setReleaseDate(parseDate(inputString));
+                //dvd.setReleaseDate(parseDate(inputString));
+                dvd.setReleaseDate(inputString);
             }
 
             inputString = consoleIo.getUserStringInput("Please Enter MPAA rating:");
@@ -245,7 +249,7 @@ public class DvdLibraryController {
             DateFormat df = DateFormat.getDateInstance();
 
             try {
-                releaseDate = df.parse(inputString);
+                releaseDate = df.parse(inputString.replaceAll(Pattern.quote("/"), Pattern.quote(".")));
             } catch (ParseException ex) {
                 Logger.getLogger(DvdLibraryController.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -15,7 +15,7 @@ import java.util.List;
 public class Dvd {
 
     private String title;
-    private Date releaseDate;
+    private String releaseDate;
     private String mPAA;
     private String directorsName;
     private String studio;
@@ -39,14 +39,14 @@ public class Dvd {
     /**
      * @return the releaseDate
      */
-    public Date getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
     /**
      * @param releaseDate the releaseDate to set
      */
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
