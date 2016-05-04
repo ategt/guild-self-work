@@ -10,6 +10,7 @@ package com.mycompany.dvdlibrary.controller;
  * @author apprentice
  */
 public class App {
+
     public static void main(String[] args) {
         new DvdLibraryController().run();
     }

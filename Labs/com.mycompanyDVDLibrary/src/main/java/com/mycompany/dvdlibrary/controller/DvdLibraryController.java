@@ -104,6 +104,7 @@ public class DvdLibraryController {
     }
 
     public void listAllDvds() {
+        consoleIo.printStringToConsole("--- DVD Titles ---");
         for (Dvd dvd : dvdLibrary.getAllDvds()) {
 
             String dvdString = dvd.getId() + ") " + dvd.getTitle();
@@ -118,22 +119,22 @@ public class DvdLibraryController {
     public void findByTitle() {
 
         listAllDvds();
-        String lastNameToFind = consoleIo.getUserStringInput("Please Enter A Last Name To Find:");
+        String dvdTitle = consoleIo.getUserStringInput("Please Enter A Title To Find:");
 
         String dvdString = "";
-        List<Dvd> foundAddresses = dvdLibrary.searchByTitle(lastNameToFind);
+        List<Dvd> foundDvds = dvdLibrary.searchByTitle(dvdTitle);
 
-        for (Dvd dvd : foundAddresses) {
-            dvdString += dvd;
+        for (Dvd dvd : foundDvds) {
+            dvdString += convertToString(dvd);
         }
 
         consoleIo.printStringToConsole(dvdString);
 
-        if (foundAddresses.size() == 1) {
+        if (foundDvds.size() == 1) {
             String editInput = consoleIo.getUserStringInput("Would You Like To Edit This Address?\n Press \"Y\" to edit.");
-            if (editInput != null && foundAddresses.get(0) != null) {
+            if (editInput != null && foundDvds.get(0) != null) {
                 if (editInput.equalsIgnoreCase("Y")) {
-                    Dvd dvdToEdit = foundAddresses.get(0);
+                    Dvd dvdToEdit = foundDvds.get(0);
                     editDvdInfo(dvdToEdit);
                     dvdLibrary.update(dvdToEdit);
 

@@ -79,7 +79,7 @@ public class DvdLibraryTest {
         instance.delete(dvdTwo);
         instance.delete(dvdThree);
         
-        int expSizeResult = 3;
+        int expSizeResult = 5;
         int sizeResult = instance.size();
         assertEquals(expSizeResult, sizeResult);
         
@@ -87,7 +87,7 @@ public class DvdLibraryTest {
         List<Dvd> result = instance.searchByTitle(title);
         assertEquals(true, result.isEmpty());
 
-        title = "Jones";
+        title = "Bills movie 3";
         result = instance.searchByTitle(title);
         assertEquals(false, result.isEmpty());
         assertEquals(2, result.size());

@@ -24,12 +24,20 @@ import java.util.logging.Logger;
  * @author apprentice
  */
 public class NoteDao {
-    
+
     private List<Note> notes = new ArrayList();
     private int nextId = 1;
     File notesFile = new File("NotesData.txt");
 
     public NoteDao() {
+        this(false);
+    }
+
+    protected NoteDao(boolean isATest) {
+
+        if (isATest) {
+            notesFile = new File("NotesTestData.txt");
+        }
 
         notes = decode();
 
@@ -55,10 +63,11 @@ public class NoteDao {
     public Note get(Integer id) {
 
         for (Note note : notes) {
-            if (note.getId() == id) {
-                return note;
+            if (note != null) {
+                if (note.getId() == id) {
+                    return note;
+                }
             }
-
         }
 
         return null;
@@ -95,9 +104,9 @@ public class NoteDao {
         encode();
 
     }
-    
-    public List<Note> getList(){
-        
+
+    public List<Note> getList() {
+
         return notes;
     }
 
@@ -160,9 +169,9 @@ public class NoteDao {
 
                 int id = Integer.parseInt(stringParts[0]);
                 note.setId(id);
-                
-                    String content = stringParts[1];
-                
+
+                String content = stringParts[1];
+
                 note.setNoteString(content);
 
                 noteList.add(note);
@@ -177,6 +186,5 @@ public class NoteDao {
 
         return noteList;
     }
-    
 
 }
