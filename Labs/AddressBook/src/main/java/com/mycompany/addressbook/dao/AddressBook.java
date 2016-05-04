@@ -30,6 +30,14 @@ public class AddressBook {
     File addressFile = new File("addressData.txt");
 
     public AddressBook() {
+        this(false);
+    }
+
+    protected AddressBook(boolean isATest) {
+
+        if (isATest) {
+            addressFile = new File("testAddressData.txt");
+        }
 
         addresses = decode();
 
@@ -201,14 +209,16 @@ public class AddressBook {
     }
 
     public List<Address> searchByLastName(String lastName) {
-        List<Address> soughtAddress = null;
+        List<Address> soughtAddress = new ArrayList();
 
         for (Address address : addresses) {
-            if (address.getLastName().compareToIgnoreCase(lastName) == 0) {
-                soughtAddress.add(address);
+            if (address.getLastName() != null && lastName != null) {
+                if (address.getLastName().compareToIgnoreCase(lastName) == 0) {
+                    //if (lastName.compareToIgnoreCase(address.getLastName()) == 0) {
+                    soughtAddress.add(address);
 
+                }
             }
-
         }
 
         return soughtAddress;
