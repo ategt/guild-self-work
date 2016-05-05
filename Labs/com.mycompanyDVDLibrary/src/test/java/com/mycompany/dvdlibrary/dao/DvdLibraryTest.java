@@ -90,7 +90,7 @@ public class DvdLibraryTest {
 
         int expSizeResult = 11;
 
-
+        // Check that the size of the list grew by 3.
         assertEquals(expSizeResult + 3, instance.size());
 
         
@@ -108,6 +108,7 @@ public class DvdLibraryTest {
         assertEquals(true, result.isEmpty());
 
         // Check to see if a real DVD is on the list.
+        // This title search should return two copies.
         title = "Bills movie 3";
         result = instance.searchByTitle(title);
         assertEquals(false, result.isEmpty());
