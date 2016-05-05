@@ -11,6 +11,7 @@ import com.mycompany.dvdlibrary.dto.Dvd;
 import com.mycompany.dvdlibrary.dto.Note;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -108,7 +109,7 @@ public class DvdLibraryController {
         for (Dvd dvd : dvdLibrary.getAllDvds()) {
 
             String dvdString = dvd.getId() + ") " + dvd.getTitle();
-            
+
             consoleIo.printStringToConsole(dvdString);
         }
 
@@ -150,7 +151,6 @@ public class DvdLibraryController {
 //            consoleIo.printStringToConsole("To Delete an Existing Entry, Enter a Dash \"-\".");
 //            consoleIo.printStringToConsole("You May Leave Lines Empty And Return To Edit Them Later.");
 //            consoleIo.printStringToConsole("Lines Left Blank Will Not Overwrite Existing Information.\n");
-
             String title = consoleIo.getUserStringInput("Please Enter a DVD Title:");
             if (title.equalsIgnoreCase("")) {
 
@@ -175,16 +175,26 @@ public class DvdLibraryController {
                 dvd.setDirectorsName(inputString);
             }
 
-            inputString = consoleIo.getUserStringInput("Please Enter Release Date:");
+            inputString = consoleIo.getUserStringInput("Please Enter Release Date in yyyy-MM-dd format:");
 
+            Date date = null;
+            
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
             } else if (inputString.equalsIgnoreCase("-")) {
                 inputString = null;
                 dvd.setReleaseDate(null);
             } else {
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                try {
+                    date = dateFormat.parse(inputString);
+                } catch (ParseException ex) {
+                    Logger.getLogger(DvdLibraryController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
                 //dvd.setReleaseDate(parseDate(inputString));
-                dvd.setReleaseDate(inputString);
+                dvd.setReleaseDate(date);
             }
 
             inputString = consoleIo.getUserStringInput("Please Enter MPAA rating:");

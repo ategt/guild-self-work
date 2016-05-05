@@ -5,6 +5,7 @@
  */
 package com.mycompany.dvdlibrary.dao;
 
+import com.mycompany.dvdlibrary.controller.DvdLibraryController;
 import com.mycompany.dvdlibrary.dto.Dvd;
 import com.mycompany.dvdlibrary.dto.Note;
 import java.io.BufferedReader;
@@ -14,6 +15,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -204,18 +208,25 @@ public class DvdLibrary {
                 int id = Integer.parseInt(stringParts[0]);
                 dvd.setId(id);
 
-                
-                
                 dvd.setTitle(fixNull(stringParts[1]));
 
-                dvd.setReleaseDate(fixNull(stringParts[2]));
-                
+                //dvd.setReleaseDate(fixNull(stringParts[2]));
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = null;
+                try {
+                    date = dateFormat.parse(fixNull(stringParts[2]));
+                } catch (ParseException ex) {
+                    Logger.getLogger(DvdLibraryController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                //dvd.setReleaseDate(parseDate(inputString));
+                dvd.setReleaseDate(date);
+
 //                
 //                String releaseDate = fixNull(stringParts[2]);
 //                if (releaseDate != null) {
 //                    dvd.setReleaseDate(new Date(releaseDate));
 //                }
-
                 dvd.setMPAA(fixNull(stringParts[3]));
                 dvd.setDirectorsName(fixNull(stringParts[4]));
                 dvd.setStudio(fixNull(stringParts[5]));
