@@ -149,38 +149,25 @@ public class DvdLibraryController {
     public void findById() {
 
         listAllDvds();
-        //String dvdTitle = consoleIo.getUserStringInput("Please Enter An ID Number To Find:");
         int id = consoleIo.getUserIntInputPositive("Please Enter An ID Number To Find:");
 
-        //String dvdString = "";
-        //List<Dvd> foundDvds = dvdLibrary.get(id);
-        //Dvd dvd 
-        // for (Dvd dvd : foundDvds) {
-        // dvdString += convertToString(dvd);
-        // }
         Dvd dvd = dvdLibrary.get(id);
         consoleIo.printStringToConsole(convertToString(dvd));
 
-        //if (foundDvds.size() == 1) {
         String editInput = consoleIo.getUserStringInput("Would You Like To Edit This DVD Information?\n Press \"Y\" to edit.");
         if (editInput != null) {
             if (editInput.equalsIgnoreCase("Y")) {
-                //Dvd dvdToEdit = foundDvds.get(0);
                 editDvdInfo(dvd);
                 dvdLibrary.update(dvd);
 
             }
         }
-        //}
 
     }
 
     public void editDvdInfo(Dvd dvd) {
         if (dvd != null) {
 
-//            consoleIo.printStringToConsole("To Delete an Existing Entry, Enter a Dash \"-\".");
-//            consoleIo.printStringToConsole("You May Leave Lines Empty And Return To Edit Them Later.");
-//            consoleIo.printStringToConsole("Lines Left Blank Will Not Overwrite Existing Information.\n");
             String title = consoleIo.getUserStringInput("Please Enter a DVD Title:");
             if (title.equalsIgnoreCase("")) {
 
@@ -222,7 +209,6 @@ public class DvdLibraryController {
                     Logger.getLogger(DvdLibraryController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                //dvd.setReleaseDate(parseDate(inputString));
                 dvd.setReleaseDate(date);
             }
 
@@ -285,39 +271,12 @@ public class DvdLibraryController {
 
     }
 
-    private Date parseDate(String inputString) {
-        Date releaseDate = null;
-        if (inputString != null) {
-            //DateFormat df = DateFormat.getDateInstance();
-
-            try {
-                releaseDate = dateFormat.parse(inputString.replaceAll(Pattern.quote("/"), Pattern.quote("-")));
-            } catch (ParseException ex) {
-                Logger.getLogger(DvdLibraryController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-        return releaseDate;
-    }
-
-    public Dvd inputDvd() {
+    private Dvd inputDvd() {
         Dvd newDvd = new Dvd();
 
         editDvdInfo(newDvd);
 
         return newDvd;
-    }
-
-    private void editById() {
-        listAllDvds();
-
-        int idNumber = consoleIo.getUserIntInputPositive("Please Enter An ID Number To Find:");
-
-        Dvd dvdToEdit = dvdLibrary.get(idNumber);
-
-        editDvdInfo(dvdToEdit);
-        dvdLibrary.update(dvdToEdit);
-
     }
 
     private String convertToString(Dvd dvd) {

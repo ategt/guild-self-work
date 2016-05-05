@@ -217,7 +217,6 @@ public class DvdLibrary {
 
                 dvd.setTitle(fixNull(stringParts[1]));
 
-                //dvd.setReleaseDate(fixNull(stringParts[2]));
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = null;
 
@@ -228,7 +227,7 @@ public class DvdLibrary {
                         Logger.getLogger(DvdLibraryController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                //dvd.setReleaseDate(parseDate(inputString));
+
                 dvd.setReleaseDate(date);
 
                 dvd.setMPAA(fixNull(stringParts[3]));
