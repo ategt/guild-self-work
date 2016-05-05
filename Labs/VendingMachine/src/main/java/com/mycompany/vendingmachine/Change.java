@@ -18,6 +18,8 @@ public class Change {
 
     public Change(int pennies) {
 
+        this.pennies = pennies;
+        
         calculateQuarters();
         calculateDimes();
         calculateNickles();

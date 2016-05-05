@@ -21,40 +21,43 @@ public class VendingMachineController {
     public void run() {
 
         boolean keepLooping = true;
-        
-        while (keepLooping){
-        
-        String mainMenu = "== Main Menu == \n" + 
-                    "1. Put in money\n" + 
-                    "2. Push the select button\n" +
-                    "3. Push the coin return button\n" +
-                    "0. Walk Away";
-        
-        int selection = consoleIo.getUserIntInputRange(mainMenu, 0, 5);
-        
-        switch(selection){
-            case 1:
-                inputMoney();
-                break;
-            case 2:
-                selectItem();
-                break;
-            case 3:
-                refundMoney();
-                break;
-            case 4:
-                addItem();
-                break;
-            case 5:
-                refillItem();
-                break;
-            case 0:
-                keepLooping = false;
-                walkAway();
-                break;
-            
+
+        while (keepLooping) {
+
+            displayChart();
+
+            String mainMenu = "== Main Menu == \n"
+                    + "1. Put in money\n"
+                    + "2. Push the select button\n"
+                    + "3. Push the coin return button\n"
+                    + "0. Walk Away";
+
+            int selection = consoleIo.getUserIntInputRange(mainMenu, 0, 5);
+
+            switch (selection) {
+                case 1:
+                    inputMoney();
+                    break;
+                case 2:
+                    selectItem();
+                    break;
+                case 3:
+                    refundMoney();
+                    break;
+                case 4:
+                    addItem();
+                    break;
+                case 5:
+                    refillItem();
+                    break;
+                case 0:
+                    keepLooping = false;
+                    walkAway();
+                    break;
+
+            }
         }
-    }}
+    }
 
     private void vendItem(Item item) {
 
@@ -62,55 +65,51 @@ public class VendingMachineController {
         dispenseChange();
 
     }
-    
-    private void dispenseItem(Item item){
-        
-        consoleIo.printToConsole("Vending one " + item.getItemName(), false);
-        
-        for ( int x = 0 ; x < 20 ; x++ ){
-            
-            consoleIo.printToConsole(".", false);
+
+    private void dispenseItem(Item item) {
+
+        //consoleIo.printToConsole("Vending one " + item.getItemName(), false);
+        consoleIo.printStringToConsole("Vending one " + item.getItemName());
+
+        for (int x = 0; x < 20; x++) {
+
             try {
-                Thread.sleep(30);
+                Thread.sleep(300);
+                //consoleIo.printToConsole(".", false);
+                consoleIo.printStringToConsole(".");
             } catch (InterruptedException ex) {
                 Logger.getLogger(VendingMachineController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         consoleIo.printStringToConsole("Done!");
-        
+
+        item.setQuantityInInventory(item.getQuantityInInventory() - 1);
+        balance -= item.getItemCost();
+        inventory.update(item);
     }
 
     private void inputMoney() {
 
+        balance += consoleIo.getUserIntInputPositive("Please Enter An Amount To Input Into The Simulated Machine:");
 
-        balance = consoleIo.getUserIntInputPositive("Please Enter An Amount To Input Into The Simulated Machine:");
-
-        if (doesMachineHaveInventory()) {
-
-            //displayChart();
-
-           // ask for selection
-        } else {
+        if (!doesMachineHaveInventory()) {
             refundMoney();
         }
 
     }
 
     private void selectItem() {
-        //Item item = askForSelection();
         Item selection = askForSelection();
 
-            int price = priceSelected(selection);
+        int price = priceSelected(selection);
 
-            if (price > balance) {
-                informUserOfInsufficentFunds();
-            } else if (doesMachineHaveInventory(selection)) {
-                vendItem(selection);
-            }
+        if (price > balance) {
+            informUserOfInsufficentFunds();
+        } else if (doesMachineHaveInventory(selection)) {
+            vendItem(selection);
+        }
 
-        
-        
     }
 
     private void refundMoney() {
@@ -126,7 +125,7 @@ public class VendingMachineController {
         int nickles = change.getNickles();
         int pennies = change.getPennies();
 
-        String receipt = "Change generated:\n"
+        String receipt = "\nChange generated:\n"
                 + " " + quarters + " Quarters\n"
                 + " " + dimes + " Dimes\n"
                 + " " + nickles + " Nickles\n"
@@ -144,14 +143,15 @@ public class VendingMachineController {
 
     private void displayChart() {
 
-        String chart = "";
-        for ( Item item : inventory.getList() ) {
-            chart += item.getId() + "" + item.getItemName() + "" + item.getItemCost() + "" + item.getQuantityInInventory() + "\n";
-            
+        String chart = "\nCurrent Balance: " + balance + " cents.\n";
+        chart += "ID#\tItem Name:\tItem Cost:\tItem Quantity:\n";
+        for (Item item : inventory.getList()) {
+            chart += item.getId() + ") \t" + item.getItemName() + "\t" + item.getItemCost() + "\t\t" + item.getQuantityInInventory() + "\n";
+
         }
-        
+
         consoleIo.printStringToConsole(chart);
-        
+
     }
 
     private void addItem() {
@@ -187,33 +187,37 @@ public class VendingMachineController {
 
     private boolean doesMachineHaveInventory() {
         boolean hasInventory = true;
-        
-        for ( Item item : inventory.getList() ){
-            
-            hasInventory = doesMachineHaveInventory(item);
-            
+
+        if (inventory.getList().size() < 1) {
+            hasInventory = false;
         }
+        if (inventory.getList() == null) {
+            hasInventory = false;
+        }
+
+        for (Item item : inventory.getList()) {
+            hasInventory = doesMachineHaveInventory(item);
+        }
+
         return hasInventory;
     }
 
     private boolean doesMachineHaveInventory(Item item) {
         Boolean hasInventory = true;
-        
-        if (item.getQuantityInInventory() < 1 ){
+
+        if (item.getQuantityInInventory() < 1) {
             hasInventory = false;
         }
         return hasInventory;
     }
 
-    private int priceSelected(Item item){
-        
-        
+    private int priceSelected(Item item) {
+
         return item.getItemCost();
     }
-    
-    private void walkAway(){
+
+    private void walkAway() {
         consoleIo.printStringToConsole("You Have Walked Away");
     }
 
-    
 }

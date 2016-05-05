@@ -26,7 +26,9 @@ public class Inventory {
 
     List<Item> items;
     int nextId;
-    File inventoryFile = new File("ItemsData.txt");;
+    File inventoryFile = new File("ItemsData.txt");
+
+    ;
 
     public Inventory() {
         this(false);
@@ -73,13 +75,18 @@ public class Inventory {
     }
 
     public void update(Item item) {
+        Item found = null;
 
-        for (Item myItem : items) {
-            if (myItem.getId() == item.getId()) {
-                items.remove(myItem);
-                items.add(item);
+        for (Item currentItem : items) {
+            if (currentItem.getId() == item.getId()) {
+                found = currentItem;
+                break;
             }
+        }
 
+        if (found != null) {
+            items.remove(found);
+            items.add(item);
         }
 
         encode();
@@ -161,9 +168,11 @@ public class Inventory {
         final String TOKEN = "::";
 
         try {
-            
-            if (!inventoryFile.exists()) inventoryFile.createNewFile();
-            
+
+            if (!inventoryFile.exists()) {
+                inventoryFile.createNewFile();
+            }
+
             Scanner sc = new Scanner(new BufferedReader(new FileReader(inventoryFile)));
 
             while (sc.hasNextLine()) {
@@ -183,7 +192,7 @@ public class Inventory {
                 content = stringParts[2];
 
                 try {
-                    
+
                     int cost = Integer.parseInt(content);
                     item.setItemCost(cost);
 
