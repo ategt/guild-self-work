@@ -151,6 +151,11 @@ public class ConsoleIO {
         System.out.println(stringToPrint);
     }
 
+    public void printToConsole(String stringToPrint, boolean nextLine) {
+        if ( nextLine ) stringToPrint += "\n"; 
+        System.out.print(stringToPrint);
+    }
+
     public String getUserStringInput(String prompt) {
         printStringToConsole(prompt);
         return keyboard.nextLine().replace("\n", "").trim();

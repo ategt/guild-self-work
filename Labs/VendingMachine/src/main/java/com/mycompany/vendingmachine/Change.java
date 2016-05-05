@@ -24,33 +24,33 @@ public class Change {
     }
 
     private void calculateQuarters() {
-        int valueOfCoin = 25;
+        final int VALUE_OF_COIN = 25;
 
-        while (getPennies() >= valueOfCoin) {
+        while ( pennies >= VALUE_OF_COIN) {
             quarters++;
-            pennies -= valueOfCoin;
+            pennies -= VALUE_OF_COIN;
         }
 
     }
 
     private void calculateDimes() {
 
-        int valueOfCoin = 10;
+        final int VALUE_OF_COIN = 10;
 
-        while (getPennies() >= valueOfCoin) {
+        while ( pennies >= VALUE_OF_COIN) {
             dimes++;
-            pennies -= valueOfCoin;
+            pennies -= VALUE_OF_COIN;
         }
 
     }
 
     private void calculateNickles() {
 
-        int valueOfCoin = 5;
+        final int VALUE_OF_COIN = 5;
 
-        while (getPennies() >= valueOfCoin) {
+        while ( pennies >= VALUE_OF_COIN) {
             nickles++;
-            pennies -= valueOfCoin;
+            pennies -= VALUE_OF_COIN;
         }
 
     }

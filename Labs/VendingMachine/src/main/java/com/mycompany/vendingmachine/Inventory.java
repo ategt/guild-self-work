@@ -26,7 +26,7 @@ public class Inventory {
 
     List<Item> items;
     int nextId;
-    File inventoryFile;
+    File inventoryFile = new File("ItemsData.txt");;
 
     public Inventory() {
         this(false);
@@ -161,6 +161,9 @@ public class Inventory {
         final String TOKEN = "::";
 
         try {
+            
+            if (!inventoryFile.exists()) inventoryFile.createNewFile();
+            
             Scanner sc = new Scanner(new BufferedReader(new FileReader(inventoryFile)));
 
             while (sc.hasNextLine()) {
@@ -205,6 +208,9 @@ public class Inventory {
             sc.close();
 
         } catch (FileNotFoundException ex) {
+            Logger.getLogger(Inventory.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(Inventory.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
