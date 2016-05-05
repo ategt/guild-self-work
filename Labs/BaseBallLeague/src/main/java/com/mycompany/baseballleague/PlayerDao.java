@@ -121,7 +121,7 @@ public class PlayerDao {
     }
 
     private int determineNextId() {
-        int highestId = 1;
+        int highestId = 100;
 
         for (Player player : players) {
             if (highestId < player.getId()) {

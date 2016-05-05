@@ -108,7 +108,7 @@ public class TeamDao {
         return teams.size();
     }
 
-    public List<Team> getList() {
+    public List<Team> getLeague() {
 
         return teams;
     }
@@ -177,6 +177,13 @@ public class TeamDao {
         final String TOKENB = ":||:";
 
         try {
+            if ( !teamsDataFile.exists() )
+                try {
+                    teamsDataFile.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(TeamDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
             Scanner sc = new Scanner(new BufferedReader(new FileReader(teamsDataFile)));
 
             while (sc.hasNextLine()) {
