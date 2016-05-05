@@ -23,11 +23,11 @@ import java.util.logging.Logger;
  * @author apprentice
  */
 public class Inventory {
+
     List<Item> items;
     int nextId;
     File inventoryFile;
-    
-    
+
     public Inventory() {
         this(false);
     }
@@ -177,14 +177,27 @@ public class Inventory {
 
                 item.setItemName(content);
 
-                String content = stringParts[2];
+                content = stringParts[2];
 
-                item.setItemCost(content);
+                try {
+                    
+                    int cost = Integer.parseInt(content);
+                    item.setItemCost(cost);
 
-                String content = stringParts[3];
+                } catch (NumberFormatException numFmtEx) {
 
-                item.setItemName(content);
+                }
 
+                content = stringParts[3];
+
+                try {
+
+                    int cost = Integer.parseInt(content);
+                    item.setQuantityInInventory(cost);
+
+                } catch (NumberFormatException numFmtEx) {
+
+                }
 
                 itemList.add(item);
             }
