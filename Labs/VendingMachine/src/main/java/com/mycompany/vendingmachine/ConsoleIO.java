@@ -41,7 +41,7 @@ public class ConsoleIO {
      * @param choice
      * @return
      */
-    public Number getUserInputValidationLoop(String prompt, int choice) {
+    private Number getUserInputValidationLoop(String prompt, int choice) {
         Number input = 0;
         return getUserInputValidationLoop(input, prompt, choice);
     }
@@ -59,7 +59,7 @@ public class ConsoleIO {
      * @param choice
      * @return
      */
-    public Number getUserInputValidationLoop(Number input, String prompt, int choice) {
+    private Number getUserInputValidationLoop(Number input, String prompt, int choice) {
         boolean isValid = false;
         String inputString;
 
