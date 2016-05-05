@@ -53,7 +53,6 @@ public class DvdLibrary {
 
         if (dvdList == null) {
             dvdList = new ArrayList();
-            System.out.println("The list was empty, making a new one.");
         }
 
         nextId = determineNextId();
