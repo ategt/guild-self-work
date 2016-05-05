@@ -79,7 +79,7 @@ public class DvdLibraryTest {
         instance.delete(dvdTwo);
         instance.delete(dvdThree);
         
-        int expSizeResult = 5;
+        int expSizeResult = 11;
         int sizeResult = instance.size();
         assertEquals(expSizeResult, sizeResult);
         

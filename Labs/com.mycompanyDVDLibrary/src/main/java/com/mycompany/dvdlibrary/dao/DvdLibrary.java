@@ -154,7 +154,13 @@ public class DvdLibrary {
                 out.print(TOKEN);
                 out.print(dvd.getTitle());
                 out.print(TOKEN);
-                out.print(dvd.getReleaseDate());
+
+                if (dvd.getReleaseDate() != null) {
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                    out.print(dateFormat.format(dvd.getReleaseDate()));
+                }
+
                 out.print(TOKEN);
                 out.print(dvd.getMPAA());
                 out.print(TOKEN);
@@ -162,15 +168,17 @@ public class DvdLibrary {
                 out.print(TOKEN);
                 out.print(dvd.getStudio());
                 out.print(TOKEN);
-                out.print(dvd.getId());
 
                 List<Note> notes = dvd.getNotes();
 
                 if (notes != null) {
                     for (com.mycompany.dvdlibrary.dto.Note note : notes) {
-                        out.print(note.getId());
-                        out.print(TOKENB);
+                        if (note != null) {
+                            out.print(note.getId());
+                            out.print(TOKENB);
+                        }
                     }
+
                 }
 
                 out.println("");
@@ -212,20 +220,17 @@ public class DvdLibrary {
                 //dvd.setReleaseDate(fixNull(stringParts[2]));
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = null;
-                try {
-                    date = dateFormat.parse(fixNull(stringParts[2]));
-                } catch (ParseException ex) {
-                    Logger.getLogger(DvdLibraryController.class.getName()).log(Level.SEVERE, null, ex);
-                }
 
+                if (fixNull(stringParts[2]) != null) {
+                    try {
+                        date = dateFormat.parse(stringParts[2]);
+                    } catch (ParseException ex) {
+                        Logger.getLogger(DvdLibraryController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                 //dvd.setReleaseDate(parseDate(inputString));
                 dvd.setReleaseDate(date);
 
-//                
-//                String releaseDate = fixNull(stringParts[2]);
-//                if (releaseDate != null) {
-//                    dvd.setReleaseDate(new Date(releaseDate));
-//                }
                 dvd.setMPAA(fixNull(stringParts[3]));
                 dvd.setDirectorsName(fixNull(stringParts[4]));
                 dvd.setStudio(fixNull(stringParts[5]));

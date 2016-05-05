@@ -28,6 +28,7 @@ public class DvdLibraryController {
     ConsoleIO consoleIo = new ConsoleIO();
     NoteDao noteDao = new NoteDao();
     DvdLibrary dvdLibrary = new DvdLibrary(noteDao);
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public void run() {
 
@@ -62,7 +63,7 @@ public class DvdLibraryController {
                     findByTitle();
                     break;
                 case 6:
-                    editById();
+                    findById();
                     break;
                 case 0:
                     choseToExit = true;
@@ -132,7 +133,7 @@ public class DvdLibraryController {
         consoleIo.printStringToConsole(dvdString);
 
         if (foundDvds.size() == 1) {
-            String editInput = consoleIo.getUserStringInput("Would You Like To Edit This Address?\n Press \"Y\" to edit.");
+            String editInput = consoleIo.getUserStringInput("Would You Like To Edit This DVD Information?\n Press \"Y\" to edit.");
             if (editInput != null && foundDvds.get(0) != null) {
                 if (editInput.equalsIgnoreCase("Y")) {
                     Dvd dvdToEdit = foundDvds.get(0);
@@ -142,6 +143,35 @@ public class DvdLibraryController {
                 }
             }
         }
+
+    }
+
+    public void findById() {
+
+        listAllDvds();
+        //String dvdTitle = consoleIo.getUserStringInput("Please Enter An ID Number To Find:");
+        int id = consoleIo.getUserIntInputPositive("Please Enter An ID Number To Find:");
+
+        //String dvdString = "";
+        //List<Dvd> foundDvds = dvdLibrary.get(id);
+        //Dvd dvd 
+        // for (Dvd dvd : foundDvds) {
+        // dvdString += convertToString(dvd);
+        // }
+        Dvd dvd = dvdLibrary.get(id);
+        consoleIo.printStringToConsole(convertToString(dvd));
+
+        //if (foundDvds.size() == 1) {
+        String editInput = consoleIo.getUserStringInput("Would You Like To Edit This DVD Information?\n Press \"Y\" to edit.");
+        if (editInput != null) {
+            if (editInput.equalsIgnoreCase("Y")) {
+                //Dvd dvdToEdit = foundDvds.get(0);
+                editDvdInfo(dvd);
+                dvdLibrary.update(dvd);
+
+            }
+        }
+        //}
 
     }
 
@@ -178,14 +208,13 @@ public class DvdLibraryController {
             inputString = consoleIo.getUserStringInput("Please Enter Release Date in yyyy-MM-dd format:");
 
             Date date = null;
-            
+
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
             } else if (inputString.equalsIgnoreCase("-")) {
                 inputString = null;
                 dvd.setReleaseDate(null);
             } else {
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
                 try {
                     date = dateFormat.parse(inputString);
@@ -243,9 +272,11 @@ public class DvdLibraryController {
 
                     if (notes == null) {
                         notes = new ArrayList();
+                        dvd.setNotes(notes);
                     }
 
                     notes.add(note);
+
                 }
 
             }
@@ -257,10 +288,10 @@ public class DvdLibraryController {
     private Date parseDate(String inputString) {
         Date releaseDate = null;
         if (inputString != null) {
-            DateFormat df = DateFormat.getDateInstance();
+            //DateFormat df = DateFormat.getDateInstance();
 
             try {
-                releaseDate = df.parse(inputString.replaceAll(Pattern.quote("/"), Pattern.quote(".")));
+                releaseDate = dateFormat.parse(inputString.replaceAll(Pattern.quote("/"), Pattern.quote("-")));
             } catch (ParseException ex) {
                 Logger.getLogger(DvdLibraryController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -292,15 +323,25 @@ public class DvdLibraryController {
     private String convertToString(Dvd dvd) {
 
         String dvdInfo = dvd.getId() + ") " + dvd.getTitle() + "\n";
-        dvdInfo += "Release Date: " + dvd.getReleaseDate() + "\n";
-        dvdInfo += "Director's Name: " + dvd.getDirectorsName() + "\n";
-        dvdInfo += "Studio: " + dvd.getStudio() + "\n";
-        dvdInfo += "Rating: " + dvd.getMPAA() + "\n";
+        if (dvd.getReleaseDate() != null) {
+            dvdInfo += "Release Date: " + dateFormat.format(dvd.getReleaseDate()) + "\n";
+        }
+        if (dvd.getDirectorsName() != null) {
+            dvdInfo += "Director's Name: " + dvd.getDirectorsName() + "\n";
+        }
+        if (dvd.getStudio() != null) {
+            dvdInfo += "Studio: " + dvd.getStudio() + "\n";
+        }
+        if (dvd.getMPAA() != null) {
+            dvdInfo += "Rating: " + dvd.getMPAA() + "\n";
+        }
 
-        if (dvd.getNotes() != null) {
+        if ( dvd.getNotes() != null ) {
             dvdInfo += "Notes:";
-            for (Note note : dvd.getNotes()) {
-                dvdInfo += "  " + note.getNoteString() + "\n";
+            for ( Note note : dvd.getNotes() ) {
+                if ( note != null ) {
+                    dvdInfo += "  " + note.getNoteString() + "\n";
+                }
             }
         }
 

@@ -5,9 +5,7 @@
  */
 package com.mycompany.dvdlibrary.dao;
 
-import com.mycompany.dvdlibrary.dto.Dvd;
 import com.mycompany.dvdlibrary.dto.Note;
-import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
