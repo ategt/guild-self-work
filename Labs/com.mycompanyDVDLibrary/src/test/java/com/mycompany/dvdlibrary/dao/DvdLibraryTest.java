@@ -35,25 +35,32 @@ public class DvdLibraryTest {
      */
     @Test
     public void testCreate() {
-        System.out.println("create");
-        Dvd address = new Dvd();
+     
+        Dvd dvd = new Dvd();
         NoteDao noteDao = new NoteDao();
+        
+        // Load the test File
         DvdLibrary instance = new DvdLibrary(true, noteDao);
-        Dvd expResult = address;
-        Dvd result = instance.create(address);
+        Dvd expResult = dvd;
+        Dvd result = instance.create(dvd);
+        
+        // Check to see that create() passed back to same file.
         assertEquals(expResult, result);
         
+        
+        // Check to see that create() assigned the Object a valid ID.
         int id = result.getId();
         assertTrue(result.getId() != 0);
         assertTrue(result.getId() >= instance.size());
 
         // Test get method.
-        Dvd returnedAddress = instance.get(id);
-        assertEquals(returnedAddress, result);
-        instance.delete(address);
+        Dvd returnedDvd = instance.get(id);
+        assertEquals(returnedDvd, result);
+        instance.delete(dvd);
 
-        returnedAddress = instance.get(id);
-        assertEquals(returnedAddress, null);
+        // Test that the Delete method erased it.
+        returnedDvd = instance.get(id);
+        assertEquals(returnedDvd, null);
     }
 
     /**
@@ -61,7 +68,9 @@ public class DvdLibraryTest {
      */
     @Test
     public void testGetAllDvds() {
-        System.out.println("getAllDvds");
+
+        // Instantiate a DvdLibrary object using the test constructor.
+        // This constructor loads a seperate test file.
         NoteDao noteDao = new NoteDao();
         DvdLibrary instance = new DvdLibrary(true, noteDao);
         
@@ -69,24 +78,36 @@ public class DvdLibraryTest {
         Dvd dvdTwo = new Dvd();
         Dvd dvdThree = new Dvd();
         
+        // Add three DVDs to the list.
         instance.create(dvdOne);
         instance.create(dvdTwo);
         instance.create(dvdThree);
         
+        // Check to see that the list contains one of the added DVDs.
+        assertTrue(instance.getAllDvds().contains(dvdOne));
         assertTrue(instance.getAllDvds().contains(dvdTwo));
+        assertTrue(instance.getAllDvds().contains(dvdThree));
+
+        int expSizeResult = 11;
+
+
+        assertEquals(expSizeResult + 3, instance.size());
+
         
         instance.delete(dvdOne);
         instance.delete(dvdTwo);
         instance.delete(dvdThree);
         
-        int expSizeResult = 11;
+        // Check that the delete method shrank the list size by 3.
         int sizeResult = instance.size();
         assertEquals(expSizeResult, sizeResult);
         
+        // Check to see if a fictional Dvd is on the list.
         String title = "SpongeBob";
         List<Dvd> result = instance.searchByTitle(title);
         assertEquals(true, result.isEmpty());
 
+        // Check to see if a real DVD is on the list.
         title = "Bills movie 3";
         result = instance.searchByTitle(title);
         assertEquals(false, result.isEmpty());
