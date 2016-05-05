@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.vendingmachine;
+package com.mycompany.vendingmachine.controller;
 
+import com.mycompany.vendingmachine.dto.Change;
+import com.mycompany.vendingmachine.dao.Inventory;
+import com.mycompany.vendingmachine.dto.Item;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -118,7 +121,7 @@ public class VendingMachineController {
 
     private void dispenseChange() {
 
-        Change change = new Change(balance);
+        Change change = new ChangeMaker().makeChange(balance);
 
         int quarters = change.getQuarters();
         int dimes = change.getDimes();
