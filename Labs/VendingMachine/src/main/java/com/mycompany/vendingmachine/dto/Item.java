@@ -9,67 +9,46 @@ package com.mycompany.vendingmachine.dto;
  *
  * @author apprentice
  */
-public class Item {
-    private String itemName;
-    private int itemCost; // in pennies
-    private int quantityInInventory;
-    private int id;
-
-    /**
-     * @return the itemName
-     */
-    public String getItemName() {
-        return itemName;
-    }
-
-    /**
-     * @return the itemCost
-     */
-    public int getItemCost() {
-        return itemCost;
-    }
-
-    /**
-     * @return the quantityInInventory
-     */
-    public int getQuantityInInventory() {
-        return quantityInInventory;
-    }
+public interface Item {
 
     /**
      * @return the id
      */
-    public int getId() {
-        return id;
-    }
+    int getId();
 
     /**
-     * @param itemName the itemName to set
+     * @return the itemCost
      */
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
+    int getItemCost();
 
     /**
-     * @param itemCost the itemCost to set
+     * @return the itemName
      */
-    public void setItemCost(int itemCost) {
-        this.itemCost = itemCost;
-    }
+    String getItemName();
 
     /**
-     * @param quantityInInventory the quantityInInventory to set
+     * @return the quantityInInventory
      */
-    public void setQuantityInInventory(int quantityInInventory) {
-        this.quantityInInventory = quantityInInventory;
-    }
+    int getQuantityInInventory();
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
-        this.id = id;
-    }
-    
+    void setId(int id);
+
+    /**
+     * @param itemCost the itemCost to set
+     */
+    void setItemCost(int itemCost);
+
+    /**
+     * @param itemName the itemName to set
+     */
+    void setItemName(String itemName);
+
+    /**
+     * @param quantityInInventory the quantityInInventory to set
+     */
+    void setQuantityInInventory(int quantityInInventory);
     
 }

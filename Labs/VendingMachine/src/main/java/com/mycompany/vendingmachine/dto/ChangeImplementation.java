@@ -5,11 +5,13 @@
  */
 package com.mycompany.vendingmachine.dto;
 
+import com.mycompany.vendingmachine.interfaces.Change;
+
 /**
  *
  * @author apprentice
  */
-public class Change {
+public class ChangeImplementation implements Change {
 
     private int quarters;
     private int nickles;
@@ -20,6 +22,7 @@ public class Change {
     /**
      * @return the quarters
      */
+    @Override
     public int getQuarters() {
         return quarters;
     }
@@ -27,6 +30,7 @@ public class Change {
     /**
      * @return the nickles
      */
+    @Override
     public int getNickles() {
         return nickles;
     }
@@ -34,6 +38,7 @@ public class Change {
     /**
      * @return the dimes
      */
+    @Override
     public int getDimes() {
         return dimes;
     }
@@ -41,6 +46,7 @@ public class Change {
     /**
      * @return the pennies
      */
+    @Override
     public int getPennies() {
         return pennies;
     }
@@ -48,6 +54,7 @@ public class Change {
     /**
      * @param quarters the quarters to set
      */
+    @Override
     public void setQuarters(int quarters) {
         this.quarters = quarters;
     }
@@ -55,6 +62,7 @@ public class Change {
     /**
      * @param nickles the nickles to set
      */
+    @Override
     public void setNickles(int nickles) {
         this.nickles = nickles;
     }
@@ -62,6 +70,7 @@ public class Change {
     /**
      * @param dimes the dimes to set
      */
+    @Override
     public void setDimes(int dimes) {
         this.dimes = dimes;
     }
@@ -69,6 +78,7 @@ public class Change {
     /**
      * @param pennies the pennies to set
      */
+    @Override
     public void setPennies(int pennies) {
         this.pennies = pennies;
     }
@@ -76,6 +86,7 @@ public class Change {
     /**
      * @return the id
      */
+    @Override
     public int getId() {
         return id;
     }
@@ -83,6 +94,7 @@ public class Change {
     /**
      * @param id the id to set
      */
+    @Override
     public void setId(int id) {
         this.id = id;
     }

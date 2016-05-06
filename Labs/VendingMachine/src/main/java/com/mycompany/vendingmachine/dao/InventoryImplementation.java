@@ -5,7 +5,8 @@
  */
 package com.mycompany.vendingmachine.dao;
 
-import com.mycompany.vendingmachine.dto.Item;
+import com.mycompany.vendingmachine.interfaces.Inventory;
+import com.mycompany.vendingmachine.dto.ItemImplementation;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,19 +24,19 @@ import java.util.logging.Logger;
  *
  * @author apprentice
  */
-public class Inventory {
+public class InventoryImplementation implements Inventory {
 
-    List<Item> items;
+    List<ItemImplementation> items;
     int nextId;
     File inventoryFile = new File("ItemsData.txt");
 
     ;
 
-    public Inventory() {
+    public InventoryImplementation() {
         this(false);
     }
 
-    protected Inventory(boolean isATest) {
+    protected InventoryImplementation(boolean isATest) {
 
         if (isATest) {
             inventoryFile = new File("ItemsTestData.txt");
@@ -51,7 +52,8 @@ public class Inventory {
         nextId = determineNextId();
     }
 
-    public Item create(Item item) {
+    @Override
+    public ItemImplementation create(ItemImplementation item) {
         item.setId(nextId);
         nextId++;
 
@@ -62,9 +64,10 @@ public class Inventory {
         return item;
     }
 
-    public Item get(Integer id) {
+    @Override
+    public ItemImplementation get(Integer id) {
 
-        for (Item item : items) {
+        for (ItemImplementation item : items) {
             if (item != null) {
                 if (item.getId() == id) {
                     return item;
@@ -75,10 +78,11 @@ public class Inventory {
         return null;
     }
 
-    public void update(Item item) {
-        Item found = null;
+    @Override
+    public void update(ItemImplementation item) {
+        ItemImplementation found = null;
 
-        for (Item currentItem : items) {
+        for (ItemImplementation currentItem : items) {
             if (currentItem.getId() == item.getId()) {
                 found = currentItem;
                 break;
@@ -94,10 +98,11 @@ public class Inventory {
 
     }
 
-    public void delete(Item item) {
-        Item found = null;
+    @Override
+    public void delete(ItemImplementation item) {
+        ItemImplementation found = null;
 
-        for (Item currentItem : items) {
+        for (ItemImplementation currentItem : items) {
             if (currentItem.getId() == item.getId()) {
                 found = currentItem;
                 break;
@@ -112,11 +117,13 @@ public class Inventory {
 
     }
 
-    public List<Item> getList() {
+    @Override
+    public List<ItemImplementation> getList() {
 
         return items;
     }
 
+    @Override
     public int size() {
         return items.size();
     }
@@ -124,7 +131,7 @@ public class Inventory {
     private int determineNextId() {
         int highestId = 1;
 
-        for (Item item : items) {
+        for (ItemImplementation item : items) {
             if (highestId < item.getId()) {
                 highestId = item.getId();
             }
@@ -141,7 +148,7 @@ public class Inventory {
 
             PrintWriter out = new PrintWriter(new FileWriter(inventoryFile));
 
-            for (Item item : items) {
+            for (ItemImplementation item : items) {
 
                 out.print(item.getId());
                 out.print(TOKEN);
@@ -157,14 +164,14 @@ public class Inventory {
             out.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(Inventory.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InventoryImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    private List<Item> decode() {
+    private List<ItemImplementation> decode() {
 
-        List<Item> itemList = new ArrayList<>();
+        List<ItemImplementation> itemList = new ArrayList<>();
 
         final String TOKEN = "::";
 
@@ -181,7 +188,7 @@ public class Inventory {
 
                 String[] stringParts = currentLine.split(TOKEN);
 
-                Item item = new Item();
+                ItemImplementation item = new ItemImplementation();
 
                 int id = Integer.parseInt(stringParts[0]);
                 item.setId(id);
@@ -218,10 +225,10 @@ public class Inventory {
             sc.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Inventory.class
+            Logger.getLogger(InventoryImplementation.class
                     .getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(Inventory.class
+            Logger.getLogger(InventoryImplementation.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
 

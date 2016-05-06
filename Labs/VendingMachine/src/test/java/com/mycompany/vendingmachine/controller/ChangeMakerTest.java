@@ -5,7 +5,7 @@
  */
 package com.mycompany.vendingmachine.controller;
 
-import com.mycompany.vendingmachine.dto.Change;
+import com.mycompany.vendingmachine.dto.ChangeImplementation;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class ChangeMakerTest {
         int nickles = 1;
         int pennies = 1;
         
-        Change result = instance.makeChange(balance);
+        ChangeImplementation result = instance.makeChange(balance);
         
         assertEquals(quarters, result.getQuarters());
         assertEquals(dimes, result.getDimes());
@@ -63,7 +63,7 @@ public class ChangeMakerTest {
         int nickles = 1;
         int pennies = 4;
         
-        Change result = instance.makeChange(balance);
+        ChangeImplementation result = instance.makeChange(balance);
         
         assertEquals(quarters, result.getQuarters());
         assertEquals(dimes, result.getDimes());
@@ -84,7 +84,7 @@ public class ChangeMakerTest {
         int nickles = 0;
         int pennies = 0;
         
-        Change result = instance.makeChange(balance);
+        ChangeImplementation result = instance.makeChange(balance);
         
         assertEquals(quarters, result.getQuarters());
         assertEquals(dimes, result.getDimes());

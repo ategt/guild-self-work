@@ -5,7 +5,7 @@
  */
 package com.mycompany.vendingmachine.controller;
 
-import com.mycompany.vendingmachine.dto.Change;
+import com.mycompany.vendingmachine.dto.ChangeImplementation;
 
 /**
  *
@@ -13,11 +13,11 @@ import com.mycompany.vendingmachine.dto.Change;
  */
 public class ChangeMaker {
 
-    Change change;
+    ChangeImplementation change;
 
-    public Change makeChange(int balance) {
+    public ChangeImplementation makeChange(int balance) {
 
-        change = new Change();
+        change = new ChangeImplementation();
 
         int pennies = balance;
 
