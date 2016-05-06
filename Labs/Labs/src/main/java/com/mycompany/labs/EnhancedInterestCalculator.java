@@ -11,9 +11,8 @@ import static com.mycompany.labs.InterestCalculator.calculateYearNumber;
  *
  * @author apprentice
  */
-public class EnhancedInterestCalculator implements Game, InterestCalcInterface {
+public class EnhancedInterestCalculator implements Game {
 
-    @Override
     public void run() {
 
         ConsoleIO consoleIO = new ConsoleIO();
@@ -36,7 +35,6 @@ public class EnhancedInterestCalculator implements Game, InterestCalcInterface {
 
     }
 
-    @Override
     public java.util.List<CompoundingPeriod> buildCompoundingPeriodList(float annualInterestRate, int compoundingsPerYear, float initialYears, float initialInvestment) {
         java.util.List<CompoundingPeriod> periodList = new java.util.ArrayList<>();
 
