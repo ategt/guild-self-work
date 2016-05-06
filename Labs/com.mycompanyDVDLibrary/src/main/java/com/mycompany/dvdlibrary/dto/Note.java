@@ -9,7 +9,8 @@ package com.mycompany.dvdlibrary.dto;
  *
  * @author apprentice
  */
-public class Note {
+public class Note implements Identifiable {
+
     private int id;
     private String noteString;
 
@@ -39,5 +40,9 @@ public class Note {
      */
     public void setNoteString(String noteString) {
         this.noteString = noteString;
+    }
+
+    public String getTitle() {
+        return "";
     }
 }

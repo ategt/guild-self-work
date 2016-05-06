@@ -7,6 +7,7 @@ package com.mycompany.dvdlibrary.dao;
 
 import com.mycompany.dvdlibrary.controller.DvdLibraryController;
 import com.mycompany.dvdlibrary.dto.Dvd;
+import com.mycompany.dvdlibrary.dto.Identifiable;
 import com.mycompany.dvdlibrary.dto.Note;
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,7 +33,7 @@ import java.util.regex.Pattern;
  */
 public class DvdLibrary {
 
-    List<Dvd> dvdList;
+    List<Identifiable> dvdList;
     int nextId = 1;
     File dvdLibraryFile = new File("dvdData.txt");
     NoteDao noteDao;
@@ -58,7 +59,7 @@ public class DvdLibrary {
         nextId = determineNextId();
     }
 
-    public Dvd create(Dvd dvd) {
+    public Identifiable create(Identifiable dvd) {
         dvd.setId(nextId);
         nextId++;
 
@@ -69,9 +70,9 @@ public class DvdLibrary {
         return dvd;
     }
 
-    public Dvd get(Integer id) {
+    public Identifiable get(Integer id) {
 
-        for (Dvd dvd : dvdList) {
+        for (Identifiable dvd : dvdList) {
             if (dvd.getId() == id) {
                 return dvd;
             }
@@ -81,11 +82,11 @@ public class DvdLibrary {
         return null;
     }
 
-    public void update(Dvd dvd) {
+    public void update(Identifiable dvd) {
 
-        Dvd foundDvd = null;
+        Identifiable foundDvd = null;
 
-        for (Dvd currentDvd : dvdList) {
+        for (Identifiable currentDvd : dvdList) {
             if (currentDvd.getId() == dvd.getId()) {
                 foundDvd = currentDvd;
                 break;
@@ -99,10 +100,10 @@ public class DvdLibrary {
 
     }
 
-    public void delete(Dvd dvd) {
-        Dvd found = null;
+    public void delete(Identifiable dvd) {
+        Identifiable found = null;
 
-        for (Dvd currentDvd : dvdList) {
+        for (Identifiable currentDvd : dvdList) {
             if (currentDvd.getId() == dvd.getId()) {
                 found = currentDvd;
                 break;
@@ -117,7 +118,7 @@ public class DvdLibrary {
 
     }
 
-    public List<Dvd> getList() {
+    public List<Identifiable> getList() {
 
         return dvdList;
     }
@@ -129,7 +130,7 @@ public class DvdLibrary {
     private int determineNextId() {
         int highestId = 1;
 
-        for (Dvd dvd : dvdList) {
+        for (Identifiable dvd : dvdList) {
             if (highestId < dvd.getId()) {
                 highestId = dvd.getId();
             }
@@ -148,8 +149,12 @@ public class DvdLibrary {
 
             PrintWriter out = new PrintWriter(new FileWriter(dvdLibraryFile));
 
-            for (Dvd dvd : dvdList) {
+            for (Identifiable iDvd : dvdList) {
 
+                
+                // Ask about doing this!!
+                Dvd dvd = (Dvd) iDvd;
+                
                 out.print(dvd.getId());
                 out.print(TOKEN);
                 out.print(dvd.getTitle());
@@ -195,9 +200,9 @@ public class DvdLibrary {
 
     }
 
-    private List<Dvd> decode() {
+    private List<Identifiable> decode() {
 
-        List<Dvd> dvdList = new ArrayList<>();
+        List<Identifiable> dvdList = new ArrayList<>();
 
         final String TOKEN = "::";
         final String TOKENB = ":||:";
@@ -267,10 +272,10 @@ public class DvdLibrary {
         return dvdList;
     }
 
-    public List<Dvd> searchByTitle(String title) {
-        List<Dvd> soughtDvd = new ArrayList();
+    public List<Identifiable> searchByTitle(String title) {
+        List<Identifiable> soughtDvd = new ArrayList();
 
-        for (Dvd dvd : dvdList) {
+        for (Identifiable dvd : dvdList) {
             if (dvd.getTitle() != null && title != null) {
                 if (dvd.getTitle().compareToIgnoreCase(title) == 0) {
                     soughtDvd.add(dvd);

@@ -21,4 +21,6 @@ public interface Identifiable {
      */
     void setId(int id);
     
+    public String getTitle();
+    
 }
