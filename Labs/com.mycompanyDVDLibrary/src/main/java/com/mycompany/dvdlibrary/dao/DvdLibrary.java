@@ -5,11 +5,9 @@
  */
 package com.mycompany.dvdlibrary.dao;
 
-import com.mycompany.dvdlibrary.interfaces.AbstractDao;
 import com.mycompany.dvdlibrary.controller.DvdLibraryController;
 import com.mycompany.dvdlibrary.dto.Dvd;
 import com.mycompany.dvdlibrary.dto.DvdImplementation;
-import com.mycompany.dvdlibrary.dto.Identifiable;
 import com.mycompany.dvdlibrary.dto.Note;
 import java.io.BufferedReader;
 import java.io.File;
@@ -33,18 +31,18 @@ import java.util.regex.Pattern;
  *
  * @author apprentice
  */
-public class DvdLibrary implements AbstractDao {
+public class DvdLibrary {
 
     List<Dvd> dvdList;
     int nextId = 1;
     File dvdLibraryFile = new File("dvdData.txt");
-    AbstractDao noteDao;
+    NoteDao noteDao;
 
-    public DvdLibrary(AbstractDao noteDao) {
+    public DvdLibrary(NoteDao noteDao) {
         this(false, noteDao);
     }
 
-    protected DvdLibrary(boolean isATest, AbstractDao noteDao) {
+    protected DvdLibrary(boolean isATest, NoteDao noteDao) {
 
         this.noteDao = noteDao;
 
@@ -61,8 +59,7 @@ public class DvdLibrary implements AbstractDao {
         nextId = determineNextId();
     }
 
-    @Override
-    public Identifiable create(Identifiable dvd) {
+    public Dvd create(Dvd dvd) {
         dvd.setId(nextId);
         nextId++;
 
@@ -73,24 +70,23 @@ public class DvdLibrary implements AbstractDao {
         return dvd;
     }
 
-    @Override
     public Dvd get(Integer id) {
 
         for (Dvd dvd : dvdList) {
             if (dvd.getId() == id) {
                 return dvd;
             }
+
         }
 
         return null;
     }
 
-    @Override
-    public void update(Identifiable dvd) {
+    public void update(Dvd dvd) {
 
-        Identifiable foundDvd = null;
+        Dvd foundDvd = null;
 
-        for (Identifiable currentDvd : dvdList) {
+        for (Dvd currentDvd : dvdList) {
             if (currentDvd.getId() == dvd.getId()) {
                 foundDvd = currentDvd;
                 break;
@@ -104,11 +100,10 @@ public class DvdLibrary implements AbstractDao {
 
     }
 
-    @Override
-    public void delete(Identifiable dvd) {
-        Identifiable found = null;
+    public void delete(Dvd dvd) {
+        Dvd found = null;
 
-        for (Identifiable currentDvd : dvdList) {
+        for (Dvd currentDvd : dvdList) {
             if (currentDvd.getId() == dvd.getId()) {
                 found = currentDvd;
                 break;
@@ -123,13 +118,11 @@ public class DvdLibrary implements AbstractDao {
 
     }
 
-    @Override
-    public List<Identifiable> getList() {
+    public List<Dvd> getList() {
 
         return dvdList;
     }
 
-    @Override
     public int size() {
         return dvdList.size();
     }
@@ -137,7 +130,7 @@ public class DvdLibrary implements AbstractDao {
     private int determineNextId() {
         int highestId = 1;
 
-        for (Identifiable dvd : dvdList) {
+        for (Dvd dvd : dvdList) {
             if (highestId < dvd.getId()) {
                 highestId = dvd.getId();
             }
@@ -156,12 +149,8 @@ public class DvdLibrary implements AbstractDao {
 
             PrintWriter out = new PrintWriter(new FileWriter(dvdLibraryFile));
 
-            for (Identifiable iDvd : dvdList) {
+            for (Dvd dvd : dvdList) {
 
-                
-                // Ask about doing this!!
-                DvdImplementation dvd = (DvdImplementation) iDvd;
-                
                 out.print(dvd.getId());
                 out.print(TOKEN);
                 out.print(dvd.getTitle());
@@ -209,7 +198,7 @@ public class DvdLibrary implements AbstractDao {
 
     private List<Dvd> decode() {
 
-        List<Identifiable> dvdList = new ArrayList<>();
+        List<Dvd> dvdList = new ArrayList<>();
 
         final String TOKEN = "::";
         final String TOKENB = ":||:";
@@ -222,7 +211,7 @@ public class DvdLibrary implements AbstractDao {
 
                 String[] stringParts = currentLine.split(TOKEN);
 
-                DvdImplementation dvd = new DvdImplementation();
+                Dvd dvd = new DvdImplementation();
 
                 int id = Integer.parseInt(stringParts[0]);
                 dvd.setId(id);
@@ -258,8 +247,7 @@ public class DvdLibrary implements AbstractDao {
 
                             }
                             if (noteId != null) {
-                                Note tempNote = (Note) noteDao.get(noteId);
-                                notes.add(tempNote);
+                                notes.add(noteDao.get(noteId));
                             }
                         }
                     }
@@ -280,7 +268,6 @@ public class DvdLibrary implements AbstractDao {
         return dvdList;
     }
 
-    @Override
     public List<Dvd> searchByTitle(String title) {
         List<Dvd> soughtDvd = new ArrayList();
 
@@ -295,7 +282,6 @@ public class DvdLibrary implements AbstractDao {
         return soughtDvd;
     }
 
-    @Override
     public String fixNull(String input) {
         String returnValue = null;
         if (input.trim().equalsIgnoreCase("null")) {
