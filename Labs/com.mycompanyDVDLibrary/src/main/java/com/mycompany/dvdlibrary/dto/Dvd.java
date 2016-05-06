@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author apprentice
  */
-public class Dvd {
+public class Dvd implements Identifiable {
 
     private String title;
     private Date releaseDate;
@@ -109,6 +109,7 @@ public class Dvd {
     /**
      * @return the id
      */
+    @Override
     public int getId() {
         return id;
     }
@@ -116,6 +117,7 @@ public class Dvd {
     /**
      * @param id the id to set
      */
+    @Override
     public void setId(int id) {
         this.id = id;
     }

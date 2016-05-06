@@ -117,7 +117,7 @@ public class DvdLibrary {
 
     }
 
-    public List<Dvd> getAllDvds() {
+    public List<Dvd> getList() {
 
         return dvdList;
     }
