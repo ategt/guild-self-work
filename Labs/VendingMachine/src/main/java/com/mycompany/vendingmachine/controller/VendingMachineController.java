@@ -5,8 +5,10 @@
  */
 package com.mycompany.vendingmachine.controller;
 
-import com.mycompany.vendingmachine.dto.ChangeImplementation;
 import com.mycompany.vendingmachine.dao.InventoryImplementation;
+import com.mycompany.vendingmachine.interfaces.Change;
+import com.mycompany.vendingmachine.interfaces.Inventory;
+import com.mycompany.vendingmachine.interfaces.Item;
 import com.mycompany.vendingmachine.dto.ItemImplementation;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +20,7 @@ import java.util.logging.Logger;
 public class VendingMachineController {
     
     ConsoleIO consoleIo = new ConsoleIO();
-    InventoryImplementation inventory = new InventoryImplementation();
+    Inventory inventory = new InventoryImplementation();
     int balance;
     
     public void run() {
@@ -62,14 +64,14 @@ public class VendingMachineController {
         }
     }
     
-    private void vendItem(ItemImplementation item) {
+    private void vendItem(Item item) {
         
         dispenseItem(item);
         dispenseChange();
         
     }
     
-    private void dispenseItem(ItemImplementation item) {
+    private void dispenseItem(Item item) {
 
         //consoleIo.printToConsole("Vending one " + item.getItemName(), false);
         consoleIo.printStringToConsole("Vending one " + item.getItemName());
@@ -103,7 +105,7 @@ public class VendingMachineController {
     }
     
     private void selectItem() {
-        ItemImplementation selection = askForSelection();
+        Item selection = askForSelection();
         
         if (selection != null) {
             int price = priceSelected(selection);
@@ -125,7 +127,7 @@ public class VendingMachineController {
     
     private void dispenseChange() {
         
-        ChangeImplementation change = new ChangeMaker().makeChange(balance);
+        Change change = new ChangeMaker().makeChange(balance);
         
         int quarters = change.getQuarters();
         int dimes = change.getDimes();
@@ -152,7 +154,7 @@ public class VendingMachineController {
         
         String chart = "\nCurrent Balance: " + balance + " cents.\n";
         chart += "ID#\tItem Name:\tItem Cost:\tItem Quantity:\n";
-        for (ItemImplementation item : inventory.getList()) {
+        for (Item item : inventory.getList()) {
             chart += item.getId() + ") \t" + item.getItemName() + "\t" + item.getItemCost() + "\t\t" + item.getQuantityInInventory() + "\n";
             
         }
@@ -163,7 +165,7 @@ public class VendingMachineController {
     
     private void addItem() {
         
-        ItemImplementation item = new ItemImplementation();
+        Item item = new ItemImplementation();
         
         String itemName = consoleIo.getUserStringInput("Please Enter The Name Of This Item.");
         item.setItemName(itemName);
@@ -179,16 +181,16 @@ public class VendingMachineController {
     
     private void refillItem() {
         
-        ItemImplementation item = askForSelection();
+        Item item = askForSelection();
         int quantity = consoleIo.getUserIntInputPositive("Please Enter The New Quantity For " + item.getItemName() + ":");
         item.setQuantityInInventory(quantity);
         inventory.update(item);
     }
     
-    private ItemImplementation askForSelection() {
+    private Item askForSelection() {
         displayChart();
         int idNumber = consoleIo.getUserIntInputPositive("Please Enter An ID Number To Select:");
-        ItemImplementation item = inventory.get(idNumber);
+        Item item = inventory.get(idNumber);
         return item;
     }
     
@@ -202,14 +204,14 @@ public class VendingMachineController {
             hasInventory = false;
         }
         
-        for (ItemImplementation item : inventory.getList()) {
+        for (Item item : inventory.getList()) {
             hasInventory = doesMachineHaveInventory(item);
         }
         
         return hasInventory;
     }
     
-    private boolean doesMachineHaveInventory(ItemImplementation item) {
+    private boolean doesMachineHaveInventory(Item item) {
         Boolean hasInventory = true;
         
         if (item.getQuantityInInventory() < 1) {
@@ -218,7 +220,7 @@ public class VendingMachineController {
         return hasInventory;
     }
     
-    private int priceSelected(ItemImplementation item) {
+    private int priceSelected(Item item) {
         
         return item.getItemCost();
     }

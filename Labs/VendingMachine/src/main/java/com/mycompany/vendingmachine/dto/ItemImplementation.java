@@ -5,6 +5,8 @@
  */
 package com.mycompany.vendingmachine.dto;
 
+import com.mycompany.vendingmachine.interfaces.Item;
+
 /**
  *
  * @author apprentice

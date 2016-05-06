@@ -5,7 +5,6 @@
  */
 package com.mycompany.vendingmachine.interfaces;
 
-import com.mycompany.vendingmachine.dto.ItemImplementation;
 import java.util.List;
 
 /**
@@ -14,16 +13,16 @@ import java.util.List;
  */
 public interface Inventory {
 
-    ItemImplementation create(ItemImplementation item);
+    Item create(Item item);
 
-    void delete(ItemImplementation item);
+    void delete(Item item);
 
-    ItemImplementation get(Integer id);
+    Item get(Integer id);
 
-    List<ItemImplementation> getList();
+    List<Item> getList();
 
     int size();
 
-    void update(ItemImplementation item);
+    void update(Item item);
     
 }
