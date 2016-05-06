@@ -11,12 +11,11 @@ import java.util.Scanner;
  *
  * @author apprentice
  */
-public class InterestCalculator {
+public class InterestCalculator implements Game {
 
     public void run() {
-        
-        ConsoleIO consoleIO = new ConsoleIO();
 
+        ConsoleIO consoleIO = new ConsoleIO();
 
         // Ask the user for lots of input.
         float annualInterestRate = consoleIO.getUserFloatRange("Please enter the annual interest rate as a percentage.", 0, Integer.MAX_VALUE);
@@ -44,7 +43,7 @@ public class InterestCalculator {
 
             interestForCurrentYear += interestEarnedForCurrentCompoundingPeriod;
             currentBalance += interestEarnedForCurrentCompoundingPeriod;
-            
+
             if (isEndOfYear(currentCompoundingPeriod, compoundingsPerYear)) {
                 tasksForTheEndOfYear(consoleIO, interestForCurrentYear, currentBalance);
             }
@@ -131,5 +130,9 @@ public class InterestCalculator {
 
     }
 
+    @Override
+    public String getName() {
+        return "Interest Calculator";
+    }
 
 }

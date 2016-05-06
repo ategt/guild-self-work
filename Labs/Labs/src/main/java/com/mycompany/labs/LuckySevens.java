@@ -11,9 +11,9 @@ import java.util.Scanner;
  *
  * @author apprentice
  */
-public class LuckySevens {
+public class LuckySevens implements Game {
 
-   // int startingBet = 0;
+    // int startingBet = 0;
     int maxAmountHeld = 0;
     int rollNumberAtMaxAmountHeld = 0;
 
@@ -86,5 +86,10 @@ public class LuckySevens {
     public int rollOneDie() {
         return (int) Math.ceil(Math.random() * 6);
 
+    }
+
+    @Override
+    public String getName() {
+        return "Lucky Sevens";
     }
 }

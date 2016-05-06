@@ -11,7 +11,7 @@ import java.util.Scanner;
  *
  * @author apprentice
  */
-public class Factorizer {
+public class Factorizer implements Game {
 
     int numberOfFactors = 0;
     int sumOfFactors = 0;
@@ -51,14 +51,14 @@ public class Factorizer {
         }
     }
 
-    
-    /** This method performs a modulus test on two numbers, divisor and dividend, to 
-     *  determine if one is evenly divisible by the other or not.
-     * This is defined as divisor divided by dividend with no remainder.
-     * 
+    /**
+     * This method performs a modulus test on two numbers, divisor and dividend,
+     * to determine if one is evenly divisible by the other or not. This is
+     * defined as divisor divided by dividend with no remainder.
+     *
      * @param divisor
      * @param dividend
-     * @return 
+     * @return
      */
     public static boolean isNumberEvenlyDivisible(int divisor, int dividend) {
         return divisor % dividend == 0;
@@ -86,5 +86,10 @@ public class Factorizer {
 
     public static boolean isPerfectNumber(int sumOfFactors, int factorizedNumber) {
         return sumOfFactors == factorizedNumber;
+    }
+
+    @Override
+    public String getName() {
+        return "Factorizer";
     }
 }

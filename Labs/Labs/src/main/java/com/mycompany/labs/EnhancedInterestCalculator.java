@@ -11,7 +11,7 @@ import static com.mycompany.labs.InterestCalculator.calculateYearNumber;
  *
  * @author apprentice
  */
-public class EnhancedInterestCalculator {
+public class EnhancedInterestCalculator implements Game {
 
     public void run() {
 
@@ -79,5 +79,12 @@ public class EnhancedInterestCalculator {
         yearNumber = calculateYearNumber(currentCompoundingPeriod, compoundingsPerYear);
         consoleIO.printStringToConsole("At the begining of year " + (yearNumber + 1) + " your starting balance would be " + Math.round(currentBalance));
     }
+    
+        @Override
+    public String getName(){
+        
+        return "Enhanced Interest Calculator";
+    }
+
 
 }

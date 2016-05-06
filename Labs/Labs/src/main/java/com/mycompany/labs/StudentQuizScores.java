@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author apprentice
  */
-public class StudentQuizScores {
+public class StudentQuizScores implements Game {
 
     java.util.List<Student> studentIdList = new java.util.ArrayList<>();
     java.util.Map<String, Student> nameToStudentMap = new java.util.HashMap<>();
@@ -641,5 +641,11 @@ public class StudentQuizScores {
         }
         return highestScore;
     }
+
+    @Override
+    public String getName(){
+        return "Student Quiz Scores";
+    }
+
 
 }

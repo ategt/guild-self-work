@@ -12,16 +12,16 @@ import java.util.Scanner;
  *
  * @author apprentice
  */
-public class RockPaperScissorsStep4 {
+public class RockPaperScissorsStep4 implements Game {
 
-    public static void main(String[] args) {
+    public void run() {
 
         playRockPaperScissors();
     }
 
     public static void playRockPaperScissors() {
         Scanner keyboard = new Scanner(System.in);
-        
+
         int userInput;
         int computerInput;
         // int currentRound = 0;
@@ -179,5 +179,10 @@ public class RockPaperScissorsStep4 {
         // (int) Math.ceil(Math.random() * 3)
         //     computerInput = ( random.nextInt(3) + 1 );
         return (random.nextInt(3) + 1);
+    }
+
+    @Override
+    public String getName() {
+        return "Rock-Paper-Scissors-v4";
     }
 }
