@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  * @author apprentice
  */
 public class TeamDao {
-    
+
     // CRUD
     private List<Team> teams = new ArrayList();
     private int nextId = 1;
@@ -72,14 +72,17 @@ public class TeamDao {
 
     public void update(Team team) {
 
+        Team found = null;
+
         for (Team myTeam : teams) {
 
             if (myTeam.getId() == team.getId()) {
-                teams.remove(myTeam);
-                teams.add(team);
+                found = myTeam;
             }
 
         }
+        teams.remove(found);
+        teams.add(team);
 
         encode();
 
@@ -164,8 +167,8 @@ public class TeamDao {
     private void encodePlayerIds(Team myTeam, PrintWriter out, final String TOKENB) {
         for (Player player : myTeam.getPlayers()) {
             if (player != null) {
-                    out.print(player.getId());
-                    out.print(TOKENB);
+                out.print(player.getId());
+                out.print(TOKENB);
 
             }
         }
@@ -179,11 +182,12 @@ public class TeamDao {
         final String TOKENB = ":||:";
 
         try {
-            if ( !teamsDataFile.exists() )
+            if (!teamsDataFile.exists()) {
                 try {
                     teamsDataFile.createNewFile();
-            } catch (IOException ex) {
-                Logger.getLogger(TeamDao.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(TeamDao.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
             Scanner sc = new Scanner(new BufferedReader(new FileReader(teamsDataFile)));
