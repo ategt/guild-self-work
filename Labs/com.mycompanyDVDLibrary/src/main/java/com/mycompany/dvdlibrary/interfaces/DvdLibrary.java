@@ -5,29 +5,29 @@
  */
 package com.mycompany.dvdlibrary.interfaces;
 
-import com.mycompany.dvdlibrary.dto.Identifiable;
+import com.mycompany.dvdlibrary.interfaces.Dvd;
 import java.util.List;
 
 /**
  *
  * @author apprentice
  */
-public interface AbstractDao {
+public interface DvdLibrary {
 
-    Identifiable create(Identifiable dvd);
+    Dvd create(Dvd dvd);
 
-    void delete(Identifiable dvd);
+    void delete(Dvd dvd);
 
     String fixNull(String input);
 
-    Identifiable get(Integer id);
+    Dvd get(Integer id);
 
-    List<Identifiable> getList();
+    List<Dvd> getAllDvds();
 
-    List<Identifiable> searchByTitle(String title);
+    List<Dvd> searchByTitle(String title);
 
     int size();
 
-    void update(Identifiable dvd);
+    void update(Dvd dvd);
     
 }

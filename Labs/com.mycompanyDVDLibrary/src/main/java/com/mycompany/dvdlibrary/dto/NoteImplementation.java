@@ -5,18 +5,20 @@
  */
 package com.mycompany.dvdlibrary.dto;
 
+import com.mycompany.dvdlibrary.interfaces.Note;
+
 /**
  *
  * @author apprentice
  */
-public class Note implements Identifiable {
-
+public class NoteImplementation implements Note {
     private int id;
     private String noteString;
 
     /**
      * @return the id
      */
+    @Override
     public int getId() {
         return id;
     }
@@ -24,6 +26,7 @@ public class Note implements Identifiable {
     /**
      * @param id the id to set
      */
+    @Override
     public void setId(int id) {
         this.id = id;
     }
@@ -31,6 +34,7 @@ public class Note implements Identifiable {
     /**
      * @return the noteString
      */
+    @Override
     public String getNoteString() {
         return noteString;
     }
@@ -38,11 +42,8 @@ public class Note implements Identifiable {
     /**
      * @param noteString the noteString to set
      */
+    @Override
     public void setNoteString(String noteString) {
         this.noteString = noteString;
-    }
-
-    public String getTitle() {
-        return "";
     }
 }

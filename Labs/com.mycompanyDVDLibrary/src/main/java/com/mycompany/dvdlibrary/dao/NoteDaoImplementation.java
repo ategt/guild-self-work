@@ -5,9 +5,9 @@
  */
 package com.mycompany.dvdlibrary.dao;
 
-import com.mycompany.dvdlibrary.interfaces.AbstractDao;
-import com.mycompany.dvdlibrary.dto.Identifiable;
-import com.mycompany.dvdlibrary.dto.Note;
+import com.mycompany.dvdlibrary.interfaces.NoteDao;
+import com.mycompany.dvdlibrary.interfaces.Note;
+import com.mycompany.dvdlibrary.dto.NoteImplementation;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,17 +25,17 @@ import java.util.logging.Logger;
  *
  * @author apprentice
  */
-public class NoteDao implements AbstractDao {
+public class NoteDaoImplementation implements NoteDao {
 
-    private List<Identifiable> notes = new ArrayList();
+    private List<Note> notes = new ArrayList();
     private int nextId = 1;
     File notesFile = new File("NotesData.txt");
 
-    public NoteDao() {
+    public NoteDaoImplementation() {
         this(false);
     }
 
-    protected NoteDao(boolean isATest) {
+    protected NoteDaoImplementation(boolean isATest) {
 
         if (isATest) {
             notesFile = new File("NotesTestData.txt");
@@ -51,7 +51,8 @@ public class NoteDao implements AbstractDao {
         nextId = determineNextId();
     }
 
-    public Identifiable create(Identifiable note) {
+    @Override
+    public Note create(Note note) {
         note.setId(nextId);
         nextId++;
 
@@ -62,9 +63,10 @@ public class NoteDao implements AbstractDao {
         return note;
     }
 
-    public Identifiable get(Integer id) {
+    @Override
+    public Note get(Integer id) {
 
-        for (Identifiable note : notes) {
+        for (Note note : notes) {
             if (note != null) {
                 if (note.getId() == id) {
                     return note;
@@ -75,9 +77,10 @@ public class NoteDao implements AbstractDao {
         return null;
     }
 
-    public void update(Identifiable note) {
+    @Override
+    public void update(Note note) {
 
-        for (Identifiable myNote : notes) {
+        for (Note myNote : notes) {
             if (myNote.getId() == note.getId()) {
                 notes.remove(myNote);
                 notes.add(note);
@@ -89,10 +92,11 @@ public class NoteDao implements AbstractDao {
 
     }
 
-    public void delete(Identifiable note) {
-        Identifiable found = null;
+    @Override
+    public void delete(Note note) {
+        Note found = null;
 
-        for (Identifiable currentNote : notes) {
+        for (Note currentNote : notes) {
             if (currentNote.getId() == note.getId()) {
                 found = currentNote;
                 break;
@@ -107,11 +111,13 @@ public class NoteDao implements AbstractDao {
 
     }
 
-    public List<Identifiable> getList() {
+    @Override
+    public List<Note> getList() {
 
         return notes;
     }
 
+    @Override
     public int size() {
         return notes.size();
     }
@@ -119,7 +125,7 @@ public class NoteDao implements AbstractDao {
     private int determineNextId() {
         int highestId = 1;
 
-        for (Identifiable note : notes) {
+        for (Note note : notes) {
             if (highestId < note.getId()) {
                 highestId = note.getId();
             }
@@ -136,9 +142,7 @@ public class NoteDao implements AbstractDao {
 
             PrintWriter out = new PrintWriter(new FileWriter(notesFile));
 
-            for (Identifiable reallyANote : notes) {
-
-                Note note = (Note) reallyANote;
+            for (Note note : notes) {
 
                 out.print(note.getId());
                 out.print(TOKEN);
@@ -150,14 +154,14 @@ public class NoteDao implements AbstractDao {
             out.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(NoteDao.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NoteDaoImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    private List<Identifiable> decode() {
+    private List<Note> decode() {
 
-        List<Identifiable> noteList = new ArrayList<>();
+        List<Note> noteList = new ArrayList<>();
 
         final String TOKEN = "::";
 
@@ -169,7 +173,7 @@ public class NoteDao implements AbstractDao {
 
                 String[] stringParts = currentLine.split(TOKEN);
 
-                Note note = new Note();
+                Note note = new NoteImplementation();
 
                 int id = Integer.parseInt(stringParts[0]);
                 note.setId(id);
@@ -184,40 +188,11 @@ public class NoteDao implements AbstractDao {
             sc.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(NoteDao.class
+            Logger.getLogger(NoteDaoImplementation.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
         return noteList;
     }
 
-    @Override
-    public List<Identifiable> searchByTitle(String title) {
-        List<Identifiable> soughtDvd = new ArrayList();
-
-        for (Identifiable dvd : notes) {
-            if (dvd.getTitle() != null && title != null) {
-                if (dvd.getTitle().compareToIgnoreCase(title) == 0) {
-                    soughtDvd.add(dvd);
-                }
-            }
-        }
-
-        return soughtDvd;
-    }
-
-        @Override
-    public String fixNull(String input) {
-        String returnValue = null;
-        if (input.trim().equalsIgnoreCase("null")) {
-            input = null;
-        } else if (input.trim().equalsIgnoreCase("")) {
-            input = null;
-        } else {
-            returnValue = input;
-        }
-        return returnValue;
-    }
-
-    
 }

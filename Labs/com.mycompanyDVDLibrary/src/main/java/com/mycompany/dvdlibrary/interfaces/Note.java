@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.dvdlibrary.dto;
+package com.mycompany.dvdlibrary.interfaces;
 
 /**
  *
  * @author apprentice
  */
-public interface Identifiable {
+public interface Note {
 
     /**
      * @return the id
@@ -17,10 +17,18 @@ public interface Identifiable {
     int getId();
 
     /**
+     * @return the noteString
+     */
+    String getNoteString();
+
+    /**
      * @param id the id to set
      */
     void setId(int id);
-    
-    public String getTitle();
+
+    /**
+     * @param noteString the noteString to set
+     */
+    void setNoteString(String noteString);
     
 }

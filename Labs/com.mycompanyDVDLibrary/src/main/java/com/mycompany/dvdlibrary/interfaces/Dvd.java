@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.dvdlibrary.dto;
+package com.mycompany.dvdlibrary.interfaces;
 
+import com.mycompany.dvdlibrary.interfaces.Note;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author apprentice
  */
-public interface Dvd extends Identifiable {
+public interface Dvd {
 
     /**
      * @return the directorsName

@@ -5,6 +5,8 @@
  */
 package com.mycompany.dvdlibrary.dto;
 
+import com.mycompany.dvdlibrary.interfaces.Dvd;
+import com.mycompany.dvdlibrary.interfaces.Note;
 import java.util.Date;
 import java.util.List;
 

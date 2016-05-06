@@ -5,13 +5,15 @@
  */
 package com.mycompany.dvdlibrary.controller;
 
-import com.mycompany.dvdlibrary.dao.DvdLibrary;
-import com.mycompany.dvdlibrary.dao.NoteDao;
-import com.mycompany.dvdlibrary.dto.Dvd;
+import com.mycompany.dvdlibrary.interfaces.DvdLibrary;
+import com.mycompany.dvdlibrary.dao.DvdLibraryImplementation;
+import com.mycompany.dvdlibrary.interfaces.NoteDao;
+import com.mycompany.dvdlibrary.dao.NoteDaoImplementation;
+import com.mycompany.dvdlibrary.interfaces.Dvd;
+import com.mycompany.dvdlibrary.interfaces.Dvd;
 import com.mycompany.dvdlibrary.dto.DvdImplementation;
-import com.mycompany.dvdlibrary.dto.Identifiable;
-import com.mycompany.dvdlibrary.dto.Note;
-import com.mycompany.dvdlibrary.interfaces.AbstractDao;
+import com.mycompany.dvdlibrary.interfaces.Note;
+import com.mycompany.dvdlibrary.dto.NoteImplementation;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,8 +31,8 @@ import java.util.regex.Pattern;
 public class DvdLibraryController {
 
     ConsoleIO consoleIo = new ConsoleIO();
-    AbstractDao noteDao = new NoteDao();
-    DvdLibrary dvdLibrary = new DvdLibrary(noteDao);
+    NoteDao noteDao = new NoteDaoImplementation();
+    DvdLibrary dvdLibrary = new DvdLibraryImplementation(noteDao);
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public void run() {
@@ -110,7 +112,7 @@ public class DvdLibraryController {
 
     public void listAllDvds() {
         consoleIo.printStringToConsole("--- DVD Titles ---");
-        for (Identifiable dvd : dvdLibrary.getList()) {
+        for (Dvd dvd : dvdLibrary.getAllDvds()) {
 
             String dvdString = dvd.getId() + ") " + dvd.getTitle();
 
@@ -127,10 +129,10 @@ public class DvdLibraryController {
         String dvdTitle = consoleIo.getUserStringInput("Please Enter A Title To Find:");
 
         String dvdString = "";
-        List<Identifiable> foundDvds = dvdLibrary.searchByTitle(dvdTitle);
+        List<Dvd> foundDvds = dvdLibrary.searchByTitle(dvdTitle);
 
         for (Dvd dvd : foundDvds) {
-            dvdString += convertToString(dvd);
+            dvdString += convertToString(dvd) + "\n";
         }
 
         consoleIo.printStringToConsole(dvdString);
@@ -139,7 +141,7 @@ public class DvdLibraryController {
             String editInput = consoleIo.getUserStringInput("Would You Like To Edit This DVD Information?\n Press \"Y\" to edit.");
             if (editInput != null && foundDvds.get(0) != null) {
                 if (editInput.equalsIgnoreCase("Y")) {
-                    Identifiable dvdToEdit = foundDvds.get(0);
+                    Dvd dvdToEdit = foundDvds.get(0);
                     editDvdInfo(dvdToEdit);
                     dvdLibrary.update(dvdToEdit);
 
@@ -246,7 +248,7 @@ public class DvdLibraryController {
 
                 inputString = consoleIo.getUserStringInput("Would you like to enter a note:\n You may enter a blank line when finished.");
 
-                Note note = new Note();
+                Note note = new NoteImplementation();
 
                 if (inputString.equalsIgnoreCase("")) {
                     inputString = null;

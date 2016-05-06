@@ -5,10 +5,12 @@
  */
 package com.mycompany.dvdlibrary.dao;
 
+import com.mycompany.dvdlibrary.interfaces.NoteDao;
+import com.mycompany.dvdlibrary.interfaces.DvdLibrary;
 import com.mycompany.dvdlibrary.controller.DvdLibraryController;
-import com.mycompany.dvdlibrary.dto.Dvd;
+import com.mycompany.dvdlibrary.interfaces.Dvd;
 import com.mycompany.dvdlibrary.dto.DvdImplementation;
-import com.mycompany.dvdlibrary.dto.Note;
+import com.mycompany.dvdlibrary.interfaces.Note;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,18 +33,18 @@ import java.util.regex.Pattern;
  *
  * @author apprentice
  */
-public class DvdLibrary {
+public class DvdLibraryImplementation implements DvdLibrary {
 
     List<Dvd> dvdList;
     int nextId = 1;
     File dvdLibraryFile = new File("dvdData.txt");
     NoteDao noteDao;
 
-    public DvdLibrary(NoteDao noteDao) {
+    public DvdLibraryImplementation(NoteDao noteDao) {
         this(false, noteDao);
     }
 
-    protected DvdLibrary(boolean isATest, NoteDao noteDao) {
+    protected DvdLibraryImplementation(boolean isATest, NoteDao noteDao) {
 
         this.noteDao = noteDao;
 
@@ -59,6 +61,7 @@ public class DvdLibrary {
         nextId = determineNextId();
     }
 
+    @Override
     public Dvd create(Dvd dvd) {
         dvd.setId(nextId);
         nextId++;
@@ -70,6 +73,7 @@ public class DvdLibrary {
         return dvd;
     }
 
+    @Override
     public Dvd get(Integer id) {
 
         for (Dvd dvd : dvdList) {
@@ -82,6 +86,7 @@ public class DvdLibrary {
         return null;
     }
 
+    @Override
     public void update(Dvd dvd) {
 
         Dvd foundDvd = null;
@@ -100,6 +105,7 @@ public class DvdLibrary {
 
     }
 
+    @Override
     public void delete(Dvd dvd) {
         Dvd found = null;
 
@@ -118,11 +124,13 @@ public class DvdLibrary {
 
     }
 
-    public List<Dvd> getList() {
+    @Override
+    public List<Dvd> getAllDvds() {
 
         return dvdList;
     }
 
+    @Override
     public int size() {
         return dvdList.size();
     }
@@ -173,7 +181,7 @@ public class DvdLibrary {
                 List<Note> notes = dvd.getNotes();
 
                 if (notes != null) {
-                    for (com.mycompany.dvdlibrary.dto.Note note : notes) {
+                    for (com.mycompany.dvdlibrary.interfaces.Note note : notes) {
                         if (note != null) {
                             out.print(note.getId());
                             out.print(TOKENB);
@@ -190,7 +198,7 @@ public class DvdLibrary {
             out.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(DvdLibrary.class
+            Logger.getLogger(DvdLibraryImplementation.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -261,13 +269,14 @@ public class DvdLibrary {
             sc.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DvdLibrary.class
+            Logger.getLogger(DvdLibraryImplementation.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
         return dvdList;
     }
 
+    @Override
     public List<Dvd> searchByTitle(String title) {
         List<Dvd> soughtDvd = new ArrayList();
 
@@ -282,6 +291,7 @@ public class DvdLibrary {
         return soughtDvd;
     }
 
+    @Override
     public String fixNull(String input) {
         String returnValue = null;
         if (input.trim().equalsIgnoreCase("null")) {
