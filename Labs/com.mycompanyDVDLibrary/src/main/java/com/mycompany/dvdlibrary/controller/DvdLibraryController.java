@@ -8,7 +8,10 @@ package com.mycompany.dvdlibrary.controller;
 import com.mycompany.dvdlibrary.dao.DvdLibrary;
 import com.mycompany.dvdlibrary.dao.NoteDao;
 import com.mycompany.dvdlibrary.dto.Dvd;
+import com.mycompany.dvdlibrary.dto.DvdImplementation;
+import com.mycompany.dvdlibrary.dto.Identifiable;
 import com.mycompany.dvdlibrary.dto.Note;
+import com.mycompany.dvdlibrary.interfaces.AbstractDao;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,7 +29,7 @@ import java.util.regex.Pattern;
 public class DvdLibraryController {
 
     ConsoleIO consoleIo = new ConsoleIO();
-    NoteDao noteDao = new NoteDao();
+    AbstractDao noteDao = new NoteDao();
     DvdLibrary dvdLibrary = new DvdLibrary(noteDao);
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -107,7 +110,7 @@ public class DvdLibraryController {
 
     public void listAllDvds() {
         consoleIo.printStringToConsole("--- DVD Titles ---");
-        for (Dvd dvd : dvdLibrary.getAllDvds()) {
+        for (Identifiable dvd : dvdLibrary.getList()) {
 
             String dvdString = dvd.getId() + ") " + dvd.getTitle();
 
@@ -124,7 +127,7 @@ public class DvdLibraryController {
         String dvdTitle = consoleIo.getUserStringInput("Please Enter A Title To Find:");
 
         String dvdString = "";
-        List<Dvd> foundDvds = dvdLibrary.searchByTitle(dvdTitle);
+        List<Identifiable> foundDvds = dvdLibrary.searchByTitle(dvdTitle);
 
         for (Dvd dvd : foundDvds) {
             dvdString += convertToString(dvd);
@@ -136,7 +139,7 @@ public class DvdLibraryController {
             String editInput = consoleIo.getUserStringInput("Would You Like To Edit This DVD Information?\n Press \"Y\" to edit.");
             if (editInput != null && foundDvds.get(0) != null) {
                 if (editInput.equalsIgnoreCase("Y")) {
-                    Dvd dvdToEdit = foundDvds.get(0);
+                    Identifiable dvdToEdit = foundDvds.get(0);
                     editDvdInfo(dvdToEdit);
                     dvdLibrary.update(dvdToEdit);
 
@@ -272,7 +275,7 @@ public class DvdLibraryController {
     }
 
     private Dvd inputDvd() {
-        Dvd newDvd = new Dvd();
+        Dvd newDvd = new DvdImplementation();
 
         editDvdInfo(newDvd);
 

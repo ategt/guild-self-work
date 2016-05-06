@@ -5,6 +5,8 @@
  */
 package com.mycompany.dvdlibrary.dao;
 
+import com.mycompany.dvdlibrary.interfaces.AbstractDao;
+import com.mycompany.dvdlibrary.dto.Identifiable;
 import com.mycompany.dvdlibrary.dto.Note;
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,9 +25,9 @@ import java.util.logging.Logger;
  *
  * @author apprentice
  */
-public class NoteDao {
+public class NoteDao implements AbstractDao {
 
-    private List<Note> notes = new ArrayList();
+    private List<Identifiable> notes = new ArrayList();
     private int nextId = 1;
     File notesFile = new File("NotesData.txt");
 
@@ -49,7 +51,7 @@ public class NoteDao {
         nextId = determineNextId();
     }
 
-    public Note create(Note note) {
+    public Identifiable create(Identifiable note) {
         note.setId(nextId);
         nextId++;
 
@@ -60,9 +62,9 @@ public class NoteDao {
         return note;
     }
 
-    public Note get(Integer id) {
+    public Identifiable get(Integer id) {
 
-        for (Note note : notes) {
+        for (Identifiable note : notes) {
             if (note != null) {
                 if (note.getId() == id) {
                     return note;
@@ -73,9 +75,9 @@ public class NoteDao {
         return null;
     }
 
-    public void update(Note note) {
+    public void update(Identifiable note) {
 
-        for (Note myNote : notes) {
+        for (Identifiable myNote : notes) {
             if (myNote.getId() == note.getId()) {
                 notes.remove(myNote);
                 notes.add(note);
@@ -87,10 +89,10 @@ public class NoteDao {
 
     }
 
-    public void delete(Note note) {
-        Note found = null;
+    public void delete(Identifiable note) {
+        Identifiable found = null;
 
-        for (Note currentNote : notes) {
+        for (Identifiable currentNote : notes) {
             if (currentNote.getId() == note.getId()) {
                 found = currentNote;
                 break;
@@ -105,7 +107,7 @@ public class NoteDao {
 
     }
 
-    public List<Note> getList() {
+    public List<Identifiable> getList() {
 
         return notes;
     }
@@ -117,7 +119,7 @@ public class NoteDao {
     private int determineNextId() {
         int highestId = 1;
 
-        for (Note note : notes) {
+        for (Identifiable note : notes) {
             if (highestId < note.getId()) {
                 highestId = note.getId();
             }
@@ -134,7 +136,9 @@ public class NoteDao {
 
             PrintWriter out = new PrintWriter(new FileWriter(notesFile));
 
-            for (Note note : notes) {
+            for (Identifiable reallyANote : notes) {
+
+                Note note = (Note) reallyANote;
 
                 out.print(note.getId());
                 out.print(TOKEN);
@@ -151,9 +155,9 @@ public class NoteDao {
 
     }
 
-    private List<Note> decode() {
+    private List<Identifiable> decode() {
 
-        List<Note> noteList = new ArrayList<>();
+        List<Identifiable> noteList = new ArrayList<>();
 
         final String TOKEN = "::";
 
@@ -187,4 +191,33 @@ public class NoteDao {
         return noteList;
     }
 
+    @Override
+    public List<Identifiable> searchByTitle(String title) {
+        List<Identifiable> soughtDvd = new ArrayList();
+
+        for (Identifiable dvd : notes) {
+            if (dvd.getTitle() != null && title != null) {
+                if (dvd.getTitle().compareToIgnoreCase(title) == 0) {
+                    soughtDvd.add(dvd);
+                }
+            }
+        }
+
+        return soughtDvd;
+    }
+
+        @Override
+    public String fixNull(String input) {
+        String returnValue = null;
+        if (input.trim().equalsIgnoreCase("null")) {
+            input = null;
+        } else if (input.trim().equalsIgnoreCase("")) {
+            input = null;
+        } else {
+            returnValue = input;
+        }
+        return returnValue;
+    }
+
+    
 }

@@ -5,8 +5,10 @@
  */
 package com.mycompany.dvdlibrary.dao;
 
+import com.mycompany.dvdlibrary.interfaces.AbstractDao;
 import com.mycompany.dvdlibrary.controller.DvdLibraryController;
 import com.mycompany.dvdlibrary.dto.Dvd;
+import com.mycompany.dvdlibrary.dto.DvdImplementation;
 import com.mycompany.dvdlibrary.dto.Identifiable;
 import com.mycompany.dvdlibrary.dto.Note;
 import java.io.BufferedReader;
@@ -31,18 +33,18 @@ import java.util.regex.Pattern;
  *
  * @author apprentice
  */
-public class DvdLibrary {
+public class DvdLibrary implements AbstractDao {
 
-    List<Identifiable> dvdList;
+    List<Dvd> dvdList;
     int nextId = 1;
     File dvdLibraryFile = new File("dvdData.txt");
-    NoteDao noteDao;
+    AbstractDao noteDao;
 
-    public DvdLibrary(NoteDao noteDao) {
+    public DvdLibrary(AbstractDao noteDao) {
         this(false, noteDao);
     }
 
-    protected DvdLibrary(boolean isATest, NoteDao noteDao) {
+    protected DvdLibrary(boolean isATest, AbstractDao noteDao) {
 
         this.noteDao = noteDao;
 
@@ -59,6 +61,7 @@ public class DvdLibrary {
         nextId = determineNextId();
     }
 
+    @Override
     public Identifiable create(Identifiable dvd) {
         dvd.setId(nextId);
         nextId++;
@@ -70,18 +73,19 @@ public class DvdLibrary {
         return dvd;
     }
 
-    public Identifiable get(Integer id) {
+    @Override
+    public Dvd get(Integer id) {
 
-        for (Identifiable dvd : dvdList) {
+        for (Dvd dvd : dvdList) {
             if (dvd.getId() == id) {
                 return dvd;
             }
-
         }
 
         return null;
     }
 
+    @Override
     public void update(Identifiable dvd) {
 
         Identifiable foundDvd = null;
@@ -100,6 +104,7 @@ public class DvdLibrary {
 
     }
 
+    @Override
     public void delete(Identifiable dvd) {
         Identifiable found = null;
 
@@ -118,11 +123,13 @@ public class DvdLibrary {
 
     }
 
+    @Override
     public List<Identifiable> getList() {
 
         return dvdList;
     }
 
+    @Override
     public int size() {
         return dvdList.size();
     }
@@ -153,7 +160,7 @@ public class DvdLibrary {
 
                 
                 // Ask about doing this!!
-                Dvd dvd = (Dvd) iDvd;
+                DvdImplementation dvd = (DvdImplementation) iDvd;
                 
                 out.print(dvd.getId());
                 out.print(TOKEN);
@@ -200,7 +207,7 @@ public class DvdLibrary {
 
     }
 
-    private List<Identifiable> decode() {
+    private List<Dvd> decode() {
 
         List<Identifiable> dvdList = new ArrayList<>();
 
@@ -215,7 +222,7 @@ public class DvdLibrary {
 
                 String[] stringParts = currentLine.split(TOKEN);
 
-                Dvd dvd = new Dvd();
+                DvdImplementation dvd = new DvdImplementation();
 
                 int id = Integer.parseInt(stringParts[0]);
                 dvd.setId(id);
@@ -251,7 +258,8 @@ public class DvdLibrary {
 
                             }
                             if (noteId != null) {
-                                notes.add(noteDao.get(noteId));
+                                Note tempNote = (Note) noteDao.get(noteId);
+                                notes.add(tempNote);
                             }
                         }
                     }
@@ -272,10 +280,11 @@ public class DvdLibrary {
         return dvdList;
     }
 
-    public List<Identifiable> searchByTitle(String title) {
-        List<Identifiable> soughtDvd = new ArrayList();
+    @Override
+    public List<Dvd> searchByTitle(String title) {
+        List<Dvd> soughtDvd = new ArrayList();
 
-        for (Identifiable dvd : dvdList) {
+        for (Dvd dvd : dvdList) {
             if (dvd.getTitle() != null && title != null) {
                 if (dvd.getTitle().compareToIgnoreCase(title) == 0) {
                     soughtDvd.add(dvd);
@@ -286,6 +295,7 @@ public class DvdLibrary {
         return soughtDvd;
     }
 
+    @Override
     public String fixNull(String input) {
         String returnValue = null;
         if (input.trim().equalsIgnoreCase("null")) {

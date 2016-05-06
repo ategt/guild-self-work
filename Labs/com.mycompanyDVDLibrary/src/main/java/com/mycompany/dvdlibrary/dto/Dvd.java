@@ -12,114 +12,76 @@ import java.util.List;
  *
  * @author apprentice
  */
-public class Dvd implements Identifiable {
-
-    private String title;
-    private Date releaseDate;
-    private String mPAA;
-    private String directorsName;
-    private String studio;
-    private List<Note> notes;
-    private int id;
-
-    /**
-     * @return the title
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * @param title the title to set
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    /**
-     * @return the releaseDate
-     */
-    public Date getReleaseDate() {
-        return releaseDate;
-    }
-
-    /**
-     * @param releaseDate the releaseDate to set
-     */
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    /**
-     * @return the mPAA
-     */
-    public String getMPAA() {
-        return mPAA;
-    }
-
-    /**
-     * @param mPAA the mPAA to set
-     */
-    public void setMPAA(String mPAA) {
-        this.mPAA = mPAA;
-    }
+public interface Dvd extends Identifiable {
 
     /**
      * @return the directorsName
      */
-    public String getDirectorsName() {
-        return directorsName;
-    }
-
-    /**
-     * @param directorsName the directorsName to set
-     */
-    public void setDirectorsName(String directorsName) {
-        this.directorsName = directorsName;
-    }
-
-    /**
-     * @return the studio
-     */
-    public String getStudio() {
-        return studio;
-    }
-
-    /**
-     * @param studio the studio to set
-     */
-    public void setStudio(String studio) {
-        this.studio = studio;
-    }
-
-    /**
-     * @return the notes
-     */
-    public List<Note> getNotes() {
-        return notes;
-    }
-
-    /**
-     * @param notes the notes to set
-     */
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
-    }
+    String getDirectorsName();
 
     /**
      * @return the id
      */
-    @Override
-    public int getId() {
-        return id;
-    }
+    int getId();
+
+    /**
+     * @return the mPAA
+     */
+    String getMPAA();
+
+    /**
+     * @return the notes
+     */
+    List<Note> getNotes();
+
+    /**
+     * @return the releaseDate
+     */
+    Date getReleaseDate();
+
+    /**
+     * @return the studio
+     */
+    String getStudio();
+
+    /**
+     * @return the title
+     */
+    String getTitle();
+
+    /**
+     * @param directorsName the directorsName to set
+     */
+    void setDirectorsName(String directorsName);
 
     /**
      * @param id the id to set
      */
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
+    void setId(int id);
 
+    /**
+     * @param mPAA the mPAA to set
+     */
+    void setMPAA(String mPAA);
+
+    /**
+     * @param notes the notes to set
+     */
+    void setNotes(List<Note> notes);
+
+    /**
+     * @param releaseDate the releaseDate to set
+     */
+    void setReleaseDate(Date releaseDate);
+
+    /**
+     * @param studio the studio to set
+     */
+    void setStudio(String studio);
+
+    /**
+     * @param title the title to set
+     */
+    void setTitle(String title);
+    
 }

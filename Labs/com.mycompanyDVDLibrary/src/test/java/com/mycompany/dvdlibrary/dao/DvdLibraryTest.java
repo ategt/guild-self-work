@@ -6,7 +6,7 @@
 package com.mycompany.dvdlibrary.dao;
 
 import com.mycompany.dvdlibrary.dao.DvdLibrary;
-import com.mycompany.dvdlibrary.dto.Dvd;
+import com.mycompany.dvdlibrary.dto.DvdImplementation;
 import java.util.List;
 import org.junit.After;
 import org.junit.Before;
@@ -36,13 +36,13 @@ public class DvdLibraryTest {
     @Test
     public void testCreate() {
      
-        Dvd dvd = new Dvd();
+        DvdImplementation dvd = new DvdImplementation();
         NoteDao noteDao = new NoteDao();
         
         // Load the test File
         DvdLibrary instance = new DvdLibrary(true, noteDao);
-        Dvd expResult = dvd;
-        Dvd result = instance.create(dvd);
+        DvdImplementation expResult = dvd;
+        DvdImplementation result = instance.create(dvd);
         
         // Check to see that create() passed back to same file.
         assertEquals(expResult, result);
@@ -54,7 +54,7 @@ public class DvdLibraryTest {
         assertTrue(result.getId() >= instance.size());
 
         // Test get method.
-        Dvd returnedDvd = instance.get(id);
+        DvdImplementation returnedDvd = instance.get(id);
         assertEquals(returnedDvd, result);
         instance.delete(dvd);
 
@@ -74,9 +74,9 @@ public class DvdLibraryTest {
         NoteDao noteDao = new NoteDao();
         DvdLibrary instance = new DvdLibrary(true, noteDao);
         
-        Dvd dvdOne = new Dvd();
-        Dvd dvdTwo = new Dvd();
-        Dvd dvdThree = new Dvd();
+        DvdImplementation dvdOne = new DvdImplementation();
+        DvdImplementation dvdTwo = new DvdImplementation();
+        DvdImplementation dvdThree = new DvdImplementation();
         
         // Add three DVDs to the list.
         instance.create(dvdOne);
@@ -102,9 +102,9 @@ public class DvdLibraryTest {
         int sizeResult = instance.size();
         assertEquals(expSizeResult, sizeResult);
         
-        // Check to see if a fictional Dvd is on the list.
+        // Check to see if a fictional DvdImplementation is on the list.
         String title = "SpongeBob";
-        List<Dvd> result = instance.searchByTitle(title);
+        List<DvdImplementation> result = instance.searchByTitle(title);
         assertEquals(true, result.isEmpty());
 
         // Check to see if a real DVD is on the list.
