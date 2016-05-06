@@ -3,7 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.baseballleague;
+package com.mycompany.baseballleague.controller;
+
+import com.mycompany.baseballleague.dto.Player;
+import com.mycompany.baseballleague.dao.PlayerDao;
+import com.mycompany.baseballleague.dto.Team;
+import com.mycompany.baseballleague.dao.TeamDao;
 
 /**
  *
