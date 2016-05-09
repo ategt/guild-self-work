@@ -140,22 +140,21 @@ public class ProductDao {
         final String DATAHEADER = "ProductType,CostPerSquareFoot,LaborCostPerSquareFoot";
         try {
 
-            PrintWriter out = new PrintWriter(new FileWriter(productDataFile));
-
-            out.println(DATAHEADER);
-            
-            for (Product product : products) {
-
-                out.print(product.getType());
-                out.print(TOKEN);
-                out.print(product.getCost());
-                out.print(TOKEN);
-                out.print(product.getLaborCost());
-                out.println("");
+            try (PrintWriter out = new PrintWriter(new FileWriter(productDataFile))) {
+                out.println(DATAHEADER);
+                
+                for (Product product : products) {
+                    
+                    out.print(product.getType());
+                    out.print(TOKEN);
+                    out.print(product.getCost());
+                    out.print(TOKEN);
+                    out.print(product.getLaborCost());
+                    out.println("");
+                }
+                
+                out.flush();
             }
-
-            out.flush();
-            out.close();
 
         } catch (IOException ex) {
             Logger.getLogger(ProductDao.class.getName()).log(Level.SEVERE, null, ex);
