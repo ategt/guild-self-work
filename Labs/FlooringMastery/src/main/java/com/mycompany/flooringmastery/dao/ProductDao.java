@@ -6,6 +6,7 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.dto.Product;
+import com.mycompany.flooringmastery.dto.Product;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,11 +26,10 @@ import java.util.logging.Logger;
  */
 public class ProductDao {
 
-    List<Product> products;
+    //List<Product> products;
+    java.util.Map<String, Product> productsMap;
     int nextId;
     File productDataFile = new File("ProductsData.txt");
-
-    ;
 
     public ProductDao() {
         this(false);
@@ -41,97 +41,95 @@ public class ProductDao {
             productDataFile = new File("ProductsTestData.txt");
         }
 
-        products = decode();
+        productsMap = decode();
 
-        if (products == null) {
-            products = new ArrayList();
+        if (productsMap == null) {
+            productsMap = new java.util.HashMap();
             System.out.println("The list was empty, making a new one.");
         }
 
-        nextId = determineNextId();
+        //nextId = determineNextId();
     }
 
-    public Product create(Product product) {
-        product.setId(nextId);
-        nextId++;
-
-        products.add(product);
-
-        encode();
-
-        return product;
+    public Product create(Product product, String productName) {
+        return create(productName, product);
     }
 
-    public Product get(Integer id) {
+    public Product create(String productName, Product product) {
 
-        for (Product product : products) {
-            if (product != null) {
-                if (product.getId() == id) {
-                    return product;
-                }
-            }
+        if (productName.equals(product.getType())) {
+            productsMap.put(productName, product);
+            encode();
+
+            return product;
+        } else {
+            return null;  // Look up how to throw exceptions and consider that instead.
         }
+    }
 
-        return null;
+    public Product get(String name) {
+        return productsMap.get(name);
+
     }
 
     public void update(Product product) {
-        Product found = null;
+        Product foundProduct = productsMap.get(product.getType());
 
-        for (Product currentProduct : products) {
-            if (currentProduct.getId() == product.getId()) {
-                found = currentProduct;
-                break;
+//        Product found = null;
+//
+//        for (Product currentProduct : products) {
+//            if (currentProduct.getId() == product.getId()) {
+//                found = currentProduct;
+//                break;
+//            }
+//        }
+        if (foundProduct != null) {
+
+            if (foundProduct.getType().equals(product.getType())) {
+                productsMap.remove(foundProduct);
+                productsMap.put(product.getType(), product);
+
+                encode();
+            } else {
+                System.out.println("Throwing a Product Not Found exception!!!!");
+                // Look up exception throwing and consider putting one here, too!
             }
+        } else {
+            System.out.println("Throwing a Product is null exception!!!!");
+            // Look up exception throwing and consider putting one here, too!
         }
-
-        if (found != null) {
-            products.remove(found);
-            products.add(product);
-        }
-
-        encode();
-
     }
 
     public void delete(Product product) {
-        Product found = null;
+//        Product found = null;
+//
+//        for (Product currentProduct : products) {
+//            if (currentProduct.getId() == product.getId()) {
+//                found = currentProduct;
+//                break;
+//            }
+//        }
+//
+//        if (found != null) {
+//            products.remove(found);
+//        }
 
-        for (Product currentProduct : products) {
-            if (currentProduct.getId() == product.getId()) {
-                found = currentProduct;
-                break;
-            }
+        if (productsMap.containsKey(product.getType())) {
+            productsMap.remove(product);
+            encode();
+        } else {
+            System.out.println("Throwing a Product Not Found exception!!!!");
+            // Look up exception throwing and consider putting one here, too!
+
         }
-
-        if (found != null) {
-            products.remove(found);
-        }
-
-        encode();
-
     }
 
-    public List<Product> getList() {
-
-        return products;
+    public List<String> getList() {
+        return new ArrayList(productsMap.keySet());
     }
 
     public int size() {
-        return products.size();
-    }
-
-    private int determineNextId() {
-        int highestId = 100;
-
-        for (Product product : products) {
-            if (highestId < product.getId()) {
-                highestId = product.getId();
-            }
-        }
-
-        highestId++;
-        return highestId++;
+        return productsMap.size();
     }
 
     private void encode() {
@@ -142,9 +140,12 @@ public class ProductDao {
 
             try (PrintWriter out = new PrintWriter(new FileWriter(productDataFile))) {
                 out.println(DATAHEADER);
-                
-                for (Product product : products) {
-                    
+
+                //for (Product product : products) {
+                for (String productType : getList()) {
+
+                    Product product = get(productType);
+
                     out.print(product.getType());
                     out.print(TOKEN);
                     out.print(product.getCost());
@@ -152,7 +153,7 @@ public class ProductDao {
                     out.print(product.getLaborCost());
                     out.println("");
                 }
-                
+
                 out.flush();
             }
 
@@ -162,9 +163,11 @@ public class ProductDao {
 
     }
 
-    private List<Product> decode() {
+    //private List<Product> decode() {
+    private java.util.Map<String, Product> decode() {
 
-        List<Product> productList = new ArrayList<>();
+        //List<Product> productList = new ArrayList<>();
+        java.util.Map<String, Product> productMap = new java.util.HashMap();
 
         final String TOKEN = ",";
 
@@ -187,19 +190,15 @@ public class ProductDao {
 
                     product.setType(content);
 
-
                     String costPerSquareFootString = stringParts[1];
 
-                    
                     try {
-                    double costPerSquareFoot = Double.parseDouble(costPerSquareFootString);
-                    product.setCost(costPerSquareFoot);
+                        double costPerSquareFoot = Double.parseDouble(costPerSquareFootString);
+                        product.setCost(costPerSquareFoot);
                     } catch (NumberFormatException numFmtEx) {
 
                     }
-                    
-                    
-                    
+
                     String laborCostPerSquareFootString = stringParts[2];
 
                     try {
@@ -212,7 +211,7 @@ public class ProductDao {
 
                     }
 
-                    productList.add(product);
+                    productMap.put(product.getType(), product);
                 }
             }
             sc.close();
@@ -225,7 +224,7 @@ public class ProductDao {
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
-        return productList;
+        return productMap;
     }
 
 }

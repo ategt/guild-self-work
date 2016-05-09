@@ -39,7 +39,7 @@ public class OrderDao {
 
         this.productDao = productDao;
         this.stateDao = stateDao;
-        
+
         if (isATest) {
             orderDataFile = new File("OrdersTestData.txt");
         }
@@ -124,6 +124,23 @@ public class OrderDao {
         return orders.size();
     }
 
+    public java.util.List<Order> searchByDate(java.util.Date date) {
+        java.util.List<Order> specificOrders = new ArrayList();
+
+        for (Order order : orders) {
+            if (isSameDay(order.getDate(), date)) {
+                specificOrders.add(order);
+            }
+        }
+
+        return specificOrders;
+    }
+
+    public static boolean isSameDay(java.util.Date date1, java.util.Date date2) {
+        java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("yyyyMMdd");
+        return fmt.format(date1).equals(fmt.format(date2));
+    }
+
     private int determineNextId() {
         int highestId = 100;
 
@@ -162,11 +179,9 @@ public class OrderDao {
                 out.print(TOKEN);
                 out.print(order.getArea());
                 out.print(TOKEN);
-                out.print(order.getPerSquareFoot());
+                out.print(order.getCostPerSquareFoot());
                 out.print(TOKEN);
-                out.print(order.getLaborCost());
-                out.print(TOKEN);
-                out.print(order.getPerSquareFoot());
+                out.print(order.getLaborCostPerSquareFoot());
                 out.print(TOKEN);
                 out.print(order.getMaterialCost());
                 out.print(TOKEN);
@@ -214,12 +229,11 @@ public class OrderDao {
 
                     Order order = new Order();
 
-                    String content = stringParts[0];
+                    String orderIdString = stringParts[0];
 
                     try {
-                        int orderId = Integer.parseInt(content);
+                        int orderId = Integer.parseInt(orderIdString);
                         order.setId(orderId);
-
                     } catch (NumberFormatException numFmtEx) {
 
                     }
@@ -228,7 +242,7 @@ public class OrderDao {
                     order.setName(name);
 
                     String state = stringParts[2];
-                    order.setState(state);
+                    order.setState(stateDao.get(state));
 
                     try {
 
@@ -239,10 +253,9 @@ public class OrderDao {
                     } catch (NumberFormatException numFmtEx) {
 
                     }
-                    String productTypeString = stringParts[4];
-                    double productType = Double.parseDouble(productTypeString);
+                    String productType = stringParts[4];
 
-                    order.setProduct(productType);
+                    order.setProduct(productDao.get(productType));
 
                     try {
                         String areaString = stringParts[5];
@@ -253,20 +266,21 @@ public class OrderDao {
                     }
 
                     try {
-                        String costPerSquareFootString = stringParts[7];
+                        String costPerSquareFootString = stringParts[6];
                         double costPerSquareFoot = Double.parseDouble(costPerSquareFootString);
-                        order.setPerSquareFoot(costPerSquareFoot);
+                        order.setCostPerSquareFoot(costPerSquareFoot);
                     } catch (NumberFormatException numFmtEx) {
 
                     }
-                    try {
 
-                        String laborCostPerSquareFootString = stringParts[6];
+                    try {
+                        String laborCostPerSquareFootString = stringParts[7];
                         double laborCostPerSquareFoot = Double.parseDouble(laborCostPerSquareFootString);
                         order.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
                     } catch (NumberFormatException numFmtEx) {
 
                     }
+
                     try {
 
                         String materialCostString = stringParts[8];
@@ -275,6 +289,7 @@ public class OrderDao {
                     } catch (NumberFormatException numFmtEx) {
 
                     }
+
                     try {
 
                         String laborCostString = stringParts[9];
