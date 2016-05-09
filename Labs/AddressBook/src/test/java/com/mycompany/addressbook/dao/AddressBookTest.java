@@ -93,7 +93,7 @@ public class AddressBookTest {
     @Test
     public void testEncodeAndDecode() {
 
-        //Dvd dvd = new DvdImplementation();
+        // The true parameter in the Address Book constructor signifies a test.
         AddressBook noteDao = new AddressBook(true);
         Address newNote = new Address();
 

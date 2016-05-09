@@ -37,7 +37,11 @@ public class TeamDao {
         this(new PlayerDao());
     }
 
-    public TeamDao(PlayerDao playerDao) {
+    public TeamDao(PlayerDao playerDao){
+        this(playerDao, false);
+    }
+    
+    public TeamDao(PlayerDao playerDao, boolean isATest) {
 
         this.playerDao = playerDao;
         teams = decode();

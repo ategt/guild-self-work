@@ -5,7 +5,7 @@
 8::Lightning::
 9::Blaze::
 11::Bobcats::106:||:
-12::Dolphins::107:||:
+12::Dolphins::
 13::Hawks::
 16::Squirrels::109:||:
 17::The Sharks::111:||:112:||:
