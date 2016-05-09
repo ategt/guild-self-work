@@ -30,15 +30,17 @@ public class BaseballController {
                 + " 2. Create A Player On A Team\n"
                 + " 3. List All The Teams In The League\n"
                 + " 4. List All Players On A Team\n"
-                + " 5. Trade Player From One Team To Another\n"
-                + " 6. Delete A Player\n"
+                + " 5. List All The Players In The League\n"
+                + " 6. Trade Player From One Team To Another\n"
+                + " 7. Delete A Player\n"
+                + " 8. Delete A Team\n"
                 + " 0. Exit";
 
         boolean keepRunning = true;
 
         while (keepRunning) {
 
-            int choice = consoleIo.getUserIntInputRange(mainMenu, 0, 6);
+            int choice = consoleIo.getUserIntInputRange(mainMenu, 0, 8);
 
             switch (choice) {
                 case 1:
@@ -54,10 +56,16 @@ public class BaseballController {
                     listPlayersOnTeam();
                     break;
                 case 5:
-                    tradePlayer();
+                    listAllPlayersInLeague();
                     break;
                 case 6:
+                    tradePlayer();
+                    break;
+                case 7:
                     deletePlayer();
+                    break;
+                case 8:
+                    deleteTeam();
                     break;
                 case 0:
                     keepRunning = false;
@@ -71,31 +79,47 @@ public class BaseballController {
     }
 
     private void addPlayer() {
-        Player newPlayer = new Player();
+        Player newPlayer = buildPlayer();
 
-        String playerName = consoleIo.getUserStringInput("Please Enter The Player's Name:");
-        newPlayer.setPlayerName(playerName);
-
-        int playerNumber = consoleIo.getUserIntInputRange("Please Enter The Player's Number:", 0, 100);
-        newPlayer.setPlayerNumber(playerNumber);
-
-        float playerAverage = consoleIo.getUserFloatRange("Please Enter The Players Batting Average:", 0, 1);
-        newPlayer.setBattingAverage(playerAverage);
-
+//        float playerAverage = consoleIo.getUserFloatRange("Please Enter The Players Batting Average:", 0, 1);
+//        newPlayer.setBattingAverage(playerAverage);
         Team playersTeam = askForTeam("What Team Is This Player Associated With?");
 
-        if (playersTeam != null) {
-
+        while (playersTeam == null) {
             listTeams();
-
             playersTeam = askForTeam("That Team Could Not Be Found\nPlease Select a Team From The List:");
-
         }
 
+        addPlayerToTeam(playersTeam, newPlayer);
+
+        confirmPlayerWasAdded(playersTeam, newPlayer);
+
+    }
+
+    private void addPlayerToTeam(Team playersTeam, Player newPlayer) {
         playersTeam.getPlayers().add(newPlayer);
         teamDao.update(playersTeam);
-        playerDao.create(newPlayer);
+    }
 
+    private Player buildPlayer() {
+        Player newPlayer = new Player();
+        String playerName = consoleIo.getUserStringInput("Please Enter The Player's Name:");
+        newPlayer.setPlayerName(playerName);
+        int playerNumber = consoleIo.getUserIntInputRange("Please Enter The Player's Number:", 0, 100);
+        
+        
+        
+        newPlayer.setPlayerNumber(playerNumber);
+        playerDao.create(newPlayer);
+        return newPlayer;
+    }
+
+    private void confirmPlayerWasAdded(Team playersTeam, Player newPlayer) {
+        if (playersTeam.getPlayers().contains(newPlayer)) {
+            consoleIo.printStringToConsole(newPlayer.getPlayerName() + " was successfully added to " + playersTeam.getTeamName());
+        } else {
+            consoleIo.printStringToConsole("An error occured while trying to add the player to the team. Please contact the vendor.");
+        }
     }
 
     private void addTeam() {
@@ -103,7 +127,19 @@ public class BaseballController {
 
         Team team = new Team();
         team.setTeamName(newTeamName);
+        team.setPlayers(new java.util.ArrayList());
         teamDao.create(team);
+
+        
+        while (consoleIo.getUserConfirmation("Would you like to add players to this team.")) {
+            Player newPlayer = buildPlayer();
+
+            Team playersTeam = team;
+            addPlayerToTeam(playersTeam, newPlayer);
+
+            confirmPlayerWasAdded(playersTeam, newPlayer);
+
+        }
 
     }
 
@@ -112,6 +148,7 @@ public class BaseballController {
         java.util.List<Team> league = teamDao.getLeague();
 
         for (Team team : league) {
+            //if (team.getPlayers() == null ) team.setPlayers(new java.util.ArrayList());
             String teams = team.getId() + ") " + team.getTeamName() + " - " + team.getPlayers().size() + " Players";
             consoleIo.printStringToConsole(teams);
 
@@ -168,7 +205,28 @@ public class BaseballController {
 
     private void deletePlayer() {
         Player player = askForPlayer("Which player would you like to delete?");
-        playerDao.delete(player);
+
+        if (player != null) {
+            playerDao.delete(player);
+        } else {
+            consoleIo.printStringToConsole("That player could not be found.");
+        }
+    }
+
+    private void deleteTeam() {
+
+        Team teamToBeDeleted = askForTeam("Which team would you like to delete?");
+        if (teamToBeDeleted != null) {
+            String confirmString = consoleIo.getUserStringInput("Are you sure you want to delete " + teamToBeDeleted.getTeamName() + "?\n Please Press \"Y\" to confirm, any other key to abort.");
+
+            if (confirmString.equalsIgnoreCase("Y")) {
+                teamDao.delete(teamToBeDeleted);
+            } else {
+                consoleIo.printStringToConsole("Operation aborted by user, No action was performed.");
+            }
+        } else {
+            consoleIo.printStringToConsole("The team entered could not be found.");
+        }
     }
 
     private void listAllPlayersInLeague() {
@@ -199,7 +257,7 @@ public class BaseballController {
         int responseNumber = 0;
 
         try {
-            Integer.parseInt(responseString);
+            responseNumber = Integer.parseInt(responseString);
             isANumber = true;
 
         } catch (NumberFormatException numFmtEx) {
@@ -257,7 +315,6 @@ public class BaseballController {
     }
 
     private void listPlayers(java.util.List<Player> playerList) {
-        //java.util.List<Player> players = team.getPlayers();
 
         for (Player player : playerList) {
             String playerStats = player.getId() + ") " + player.getPlayerName() + "\t" + player.getPlayerNumber() + "\t" + player.getBattingAverage();
@@ -289,11 +346,27 @@ public class BaseballController {
 
         String inputString = consoleIo.getUserStringInput(prompt);
 
-        for (Team team : teamDao.getLeague()) {
+        boolean isANumber = false;
+        int responseNumber = 0;
 
-            if (inputString.trim().equalsIgnoreCase(team.getTeamName().trim())) {
-                returnedTeam = team;
-                break;
+        try {
+            responseNumber = Integer.parseInt(inputString);
+            isANumber = true;
+
+        } catch (NumberFormatException numFmtEx) {
+
+        }
+
+        if (isANumber) {
+            returnedTeam = teamDao.get(responseNumber);
+        } else {
+
+            for (Team team : teamDao.getLeague()) {
+
+                if (inputString.trim().equalsIgnoreCase(team.getTeamName().trim())) {
+                    returnedTeam = team;
+                    break;
+                }
             }
         }
 

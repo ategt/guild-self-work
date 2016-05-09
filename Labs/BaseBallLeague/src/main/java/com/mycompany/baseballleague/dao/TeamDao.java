@@ -53,6 +53,10 @@ public class TeamDao {
         team.setId(nextId);
         nextId++;
         teams.add(team);
+        
+//        if ( team.getPlayers() == null ) 
+//            team.setPlayers(new ArrayList<>());
+            
 
         encode();
 

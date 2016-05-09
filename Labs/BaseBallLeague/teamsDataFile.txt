@@ -1,3 +1,15 @@
 2::Browns::
-3::0::
-4::Bears::0:||:
+4::Bears::
+5::Bangels::
+6::Cubs::
+7::Thunder::
+8::Lightning::
+9::Blaze::
+11::Bobcats::106:||:
+12::Dolphins::107:||:
+10::Lazers::105:||:108:||:
+13::Hawks::
+14::Geese::
+15::Greyhounds::
+16::Squirrels::109:||:
+17::The Sharks::110:||:111:||:112:||:

@@ -41,7 +41,7 @@ public class ConsoleIO {
      * @param choice
      * @return
      */
-    public Number getUserInputValidationLoop(String prompt, int choice) {
+    private Number getUserInputValidationLoop(String prompt, int choice) {
         Number input = 0;
         return getUserInputValidationLoop(input, prompt, choice);
     }
@@ -59,7 +59,7 @@ public class ConsoleIO {
      * @param choice
      * @return
      */
-    public Number getUserInputValidationLoop(Number input, String prompt, int choice) {
+    private Number getUserInputValidationLoop(Number input, String prompt, int choice) {
         boolean isValid = false;
         String inputString;
 
@@ -154,6 +154,21 @@ public class ConsoleIO {
     public String getUserStringInput(String prompt) {
         printStringToConsole(prompt);
         return keyboard.nextLine().replace("\n", "").trim();
+    }
+    
+    public boolean getUserConfirmation(){
+        return getUserConfirmation("");
+    }
+    
+    public boolean getUserConfirmation(String prompt){
+        boolean confirmed = false;
+        String stringResponse = getUserStringInput(prompt+"\n Please Enter \"Y\" To Confirm, Or Any Other Key To Abort.");
+        
+        if ( stringResponse.equalsIgnoreCase("Y") || stringResponse.equalsIgnoreCase("Yes") ){
+            confirmed = true;
+        }
+        
+        return confirmed;
     }
 
     public float getUserFloatInput(String prompt) {
