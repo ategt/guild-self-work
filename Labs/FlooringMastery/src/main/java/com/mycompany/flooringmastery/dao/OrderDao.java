@@ -157,6 +157,7 @@ public class OrderDao {
     private void encode() {
 
         final String TOKEN = ",";
+        final String CSV_ESCAPE = "\\,";
         final String DATAHEADER = "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCost"
                 + "PerSquareFoot,MaterialCost,LaborCost,Tax,Total";
         try {
@@ -168,13 +169,13 @@ public class OrderDao {
 
                     out.print(order.getId());
                     out.print(TOKEN);
-                    out.print(order.getName());
+                    out.print(order.getName().replaceAll(TOKEN, CSV_ESCAPE));
                     out.print(TOKEN);
-                    out.print(order.getState());
+                    out.print(order.getState().getState().replaceAll(TOKEN, CSV_ESCAPE));
                     out.print(TOKEN);
                     out.print(order.getTaxRate());
                     out.print(TOKEN);
-                    out.print(order.getProduct().getType());
+                    out.print(order.getProduct().getType().replaceAll(TOKEN, CSV_ESCAPE));
                     out.print(TOKEN);
                     out.print(order.getArea());
                     out.print(TOKEN);
@@ -207,6 +208,10 @@ public class OrderDao {
         List<Order> orderList = new ArrayList<>();
 
         final String TOKEN = ",";
+        final String CSV_ESCAPE = "\\,";
+                final String CSV_ESCAPE_TEMP = "::==::";
+
+
         final String DATAHEADER = "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCost"
                 + "PerSquareFoot,MaterialCost,LaborCost,Tax,Total";
 
@@ -223,8 +228,14 @@ public class OrderDao {
 
                     } else if (!currentLine.trim().isEmpty()) {
 
-                        String[] stringParts = currentLine.split(TOKEN);
+                        String[] stringParts = currentLine.replaceAll(CSV_ESCAPE, CSV_ESCAPE_TEMP).split(TOKEN);
 
+                        for ( int x = 0 ; x < stringParts.length ; x++ ){
+                            stringParts[x] = stringParts[x].replaceAll(CSV_ESCAPE_TEMP, TOKEN);
+                        }
+                        
+                        
+                        
                         Order order = new Order();
 
                         String orderIdString = stringParts[0];
