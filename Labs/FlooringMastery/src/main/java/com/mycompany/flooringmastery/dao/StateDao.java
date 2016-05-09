@@ -86,7 +86,7 @@ public class StateDao {
         if (foundState != null) {
 
             if (foundState.getState().equals(state.getState())) {
-                statesMap.remove(foundState);
+                statesMap.remove(foundState.getState());
                 statesMap.put(state.getState(), state);
 
                 encode();
@@ -115,7 +115,7 @@ public class StateDao {
 //        }
 
         if (statesMap.containsKey(state.getState())) {
-            statesMap.remove(state);
+            statesMap.remove(state.getState());
             encode();
         } else {
             System.out.println("Throwing a State Not Found exception!!!!");
@@ -151,22 +151,21 @@ public class StateDao {
         final String DATAHEADER = "State,TaxRate";
         try {
 
-            PrintWriter out = new PrintWriter(new FileWriter(stateDataFile));
+            try (PrintWriter out = new PrintWriter(new FileWriter(stateDataFile))) {
+                out.println(DATAHEADER);
 
-            out.println(DATAHEADER);
+                for (String stateName : getList()) {
 
-            for (String stateName : getList()) {
+                    State state = statesMap.get(stateName);
 
-                State state = statesMap.get(stateName);
+                    out.print(state.getState());
+                    out.print(TOKEN);
+                    out.print(state.getStateTax());
+                    out.println("");
+                }
 
-                out.print(state.getState());
-                out.print(TOKEN);
-                out.print(state.getStateTax());
-                out.println("");
+                out.flush();
             }
-
-            out.flush();
-            out.close();
 
         } catch (IOException ex) {
             Logger.getLogger(StateDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -189,35 +188,34 @@ public class StateDao {
                 stateDataFile.createNewFile();
             }
 
-            Scanner sc = new Scanner(new BufferedReader(new FileReader(stateDataFile)));
+            try (Scanner sc = new Scanner(new BufferedReader(new FileReader(stateDataFile)))) {
+                while (sc.hasNextLine()) {
+                    String currentLine = sc.nextLine();
+                    if (currentLine.equalsIgnoreCase(DATAHEADER)) {
 
-            while (sc.hasNextLine()) {
-                String currentLine = sc.nextLine();
-                if (currentLine.equalsIgnoreCase(DATAHEADER)) {
+                    } else if (!currentLine.trim().isEmpty()) {
 
-                } else if (!currentLine.trim().isEmpty()) {
+                        String[] stringParts = currentLine.split(TOKEN);
 
-                    String[] stringParts = currentLine.split(TOKEN);
+                        State state = new State();
 
-                    State state = new State();
+                        String content = stringParts[0];
 
-                    String content = stringParts[0];
+                        state.setState(content);
 
-                    state.setState(content);
+                        String stateSalesTaxString = stringParts[1];
 
-                    String stateSalesTaxString = stringParts[1];
+                        try {
+                            double stateSalesTax = Double.parseDouble(stateSalesTaxString);
+                            state.setStateTax(stateSalesTax);
+                        } catch (NumberFormatException numFmtEx) {
 
-                    try {
-                        double stateSalesTax = Double.parseDouble(stateSalesTaxString);
-                        state.setStateTax(stateSalesTax);
-                    } catch (NumberFormatException numFmtEx) {
+                        }
 
+                        stateList.put(state.getState(), state);
                     }
-
-                    stateList.put(state.getState(), state);
                 }
             }
-            sc.close();
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(StateDao.class

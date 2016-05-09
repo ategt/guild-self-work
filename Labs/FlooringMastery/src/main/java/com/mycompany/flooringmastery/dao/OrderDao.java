@@ -161,41 +161,40 @@ public class OrderDao {
                 + "PerSquareFoot,MaterialCost,LaborCost,Tax,Total";
         try {
 
-            PrintWriter out = new PrintWriter(new FileWriter(orderDataFile));
+            try (PrintWriter out = new PrintWriter(new FileWriter(orderDataFile))) {
+                out.println(DATAHEADER);
 
-            out.println(DATAHEADER);
+                for (Order order : orders) {
 
-            for (Order order : orders) {
+                    out.print(order.getId());
+                    out.print(TOKEN);
+                    out.print(order.getName());
+                    out.print(TOKEN);
+                    out.print(order.getState());
+                    out.print(TOKEN);
+                    out.print(order.getTaxRate());
+                    out.print(TOKEN);
+                    out.print(order.getProduct().getType());
+                    out.print(TOKEN);
+                    out.print(order.getArea());
+                    out.print(TOKEN);
+                    out.print(order.getCostPerSquareFoot());
+                    out.print(TOKEN);
+                    out.print(order.getLaborCostPerSquareFoot());
+                    out.print(TOKEN);
+                    out.print(order.getMaterialCost());
+                    out.print(TOKEN);
+                    out.print(order.getLaborCost());
+                    out.print(TOKEN);
+                    out.print(order.getTax());
+                    out.print(TOKEN);
+                    out.print(order.getTotal());
 
-                out.print(order.getId());
-                out.print(TOKEN);
-                out.print(order.getName());
-                out.print(TOKEN);
-                out.print(order.getState());
-                out.print(TOKEN);
-                out.print(order.getTaxRate());
-                out.print(TOKEN);
-                out.print(order.getProduct().getType());
-                out.print(TOKEN);
-                out.print(order.getArea());
-                out.print(TOKEN);
-                out.print(order.getCostPerSquareFoot());
-                out.print(TOKEN);
-                out.print(order.getLaborCostPerSquareFoot());
-                out.print(TOKEN);
-                out.print(order.getMaterialCost());
-                out.print(TOKEN);
-                out.print(order.getLaborCost());
-                out.print(TOKEN);
-                out.print(order.getTax());
-                out.print(TOKEN);
-                out.print(order.getTotal());
+                    out.println("");
+                }
 
-                out.println("");
+                out.flush();
             }
-
-            out.flush();
-            out.close();
 
         } catch (IOException ex) {
             Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -217,110 +216,109 @@ public class OrderDao {
                 orderDataFile.createNewFile();
             }
 
-            Scanner sc = new Scanner(new BufferedReader(new FileReader(orderDataFile)));
+            try (Scanner sc = new Scanner(new BufferedReader(new FileReader(orderDataFile)))) {
+                while (sc.hasNextLine()) {
+                    String currentLine = sc.nextLine();
+                    if (currentLine.equalsIgnoreCase(DATAHEADER)) {
 
-            while (sc.hasNextLine()) {
-                String currentLine = sc.nextLine();
-                if (currentLine.equalsIgnoreCase(DATAHEADER)) {
+                    } else if (!currentLine.trim().isEmpty()) {
 
-                } else if (!currentLine.trim().isEmpty()) {
+                        String[] stringParts = currentLine.split(TOKEN);
 
-                    String[] stringParts = currentLine.split(TOKEN);
+                        Order order = new Order();
 
-                    Order order = new Order();
+                        String orderIdString = stringParts[0];
 
-                    String orderIdString = stringParts[0];
+                        try {
+                            int orderId = Integer.parseInt(orderIdString);
+                            order.setId(orderId);
+                        } catch (NumberFormatException numFmtEx) {
 
-                    try {
-                        int orderId = Integer.parseInt(orderIdString);
-                        order.setId(orderId);
-                    } catch (NumberFormatException numFmtEx) {
+                        }
 
+                        String name = stringParts[1];
+                        order.setName(name);
+
+                        String state = stringParts[2];
+                        order.setState(stateDao.get(state));
+
+                        try {
+
+                            String taxRateString = stringParts[3];
+                            double taxRate = Double.parseDouble(taxRateString);
+                            order.setTaxRate(taxRate);
+
+                        } catch (NumberFormatException numFmtEx) {
+
+                        }
+                        String productType = stringParts[4];
+
+                        order.setProduct(productDao.get(productType));
+
+                        try {
+                            String areaString = stringParts[5];
+                            double area = Double.parseDouble(areaString);
+                            order.setArea(area);
+                        } catch (NumberFormatException numFmtEx) {
+
+                        }
+
+                        try {
+                            String costPerSquareFootString = stringParts[6];
+                            double costPerSquareFoot = Double.parseDouble(costPerSquareFootString);
+                            order.setCostPerSquareFoot(costPerSquareFoot);
+                        } catch (NumberFormatException numFmtEx) {
+
+                        }
+
+                        try {
+                            String laborCostPerSquareFootString = stringParts[7];
+                            double laborCostPerSquareFoot = Double.parseDouble(laborCostPerSquareFootString);
+                            order.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
+                        } catch (NumberFormatException numFmtEx) {
+
+                        }
+
+                        try {
+
+                            String materialCostString = stringParts[8];
+                            double materialCost = Double.parseDouble(materialCostString);
+                            order.setMaterialCost(materialCost);
+                        } catch (NumberFormatException numFmtEx) {
+
+                        }
+
+                        try {
+
+                            String laborCostString = stringParts[9];
+                            double laborCost = Double.parseDouble(laborCostString);
+                            order.setLaborCost(laborCost);
+
+                        } catch (NumberFormatException numFmtEx) {
+
+                        }
+                        try {
+
+                            String taxString = stringParts[10];
+                            double tax = Double.parseDouble(taxString);
+                            order.setTax(tax);
+
+                        } catch (NumberFormatException numFmtEx) {
+
+                        }
+                        try {
+
+                            String totalString = stringParts[11];
+                            double total = Double.parseDouble(totalString);
+                            order.setTotal(total);
+                        } catch (NumberFormatException numFmtEx) {
+
+                        }
+
+                        orderList.add(order);
                     }
-
-                    String name = stringParts[1];
-                    order.setName(name);
-
-                    String state = stringParts[2];
-                    order.setState(stateDao.get(state));
-
-                    try {
-
-                        String taxRateString = stringParts[3];
-                        double taxRate = Double.parseDouble(taxRateString);
-                        order.setTaxRate(taxRate);
-
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-                    String productType = stringParts[4];
-
-                    order.setProduct(productDao.get(productType));
-
-                    try {
-                        String areaString = stringParts[5];
-                        double area = Double.parseDouble(areaString);
-                        order.setArea(area);
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-
-                    try {
-                        String costPerSquareFootString = stringParts[6];
-                        double costPerSquareFoot = Double.parseDouble(costPerSquareFootString);
-                        order.setCostPerSquareFoot(costPerSquareFoot);
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-
-                    try {
-                        String laborCostPerSquareFootString = stringParts[7];
-                        double laborCostPerSquareFoot = Double.parseDouble(laborCostPerSquareFootString);
-                        order.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-
-                    try {
-
-                        String materialCostString = stringParts[8];
-                        double materialCost = Double.parseDouble(materialCostString);
-                        order.setMaterialCost(materialCost);
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-
-                    try {
-
-                        String laborCostString = stringParts[9];
-                        double laborCost = Double.parseDouble(laborCostString);
-                        order.setLaborCost(laborCost);
-
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-                    try {
-
-                        String taxString = stringParts[10];
-                        double tax = Double.parseDouble(taxString);
-                        order.setTax(tax);
-
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-                    try {
-
-                        String totalString = stringParts[11];
-                        double total = Double.parseDouble(totalString);
-                        order.setTotal(total);
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-
-                    orderList.add(order);
                 }
             }
-            sc.close();
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(OrderDao.class

@@ -6,7 +6,6 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.dto.Product;
-import com.mycompany.flooringmastery.dto.Product;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -86,7 +85,7 @@ public class ProductDao {
         if (foundProduct != null) {
 
             if (foundProduct.getType().equals(product.getType())) {
-                productsMap.remove(foundProduct);
+                productsMap.remove(foundProduct.getType());
                 productsMap.put(product.getType(), product);
 
                 encode();
@@ -115,7 +114,7 @@ public class ProductDao {
 //        }
 
         if (productsMap.containsKey(product.getType())) {
-            productsMap.remove(product);
+            productsMap.remove(product.getType());
             encode();
         } else {
             System.out.println("Throwing a Product Not Found exception!!!!");
@@ -177,44 +176,43 @@ public class ProductDao {
                 productDataFile.createNewFile();
             }
 
-            Scanner sc = new Scanner(new BufferedReader(new FileReader(productDataFile)));
+            try (Scanner sc = new Scanner(new BufferedReader(new FileReader(productDataFile)))) {
+                while (sc.hasNextLine()) {
+                    String currentLine = sc.nextLine();
+                    if (!currentLine.trim().isEmpty()) {
+                        String[] stringParts = currentLine.split(TOKEN);
 
-            while (sc.hasNextLine()) {
-                String currentLine = sc.nextLine();
-                if (!currentLine.trim().isEmpty()) {
-                    String[] stringParts = currentLine.split(TOKEN);
+                        Product product = new Product();
 
-                    Product product = new Product();
+                        String content = stringParts[0];
 
-                    String content = stringParts[0];
+                        product.setType(content);
 
-                    product.setType(content);
+                        String costPerSquareFootString = stringParts[1];
 
-                    String costPerSquareFootString = stringParts[1];
+                        try {
+                            double costPerSquareFoot = Double.parseDouble(costPerSquareFootString);
+                            product.setCost(costPerSquareFoot);
+                        } catch (NumberFormatException numFmtEx) {
 
-                    try {
-                        double costPerSquareFoot = Double.parseDouble(costPerSquareFootString);
-                        product.setCost(costPerSquareFoot);
-                    } catch (NumberFormatException numFmtEx) {
+                        }
 
+                        String laborCostPerSquareFootString = stringParts[2];
+
+                        try {
+
+                            double laborCostPerSquareFoot = Double.parseDouble(laborCostPerSquareFootString);
+
+                            product.setLaborCost(laborCostPerSquareFoot);
+
+                        } catch (NumberFormatException numFmtEx) {
+
+                        }
+
+                        productMap.put(product.getType(), product);
                     }
-
-                    String laborCostPerSquareFootString = stringParts[2];
-
-                    try {
-
-                        double laborCostPerSquareFoot = Double.parseDouble(laborCostPerSquareFootString);
-
-                        product.setLaborCost(laborCostPerSquareFoot);
-
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-
-                    productMap.put(product.getType(), product);
                 }
             }
-            sc.close();
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ProductDao.class
