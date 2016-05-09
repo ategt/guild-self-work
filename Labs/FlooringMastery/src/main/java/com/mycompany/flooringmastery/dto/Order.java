@@ -203,20 +203,6 @@ PerSquareFoot,MaterialCost,LaborCost,Tax,Total
     }
 
     /**
-     * @return the perSquareFoot
-     */
-    public double getPerSquareFoot() {
-        return perSquareFoot;
-    }
-
-    /**
-     * @param perSquareFoot the perSquareFoot to set
-     */
-    public void setPerSquareFoot(double perSquareFoot) {
-        this.perSquareFoot = perSquareFoot;
-    }
-
-    /**
      * @return the costPerSquareFoot
      */
     public double getCostPerSquareFoot() {

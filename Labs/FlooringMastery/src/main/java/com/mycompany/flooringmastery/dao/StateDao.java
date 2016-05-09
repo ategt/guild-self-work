@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,98 +41,109 @@ public class StateDao {
             stateDataFile = new File("StatesTestData.txt");
         }
 
-        states = decode();
+        statesMap = decode();
 
-        if (states == null) {
-            states = new ArrayList();
+        if (statesMap == null) {
+            statesMap = new java.util.HashMap();
             System.out.println("The list was empty, making a new one.");
         }
 
-        nextId = determineNextId();
+        //nextId = determineNextId();
     }
 
-    public State create(State state) {
-        state.setId(nextId);
-        nextId++;
-
-        states.add(state);
-
-        encode();
-
-        return state;
+    public State create(State state, String stateName) {
+        return create(stateName, state);
     }
 
-    public State get(Integer id) {
+    public State create(String stateName, State state) {
 
-        for (State state : states) {
-            if (state != null) {
-                if (state.getId() == id) {
-                    return state;
-                }
-            }
+        if (stateName.equals(state.getState())) {
+            statesMap.put(stateName, state);
+            encode();
+
+            return state;
+        } else {
+            return null;  // Look up how to throw exceptions and consider that instead.
         }
+    }
 
-        return null;
+    public State get(String name) {
+        return statesMap.get(name);
+
     }
 
     public void update(State state) {
-        State found = null;
+        State foundState = statesMap.get(state.getState());
 
-        for (State currentState : states) {
-            if (currentState.getId() == state.getId()) {
-                found = currentState;
-                break;
+//        State found = null;
+//
+//        for (State currentState : states) {
+//            if (currentState.getId() == state.getId()) {
+//                found = currentState;
+//                break;
+//            }
+//        }
+        if (foundState != null) {
+
+            if (foundState.getState().equals(state.getState())) {
+                statesMap.remove(foundState);
+                statesMap.put(state.getState(), state);
+
+                encode();
+            } else {
+                System.out.println("Throwing a State Not Found exception!!!!");
+                // Look up exception throwing and consider putting one here, too!
             }
+        } else {
+            System.out.println("Throwing a State is null exception!!!!");
+            // Look up exception throwing and consider putting one here, too!
         }
-
-        if (found != null) {
-            states.remove(found);
-            states.add(state);
-        }
-
-        encode();
-
     }
 
     public void delete(State state) {
-        State found = null;
+//        State found = null;
+//
+//        for (State currentState : states) {
+//            if (currentState.getId() == state.getId()) {
+//                found = currentState;
+//                break;
+//            }
+//        }
+//
+//        if (found != null) {
+//            states.remove(found);
+//        }
 
-        for (State currentState : states) {
-            if (currentState.getId() == state.getId()) {
-                found = currentState;
-                break;
-            }
+        if (statesMap.containsKey(state.getState())) {
+            statesMap.remove(state);
+            encode();
+        } else {
+            System.out.println("Throwing a State Not Found exception!!!!");
+            // Look up exception throwing and consider putting one here, too!
+
         }
-
-        if (found != null) {
-            states.remove(found);
-        }
-
-        encode();
-
     }
 
-    public List<State> getList() {
-
-        return states;
+    public List<String> getList() {
+        return new ArrayList(statesMap.keySet());
     }
 
     public int size() {
-        return states.size();
+        return statesMap.size();
     }
-
-    private int determineNextId() {
-        int highestId = 100;
-
-        for (State state : states) {
-            if (highestId < state.getId()) {
-                highestId = state.getId();
-            }
-        }
-
-        highestId++;
-        return highestId++;
-    }
+//
+//    private int determineNextId() {
+//        int highestId = 100;
+//
+//        for (State state : states) {
+//            if (highestId < state.getId()) {
+//                highestId = state.getId();
+//            }
+//        }
+//
+//        highestId++;
+//        return highestId++;
+//    }
 
     private void encode() {
 
@@ -143,7 +155,9 @@ public class StateDao {
 
             out.println(DATAHEADER);
 
-            for (State state : states) {
+            for (String stateName : getList()) {
+
+                State state = statesMap.get(stateName);
 
                 out.print(state.getState());
                 out.print(TOKEN);
@@ -160,9 +174,11 @@ public class StateDao {
 
     }
 
-    private List<State> decode() {
+    //private List<State> decode() {
+    private Map<String, State> decode() {
 
-        List<State> stateList = new ArrayList<>();
+        //List<State> stateList = new ArrayList<>();
+        Map<String, State> stateList = new java.util.HashMap<>();
 
         final String TOKEN = ",";
         final String DATAHEADER = "State,TaxRate";
@@ -198,7 +214,7 @@ public class StateDao {
 
                     }
 
-                    stateList.add(state);
+                    stateList.put(state.getState(), state);
                 }
             }
             sc.close();
