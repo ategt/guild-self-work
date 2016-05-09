@@ -15,13 +15,13 @@ import com.mycompany.baseballleague.dao.TeamDao;
  * @author apprentice
  */
 public class BaseballController {
-
+    
     ConsoleIO consoleIo = new ConsoleIO();
     PlayerDao playerDao = new PlayerDao();
     TeamDao teamDao = new TeamDao(playerDao);
-
+    
     public void run() {
-
+        
         String mainMenu = "=============================\n"
                 + "==       Main Menu         ==\n"
                 + "=============================\n"
@@ -35,13 +35,13 @@ public class BaseballController {
                 + " 7. Delete A Player\n"
                 + " 8. Delete A Team\n"
                 + " 0. Exit";
-
+        
         boolean keepRunning = true;
-
+        
         while (keepRunning) {
-
+            
             int choice = consoleIo.getUserIntInputRange(mainMenu, 0, 8);
-
+            
             switch (choice) {
                 case 1:
                     addTeam();
@@ -71,49 +71,49 @@ public class BaseballController {
                     keepRunning = false;
                     displayExit();
                     break;
-
+                
             }
-
+            
         }
-
+        
     }
-
+    
     private void addPlayer() {
         Player newPlayer = buildPlayer();
-
-//        float playerAverage = consoleIo.getUserFloatRange("Please Enter The Players Batting Average:", 0, 1);
-//        newPlayer.setBattingAverage(playerAverage);
+        
         Team playersTeam = askForTeam("What Team Is This Player Associated With?");
-
+        
         while (playersTeam == null) {
             listTeams();
             playersTeam = askForTeam("That Team Could Not Be Found\nPlease Select a Team From The List:");
         }
-
+        
         addPlayerToTeam(playersTeam, newPlayer);
-
+        
         confirmPlayerWasAdded(playersTeam, newPlayer);
-
+        
     }
-
+    
     private void addPlayerToTeam(Team playersTeam, Player newPlayer) {
         playersTeam.getPlayers().add(newPlayer);
         teamDao.update(playersTeam);
     }
-
+    
     private Player buildPlayer() {
         Player newPlayer = new Player();
         String playerName = consoleIo.getUserStringInput("Please Enter The Player's Name:");
-        newPlayer.setPlayerName(playerName);
-        int playerNumber = consoleIo.getUserIntInputRange("Please Enter The Player's Number:", 0, 100);
-        
-        
-        
-        newPlayer.setPlayerNumber(playerNumber);
-        playerDao.create(newPlayer);
-        return newPlayer;
+        if (playerName == null || playerName.equals("")) {
+            return null;
+        } else {
+            newPlayer.setPlayerName(playerName);
+            int playerNumber = consoleIo.getUserIntInputRange("Please Enter The Player's Number:", 0, 100);
+            
+            newPlayer.setPlayerNumber(playerNumber);
+            playerDao.create(newPlayer);
+            return newPlayer;
+        }
     }
-
+    
     private void confirmPlayerWasAdded(Team playersTeam, Player newPlayer) {
         if (playersTeam.getPlayers().contains(newPlayer)) {
             consoleIo.printStringToConsole(newPlayer.getPlayerName() + " was successfully added to " + playersTeam.getTeamName());
@@ -121,104 +121,126 @@ public class BaseballController {
             consoleIo.printStringToConsole("An error occured while trying to add the player to the team. Please contact the vendor.");
         }
     }
-
+    
     private void addTeam() {
         String newTeamName = consoleIo.getUserStringInput("Please Enter The Name Of The Team To Be Added.");
-
+        
         Team team = new Team();
         team.setTeamName(newTeamName);
         team.setPlayers(new java.util.ArrayList());
         teamDao.create(team);
-
         
         while (consoleIo.getUserConfirmation("Would you like to add players to this team.")) {
             Player newPlayer = buildPlayer();
-
+            
             Team playersTeam = team;
             addPlayerToTeam(playersTeam, newPlayer);
-
+            
             confirmPlayerWasAdded(playersTeam, newPlayer);
-
+            
         }
-
+        
     }
-
+    
     private void listTeams() {
-
         java.util.List<Team> league = teamDao.getLeague();
-
+        
         for (Team team : league) {
-            //if (team.getPlayers() == null ) team.setPlayers(new java.util.ArrayList());
             String teams = team.getId() + ") " + team.getTeamName() + " - " + team.getPlayers().size() + " Players";
             consoleIo.printStringToConsole(teams);
-
         }
-
     }
-
+    
     private void listPlayersOnTeam() {
-
         Team team = askForTeam();
-
         listPlayersOnTeam(team);
-
     }
-
+    
     private void listPlayersOnTeam(Team team) {
         if (team != null) {
             java.util.List<Player> players = team.getPlayers();
-
+            
+            if (players.isEmpty()) {
+                consoleIo.printStringToConsole("-That Team Does Not Appear To Have Any Players Associated With It.-");
+            } else {
+                consoleIo.printStringToConsole("ID#:  Name:\tNumber:");
+            }
+            
             for (Player player : players) {
-                String playerStats = player.getId() + ") " + player.getPlayerName() + "\t" + player.getPlayerNumber() + "\t" + player.getBattingAverage();
-                consoleIo.printStringToConsole(playerStats);
-
+                if (player != null) {
+                    String playerStats = player.getId() + ") " + player.getPlayerName() + "\t" + player.getPlayerNumber();  // + "\t" + player.getBattingAverage();
+                    consoleIo.printStringToConsole(playerStats);
+                }
             }
         }
         consoleIo.printStringToConsole("");
     }
-
+    
     private void tradePlayer() {
-
+        
         Player player = askForPlayer();
-
-        Team oldTeam = teamDao.get(player.getId());
-
-        oldTeam.getPlayers().remove(player);
-
-        Team newTeam = askForTeam("What team is that player being traded to?");
-
-        newTeam.getPlayers().add(player);
-
-        Player tradedPlayer = askForPlayer("Who is " + player.getPlayerName() + " being traded for?", newTeam);
-
-        newTeam.getPlayers().remove(tradedPlayer);
-        oldTeam.getPlayers().add(player);
-        teamDao.update(newTeam);
-        teamDao.update(oldTeam);
-
-        String statusUpdate = "The " + oldTeam.getTeamName() + " just traded " + player.getPlayerName()
-                + " to the " + newTeam.getTeamName() + " for " + tradedPlayer.getPlayerName() + ".";
-
-        consoleIo.printStringToConsole(statusUpdate);
-
+        
+        Team oldTeam = null;
+        
+        for (Team team : teamDao.getLeague()) {
+            if (team.getPlayers().contains(player)) {
+                oldTeam = team;
+                break;
+            }
+        }
+        
+        if (oldTeam != null) {
+            
+            Team newTeam = askForTeam("What team is that player being traded to?");
+            
+            if (newTeam != null) {
+                Player tradedPlayer = askForPlayer("Who is " + player.getPlayerName() + " being traded for?", newTeam);
+                
+                if (tradedPlayer != null) {
+                    oldTeam.getPlayers().remove(player);
+                    oldTeam.getPlayers().add(tradedPlayer);
+                    
+                    newTeam.getPlayers().remove(tradedPlayer);
+                    newTeam.getPlayers().add(player);
+                    teamDao.update(newTeam);
+                    teamDao.update(oldTeam);
+                    
+                    String statusUpdate = "The " + oldTeam.getTeamName() + " just traded " + player.getPlayerName()
+                            + " to the " + newTeam.getTeamName() + " for " + tradedPlayer.getPlayerName() + ".";
+                    
+                    consoleIo.printStringToConsole(statusUpdate);
+                } else {
+                    consoleIo.printStringToConsole("That Player could not be found.");
+                }
+            } else {
+                consoleIo.printStringToConsole("That Team could not be found.");
+            }
+        } else {
+            consoleIo.printStringToConsole(player.getPlayerName() + " does not appear to be assosicated with any team.");
+        }
     }
-
+    
     private void deletePlayer() {
         Player player = askForPlayer("Which player would you like to delete?");
-
+        
         if (player != null) {
-            playerDao.delete(player);
+            if (consoleIo.getUserConfirmation("Are you sure you want to delete " + player.getPlayerName() + "?")) {
+                
+                playerDao.delete(player);
+            } else {
+                consoleIo.printStringToConsole("Action Aborted By User.");
+            }
         } else {
             consoleIo.printStringToConsole("That player could not be found.");
         }
     }
-
+    
     private void deleteTeam() {
-
+        
         Team teamToBeDeleted = askForTeam("Which team would you like to delete?");
         if (teamToBeDeleted != null) {
             String confirmString = consoleIo.getUserStringInput("Are you sure you want to delete " + teamToBeDeleted.getTeamName() + "?\n Please Press \"Y\" to confirm, any other key to abort.");
-
+            
             if (confirmString.equalsIgnoreCase("Y")) {
                 teamDao.delete(teamToBeDeleted);
             } else {
@@ -228,69 +250,70 @@ public class BaseballController {
             consoleIo.printStringToConsole("The team entered could not be found.");
         }
     }
-
+    
     private void listAllPlayersInLeague() {
         for (Team team : teamDao.getLeague()) {
+            consoleIo.printStringToConsole(team.getTeamName() + ":");
             listPlayersOnTeam(team);
         }
     }
-
+    
     private Player askForPlayer() {
         return askForPlayer("Please Enter A Player's Name Or Number:");
     }
-
+    
     private Player askForPlayer(String prompt) {
         return askForPlayer(prompt, null);
     }
-
+    
     private Player askForPlayer(String prompt, Team team) {
-
+        
         Player player = null;
-
+        
         if (team != null) {
             listPlayersOnTeam(team);
         }
-
+        
         String responseString = consoleIo.getUserStringInput(prompt);
-
+        
         boolean isANumber = false;
         int responseNumber = 0;
-
+        
         try {
             responseNumber = Integer.parseInt(responseString);
             isANumber = true;
-
+            
         } catch (NumberFormatException numFmtEx) {
-
+            
         }
-
+        
         if (isANumber) {
-
+            
             if (responseNumber < 100) {
                 player = getPlayerByJerseyNumber(responseNumber);
             } else {
                 player = playerDao.get(responseNumber);
             }
-
+            
         } else {
             player = getPlayerByName(responseString);
         }
-
+        
         return player;
     }
-
+    
     private Player getPlayerByName(String playerName) {
         Player player = null;
         java.util.List<Player> playerList = new java.util.ArrayList();
-
+        
         for (Player currentPlayer : playerDao.getList()) {
-
+            
             if (currentPlayer.getPlayerName().trim().equalsIgnoreCase(playerName)) {
                 playerList.add(currentPlayer);
             }
-
+            
         }
-
+        
         if (playerList.size() == 1) {
             player = playerList.get(0);
         } else if (playerList.size() == 0) {
@@ -298,83 +321,83 @@ public class BaseballController {
         } else {
             player = getPlayerByIdNumber("Your search has returned more than one player with that name.\n Please select the player by ID Number.", playerList);
         }
-
+        
         return player;
     }
-
+    
     private Player getPlayerByIdNumber(String prompt, java.util.List<Player> playerList) {
         Player player = null;
-
+        
         listPlayers(playerList);
-
+        
         int inputInt = consoleIo.getUserIntInputPositive(prompt);
-
+        
         player = playerDao.get(inputInt);
-
+        
         return player;
     }
-
+    
     private void listPlayers(java.util.List<Player> playerList) {
-
+        
         for (Player player : playerList) {
             String playerStats = player.getId() + ") " + player.getPlayerName() + "\t" + player.getPlayerNumber() + "\t" + player.getBattingAverage();
             consoleIo.printStringToConsole(playerStats);
         }
-
+        
         consoleIo.printStringToConsole("");
     }
-
+    
     private Player getPlayerByJerseyNumber(int jerseyNumber) {
         Player player = null;
-
+        
         for (Player currentPlayer : playerDao.getList()) {
             if (currentPlayer.getPlayerNumber() == jerseyNumber) {
                 player = currentPlayer;
                 break;
             }
         }
-
+        
         return player;
     }
-
+    
     private Team askForTeam() {
         return askForTeam("Please Enter A Team Name:");
     }
-
+    
     private Team askForTeam(String prompt) {
         Team returnedTeam = null;
-
+        
         String inputString = consoleIo.getUserStringInput(prompt);
-
+        
         boolean isANumber = false;
         int responseNumber = 0;
-
+        
         try {
             responseNumber = Integer.parseInt(inputString);
             isANumber = true;
-
+            
         } catch (NumberFormatException numFmtEx) {
-
+            
         }
-
+        
         if (isANumber) {
             returnedTeam = teamDao.get(responseNumber);
         } else {
-
+            
             for (Team team : teamDao.getLeague()) {
-
+                
                 if (inputString.trim().equalsIgnoreCase(team.getTeamName().trim())) {
                     returnedTeam = team;
                     break;
                 }
             }
         }
-
+        
         return returnedTeam;
     }
-
+    
     public void displayExit() {
         consoleIo.printStringToConsole("Have a nice day.");
     }
-
+    
 }

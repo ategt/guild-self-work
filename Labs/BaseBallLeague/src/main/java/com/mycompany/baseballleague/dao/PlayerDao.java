@@ -24,18 +24,18 @@ import java.util.logging.Logger;
  * @author apprentice
  */
 public class PlayerDao {
-    
+
     List<Player> players;
     int nextId;
     File playerDataFile = new File("PlayersData.txt");
 
     ;
 
-    public PlayerDao () {
+    public PlayerDao() {
         this(false);
     }
 
-    protected PlayerDao (boolean isATest) {
+    protected PlayerDao(boolean isATest) {
 
         if (isATest) {
             playerDataFile = new File("PlayersTestData.txt");
@@ -157,7 +157,7 @@ public class PlayerDao {
             out.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(PlayerDao .class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PlayerDao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -178,50 +178,50 @@ public class PlayerDao {
 
             while (sc.hasNextLine()) {
                 String currentLine = sc.nextLine();
+                if (!currentLine.trim().isEmpty()) {
+                    String[] stringParts = currentLine.split(TOKEN);
 
-                String[] stringParts = currentLine.split(TOKEN);
+                    Player player = new Player();
 
-                Player player = new Player();
+                    int id = Integer.parseInt(stringParts[0]);
+                    player.setId(id);
 
-                int id = Integer.parseInt(stringParts[0]);
-                player.setId(id);
+                    String content = stringParts[1];
 
-                String content = stringParts[1];
+                    player.setPlayerName(content);
 
-                player.setPlayerName(content);
+                    content = stringParts[2];
 
-                content = stringParts[2];
+                    try {
 
-                try {
+                        int playerNumber = Integer.parseInt(content);
+                        player.setPlayerNumber(playerNumber);
 
-                    int playerNumber = Integer.parseInt(content);
-                    player.setPlayerNumber(playerNumber);
+                    } catch (NumberFormatException numFmtEx) {
 
-                } catch (NumberFormatException numFmtEx) {
+                    }
 
+                    String battingAverage = stringParts[3];
+
+                    try {
+
+                        float battingAverageFloat = Float.parseFloat(battingAverage);
+                        player.setBattingAverage(battingAverageFloat);
+
+                    } catch (NumberFormatException numFmtEx) {
+
+                    }
+
+                    playerList.add(player);
                 }
-
-                String battingAverage = stringParts[3];
-
-                try {
-
-                    float battingAverageFloat = Float.parseFloat(battingAverage);
-                    player.setBattingAverage(battingAverageFloat);
-
-                } catch (NumberFormatException numFmtEx) {
-
-                }
-
-                playerList.add(player);
             }
-
             sc.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(PlayerDao .class
+            Logger.getLogger(PlayerDao.class
                     .getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(PlayerDao .class
+            Logger.getLogger(PlayerDao.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
