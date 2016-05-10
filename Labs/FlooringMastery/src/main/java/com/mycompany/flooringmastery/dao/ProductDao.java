@@ -50,24 +50,53 @@ public class ProductDao {
         //nextId = determineNextId();
     }
 
+    public Product create(Product product) {
+        if (product != null) {
+            return create(product.getType(), product);
+        } else {
+            return null;
+        }
+    }
+
     public Product create(Product product, String productName) {
         return create(productName, product);
     }
 
     public Product create(String productName, Product product) {
 
-        if (productName.equals(product.getType())) {
-            productsMap.put(productName, product);
-            encode();
+        if (product == null) {
+            return null;
+        } else if (product.getType() == null) {
+            return null;
+        } else if (productName.equals(product.getType())) {
 
-            return product;
+            String titleCaseName = Utilities.TextUtilities.toTitleCase(productName);
+
+            if (!productsMap.containsKey(titleCaseName)) {
+                productsMap.put(titleCaseName, product);
+                product.setType(titleCaseName);
+                encode();
+
+                return product;
+            } else {
+                return null;
+            }
         } else {
             return null;  // Look up how to throw exceptions and consider that instead.
         }
     }
 
     public Product get(String name) {
-        return productsMap.get(name);
+
+        String input = null;
+
+        for (String productTest : productsMap.keySet()) {
+            if (name.equalsIgnoreCase(productTest)) {
+                input = productTest;
+                break;
+            }
+        }
+        return productsMap.get(input);
 
     }
 

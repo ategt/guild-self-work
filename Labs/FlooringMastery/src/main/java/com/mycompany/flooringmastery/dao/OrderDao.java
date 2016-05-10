@@ -25,11 +25,11 @@ import java.util.logging.Logger;
  */
 public class OrderDao {
 
-    List<Order> orders;
-    int nextId;
-    File orderDataFile = new File("OrdersData.txt");
-    StateDao stateDao;
-    ProductDao productDao;
+    private List<Order> orders;
+    private int nextId;
+    private File orderDataFile = new File("OrdersData.txt");
+    private StateDao stateDao;
+    private ProductDao productDao;
 
     public OrderDao(ProductDao productDao, StateDao stateDao) {
         this(productDao, stateDao, false);
@@ -116,8 +116,9 @@ public class OrderDao {
     }
 
     public List<Order> getList() {
-
-        return orders;
+        List<Order> copy = new ArrayList();
+        copy.addAll(orders);
+        return copy;
     }
 
     public int size() {
@@ -209,8 +210,7 @@ public class OrderDao {
 
         final String TOKEN = ",";
         final String CSV_ESCAPE = "\\,";
-                final String CSV_ESCAPE_TEMP = "::==::";
-
+        final String CSV_ESCAPE_TEMP = "::==::";
 
         final String DATAHEADER = "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCost"
                 + "PerSquareFoot,MaterialCost,LaborCost,Tax,Total";
@@ -230,12 +230,10 @@ public class OrderDao {
 
                         String[] stringParts = currentLine.replaceAll(CSV_ESCAPE, CSV_ESCAPE_TEMP).split(TOKEN);
 
-                        for ( int x = 0 ; x < stringParts.length ; x++ ){
+                        for (int x = 0; x < stringParts.length; x++) {
                             stringParts[x] = stringParts[x].replaceAll(CSV_ESCAPE_TEMP, TOKEN);
                         }
-                        
-                        
-                        
+
                         Order order = new Order();
 
                         String orderIdString = stringParts[0];

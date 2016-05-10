@@ -22,6 +22,13 @@ public class StateDaoTest {
 
     @Before
     public void setUp() {
+
+        java.io.File testFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/StatesTestData.txt");
+        java.io.File backupTestFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/StatesTestData-Backup.txt");
+        backupTestFile.deleteOnExit();
+        testFile.renameTo(backupTestFile);
+        
+        
     }
 
     @After
@@ -74,7 +81,7 @@ public class StateDaoTest {
     public void testCreateE() {
         System.out.println("create");
         State state = new State();
-        state.setState("GH");
+        state.setState("SW");
         StateDao instance = new StateDao(true);
         State expResult = state;
         State result = instance.create(state, state.getState());
@@ -87,9 +94,38 @@ public class StateDaoTest {
         State state = new State();
         state.setState("Mexico");
         StateDao instance = new StateDao(true);
-        State expResult = state;
+        State expResult = null;
         State result = instance.create(state, state.getState());
         assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testCreateH() {
+        System.out.println("create");
+        State state = new State();
+        state.setState("HQ");
+        StateDao instance = new StateDao(true);
+        State expResult = null;
+        State result = instance.create(state, "HR");
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testCreateG() {
+        System.out.println("create");
+        State state = new State();
+        state.setState("SG");
+
+        State otherState = new State();
+        otherState.setState("SG");
+
+        StateDao instance = new StateDao(true);
+        State expResult = state;
+        State result = instance.create(state);
+        State otherResult = instance.create(otherState);
+
+        assertEquals(expResult, result);
+        assertEquals(null, otherResult);
     }
 
     @Test
@@ -192,13 +228,11 @@ public class StateDaoTest {
         instance.create(secondState);
         instance.create(thirdState);
 
-        assertEquals(5, instance.size());
+        assertEquals(3, instance.size());
 
         assertTrue(instance.getList().contains("SG"));
         assertTrue(instance.getList().contains("FG"));
         assertTrue(instance.getList().contains("DQ"));
-        assertTrue(instance.getList().contains("Mexico"));
-        assertTrue(instance.getList().contains("GH"));
 
     }
 
@@ -246,4 +280,5 @@ public class StateDaoTest {
         assertEquals(thirdDao.get(stateName), null);
 
     }
+
 }

@@ -38,6 +38,7 @@ public class StateDao {
 
         if (isATest) {
             stateDataFile = new File("StatesTestData.txt");
+            //System.out.println(stateDataFile.getAbsolutePath());
         }
 
         statesMap = decode();
@@ -61,29 +62,36 @@ public class StateDao {
     }
 
     /**
-     * The state Name must be at least two characters and must match the
-     * getState() method of the passed in state object.
+     * The state Name must be the two character state postal code abbreviation
+     * and must match the getState() method of the passed in state object.
      *
      * @param stateName
      * @param state
      * @return
      */
     public State create(String stateName, State state) {
+        State returnedState = null;
 
         if (state.getState() == null) {
-            return null;
         } else if (stateName == null) {
-            return null;
-        } else if (stateName.length() < 2) {
-            return null;
+        } else if (stateName.length() != 2) {
         } else if (stateName.equals(state.getState())) {
-            statesMap.put(stateName, state);
-            encode();
 
-            return state;
+            String postalCode = stateName.toUpperCase();
+
+            if (!statesMap.containsKey(postalCode)) {
+
+                state.setState(postalCode);
+                statesMap.put(postalCode, state);
+
+                encode();
+
+                returnedState = state;
+            }
         } else {
-            return null;  // Look up how to throw exceptions and consider that instead.
+            // Look up how to throw exceptions and consider that here.
         }
+        return returnedState;
     }
 
     public State get(String name) {
@@ -136,7 +144,7 @@ public class StateDao {
     public int size() {
         return statesMap.size();
     }
-    
+
 //    
 //    public String formatTax(State state){
 //        return formatTax(state.getStateTax());
@@ -146,7 +154,6 @@ public class StateDao {
 //        java.text.DecimalFormat df = new java.text.DecimalFormat("#.##");
 //        return df.format(input);
 //    }
-
     private void encode() {
 
         final String TOKEN = ",";
