@@ -26,10 +26,9 @@ import java.util.logging.Logger;
  */
 public class StateDao {
 
-    //List<State> states;
-    java.util.Map<String, State> statesMap;
-    int nextId;
-    File stateDataFile = new File("StatesData.txt");
+    private java.util.Map<String, State> statesMap;
+    private int nextId;
+    private File stateDataFile = new File("StatesData.txt");
 
     public StateDao() {
         this(false);
@@ -47,17 +46,37 @@ public class StateDao {
             statesMap = new java.util.HashMap();
             System.out.println("The list was empty, making a new one.");
         }
+    }
 
-        //nextId = determineNextId();
+    public State create(State state) {
+        if (state == null) {
+            return null;
+        } else {
+            return create(state.getState(), state);
+        }
     }
 
     public State create(State state, String stateName) {
         return create(stateName, state);
     }
 
+    /**
+     * The state Name must be at least two characters and must match the
+     * getState() method of the passed in state object.
+     *
+     * @param stateName
+     * @param state
+     * @return
+     */
     public State create(String stateName, State state) {
 
-        if (stateName.equals(state.getState())) {
+        if (state.getState() == null) {
+            return null;
+        } else if (stateName == null) {
+            return null;
+        } else if (stateName.length() < 2) {
+            return null;
+        } else if (stateName.equals(state.getState())) {
             statesMap.put(stateName, state);
             encode();
 
@@ -68,21 +87,19 @@ public class StateDao {
     }
 
     public State get(String name) {
-        return statesMap.get(name);
-
+        String input = null;
+        for (String stateTest : statesMap.keySet()) {
+            if (name.equalsIgnoreCase(stateTest)) {
+                input = stateTest;
+                break;
+            }
+        }
+        return statesMap.get(input);
     }
 
     public void update(State state) {
         State foundState = statesMap.get(state.getState());
 
-//        State found = null;
-//
-//        for (State currentState : states) {
-//            if (currentState.getId() == state.getId()) {
-//                found = currentState;
-//                break;
-//            }
-//        }
         if (foundState != null) {
 
             if (foundState.getState().equals(state.getState())) {
@@ -101,18 +118,6 @@ public class StateDao {
     }
 
     public void delete(State state) {
-//        State found = null;
-//
-//        for (State currentState : states) {
-//            if (currentState.getId() == state.getId()) {
-//                found = currentState;
-//                break;
-//            }
-//        }
-//
-//        if (found != null) {
-//            states.remove(found);
-//        }
 
         if (statesMap.containsKey(state.getState())) {
             statesMap.remove(state.getState());
@@ -131,18 +136,15 @@ public class StateDao {
     public int size() {
         return statesMap.size();
     }
-//
-//    private int determineNextId() {
-//        int highestId = 100;
-//
-//        for (State state : states) {
-//            if (highestId < state.getId()) {
-//                highestId = state.getId();
-//            }
-//        }
-//
-//        highestId++;
-//        return highestId++;
+    
+//    
+//    public String formatTax(State state){
+//        return formatTax(state.getStateTax());
+//    }
+//    
+//    public String formatTax(double input){      
+//        java.text.DecimalFormat df = new java.text.DecimalFormat("#.##");
+//        return df.format(input);
 //    }
 
     private void encode() {
@@ -160,6 +162,7 @@ public class StateDao {
 
                     out.print(state.getState());
                     out.print(TOKEN);
+                    //out.print(formatTax(state.getStateTax()));
                     out.print(state.getStateTax());
                     out.println("");
                 }
@@ -173,10 +176,8 @@ public class StateDao {
 
     }
 
-    //private List<State> decode() {
     private Map<String, State> decode() {
 
-        //List<State> stateList = new ArrayList<>();
         Map<String, State> stateList = new java.util.HashMap<>();
 
         final String TOKEN = ",";
