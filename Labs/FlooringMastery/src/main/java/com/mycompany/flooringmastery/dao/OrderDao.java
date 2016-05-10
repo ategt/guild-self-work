@@ -175,7 +175,7 @@ public class OrderDao {
 
         final String TOKEN = ",";
         //final String CSV_ESCAPE = Pattern.quote("\\,");
-        final String CSV_ESCAPE = "--qfg" + TOKEN;
+        final String CSV_ESCAPE = Pattern.quote("\\") + TOKEN;
         final String DATAHEADER = "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCost"
                 + "PerSquareFoot,MaterialCost,LaborCost,Tax,Total";
 
@@ -205,7 +205,7 @@ public class OrderDao {
 
                     String nameValue = null;
                     if (order.getName() != null) {
-                        nameValue = order.getName().replaceAll(TOKEN, CSV_ESCAPE);
+                        nameValue = order.getName().replaceAll(TOKEN, CSV_ESCAPE).replaceAll("Q", "").replaceAll("E", "");
                     }
 
                     out.print(order.getId());
@@ -265,7 +265,7 @@ public class OrderDao {
 
         final String TOKEN = ",";
         //final String CSV_ESCAPE = "Q,E";
-        final String CSV_ESCAPE = "--qfg,";
+        final String CSV_ESCAPE = Pattern.quote("\\") + TOKEN;
         //final String CSV_ESCAPE = Pattern.quote("--qfg,");
         //final String CSV_ESCAPE_TEMP = Pattern.quote("::==::");
         final String CSV_ESCAPE_TEMP = "::==::";

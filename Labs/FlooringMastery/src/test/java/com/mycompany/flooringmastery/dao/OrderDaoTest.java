@@ -168,7 +168,7 @@ public class OrderDaoTest {
         com.mycompany.flooringmastery.dto.Product product = new com.mycompany.flooringmastery.dto.Product();
         product.setType("Wood");
         productDao.create(product);
-        
+
         // Make some data for the dto.
         // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
         String name = "Wise";
@@ -212,7 +212,7 @@ public class OrderDaoTest {
         // Check that the update method saved the new text.
         //assertEquals("This Is a test note.", thirdOrder.getNoteString());
         assertEquals(name, thirdOrder.getName());
-       assertEquals(ohio.getState(), thirdOrder.getState().getState());
+        assertEquals(ohio.getState(), thirdOrder.getState().getState());
         assertEquals(taxRate, thirdOrder.getTaxRate(), 1e-8);
         assertEquals(product.getType(), thirdOrder.getProduct().getType());
         assertEquals(area, thirdOrder.getArea(), 1e-8);
@@ -237,9 +237,6 @@ public class OrderDaoTest {
 
     }
 
-    
-    
-    
     @Test
     public void testEncodeAndDecodeWithCommas() {
 
@@ -268,7 +265,7 @@ public class OrderDaoTest {
         com.mycompany.flooringmastery.dto.Product product = new com.mycompany.flooringmastery.dto.Product();
         product.setType("Wood");
         productDao.create(product);
-        
+
         // Make some data for the dto.
         // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
         String name = "Acme, INC.";
@@ -312,7 +309,7 @@ public class OrderDaoTest {
         // Check that the update method saved the new text.
         //assertEquals("This Is a test note.", thirdOrder.getNoteString());
         assertEquals(name, thirdOrder.getName());
-       assertEquals(ohio.getState(), thirdOrder.getState().getState());
+        assertEquals(ohio.getState(), thirdOrder.getState().getState());
         assertEquals(taxRate, thirdOrder.getTaxRate(), 1e-8);
         assertEquals(product.getType(), thirdOrder.getProduct().getType());
         assertEquals(area, thirdOrder.getArea(), 1e-8);
@@ -337,7 +334,6 @@ public class OrderDaoTest {
 
     }
 
-    
 //    /**
 //     * Test of create method, of class OrderDao.
 //     */
