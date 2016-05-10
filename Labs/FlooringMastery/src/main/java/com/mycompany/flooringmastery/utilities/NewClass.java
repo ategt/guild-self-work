@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Utilities;
+package com.mycompany.flooringmastery.utilities;
 
 /**
  *
@@ -13,7 +13,7 @@ public class NewClass {
     
     public static void main(String[] args) {
         String productName = "doug the dog person!!";
-        String titleCaseName = Utilities.TextUtilities.toTitleCase(productName);
+        String titleCaseName = com.mycompany.flooringmastery.utilities.TextUtilities.toTitleCase(productName);
         System.out.println(titleCaseName);
     }
             

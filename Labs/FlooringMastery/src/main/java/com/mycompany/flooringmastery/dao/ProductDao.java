@@ -70,7 +70,7 @@ public class ProductDao {
             return null;
         } else if (productName.equals(product.getType())) {
 
-            String titleCaseName = Utilities.TextUtilities.toTitleCase(productName);
+            String titleCaseName = com.mycompany.flooringmastery.utilities.TextUtilities.toTitleCase(productName);
 
             if (!productsMap.containsKey(titleCaseName)) {
                 productsMap.put(titleCaseName, product);
