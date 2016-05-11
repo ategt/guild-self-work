@@ -1,4 +1,0 @@
-ProductType,CostPerSquareFoot,LaborCostPerSquareFoot
-Wood,0.0,0.0
-ProductType,0.0,0.0
-Steel,0.0,0.0

@@ -68,7 +68,7 @@ public class OrderFilterTest {
         System.out.println("accept");
         
 
-        File file = new File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/Ordersdata.txt");
+        File file = new File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/Orderdata.txt");
         OrderFilter instance = new OrderFilter();
         boolean expResult = false;
         

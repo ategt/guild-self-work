@@ -154,6 +154,7 @@ public class StateDao {
 //        java.text.DecimalFormat df = new java.text.DecimalFormat("#.##");
 //        return df.format(input);
 //    }
+    
     private void encode() {
 
         final String TOKEN = ",";

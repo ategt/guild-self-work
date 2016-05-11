@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -57,26 +58,22 @@ public class OrderDao {
                 List<Order> loadedOrders = new ArrayList();
                 java.io.File[] orderFiles = lookForOrders();
                 for (java.io.File orderFile : orderFiles) {
-                    if (!orderFile.getName().endsWith("00000000.txt"))
-                    loadedOrders.addAll(decode(orderFile));
+                    if (!orderFile.getName().endsWith("00000000.txt")) {
+                        loadedOrders.addAll(decode(orderFile));
+                    }
                 }
 
-                
                 if (orders == null) {
                     orders = loadedOrders;
                 } else {
                     orders.addAll(loadedOrders);
                 }
 
-
 //                for (java.io.File orderFile : orderFiles) {
 //                    if (orderFile.getName().endsWith("00000000.txt")){
 //                        if (get()){
 //                    //loadedOrders.addAll(decode(orderFile));
 //                }}}
-
-
-
             }
 
         } catch (FileNotFoundException ex) {
@@ -508,15 +505,27 @@ public class OrderDao {
 
     private Date extractDate(String dateString) {
         Date date = null;
-        String simplifiedDateString = dateString.replaceAll("Orders_", "").replaceAll(".txt", "");
-        java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("MMddyyyy");
+        if (dateString.toLowerCase().contains("test")) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(2000, Calendar.JANUARY, 1);
+            date = calendar.getTime();
+        } else {
+            String simplifiedDateString = dateString.replaceAll("Orders_", "").replaceAll(".txt", "");
+            java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("MMddyyyy");
 
-        try {
-            date = fmt.parse(simplifiedDateString);
-        } catch (ParseException ex) {
-            Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
+            String regex = "[0-9]+";
+
+            try {
+                if (simplifiedDateString.matches(regex)) {
+                    date = fmt.parse(simplifiedDateString);
+
+                } else {
+                    System.out.println("Date String: " + dateString + "\nDate unparsable exception thrown here!!!!!\n");
+                }
+            } catch (ParseException ex) {
+                Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-
         return date;
     }
 
