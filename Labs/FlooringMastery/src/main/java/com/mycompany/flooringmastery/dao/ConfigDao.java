@@ -5,14 +5,13 @@
  */
 package com.mycompany.flooringmastery.dao;
 
-import com.mycompany.flooringmastery.dto.State;
+import com.mycompany.flooringmastery.exceptions.ConfigurationFileCorruptException;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,29 +25,61 @@ public class ConfigDao {
     java.io.File configFile;
     com.mycompany.flooringmastery.dto.Config config;
     java.io.File defaultTestDirectory = new java.io.File("Test");
-    java.io.File defaultTaxesFile = new java.io.File("Data\\Taxes.txt");
-    java.io.File defaultProductsFile = new java.io.File("Data\\Products.txt");
-    
-    public ConfigDao() {
+    java.io.File defaultTaxesFile = new java.io.File("Data/Taxes.txt");
+    java.io.File defaultProductsFile = new java.io.File("Data/Products.txt");
+
+    public ConfigDao() throws ConfigurationFileCorruptException {
         this(new java.io.File("config.txt"));
     }
 
-    public ConfigDao(java.io.File configFile) {
+    public ConfigDao(java.io.File configFile) throws ConfigurationFileCorruptException {
         this.configFile = configFile;
 
-        this.config = buildConfig(configFile);
+        buildConfig(configFile);
+        if (!verifyLoading())
+            throw new com.mycompany.flooringmastery.exceptions.ConfigurationFileCorruptException("The configuration file Failed to verify!\n Without basic configuration parameters, this program will not function correctly.");
     }
 
-    private com.mycompany.flooringmastery.dto.Config buildConfig(java.io.File configFile) {
-        com.mycompany.flooringmastery.dto.Config tempConfig = null;
+    private boolean verifyLoading() {
+        boolean goodLoad = true;
+        com.mycompany.flooringmastery.dto.Config tempConfig = makeConfig();
+        if (config.getProductFile() == null) {
+            config.setProductFile(tempConfig.getProductFile());
+            goodLoad = false;
+        }
+
+        if (config.getTaxesFile() == null) {
+            config.setTaxesFile(tempConfig.getTaxesFile());
+            goodLoad = false;
+        }
+
+        if (config.getTestDirectory() == null) {
+            config.setTestDirectory(tempConfig.getTestDirectory());
+            goodLoad = false;
+        }
+        return goodLoad;
+    }
+
+    //private com.mycompany.flooringmastery.dto.Config buildConfig(java.io.File configFile) {
+      private void buildConfig(java.io.File configFile) {
+        //com.mycompany.flooringmastery.dto.Config tempConfig = null;
         if (configFile.exists()) {
-            tempConfig = decode(configFile);
+           config = decode(configFile);
         } else {
-            tempConfig = makeConfig();
+            config = makeConfig();
             encode();
         }
 
-        return tempConfig;
+        //return tempConfig;
+        //return config
+    }
+
+    public com.mycompany.flooringmastery.dto.Config get() {
+        return config;
+    }
+
+    public void update() {
+        encode();
     }
 
     private com.mycompany.flooringmastery.dto.Config decode(java.io.File dataFile) {
@@ -85,7 +116,7 @@ public class ConfigDao {
                     if (inTestModeString.equalsIgnoreCase("false")) {
                         inTestMode = false;
                     }
-                    
+
                     tempConfig.setInTestMode(inTestMode);
                 } else {
                     System.out.println("Throw unknown line in config file EXCEPTION!!");
@@ -99,8 +130,8 @@ public class ConfigDao {
 
         return tempConfig;
     }
-    
-        private com.mycompany.flooringmastery.dto.Config makeConfig() {
+
+    private com.mycompany.flooringmastery.dto.Config makeConfig() {
 
         com.mycompany.flooringmastery.dto.Config tempConfig = new com.mycompany.flooringmastery.dto.Config();
 
@@ -108,33 +139,27 @@ public class ConfigDao {
         tempConfig.setProductFile(defaultProductsFile);
         tempConfig.setTaxesFile(defaultTaxesFile);
         tempConfig.setTestDirectory(defaultTestDirectory);
-        
-        return tempConfig;
-        }
-    
 
-        private void encode(){
-            
+        return tempConfig;
+    }
+
+    private void encode() {
+
         try (PrintWriter out = new PrintWriter(new FileWriter(configFile))) {
-                
-                String configString = "ProductFile:" + config.getProductFile().getPath() + "\n" +
-                                    "TaxesFile:" + config.getTaxesFile().getPath() + "\n" +
-                                    "TestDirectory:" + config.getTestDirectory().getPath() + "\n" +
-                                    "InTestMode:" + config.isInTestMode();
-                
-                
-                out.print(configString);
-                out.println("");
-            
-            
+
+            String configString = "ProductFile:" + config.getProductFile().getPath() + "\n"
+                    + "TaxesFile:" + config.getTaxesFile().getPath() + "\n"
+                    + "TestDirectory:" + config.getTestDirectory().getPath() + "\n"
+                    + "InTestMode:" + config.isInTestMode();
+
+            out.print(configString);
+            out.println("");
+
             out.flush();
         } catch (IOException ex) {
             Logger.getLogger(ConfigDao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-            
-            
-        
-        
+
 }
