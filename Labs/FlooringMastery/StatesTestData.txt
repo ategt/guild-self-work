@@ -1,3 +1,4 @@
 State,TaxRate
 IN,0.0
+KC,0.0
 OH,0.0

@@ -252,9 +252,8 @@ public class OrderDao {
             for (Order order : groupOfOrders) {
 
                 //toString(out, order, TOKEN, nameValue, stateName, productName);
-
                 String orderString = toString(order, TOKEN);
-                
+
                 out.println(orderString);
             }
 
@@ -329,6 +328,49 @@ public class OrderDao {
         orderString += order.getTotal();
 
         return orderString;
+    }
+
+    public String addLabels(Order order, final String TOKEN) {
+        return addLabels(toString(order), TOKEN);
+    }
+    
+    
+    public String addLabels(String orderString, final String TOKEN){
+        return addLabels(orderString, TOKEN, ": ");
+    }
+    
+
+    /**
+     * The first token is for seperating label-order pairs(it is a comma in the
+     * file and a new line in the controller). The second token is for
+     * seperating labels and orders (it would be the dash in the above example).
+     *
+     * @param orderString
+     * @param TOKEN
+     * @param SECOND_TOKEN
+     * @return
+     */
+    public String addLabels(String orderString, final String TOKEN, final String SECOND_TOKEN) {
+
+        String labeledOrderString = "";
+
+        String[] orderParts = orderString.split(TOKEN);
+
+        labeledOrderString += "Order ID#" + SECOND_TOKEN + orderParts[0] + TOKEN;
+        labeledOrderString += "Customer Name" + SECOND_TOKEN + orderParts[1] + TOKEN;
+        labeledOrderString += "State" + SECOND_TOKEN + orderParts[2] + TOKEN;
+        labeledOrderString += "Tax Rate" + SECOND_TOKEN + orderParts[3] + TOKEN;
+        labeledOrderString += "Product Name" + SECOND_TOKEN + orderParts[4] + TOKEN;
+        labeledOrderString += "Area" + SECOND_TOKEN + orderParts[5] + TOKEN;
+        labeledOrderString += "Cost Per Square Foot" + SECOND_TOKEN + orderParts[6] + TOKEN;
+        labeledOrderString += "Labor Cost Per Square Foot" + SECOND_TOKEN + orderParts[7] + TOKEN;
+        labeledOrderString += "Material Cost" + SECOND_TOKEN + orderParts[8] + TOKEN;
+        labeledOrderString += "Labor Cost" + SECOND_TOKEN + orderParts[9] + TOKEN;
+        labeledOrderString += "Tax" + SECOND_TOKEN + orderParts[10] + TOKEN;
+        labeledOrderString += "Total" + SECOND_TOKEN + orderParts[11];
+
+        return labeledOrderString;
+
     }
 
     private List<Order> decode() throws FileNotFoundException, IOException {

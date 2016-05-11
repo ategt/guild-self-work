@@ -6,12 +6,18 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.dto.Order;
+import com.mycompany.flooringmastery.dto.State;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -97,7 +103,8 @@ public class OrderDaoTest {
         try {
             secondDate = fmt.parse(fmt.format(secondDate));
         } catch (ParseException ex) {
-            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Parse Exception - " + ex.getMessage());
+            //Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         orderOne.setDate(date);
@@ -410,6 +417,29 @@ public class OrderDaoTest {
         // Pull a note  using the id number recorded earlier.
         Order thirdOrder = secondOrderDao.get(id);
 
+        String thirdOrderString = secondOrderDao.toString(thirdOrder, System.lineSeparator());
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(new java.io.File("myTestFile.txt")))) {
+
+            out.println(thirdOrderString);
+            out.flush();
+        } catch (IOException ex) {
+            fail("IOException - " + ex.getMessage());
+            //Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(new java.io.File("myNextTestFile.txt")))) {
+
+            String token = System.lineSeparator();
+            String thirdOrderStringWithLabels = secondOrderDao.addLabels(thirdOrderString, token);
+
+            out.println(thirdOrderStringWithLabels);
+            out.flush();
+        } catch (IOException ex) {
+            fail("IOException - " + ex.getMessage());
+            //Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         assertTrue(thirdOrder != null);
 
         // Check that the update method saved the new text.
@@ -438,6 +468,129 @@ public class OrderDaoTest {
         //OrderDao thirdDao = new OrderDao(true);
         assertEquals(thirdOrderDao.get(id), null);
 
+    }
+
+    @Test
+    public void testToString() {
+
+        boolean isATest = true;
+
+        ProductDao productDao = new ProductDao(true);
+        StateDao stateDao = new StateDao(true);
+        OrderDao orderDao = new OrderDao(productDao, stateDao, isATest);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        Order order = new Order();
+
+        // Create the file in the Dao.
+        //Order returnedOrder = orderDao.create(order);
+
+        // Record the notes id number.
+        //int id = order.getId();
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        //assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmastery.dto.State ohio = new com.mycompany.flooringmastery.dto.State();
+        ohio.setState("KC");
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmastery.dto.Product product = new com.mycompany.flooringmastery.dto.Product();
+        product.setType("Grass");
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = "Steve the Awsome,,est.";
+        double taxRate = 20.25;
+        double area = 150.00;
+        double costPerSquareFoot = 25.15;
+        double laborCostPerSquareFoot = 0.75;
+        double materialCost = 1.55;
+        double laborCost = 400.00;
+        double tax = 3.08;
+        double total = 4.88;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 1);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+
+        // Set the above values to the appropriate attributes.
+        order.setId(3);
+        order.setName(name);
+        order.setState(ohio);
+        order.setTaxRate(taxRate);
+        order.setProduct(product);
+        order.setArea(area);
+        order.setCostPerSquareFoot(costPerSquareFoot);
+        order.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
+        order.setMaterialCost(materialCost);
+        order.setLaborCost(laborCost);
+        order.setTax(tax);
+        order.setTotal(total);
+        order.setDate(orderDate);
+        // Use the update method to save this new text to file.
+        //orderDao.update(order);
+
+        // Load a new instance of the OrderDao.
+        //OrderDao secondDao = new OrderDao(true);
+//        ProductDao secondProductDao = new ProductDao(true);
+//        StateDao secondStateDao = new StateDao(true);
+//        OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, isATest);
+
+        // Pull a note  using the id number recorded earlier.
+        //Order thirdOrder = secondOrderDao.get(id);
+
+        String thirdOrderString = orderDao.toString(order, System.lineSeparator());
+        java.io.File firstTestFile = new java.io.File("myOtherTestFile.txt");
+        firstTestFile.deleteOnExit();
+        
+        try (PrintWriter out = new PrintWriter(new FileWriter(firstTestFile))) {
+
+            out.println(thirdOrderString);
+            out.flush();
+        } catch (IOException ex) {
+            fail("IOException - " + ex.getMessage());
+            //Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        java.io.File secondTestFile = new java.io.File("myNextOtherTestFile.txt");
+        secondTestFile.deleteOnExit();
+        
+        try (PrintWriter out = new PrintWriter(new FileWriter(secondTestFile))) {
+
+            String token = System.lineSeparator();
+            String thirdOrderStringWithLabels = orderDao.addLabels(thirdOrderString, token);
+
+            out.println(thirdOrderStringWithLabels);
+            out.flush();
+        } catch (IOException ex) {
+            fail("IOException - " + ex.getMessage());
+            //Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        java.io.File firstValidTestFile = new java.io.File("myTestFile.txt");
+        java.io.File secondValidTestFile = new java.io.File("myNextTestFile.txt");
+
+        assertEquals(readFile(firstValidTestFile), readFile(firstTestFile));
+        assertEquals(readFile(secondValidTestFile), readFile(secondTestFile));
+
+    }
+
+    private String readFile(java.io.File file) {
+        String text = "";
+
+        try (java.util.Scanner scanner = new java.util.Scanner(file)) {
+            text += scanner.useDelimiter("\\A").next();
+        } catch (FileNotFoundException ex) {
+            fail("File " + file.getName() + " could not be Found!");
+            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return text;
     }
 
 //    /**
