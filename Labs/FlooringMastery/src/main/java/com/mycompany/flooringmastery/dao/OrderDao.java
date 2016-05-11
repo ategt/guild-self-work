@@ -13,7 +13,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -30,8 +32,10 @@ public class OrderDao {
     private int nextId;
     //private File orderDataFile = new File("OrdersData.txt");
     private File orderDataFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/OrdersData.txt");
+    private File testOrderDateFile = new File("OrdersTestData.txt");
     private StateDao stateDao;
     private ProductDao productDao;
+    private boolean isATest;
 
     public OrderDao(ProductDao productDao, StateDao stateDao) {
         this(productDao, stateDao, false);
@@ -42,18 +46,37 @@ public class OrderDao {
 
         this.productDao = productDao;
         this.stateDao = stateDao;
+        this.isATest = isATest;
 
         try {
-            
+
             if (isATest) {
-                orderDataFile = new File("OrdersTestData.txt");
+                orderDataFile = testOrderDateFile;
                 orders = decode(orderDataFile);
             } else {
-
+                List<Order> loadedOrders = new ArrayList();
                 java.io.File[] orderFiles = lookForOrders();
                 for (java.io.File orderFile : orderFiles) {
-                    orders.addAll(decode(orderFile));
+                    if (!orderFile.getName().endsWith("00000000.txt"))
+                    loadedOrders.addAll(decode(orderFile));
                 }
+
+                
+                if (orders == null) {
+                    orders = loadedOrders;
+                } else {
+                    orders.addAll(loadedOrders);
+                }
+
+
+//                for (java.io.File orderFile : orderFiles) {
+//                    if (orderFile.getName().endsWith("00000000.txt")){
+//                        if (get()){
+//                    //loadedOrders.addAll(decode(orderFile));
+//                }}}
+
+
+
             }
 
         } catch (FileNotFoundException ex) {
@@ -76,7 +99,7 @@ public class OrderDao {
 
         orders.add(order);
 
-        encode();
+        encode(order);
 
         return order;
     }
@@ -109,7 +132,7 @@ public class OrderDao {
             orders.add(order);
         }
 
-        encode();
+        encode(order);
 
     }
 
@@ -127,7 +150,7 @@ public class OrderDao {
             orders.remove(found);
         }
 
-        encode();
+        encode(order);
 
     }
 
@@ -154,7 +177,14 @@ public class OrderDao {
     }
 
     private static boolean isSameDay(java.util.Date date1, java.util.Date date2) {
+        if (date1 == null && date2 == null) {
+            return true;
+        }
         java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("yyyyMMdd");
+
+        if (date1 == null || date2 == null) {
+            return false;
+        }
         return fmt.format(date1).equals(fmt.format(date2));
     }
 
@@ -171,75 +201,108 @@ public class OrderDao {
         return highestId++;
     }
 
-    private void encode() {
+//    private void encode() {
+//        encode(orderDataFile);
+//    }
+//    private void encode(PrintWriter printWriter) {
+//        encode(printWriter, orders);
+//    }
+    private void encode(Order order) {
+        //determineFile(order.getDate());
+        // This was the source of a lot of problems earlier.
+
+        encode(order.getDate());
+    }
+
+    private void encode(java.util.Date date) {
+        try {
+            File file = null;
+            if (isATest) {
+                file = testOrderDateFile;
+            } else {
+                file = determineFile(date);
+            }
+
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            encode(file, searchByDate(date));
+
+        } catch (IOException ex) {
+            Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Something just went quite wrong in the file creation/encoding method!! ");
+        }
+
+    }
+
+    //private void encode(PrintWriter printWriter, List<Order> groupOfOrders) {
+    //}
+    private void encode(java.io.File orderFile, List<Order> groupOfOrders) throws IOException {
+        encode(new PrintWriter(new FileWriter(orderFile)), groupOfOrders);
+    }
+
+    private void encode(PrintWriter printWriter, List<Order> groupOfOrders) {
 
         final String TOKEN = ",";
-        //final String CSV_ESCAPE = Pattern.quote("\\,");
         final String CSV_ESCAPE = Pattern.quote("\\") + TOKEN;
         final String DATAHEADER = "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCost"
                 + "PerSquareFoot,MaterialCost,LaborCost,Tax,Total";
 
-        try {
+        try (PrintWriter out = printWriter) {
+            out.println(DATAHEADER);
 
-            try (PrintWriter out = new PrintWriter(new FileWriter(orderDataFile))) {
-                out.println(DATAHEADER);
+            for (Order order : groupOfOrders) {
 
-                for (Order order : orders) {
-
-                    String stateName = "null";
-                    if (order.getState() == null) {
-                        stateName = "null";
-                    } else {
-                        if ( order.getState().getState() != null ){
-                        stateName = order.getState().getState().replaceAll(TOKEN, CSV_ESCAPE);
-                    }}
-                    
-                    String productName = "null";
-                    if (order.getProduct() != null) {
-                        if (order.getProduct().getType() != null) {
-
-                            productName = order.getProduct().getType().replaceAll(TOKEN, CSV_ESCAPE);
-
-                        }
-                    }
-
-                    String nameValue = null;
-                    if (order.getName() != null) {
-                        nameValue = order.getName().replaceAll(TOKEN, CSV_ESCAPE).replaceAll("Q", "").replaceAll("E", "");
-                    }
-
-                    out.print(order.getId());
-                    out.print(TOKEN);
-                    out.print(nameValue);
-                    out.print(TOKEN);
-                    out.print(stateName);
-                    out.print(TOKEN);
-                    out.print(order.getTaxRate());
-                    out.print(TOKEN);
-                    out.print(productName);
-                    out.print(TOKEN);
-                    out.print(order.getArea());
-                    out.print(TOKEN);
-                    out.print(order.getCostPerSquareFoot());
-                    out.print(TOKEN);
-                    out.print(order.getLaborCostPerSquareFoot());
-                    out.print(TOKEN);
-                    out.print(order.getMaterialCost());
-                    out.print(TOKEN);
-                    out.print(order.getLaborCost());
-                    out.print(TOKEN);
-                    out.print(order.getTax());
-                    out.print(TOKEN);
-                    out.print(order.getTotal());
-
-                    out.println("");
+                String stateName = "null";
+                if (order.getState() == null) {
+                    stateName = "null";
+                } else if (order.getState().getState() != null) {
+                    stateName = order.getState().getState().replaceAll(TOKEN, CSV_ESCAPE);
                 }
 
-                out.flush();
+                String productName = "null";
+                if (order.getProduct() != null) {
+                    if (order.getProduct().getType() != null) {
+
+                        productName = order.getProduct().getType().replaceAll(TOKEN, CSV_ESCAPE);
+
+                    }
+                }
+
+                String nameValue = null;
+                if (order.getName() != null) {
+                    nameValue = order.getName().replaceAll(TOKEN, CSV_ESCAPE).replaceAll("Q", "").replaceAll("E", "");
+                }
+
+                out.print(order.getId());
+                out.print(TOKEN);
+                out.print(nameValue);
+                out.print(TOKEN);
+                out.print(stateName);
+                out.print(TOKEN);
+                out.print(order.getTaxRate());
+                out.print(TOKEN);
+                out.print(productName);
+                out.print(TOKEN);
+                out.print(order.getArea());
+                out.print(TOKEN);
+                out.print(order.getCostPerSquareFoot());
+                out.print(TOKEN);
+                out.print(order.getLaborCostPerSquareFoot());
+                out.print(TOKEN);
+                out.print(order.getMaterialCost());
+                out.print(TOKEN);
+                out.print(order.getLaborCost());
+                out.print(TOKEN);
+                out.print(order.getTax());
+                out.print(TOKEN);
+                out.print(order.getTotal());
+
+                out.println("");
             }
 
-        } catch (IOException ex) {
-            Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
+            out.flush();
         }
 
     }
@@ -250,30 +313,28 @@ public class OrderDao {
 
     private List<Order> decode(java.io.File orderFile) throws FileNotFoundException, IOException {
 
-        if (!orderFile.exists()){
+        if (!orderFile.exists()) {
             orderFile.createNewFile();
         }
-        
-        return decode(new BufferedReader(new FileReader(orderFile)));
-        //new BufferedReader(new FileReader(orderDataFile))
+
+        String dateString = orderFile.getName();
+
+        return decode(new BufferedReader(new FileReader(orderFile)), dateString);
 
     }
 
-    private List<Order> decode(BufferedReader bufferedReader) {
+    private List<Order> decode(BufferedReader bufferedReader, String dateString) {
 
         List<Order> orderList = new ArrayList<>();
 
         final String TOKEN = ",";
-        //final String CSV_ESCAPE = "Q,E";
         final String CSV_ESCAPE = Pattern.quote("\\") + TOKEN;
-        //final String CSV_ESCAPE = Pattern.quote("--qfg,");
-        //final String CSV_ESCAPE_TEMP = Pattern.quote("::==::");
         final String CSV_ESCAPE_TEMP = "::==::";
-        
-        //final Pattern.quote(TOKEN);
 
         final String DATAHEADER = "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCost"
                 + "PerSquareFoot,MaterialCost,LaborCost,Tax,Total";
+
+        java.util.Date orderDate = extractDate(dateString);
 
         try (Scanner sc = new Scanner(bufferedReader)) {
             while (sc.hasNextLine()) {
@@ -284,11 +345,11 @@ public class OrderDao {
 
                     String[] stringParts = currentLine.replaceAll(CSV_ESCAPE, CSV_ESCAPE_TEMP).split(TOKEN);
 
-                    for (String string : stringParts){
+                    for (String string : stringParts) {
                         System.out.print(string + " - ");
                     }
                     System.out.println("");
-                    
+
                     for (int x = 0; x < stringParts.length; x++) {
                         stringParts[x] = stringParts[x].replaceAll(CSV_ESCAPE_TEMP, TOKEN);
                     }
@@ -383,6 +444,8 @@ public class OrderDao {
 
                     }
 
+                    order.setDate(orderDate);
+
                     orderList.add(order);
                 }
             }
@@ -404,8 +467,57 @@ public class OrderDao {
         }
     }
 
-//    private boolean doesOrderExist() {
-//        lookForOrders();
-//
-//    }
+    private File determineFile(java.util.Date date) {
+        try {
+            return determineFile(orderDataFile, date);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
+            // System.out.println("Something just went very wrong in the determineFile Method!!!");
+        }
+        return null;
+    }
+
+    private File determineFile(File ordersDirectory, java.util.Date date) throws FileNotFoundException {
+        //File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/OrdersData.txt")
+        String dateString;
+
+        String orderDirectoryPath = "";
+
+        if (ordersDirectory.isDirectory()) {
+            orderDirectoryPath = ordersDirectory.getAbsolutePath();
+        } else if (ordersDirectory.isFile()) {
+            orderDirectoryPath = ordersDirectory.getParent();
+
+        } else {
+            //throw new FileNotFoundException();
+        }
+
+        if (date == null) {
+            dateString = "00000000";
+        } else {
+            java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("MMddyyyy");
+            dateString = fmt.format(date);
+        }
+
+        String prefix = "Orders_";
+        String extension = ".txt";
+        String dateFilePath = orderDirectoryPath + prefix + dateString + extension;
+
+        return new File(dateFilePath);
+    }
+
+    private Date extractDate(String dateString) {
+        Date date = null;
+        String simplifiedDateString = dateString.replaceAll("Orders_", "").replaceAll(".txt", "");
+        java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("MMddyyyy");
+
+        try {
+            date = fmt.parse(simplifiedDateString);
+        } catch (ParseException ex) {
+            Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return date;
+    }
+
 }

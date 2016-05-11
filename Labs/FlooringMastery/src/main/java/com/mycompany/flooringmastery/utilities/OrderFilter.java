@@ -15,7 +15,7 @@ public class OrderFilter implements FileFilter {
 
     private final String extension = "txt";
 
-    private final String orderPrefix = "Orders_";
+    private final String orderPrefix = "orders_";
 
     @Override
     public boolean accept(File file) {
