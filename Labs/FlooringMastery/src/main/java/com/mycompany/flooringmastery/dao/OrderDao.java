@@ -242,7 +242,7 @@ public class OrderDao {
     private void encode(PrintWriter printWriter, List<Order> groupOfOrders) {
 
         final String TOKEN = ",";
-        final String CSV_ESCAPE = Pattern.quote("\\") + TOKEN;
+        //final String CSV_ESCAPE = Pattern.quote("\\") + TOKEN;
         final String DATAHEADER = "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCost"
                 + "PerSquareFoot,MaterialCost,LaborCost,Tax,Total";
 
@@ -251,57 +251,84 @@ public class OrderDao {
 
             for (Order order : groupOfOrders) {
 
-                String stateName = "null";
-                if (order.getState() == null) {
-                    stateName = "null";
-                } else if (order.getState().getState() != null) {
-                    stateName = order.getState().getState().replaceAll(TOKEN, CSV_ESCAPE);
-                }
+                //toString(out, order, TOKEN, nameValue, stateName, productName);
 
-                String productName = "null";
-                if (order.getProduct() != null) {
-                    if (order.getProduct().getType() != null) {
-
-                        productName = order.getProduct().getType().replaceAll(TOKEN, CSV_ESCAPE);
-
-                    }
-                }
-
-                String nameValue = null;
-                if (order.getName() != null) {
-                    nameValue = order.getName().replaceAll(TOKEN, CSV_ESCAPE).replaceAll("Q", "").replaceAll("E", "");
-                }
-
-                out.print(order.getId());
-                out.print(TOKEN);
-                out.print(nameValue);
-                out.print(TOKEN);
-                out.print(stateName);
-                out.print(TOKEN);
-                out.print(order.getTaxRate());
-                out.print(TOKEN);
-                out.print(productName);
-                out.print(TOKEN);
-                out.print(order.getArea());
-                out.print(TOKEN);
-                out.print(order.getCostPerSquareFoot());
-                out.print(TOKEN);
-                out.print(order.getLaborCostPerSquareFoot());
-                out.print(TOKEN);
-                out.print(order.getMaterialCost());
-                out.print(TOKEN);
-                out.print(order.getLaborCost());
-                out.print(TOKEN);
-                out.print(order.getTax());
-                out.print(TOKEN);
-                out.print(order.getTotal());
-
-                out.println("");
+                String orderString = toString(order, TOKEN);
+                
+                out.println(orderString);
             }
 
             out.flush();
         }
 
+    }
+
+    public String toString(Order order) {
+        return toString(order, "");
+    }
+
+    public String toString(Order order, final String TOKEN) {
+        final String CSV_ESCAPE = Pattern.quote("\\") + TOKEN;
+
+        return toString(order, TOKEN, CSV_ESCAPE);
+    }
+
+    //private String toString(final PrintWriter out, Order order, final String TOKEN, String nameValue, String stateName, String productName) {
+    public String toString(Order order, final String TOKEN, final String CSV_ESCAPE) {
+
+        String stateName = "null";
+        if (order.getState() == null) {
+            stateName = "null";
+        } else if (order.getState().getState() != null) {
+            stateName = order.getState().getState().replaceAll(TOKEN, CSV_ESCAPE);
+        }
+
+        String productName = "null";
+        if (order.getProduct() != null) {
+            if (order.getProduct().getType() != null) {
+
+                productName = order.getProduct().getType().replaceAll(TOKEN, CSV_ESCAPE);
+
+            }
+        }
+
+        String nameValue = null;
+        if (order.getName() != null) {
+            nameValue = order.getName().replaceAll(TOKEN, CSV_ESCAPE).replaceAll("Q", "").replaceAll("E", "");
+        }
+
+        return toString(order, TOKEN, nameValue, stateName, productName);
+    }
+
+    private String toString(Order order, final String TOKEN, String nameValue, String stateName, String productName) {
+
+        String orderString = "";
+
+        orderString += order.getId();
+        orderString += TOKEN;
+        orderString += nameValue;
+        orderString += TOKEN;
+        orderString += stateName;
+        orderString += TOKEN;
+        orderString += order.getTaxRate();
+        orderString += TOKEN;
+        orderString += productName;
+        orderString += TOKEN;
+        orderString += order.getArea();
+        orderString += TOKEN;
+        orderString += order.getCostPerSquareFoot();
+        orderString += TOKEN;
+        orderString += order.getLaborCostPerSquareFoot();
+        orderString += TOKEN;
+        orderString += order.getMaterialCost();
+        orderString += TOKEN;
+        orderString += order.getLaborCost();
+        orderString += TOKEN;
+        orderString += order.getTax();
+        orderString += TOKEN;
+        orderString += order.getTotal();
+
+        return orderString;
     }
 
     private List<Order> decode() throws FileNotFoundException, IOException {
