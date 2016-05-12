@@ -6,6 +6,7 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.exceptions.ConfigurationFileCorruptException;
+import com.mycompany.flooringmastery.exceptions.FileCreationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -40,6 +41,12 @@ public class ConfigDaoTest {
             configDao = new ConfigDao(testConfigFile);
             fail("The test was supposed to throw an exception here.");
         } catch (ConfigurationFileCorruptException ex) {
+            System.out.println("This Test Checks to see if the exception thrower works right.");
+            System.out.println(" Exception Message: " + ex.getMessage());
+            System.out.println("End Exception Thrower test.");
+        } catch (FileCreationException ex) {
+            fail("The test was not supposed to throw an exception here.");
+            Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(" Exception Message: " + ex.getMessage());
         }
 
@@ -73,6 +80,10 @@ public class ConfigDaoTest {
 
             assertEquals(testDirectory, config.getTestDirectory().getPath());
         } catch (ConfigurationFileCorruptException ex) {
+            Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(" Exception Message: " + ex.getMessage());
+            fail("The Test Threw an exception.");
+        } catch (FileCreationException ex) {
             Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(" Exception Message: " + ex.getMessage());
             fail("The Test Threw an exception.");
@@ -119,6 +130,10 @@ public class ConfigDaoTest {
             Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(" Exception Message: " + ex.getMessage());
             fail("The Test Threw an exception.");
+        } catch (FileCreationException ex) {
+            Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(" Exception Message: " + ex.getMessage());
+            fail("The Test Threw an exception.");
         }
 
     }
@@ -149,7 +164,7 @@ public class ConfigDaoTest {
 
             assertEquals(testDirectory, config.getTestDirectory().getPath());
 
-            java.io.File differentTaxesFile = new java.io.File("Data/ExtraTestTaxes.txt");
+            java.io.File differentTaxesFile = new java.io.File("ExtraTestTaxes.txt");
 
             config.setTaxesFile(differentTaxesFile);
             config.setInTestMode(false);
@@ -169,6 +184,10 @@ public class ConfigDaoTest {
             Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(" Exception Message: " + ex.getMessage());
             fail("The Test Threw an exception.");
+        } catch (FileCreationException ex) {
+            Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(" Exception Message: " + ex.getMessage());
+            fail("The Test Threw an exception.");
         }
 
     }
@@ -181,6 +200,8 @@ public class ConfigDaoTest {
             java.io.File defaultTestDirectory = new java.io.File("Test");
             java.io.File defaultProductsFile = new java.io.File("Data/ProductsGarbal.txt");
             java.io.File testConfigFile = new java.io.File("testConfigFile5.txt");
+            //java.io.File dataDirectory = new java.io.File("testConfigFile5.txt");
+            
 
             String productFile = defaultProductsFile.getPath();
             String testDirectory = defaultTestDirectory.getPath();
@@ -196,6 +217,10 @@ public class ConfigDaoTest {
             assertEquals(false, secondConfig.isInTestMode());
 
         } catch (ConfigurationFileCorruptException ex) {
+            Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(" Exception Message: " + ex.getMessage());
+            fail("The Test Threw an exception.");
+        } catch (FileCreationException ex) {
             Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(" Exception Message: " + ex.getMessage());
             fail("The Test Threw an exception.");

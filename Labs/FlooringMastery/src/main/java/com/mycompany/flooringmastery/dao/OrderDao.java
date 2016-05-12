@@ -32,28 +32,59 @@ public class OrderDao {
     private List<Order> orders;
     private int nextId;
     //private File orderDataFile = new File("OrdersData.txt");
-    private File orderDataFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/OrdersData.txt");
+    private File orderDataFile; // = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/OrdersData.txt");
     private File testOrderDateFile = new File("OrdersTestData.txt");
     private StateDao stateDao;
     private ProductDao productDao;
+    private ConfigDao configDao;
     private boolean isATest;
 
     public OrderDao(ProductDao productDao, StateDao stateDao) {
-        this(productDao, stateDao, false);
+        this(productDao, stateDao,null);
     }
 
-    protected OrderDao(ProductDao productDao, StateDao stateDao, boolean isATest) {
+    
+//    public OrderDao( StateDao stateDao, ProductDao productDao, boolean isATest){
+//        this(productDao, stateDao, new ConfigDao().get().setInTestMode(isATest));
+//        
+//        
+//    }
+//    
+    //protected OrderDao(ProductDao productDao, StateDao stateDao, boolean isATest) {
         //protected OrderDao(ProductDao productDao, StateDao stateDao, java.io.File ) {
 
+      protected OrderDao(ProductDao productDao, StateDao stateDao, ConfigDao configDao) {
+        
+        
         this.productDao = productDao;
         this.stateDao = stateDao;
-        this.isATest = isATest;
 
+        if (configDao != null){
+            this.configDao = configDao;
+        
+        //if (configDao.get().isInTestMode())
+        this.isATest = configDao.get().isInTestMode();
+
+        }else{
+            this.isATest = true;
+        }
+        
         try {
 
             if (isATest) {
-                orderDataFile = testOrderDateFile;
-                orders = decode(orderDataFile);
+                //orderDataFile = testOrderDateFile;
+                //orders = decode(orderDataFile);
+                
+                List<Order> loadedOrders = new ArrayList();
+                java.io.File[] orderFiles = lookForOrders(configDao.get().getTestDirectory());
+                for (java.io.File orderFile : orderFiles) {
+                    if (!orderFile.getName().endsWith("00000000.txt")) {
+                        loadedOrders.addAll(decode(orderFile));
+                    }
+                }
+
+                orders = loadedOrders;
+                
             } else {
                 List<Order> loadedOrders = new ArrayList();
                 java.io.File[] orderFiles = lookForOrders();
@@ -223,7 +254,7 @@ public class OrderDao {
         try {
             File file = null;
             if (isATest) {
-                file = testOrderDateFile;
+                file = determineFile(configDao.get().getTestDirectory(), date); // testOrderDateFile;
             } else {
                 file = determineFile(date);
             }

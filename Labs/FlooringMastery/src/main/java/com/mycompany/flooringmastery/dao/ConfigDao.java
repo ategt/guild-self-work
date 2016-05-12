@@ -6,6 +6,7 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.exceptions.ConfigurationFileCorruptException;
+import com.mycompany.flooringmastery.exceptions.FileCreationException;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -25,26 +26,98 @@ public class ConfigDao {
     java.io.File configFile;
     com.mycompany.flooringmastery.dto.Config config;
     java.io.File defaultTestDirectory = new java.io.File("Test");
-    java.io.File defaultTaxesFile = new java.io.File("Data/Taxes.txt");
-    java.io.File defaultProductsFile = new java.io.File("Data/Products.txt");
+    java.io.File defaultDataDirectory = new java.io.File("Data");
+    java.io.File defaultTaxesFile = new java.io.File("Taxes.txt");
+    java.io.File defaultProductsFile = new java.io.File("Products.txt");
 
-    public ConfigDao() throws ConfigurationFileCorruptException {
+    public ConfigDao() throws ConfigurationFileCorruptException, FileCreationException {
         this(new java.io.File("config.txt"));
     }
 
-    public ConfigDao(java.io.File configFile) throws ConfigurationFileCorruptException {
+    public ConfigDao(java.io.File configFile) throws ConfigurationFileCorruptException, FileCreationException {
         this.configFile = configFile;
 
         buildConfig(configFile);
-        if (!verifyLoading())
+        if (!verifyLoading()) {
             throw new com.mycompany.flooringmastery.exceptions.ConfigurationFileCorruptException("The configuration file Failed to verify!\n Without basic configuration parameters, this program will not function correctly.");
+        }
+
+        validateFolders();
     }
 
-    private boolean verifyLoading() {
+    public final void validateFolders() throws FileCreationException {
+
+        validateFolder(config.getTestDirectory());
+        validateFolder(config.getDataDirectory());
+
+        if (!config.getTestDirectory().isDirectory()) {
+            throw new FileCreationException("Something went wrong, the test file is not a directory.");
+        }
+
+        if (!config.getDataDirectory().isDirectory()) {
+            throw new FileCreationException("Something went wrong, the data file is not a directory.");
+        }
+    }
+
+    public void placeDataFilesInDataFolder() {
+        placeDataFilesInDataFolder(config);
+    }
+
+    public void placeDataFilesInDataFolder(com.mycompany.flooringmastery.dto.Config config) {
+
+        // The config file should always be non-null, but just in case.
+        if (config != null) {
+
+            // Get the Tax File
+            java.io.File taxFile = config.getTaxesFile();
+            java.io.File taxParentFile = null;
+
+            // If the Tax file has a parent define it, otherwise it stays null.
+            if (taxFile.getParent() != null) {
+                taxParentFile = new java.io.File(taxFile.getParent());
+            }
+            
+            // Get the data directory.
+            java.io.File dataDir = config.getDataDirectory();
+
+            // If the tax file is an orphan give it a parent.
+            if (taxParentFile == null ) {
+                config.setTaxesFile(new java.io.File((dataDir.getPath() + "/" + config.getTaxesFile().getName()).replaceAll("//", "/")));
+            }
+
+            java.io.File productFile = config.getProductFile();
+            java.io.File productParentFile = null;
+
+            if ( productFile.getParent() != null ){
+                productParentFile = new java.io.File(productFile.getParent());
+            }
+            
+            if (productParentFile == null ) {
+                config.setProductFile(new java.io.File((dataDir.getPath() + "/" + config.getProductFile().getName()).replaceAll("//", "/")));
+            }
+        }
+    }
+
+    public void validateFolder(java.io.File folder) throws FileCreationException {
+
+        if (!folder.exists()) {
+            if (!folder.mkdir()) {
+                throw new FileCreationException("Something went wrong during file creation.");
+            }
+        }
+    }
+
+//    private boolean verifyLoading(){
+//        return verifyLoading(config);
+//    }
+    
+    private boolean verifyLoading(){ //com.mycompany.flooringmastery.dto.Config tempConfig) {
         boolean goodLoad = true;
+        
+        // This loads the defaults and will transfer the default values to any null fields.
         com.mycompany.flooringmastery.dto.Config tempConfig = makeConfig();
         if (config.getProductFile() == null) {
-            config.setProductFile(tempConfig.getProductFile());
+           config.setProductFile(tempConfig.getProductFile());
             goodLoad = false;
         }
 
@@ -57,21 +130,22 @@ public class ConfigDao {
             config.setTestDirectory(tempConfig.getTestDirectory());
             goodLoad = false;
         }
+
+        if (config.getDataDirectory() == null) {
+            config.setDataDirectory(tempConfig.getDataDirectory());
+            goodLoad = false;
+        }
+
         return goodLoad;
     }
 
-    //private com.mycompany.flooringmastery.dto.Config buildConfig(java.io.File configFile) {
-      private void buildConfig(java.io.File configFile) {
-        //com.mycompany.flooringmastery.dto.Config tempConfig = null;
+    private void buildConfig(java.io.File configFile) {
         if (configFile.exists()) {
-           config = decode(configFile);
+            config = decode(configFile);
         } else {
             config = makeConfig();
             encode();
         }
-
-        //return tempConfig;
-        //return config
     }
 
     public com.mycompany.flooringmastery.dto.Config get() {
@@ -110,6 +184,10 @@ public class ConfigDao {
                     String testDirectoryPath = configLine.replace("TestDirectory:", "");
                     java.io.File testDirectory = new java.io.File(testDirectoryPath);
                     tempConfig.setTestDirectory(testDirectory);
+                } else if (configLine.contains("DataDirectory:")) {
+                    String dataDirectoryPath = configLine.replace("DataDirectory:", "");
+                    java.io.File dataDirectory = new java.io.File(dataDirectoryPath);
+                    tempConfig.setDataDirectory(dataDirectory);
                 } else if (configLine.contains("InTestMode:")) {
                     String inTestModeString = configLine.replace("InTestMode:", "");
                     boolean inTestMode = true;
@@ -139,6 +217,9 @@ public class ConfigDao {
         tempConfig.setProductFile(defaultProductsFile);
         tempConfig.setTaxesFile(defaultTaxesFile);
         tempConfig.setTestDirectory(defaultTestDirectory);
+        tempConfig.setDataDirectory(defaultDataDirectory);
+
+        placeDataFilesInDataFolder(tempConfig);
 
         return tempConfig;
     }
@@ -150,6 +231,7 @@ public class ConfigDao {
             String configString = "ProductFile:" + config.getProductFile().getPath() + "\n"
                     + "TaxesFile:" + config.getTaxesFile().getPath() + "\n"
                     + "TestDirectory:" + config.getTestDirectory().getPath() + "\n"
+                    + "DataDirectory:" + config.getDataDirectory().getPath() + "\n"
                     + "InTestMode:" + config.isInTestMode();
 
             out.print(configString);

@@ -18,34 +18,7 @@ public class OrderFilter implements FileFilter {
     private final String orderPrefix = "orders_";
 
     @Override
-    public boolean accept(File file) {
-//        
-//                String fileName = file.getName();
-//        String lowerCaseFileName = fileName.toLowerCase();
-//        
-//        boolean containsExtension = false;
-//        
-//        if (lowerCaseFileName.endsWith(extension)){
-//            System.out.println("contains extension");
-//            containsExtension = true;
-//        }else{
-//            System.out.println("does not contain extension");
-//        }
-//        
-//        boolean containsPrefix = false;
-//        
-//        if (lowerCaseFileName.startsWith(orderPrefix)){
-//            System.out.println("contains Prefix");
-//            containsPrefix = true;
-//        }else{
-//            System.out.println("does not contain prefix");    
-//        }
-//        
-//        System.out.println("File Name: " + fileName + " evaluates as " + ( containsExtension && containsPrefix));
-//        
-        //return ( containsExtension && containsPrefix);
-
-        
+    public boolean accept(File file) {        
         return (file.getName().toLowerCase().endsWith(extension) && file.getName().toLowerCase().startsWith(orderPrefix));
     }
 }

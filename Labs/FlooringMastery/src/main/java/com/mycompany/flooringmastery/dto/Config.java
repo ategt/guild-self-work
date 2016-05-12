@@ -13,6 +13,8 @@ public class Config {
     private java.io.File productFile;
     private java.io.File taxesFile;
     private java.io.File testDirectory;
+    private java.io.File dataDirectory;
+    
     
     private boolean inTestMode;
 
@@ -70,6 +72,20 @@ public class Config {
      */
     public void setInTestMode(boolean inTestMode) {
         this.inTestMode = inTestMode;
+    }
+
+    /**
+     * @return the dataDirectory
+     */
+    public java.io.File getDataDirectory() {
+        return dataDirectory;
+    }
+
+    /**
+     * @param dataDirectory the dataDirectory to set
+     */
+    public void setDataDirectory(java.io.File dataDirectory) {
+        this.dataDirectory = dataDirectory;
     }
     
     

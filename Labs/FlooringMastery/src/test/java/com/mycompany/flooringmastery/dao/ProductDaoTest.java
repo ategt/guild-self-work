@@ -6,8 +6,6 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.dto.Product;
-import com.mycompany.flooringmastery.dto.Product;
-import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

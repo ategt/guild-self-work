@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 public class StateDao {
 
     private java.util.Map<String, State> statesMap;
-    private int nextId;
     private File stateDataFile = new File("StatesData.txt");
 
     public StateDao() {
@@ -38,7 +37,6 @@ public class StateDao {
 
         if (isATest) {
             stateDataFile = new File("StatesTestData.txt");
-            //System.out.println(stateDataFile.getAbsolutePath());
         }
 
         statesMap = decode();
