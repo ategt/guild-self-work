@@ -7,6 +7,7 @@ package com.mycompany.consoleio;
 
 import com.mycompany.consoleio.exceptions.UserWantsOutException;
 import com.mycompany.consoleio.exceptions.UserWantsToDeleteDateException;
+import com.mycompany.consoleio.exceptions.UserWantsToDeleteValueException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -158,11 +159,97 @@ public class ConsoleIO {
         System.out.println(stringToPrint);
     }
 
-    public String getUserStringInput(String prompt) {
+    public String getUserStringInput(String prompt) throws UserWantsOutException, UserWantsToDeleteValueException {
         printStringToConsole(prompt);
-        return keyboard.nextLine().replace("\n", "").trim();
+        
+        String inputString = keyboard.nextLine().replace("\n", "").trim();
+        String returnedString = null;
+         if (inputString.equalsIgnoreCase("0") || inputString.equalsIgnoreCase("exit") || inputString.equalsIgnoreCase("x") || inputString.equalsIgnoreCase("e") || inputString.equalsIgnoreCase("ex")) {
+                    throw new com.mycompany.consoleio.exceptions.UserWantsOutException("The User Has Requested To Return To The Main Menu.");
+                } else if (inputString.equalsIgnoreCase("")) {
+                    returnedString = null;
+//                    if (allowNullDate) {
+//                        valid = true;
+//                    }
+                } else if (inputString.equalsIgnoreCase("-")) {
+                   // if (allowNullDate) {
+                        throw new com.mycompany.consoleio.exceptions.UserWantsToDeleteValueException("The User Has Requested To Delete The Existing Value.");
+                   // } else {
+                        //throw new com.mycompany.consoleio.exceptions.UserWantsOutException("The User Has Requested To Return To The Main Menu.");
+
+                   // }
+                }
+        
+        returnedString = inputString;
+        
+        
+        
+        
+        return returnedString;
     }
 
+    
+    // begin madness
+    public java.util.Date getUserDate(String prompt, boolean allowNullDate) throws UserWantsOutException, UserWantsToDeleteDateException {
+        java.util.Date passedInDate = null;
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        boolean valid = false;
+
+        while (!valid) {
+            String inputText = getUserStringInput(prompt);
+
+            try {
+                if (inputText.equalsIgnoreCase("0") || inputText.equalsIgnoreCase("exit") || inputText.equalsIgnoreCase("x") || inputText.equalsIgnoreCase("e") || inputText.equalsIgnoreCase("ex")) {
+                    throw new com.mycompany.consoleio.exceptions.UserWantsOutException("The User Has Requested To Return To The Main Menu.");
+                } else if (inputText.equalsIgnoreCase("")) {
+                    passedInDate = null;
+                    if (allowNullDate) {
+                        valid = true;
+                    }
+                } else if (inputText.equalsIgnoreCase("-")) {
+                    if (allowNullDate) {
+                        throw new com.mycompany.consoleio.exceptions.UserWantsToDeleteDateException("The User Has Requested To Delete The Existing Date.");
+                    } else {
+                        throw new com.mycompany.consoleio.exceptions.UserWantsOutException("The User Has Requested To Return To The Main Menu.");
+
+                    }
+                }
+
+                passedInDate = dateFormat.parse(inputText);
+                valid = true;
+            } catch (ParseException ex) {
+                //Logger.getLogger(ConsoleIO.class.getName()).log(Level.SEVERE, null, ex);
+                printStringToConsole("The System Could Understand That Date. \n - Please Enter The Date In DD-MM-yyyy Format or 0 to exit. -\n");
+            }
+
+        }
+        return passedInDate;
+    }
+// end madness
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public boolean getUserConfirmation() {
         return getUserConfirmation("");
     }
