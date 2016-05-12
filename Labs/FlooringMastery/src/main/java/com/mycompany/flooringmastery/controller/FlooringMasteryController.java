@@ -60,7 +60,6 @@ public class FlooringMasteryController {
         boolean done = false;
 
         //String border = new String(new char[77]).replaceAll('\0','*');
-        
         String border = "*****************************************************************************";
 
         String titleString = "Flooring Program";
@@ -109,12 +108,13 @@ public class FlooringMasteryController {
                         displayExitMessage();
                         done = true;
                         break;
-
                 }
 
             } catch (UserWantsOutException ex) {
+                displayExitMessage();
                 done = true;
             } catch (UserWantsToDeleteValueException ex) {
+                displayExitMessage();
                 done = true;
             }
 
@@ -139,7 +139,6 @@ public class FlooringMasteryController {
         } catch (UserWantsToDeleteValueException ex) {
             consoleIo.printStringToConsole("You Have Choosen To Delete This Value");
         }
-
     }
 
     private void displayOrders(List<Order> orders) {
@@ -356,7 +355,7 @@ public class FlooringMasteryController {
         askMaterialCost(order, newOrder);
 
         askLaborCostPerSquareFoot(order, newOrder);
-        
+
         askLaborCost(order, newOrder);
 
         askTax(order, newOrder);
