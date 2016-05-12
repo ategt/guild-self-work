@@ -114,8 +114,8 @@ public class FlooringMasteryController {
     }
     
     private String convertOrderToString(Order order){
-        String orderString = "";
-        orderDao.to
+        //String orderString = "";
+        String orderString = orderDao.addLabels(order, System.lineSeparator() , "::");
         
         
         return orderString;

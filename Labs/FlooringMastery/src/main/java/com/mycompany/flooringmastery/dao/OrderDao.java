@@ -339,6 +339,11 @@ public class OrderDao {
         return addLabels(orderString, TOKEN, ": ");
     }
     
+    
+    public String addLabels(Order order, final String TOKEN, final String SECOND_TOKEN){
+        return addLabels(toString(order), TOKEN, SECOND_TOKEN);
+    }
+    
 
     /**
      * The first token is for seperating label-order pairs(it is a comma in the

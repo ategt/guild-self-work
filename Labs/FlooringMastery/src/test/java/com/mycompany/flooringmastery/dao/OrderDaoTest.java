@@ -6,7 +6,6 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.dto.Order;
-import com.mycompany.flooringmastery.dto.State;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,7 +16,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -486,12 +484,6 @@ public class OrderDaoTest {
         // Create the file in the Dao.
         //Order returnedOrder = orderDao.create(order);
 
-        // Record the notes id number.
-        //int id = order.getId();
-
-        // Verify that the note object that the create method passed back
-        // was the same one it was given.
-        //assertEquals(order, returnedOrder);
 
         com.mycompany.flooringmastery.dto.State ohio = new com.mycompany.flooringmastery.dto.State();
         ohio.setState("KC");
@@ -517,7 +509,6 @@ public class OrderDaoTest {
         calendar.set(2000, Calendar.JANUARY, 1);
 
         Date orderDate = calendar.getTime();
-        //Date orderDate = new Date();
 
         // Set the above values to the appropriate attributes.
         order.setId(3);
@@ -533,20 +524,9 @@ public class OrderDaoTest {
         order.setTax(tax);
         order.setTotal(total);
         order.setDate(orderDate);
-        // Use the update method to save this new text to file.
-        //orderDao.update(order);
-
-        // Load a new instance of the OrderDao.
-        //OrderDao secondDao = new OrderDao(true);
-//        ProductDao secondProductDao = new ProductDao(true);
-//        StateDao secondStateDao = new StateDao(true);
-//        OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, isATest);
-
-        // Pull a note  using the id number recorded earlier.
-        //Order thirdOrder = secondOrderDao.get(id);
 
         String thirdOrderString = orderDao.toString(order, System.lineSeparator());
-        java.io.File firstTestFile = new java.io.File("myOtherTestFile.txt");
+        java.io.File firstTestFile = new java.io.File("FirstResultTestFile.txt");
         firstTestFile.deleteOnExit();
         
         try (PrintWriter out = new PrintWriter(new FileWriter(firstTestFile))) {
@@ -558,7 +538,7 @@ public class OrderDaoTest {
             //Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        java.io.File secondTestFile = new java.io.File("myNextOtherTestFile.txt");
+        java.io.File secondTestFile = new java.io.File("SecondResultTestFile.txt");
         secondTestFile.deleteOnExit();
         
         try (PrintWriter out = new PrintWriter(new FileWriter(secondTestFile))) {
@@ -573,8 +553,8 @@ public class OrderDaoTest {
             //Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        java.io.File firstValidTestFile = new java.io.File("myTestFile.txt");
-        java.io.File secondValidTestFile = new java.io.File("myNextTestFile.txt");
+        java.io.File firstValidTestFile = new java.io.File("FirstExpectedTestFile.txt");
+        java.io.File secondValidTestFile = new java.io.File("SecondExpectedTestFile.txt");
 
         assertEquals(readFile(firstValidTestFile), readFile(firstTestFile));
         assertEquals(readFile(secondValidTestFile), readFile(secondTestFile));
@@ -593,388 +573,4 @@ public class OrderDaoTest {
         return text;
     }
 
-//    /**
-//     * Test of create method, of class OrderDao.
-//     */
-//    @Test
-//    public void testCreateB() {
-//        System.out.println("create");
-//        Order order = new Order();
-//        OrderDao instance = new OrderDao(true);
-//        Order expResult = order;
-//        Order result = instance.create(order);
-//        assertEquals(expResult, result);
-//
-//        int id = result.getId();
-//        assertTrue(result.getId() != 0);
-//        assertTrue(result.getId() >= instance.size());
-//
-//        // Test get method.
-//        Order returnedOrder = instance.get(id);
-//        assertEquals(returnedOrder, result);
-//        instance.delete(order);
-//
-//        returnedOrder = instance.get(id);
-//        assertEquals(returnedOrder, null);
-//    }
-//
-//    /**
-//     * Test of getAllOrderes method, of class OrderDao.
-//     */
-//    @Test
-//    public void testGetAllOrderesB() {
-//        System.out.println("getAllOrderes");
-//        OrderDao instance = new OrderDao(true);
-//
-//        Order orderOne = new Order();
-//        Order orderTwo = new Order();
-//        Order orderThree = new Order();
-//
-//        instance.create(orderOne);
-//        instance.create(orderTwo);
-//        instance.create(orderThree);
-//
-//        assertTrue(instance.getAllOrderes().contains(orderTwo));
-//
-//        instance.delete(orderOne);
-//        instance.delete(orderTwo);
-//        instance.delete(orderThree);
-//
-//        int expSizeResult = 3;
-//        int sizeResult = instance.size();
-//        assertEquals(expSizeResult, sizeResult);
-//
-//        String lastName = "Steve";
-//        List<Order> result = instance.searchByLastName(lastName);
-//        assertEquals(true, result.isEmpty());
-//
-//        lastName = "Jones";
-//        result = instance.searchByLastName(lastName);
-//        assertEquals(false, result.isEmpty());
-//        assertEquals(2, result.size());
-//    }
-//
-//    @Test
-//    public void testEncodeAndDecodeB() {
-//
-//        //Dvd dvd = new DvdImplementation();
-//        OrderDao orderDao = new OrderDao(true);
-//        Order order = new Order();
-//
-//        // Create the file in the Dao.
-//        Order returnedOrder = orderDao.create(order);
-//
-//        // Record the notes id number.
-//        int id = order.getId();
-//
-//        // Verify that the note object that the create method passed back
-//        // was the same one it was given.
-//        assertEquals(order, returnedOrder);
-//
-//        String city = "Seville";
-//        String country = "USA";
-//        String type = "mailing";
-//        String zipCode = "88775";
-//        String poBox = "21";
-//        String firstName = "First and last name here";
-//        String street = "3589 Street Road";
-//        String state = "Michigan";
-//
-//        // Set some text in the note file.
-//        //returnedOrder.setNoteString("This Is a test note.");
-//        returnedOrder.setCity(city);
-//        returnedOrder.setCountry(country);
-//        returnedOrder.setType(type);
-//        returnedOrder.setZipcode(zipCode);
-//        returnedOrder.setPoBox(poBox);
-//        returnedOrder.setFirstName(firstName);
-//        returnedOrder.setStreetOrder(street);
-//        returnedOrder.setState(state);
-//
-//        // Use the update method to save this new text to file.
-//        orderDao.update(order);
-//
-//        // Load a new instance of the NoteDao.
-//        OrderDao thirdDao = new OrderDao(true);
-//
-//        // Pull a note  using the id number recorded earlier.
-//        Order thirdOrder = secondDao.get(id);
-//
-//        assertTrue(thirdOrder != null);
-//
-//        // Check that the update method saved the new text.
-//        //assertEquals("This Is a test note.", thirdOrder.getNoteString());
-//        assertEquals(city, thirdOrder.getCity());
-//        assertEquals(country, thirdOrder.getCountry());
-//        assertEquals(type, thirdOrder.getType());
-//        assertEquals(zipCode, thirdOrder.getZipcode());
-//        assertEquals(poBox, thirdOrder.getPoBox());
-//        assertEquals(firstName, thirdOrder.getFirstName());
-//        assertEquals(street, thirdOrder.getStreetOrder());
-//        assertEquals(state, thirdOrder.getState());
-//
-//        // Delete the test note.
-//        secondDao.delete(thirdOrder);
-//
-//        // Load a third instance of the Dao and verify that 
-//        // the note was deleted from the file.
-//        OrderDao thirdDao = new OrderDao(true);
-//        assertEquals(thirdDao.get(id), null);
-//
-//    }
-//
-//    /**
-//     * Test of create method, of class OrderDao.
-//     */
-//    @Test
-//    public void testCreateC() {
-//        System.out.println("create");
-//        Order order = new Order();
-//        OrderDao instance = new OrderDao(true);
-//        Order expResult = order;
-//        Order result = instance.create(order);
-//        assertEquals(expResult, result);
-//
-//        int id = result.getId();
-//        assertTrue(result.getId() != 0);
-//        assertTrue(result.getId() >= instance.size());
-//
-//        // Test get method.
-//        Order returnedOrder = instance.get(id);
-//        assertEquals(returnedOrder, result);
-//        instance.delete(order);
-//
-//        returnedOrder = instance.get(id);
-//        assertEquals(returnedOrder, null);
-//    }
-//
-//    /**
-//     * Test of getAllOrderes method, of class OrderDao.
-//     */
-//    @Test
-//    public void testGetAllOrderesC() {
-//        System.out.println("getAllOrderes");
-//        OrderDao instance = new OrderDao(true);
-//
-//        Order orderOne = new Order();
-//        Order orderTwo = new Order();
-//        Order orderThree = new Order();
-//
-//        instance.create(orderOne);
-//        instance.create(orderTwo);
-//        instance.create(orderThree);
-//
-//        assertTrue(instance.getAllOrderes().contains(orderTwo));
-//
-//        instance.delete(orderOne);
-//        instance.delete(orderTwo);
-//        instance.delete(orderThree);
-//
-//        int expSizeResult = 3;
-//        int sizeResult = instance.size();
-//        assertEquals(expSizeResult, sizeResult);
-//
-//        String lastName = "Steve";
-//        List<Order> result = instance.searchByLastName(lastName);
-//        assertEquals(true, result.isEmpty());
-//
-//        lastName = "Jones";
-//        result = instance.searchByLastName(lastName);
-//        assertEquals(false, result.isEmpty());
-//        assertEquals(2, result.size());
-//    }
-//
-//    @Test
-//    public void testEncodeAndDecodeC() {
-//
-//        //Dvd dvd = new DvdImplementation();
-//        OrderDao orderDao = new OrderDao(true);
-//        Order order = new Order();
-//
-//        // Create the file in the Dao.
-//        Order returnedOrder = orderDao.create(order);
-//
-//        // Record the notes id number.
-//        int id = order.getId();
-//
-//        // Verify that the note object that the create method passed back
-//        // was the same one it was given.
-//        assertEquals(order, returnedOrder);
-//
-//        String city = "Seville";
-//        String country = "USA";
-//        String type = "mailing";
-//        String zipCode = "88775";
-//        String poBox = "21";
-//        String firstName = "First and last name here";
-//        String street = "3589 Street Road";
-//        String state = "Michigan";
-//
-//        // Set some text in the note file.
-//        //returnedOrder.setNoteString("This Is a test note.");
-//        returnedOrder.setCity(city);
-//        returnedOrder.setCountry(country);
-//        returnedOrder.setType(type);
-//        returnedOrder.setZipcode(zipCode);
-//        returnedOrder.setPoBox(poBox);
-//        returnedOrder.setFirstName(firstName);
-//        returnedOrder.setStreetOrder(street);
-//        returnedOrder.setState(state);
-//
-//        // Use the update method to save this new text to file.
-//        orderDao.update(order);
-//
-//        // Load a new instance of the NoteDao.
-//        OrderDao secondDao = new OrderDao(true);
-//
-//        // Pull a note  using the id number recorded earlier.
-//        Order thirdOrder = secondDao.get(id);
-//
-//        assertTrue(thirdOrder != null);
-//
-//        // Check that the update method saved the new text.
-//        //assertEquals("This Is a test note.", thirdOrder.getNoteString());
-//        assertEquals(city, thirdOrder.getCity());
-//        assertEquals(country, thirdOrder.getCountry());
-//        assertEquals(type, thirdOrder.getType());
-//        assertEquals(zipCode, thirdOrder.getZipcode());
-//        assertEquals(poBox, thirdOrder.getPoBox());
-//        assertEquals(firstName, thirdOrder.getFirstName());
-//        assertEquals(street, thirdOrder.getStreetOrder());
-//        assertEquals(state, thirdOrder.getState());
-//
-//        // Delete the test note.
-//        secondDao.delete(thirdOrder);
-//
-//        // Load a third instance of the Dao and verify that 
-//        // the note was deleted from the file.
-//        OrderDao thirdDao = new OrderDao(true);
-//        assertEquals(thirdDao.get(id), null);
-//
-//    }
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    /**
-//     * Test of create method, of class OrderDao.
-//     */
-//    @Test
-//    public void testCreate() {
-//        System.out.println("create");
-//        Order order = null;
-//        OrderDao instance = null;
-//        Order expResult = null;
-//        Order result = instance.create(order);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of get method, of class OrderDao.
-//     */
-//    @Test
-//    public void testGet() {
-//        System.out.println("get");
-//        Integer id = null;
-//        OrderDao instance = null;
-//        Order expResult = null;
-//        Order result = instance.get(id);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of update method, of class OrderDao.
-//     */
-//    @Test
-//    public void testUpdate() {
-//        System.out.println("update");
-//        Order order = null;
-//        OrderDao instance = null;
-//        instance.update(order);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of delete method, of class OrderDao.
-//     */
-//    @Test
-//    public void testDelete() {
-//        System.out.println("delete");
-//        Order order = null;
-//        OrderDao instance = null;
-//        instance.delete(order);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getList method, of class OrderDao.
-//     */
-//    @Test
-//    public void testGetList() {
-//        System.out.println("getList");
-//        OrderDao instance = null;
-//        List<Order> expResult = null;
-//        List<Order> result = instance.getList();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of size method, of class OrderDao.
-//     */
-//    @Test
-//    public void testSize() {
-//        System.out.println("size");
-//        OrderDao instance = null;
-//        int expResult = 0;
-//        int result = instance.size();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of searchByDate method, of class OrderDao.
-//     */
-//    @Test
-//    public void testSearchByDate() {
-//        System.out.println("searchByDate");
-//        Date date = null;
-//        OrderDao instance = null;
-//        List<Order> expResult = null;
-//        List<Order> result = instance.searchByDate(date);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of isSameDay method, of class OrderDao.
-//     */
-//    @Test
-//    public void testIsSameDay() {
-//        System.out.println("isSameDay");
-//        Date date1 = null;
-//        Date date2 = null;
-//        boolean expResult = false;
-//        boolean result = OrderDao.isSameDay(date1, date2);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//    
 }
