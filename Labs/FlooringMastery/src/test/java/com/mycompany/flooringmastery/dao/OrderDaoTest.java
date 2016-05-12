@@ -573,4 +573,150 @@ public class OrderDaoTest {
         return text;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @Test
+    public void testIfDateWillChangeWhichFileOrderIsIn() {
+
+        // Hopefully no one ever has to call this method several times from an outside source.
+        // I guess it is public, though.
+        // I know what my luck looks like; best of luck future me.
+        
+        boolean isATest = true;
+
+        ProductDao productDao = new ProductDao(true);
+        StateDao stateDao = new StateDao(true);
+        OrderDao orderDao = new OrderDao(productDao, stateDao, isATest);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        Order order = new Order();
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(order);
+
+        // Record the notes id number.
+        int id = order.getId();
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmastery.dto.State ohio = new com.mycompany.flooringmastery.dto.State();
+        ohio.setState("IN");
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmastery.dto.Product product = new com.mycompany.flooringmastery.dto.Product();
+        product.setType("Steel");
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = "Bob and sons, perfection.";
+        double taxRate = 3.25;
+        double area = 100.00;
+        double costPerSquareFoot = 5.15;
+        double laborCostPerSquareFoot = 4.75;
+        double materialCost = 515.00;
+        double laborCost = 475.00;
+        double tax = 3061.88;
+        double total = 4051.88;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 1);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+
+        // Set the above values to the appropriate attributes.
+        //order.setId(1);
+        order.setName(name);
+        order.setState(ohio);
+        order.setTaxRate(taxRate);
+        order.setProduct(product);
+        order.setArea(area);
+        order.setCostPerSquareFoot(costPerSquareFoot);
+        order.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
+        order.setMaterialCost(materialCost);
+        order.setLaborCost(laborCost);
+        order.setTax(tax);
+        order.setTotal(total);
+        order.setDate(orderDate);
+        // Use the update method to save this new text to file.
+        orderDao.update(order);
+
+        // Load a new instance of the OrderDao.
+        //OrderDao secondDao = new OrderDao(true);
+        ProductDao secondProductDao = new ProductDao(true);
+        StateDao secondStateDao = new StateDao(true);
+        OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, isATest);
+
+        // Pull a note  using the id number recorded earlier.
+        Order thirdOrder = secondOrderDao.get(id);
+
+        String thirdOrderString = secondOrderDao.toString(thirdOrder, System.lineSeparator());
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(new java.io.File("myTestFile.txt")))) {
+
+            out.println(thirdOrderString);
+            out.flush();
+        } catch (IOException ex) {
+            fail("IOException - " + ex.getMessage());
+            //Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(new java.io.File("myNextTestFile.txt")))) {
+
+            String token = System.lineSeparator();
+            String thirdOrderStringWithLabels = secondOrderDao.addLabels(thirdOrderString, token);
+
+            out.println(thirdOrderStringWithLabels);
+            out.flush();
+        } catch (IOException ex) {
+            fail("IOException - " + ex.getMessage());
+            //Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        assertTrue(thirdOrder != null);
+
+        // Check that the update method saved the new text.
+        //assertEquals("This Is a test note.", thirdOrder.getNoteString());
+        assertEquals(name, thirdOrder.getName());
+        assertEquals(ohio.getState(), thirdOrder.getState().getState());
+        assertEquals(taxRate, thirdOrder.getTaxRate(), 1e-8);
+        assertEquals(product.getType(), thirdOrder.getProduct().getType());
+        assertEquals(area, thirdOrder.getArea(), 1e-8);
+        assertEquals(costPerSquareFoot, thirdOrder.getCostPerSquareFoot(), 1e-8);
+        assertEquals(laborCostPerSquareFoot, thirdOrder.getLaborCostPerSquareFoot(), 1e-8);
+        assertEquals(materialCost, thirdOrder.getMaterialCost(), 1e-8);
+        assertEquals(laborCost, thirdOrder.getLaborCost(), 1e-8);
+        assertEquals(tax, thirdOrder.getTax(), 1e-8);
+        assertEquals(total, thirdOrder.getTotal(), 1e-8);
+
+        // Delete the test note.
+        secondOrderDao.delete(thirdOrder);
+
+        // Load a third instance of the Dao and verify that 
+        // the note was deleted from the file.
+        ProductDao thirdProductDao = new ProductDao(true);
+        StateDao thirdStateDao = new StateDao(true);
+        OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, isATest);
+
+        //OrderDao thirdDao = new OrderDao(true);
+        assertEquals(thirdOrderDao.get(id), null);
+
+    }
+
+    
+    
 }

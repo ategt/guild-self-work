@@ -124,11 +124,17 @@ public class OrderDao {
             }
         }
 
+        
+        Date oldDate = null;
         if (found != null) {
+            oldDate = found.getDate();
+            
             orders.remove(found);
             orders.add(order);
         }
 
+        encode(oldDate);
+        
         encode(order);
 
     }
@@ -143,10 +149,13 @@ public class OrderDao {
             }
         }
 
+        Date oldDate = null;
         if (found != null) {
+            oldDate = found.getDate();
             orders.remove(found);
         }
 
+        encode(oldDate);
         encode(order);
 
     }
@@ -600,6 +609,7 @@ public class OrderDao {
                 Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
         return date;
     }
 
