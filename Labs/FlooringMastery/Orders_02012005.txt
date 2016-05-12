@@ -1,4 +1,4 @@
 OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
 1,Billy Bob Jones,OH,8.0,Tile,7.0,8.0,9.0,4.0,1.0,5.0,1000000.0
 2,Joe,MI,7.0,Wood,8.0,8.0,8.0,8.0,8.0,8.0,8.0
-3,Timmy,PA,9.0,Wood,9.0,9.0,9.0,9.0,9.0,9.0,9.0
+4,Fred,OH,7.0,Tile,9.0,3.0,3.0,3.0,3.0,3.0,3.0
