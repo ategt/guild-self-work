@@ -370,14 +370,7 @@ public class FlooringMasteryController {
 //        
         askTaxRate(order, newOrder);
 
-        
-
-        
-        
-        
-        
-        
-       double oldTaxRateDouble = 0.0d;
+        double oldTaxRateDouble = 0.0d;
         String oldTaxRate;
         if (order == null) {
             oldTaxRate = "";
@@ -387,54 +380,17 @@ public class FlooringMasteryController {
         } else {
             oldTaxRate = "";
         }
-        
+
         double taxRate;
         try {
             taxRate = consoleIo.getUserDoubleMinMax("\n" + oldTaxRate + "\nPlease Enter Tax Rate: ", 0, 100.00d, oldTaxRateDouble);
             newOrder.setTaxRate(taxRate);
-            
+
         } catch (UserWantsToDeleteValueException ex) {
             newOrder.setTaxRate(0.0d);
         }
-    
-        
-        
-        
-        
+
         //newOrder.setTaxRate(taxRate);
-
-        
-        String oldState;
-        if (order == null) {
-            oldState = "";
-        } else if (order.getState() != null) {
-            oldState = order.getState().getState();
-        } else {
-            oldState = "";
-        }
-
-        boolean valid = false;
-        while (!valid) {
-            String customerState = consoleIo.getUserStringInputSimple("\n" + oldState + "\nPlease Enter State: ");
-
-            com.mycompany.flooringmastery.dto.State state = stateDao.get(customerState);
-
-            if (customerState.equalsIgnoreCase("")) {
-                customerState = null;
-                valid = true;
-            } else if (customerState.equalsIgnoreCase("-")) {
-                customerState = null;
-                newOrder.setState(null);
-                valid = true;
-            } else if (state != null) {
-                newOrder.setState(state);
-                valid = true;
-            } //newOrder.setName(customerState);
-        }
-//            
-        
-
-
         String oldProduct;
         if (order == null) {
             oldProduct = "";
@@ -448,11 +404,7 @@ public class FlooringMasteryController {
         while (!validProduct) {
             String customerProduct = consoleIo.getUserStringInputSimple("\n" + oldProduct + "\nPlease Enter Product Name: ");
             com.mycompany.flooringmastery.dto.Product product = productDao.get(customerProduct);
-            
-            
-            
-            
-            
+
             if (customerProduct.equalsIgnoreCase("")) {
                 customerProduct = null;
                 valid = true;
@@ -465,27 +417,146 @@ public class FlooringMasteryController {
                 valid = true;
             }
         }
-            
 
-        double area = consoleIo.getUserDoubleRange("Please Enter Area Of Floor: ", 0, Double.MAX_VALUE);
-        newOrder.setArea(area);
+        // template
+        double oldAreaDouble = 0.0d;
+        String oldArea;
+        if (order == null) {
+            oldArea = "";
+        } else if (order.getTaxRate() != 0.0d) {
+            oldArea = Double.toString(order.getArea());
+            oldAreaDouble = order.getArea();
+        } else {
+            oldArea = "";
+        }
 
-        double costPerSqrFt = consoleIo.getUserDoubleRange("Please Enter Material Cost Per Square Foot: ", 0, Double.MAX_VALUE);
-        newOrder.setCostPerSquareFoot(costPerSqrFt);
+        double area;
+        try {
+            area = consoleIo.getUserDoubleMinMax("\n" + oldArea + "\nPlease Enter Area Of Floor: ", 0, Double.MAX_VALUE, oldAreaDouble);
+            newOrder.setArea(area);
 
-        double materialCost = consoleIo.getUserDoubleRange("Please Enter Material Cost: ", 0, Double.MAX_VALUE);
-        newOrder.setMaterialCost(materialCost);
+        } catch (UserWantsToDeleteValueException ex) {
+            newOrder.setArea(0.0d);
+        }
 
-        double laborCost = consoleIo.getUserDoubleRange("Please Enter Labor Cost: ", 0, Double.MAX_VALUE);
-        newOrder.setLaborCost(laborCost);
+        // template
+        // double area = consoleIo.getUserDoubleRange("Please Enter Area Of Floor: ", 0, Double.MAX_VALUE);
+        //newOrder.setArea(area);
+        double oldcostPerSqrFtDouble = 0.0d;
+        String oldcostPerSqrFt;
+        if (order == null) {
+            oldcostPerSqrFt = "";
+        } else if (order.getCostPerSquareFoot() != 0.0d) {
+            oldcostPerSqrFt = Double.toString(order.getCostPerSquareFoot());
+            oldcostPerSqrFtDouble = order.getCostPerSquareFoot();
+        } else {
+            oldcostPerSqrFt = "";
+        }
 
-        double tax = consoleIo.getUserDoubleRange("Please Enter Total Tax: ", 0, Double.MAX_VALUE);
-        newOrder.setTax(tax);
+        double costPerSqrFt;
+        try {
+            costPerSqrFt = consoleIo.getUserDoubleMinMax("\n" + oldcostPerSqrFt + "\nPlease Enter Material Cost Per Square Foot: ", 0, Double.MAX_VALUE, oldcostPerSqrFtDouble);
+            newOrder.setCostPerSquareFoot(costPerSqrFt);
 
-        double totalCost = consoleIo.getUserDoubleRange("Please Enter Total Project Cost: ", 0, Double.MAX_VALUE);
-        newOrder.setTotal(totalCost);
+        } catch (UserWantsToDeleteValueException ex) {
+            newOrder.setCostPerSquareFoot(0.0d);
+        }
+
+        // double costPerSqrFt = consoleIo.getUserDoubleRange("Please Enter Material Cost Per Square Foot: ", 0, Double.MAX_VALUE);
+        //newOrder.setCostPerSquareFoot(costPerSqrFt);
+        double oldmaterialCostDouble = 0.0d;
+        String oldmaterialCost;
+        if (order == null) {
+            oldmaterialCost = "";
+        } else if (order.getMaterialCost() != 0.0d) {
+            oldmaterialCost = Double.toString(order.getMaterialCost());
+            oldmaterialCostDouble = order.getMaterialCost();
+        } else {
+            oldmaterialCost = "";
+        }
+
+        double materialCost;
+        try {
+            materialCost = consoleIo.getUserDoubleMinMax("\n" + oldmaterialCost + "\nPlease Enter Total Material Cost: ", 0, Double.MAX_VALUE, oldmaterialCostDouble);
+            newOrder.setMaterialCost(materialCost);
+
+        } catch (UserWantsToDeleteValueException ex) {
+            newOrder.setMaterialCost(0.0d);
+        }
+
+        //double materialCost = consoleIo.getUserDoubleRange("Please Enter Material Cost: ", 0, Double.MAX_VALUE);
+        //newOrder.setMaterialCost(materialCost);
+        double oldlaborCostDouble = 0.0d;
+        String oldlaborCost;
+        if (order == null) {
+            oldlaborCost = "";
+        } else if (order.getLaborCost() != 0.0d) {
+            oldlaborCost = Double.toString(order.getLaborCost());
+            oldlaborCostDouble = order.getLaborCost();
+        } else {
+            oldlaborCost = "";
+        }
+
+        double laborCost;
+        try {
+            laborCost = consoleIo.getUserDoubleMinMax("\n" + oldlaborCost + "\nPlease Enter Total Labor Cost: ", 0, Double.MAX_VALUE, oldlaborCostDouble);
+            newOrder.setLaborCost(laborCost);
+
+        } catch (UserWantsToDeleteValueException ex) {
+            newOrder.setLaborCost(0.0d);
+        }
+
+        //double laborCost = consoleIo.getUserDoubleRange("Please Enter Labor Cost: ", 0, Double.MAX_VALUE);
+        //newOrder.setLaborCost(laborCost);
+        double oldtaxDouble = 0.0d;
+        String oldtax;
+        if (order == null) {
+            oldtax = "";
+        } else if (order.getTax() != 0.0d) {
+            oldtax = Double.toString(order.getTax());
+            oldtaxDouble = order.getTax();
+        } else {
+            oldtax = "";
+        }
+
+        double tax;
+        try {
+            tax = consoleIo.getUserDoubleMinMax("\n" + oldtax + "\nPlease Enter Total Tax: ", 0, Double.MAX_VALUE, oldtaxDouble);
+            newOrder.setTax(tax);
+
+        } catch (UserWantsToDeleteValueException ex) {
+            newOrder.setTax(0.0d);
+        }
+
+        askTotalCost(order, newOrder);
 
         return newOrder;
+    }
+
+    private void askTotalCost(Order order, Order newOrder) throws UserWantsOutException {
+        //double tax = consoleIo.getUserDoubleRange("Please Enter Total Tax: ", 0, Double.MAX_VALUE);
+        //newOrder.setTax(tax);
+        //double totalCost = consoleIo.getUserDoubleRange("Please Enter Total Project Cost: ", 0, Double.MAX_VALUE);
+        // newOrder.setTotal(totalCost);
+        double oldtotalCostDouble = 0.0d;
+        String oldtotalCost;
+        if (order == null) {
+            oldtotalCost = "";
+        } else if (order.getTotal() != 0.0d) {
+            oldtotalCost = Double.toString(order.getTotal());
+            oldtotalCostDouble = order.getTotal();
+        } else {
+            oldtotalCost = "";
+        }
+
+        double totalCost;
+        try {
+            totalCost = consoleIo.getUserDoubleMinMax("\n" + oldtotalCost + "\nPlease Enter Total Project Cost: ", 0, Double.MAX_VALUE, oldtotalCostDouble);
+            newOrder.setTotal(totalCost);
+
+        } catch (UserWantsToDeleteValueException ex) {
+            newOrder.setTotal(0.0d);
+        }
     }
 
     private void askTaxRate(Order order, Order newOrder) throws UserWantsOutException {
@@ -499,12 +570,12 @@ public class FlooringMasteryController {
         } else {
             oldTaxRate = "";
         }
-        
+
         double taxRate;
         try {
             taxRate = consoleIo.getUserDoubleMinMax("\n" + oldTaxRate + "\nPlease Enter Tax Rate: ", 0, 100.00d, oldTaxRateDouble);
             newOrder.setTaxRate(taxRate);
-            
+
         } catch (UserWantsToDeleteValueException ex) {
             newOrder.setTaxRate(0.0d);
         }
