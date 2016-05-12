@@ -90,6 +90,10 @@ public class ConsoleIO {
 
                 inputString = getUserStringInput(prompt);
 
+                if (inputString.equalsIgnoreCase("")){
+                    inputString = input.toString();
+                }
+                
                 switch (choice) {
                     case 2:
                         input = Float.parseFloat(inputString);
@@ -271,8 +275,8 @@ public class ConsoleIO {
         return userFloatInput;
     }
 
-    public double getUserDoubleInput(String prompt) throws UserWantsOutException, UserWantsToDeleteValueException {
-        Number input = 0d;
+    public double getUserDoubleInput(String prompt, double oldValue) throws UserWantsOutException, UserWantsToDeleteValueException {
+        Number input = oldValue;
         int choice = 3;
 
         input = getUserInputValidationLoop(input, prompt, choice);
@@ -291,12 +295,15 @@ public class ConsoleIO {
     }
 
     public double getUserDoubleMinMax(String prompt, double min, double max) throws UserWantsOutException, UserWantsToDeleteValueException {
+        return getUserDoubleMinMax( prompt, min, max, 0.0d);
+    }
+public double getUserDoubleMinMax(String prompt, double min, double max, double oldValue) throws UserWantsOutException, UserWantsToDeleteValueException {
 
-        double userDoubleInput = 0.0d;
+        double userDoubleInput = oldValue;
         boolean isValid = false;
 
         while (!isValid) {
-            userDoubleInput = this.getUserDoubleInput(prompt);
+            userDoubleInput = this.getUserDoubleInput(prompt, oldValue );
             if (userDoubleInput >= min && userDoubleInput <= max) {
                 isValid = true;
 

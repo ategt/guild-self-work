@@ -8,6 +8,7 @@ package com.mycompany.flooringmastery.controller;
 import com.mycompany.consoleio.ConsoleIO;
 import com.mycompany.consoleio.exceptions.UserWantsOutException;
 import com.mycompany.consoleio.exceptions.UserWantsToDeleteDateException;
+import com.mycompany.consoleio.exceptions.UserWantsToDeleteValueException;
 import com.mycompany.flooringmastery.dao.ConfigDao;
 import com.mycompany.flooringmastery.dao.OrderDao;
 import com.mycompany.flooringmastery.dao.ProductDao;
@@ -46,7 +47,13 @@ public class FlooringMasteryController {
             Logger.getLogger(FlooringMasteryController.class.getName()).log(Level.SEVERE, null, ex);
             consoleIo.printStringToConsole("There is something wrong with the program!");
             consoleIo.printStringToConsole(ex.getMessage());
-            consoleIo.getUserConfirmation("Please Read The Above Message Before Continuing\n Enter \"Y\" To Continue");
+            try {
+                consoleIo.getUserConfirmation("Please Read The Above Message Before Continuing\n Enter \"Y\" To Continue");
+            } catch (UserWantsOutException ex1) {
+                consoleIo.printStringToConsole(ex1.getMessage());
+            } catch (UserWantsToDeleteValueException ex1) {
+                consoleIo.printStringToConsole(ex1.getMessage());
+            }
         }
         config = configDao.get();
 
@@ -76,30 +83,38 @@ public class FlooringMasteryController {
                 + border;
 
         while (!done) {
+            try {
+                int option;
 
-            int option = consoleIo.getUserIntInputRange(menuString, 0, 6);
+                option = consoleIo.getUserIntInputRange(menuString, 0, 6);
 
-            switch (option) {
-                case 1:
-                    displayOrders();
-                    break;
-                case 2:
-                    addOrder();
-                    break;
-                case 3:
-                    editOrder();
-                    break;
-                case 4:
-                    removeOrder();
-                    break;
-                case 5:
-                    save();
-                    break;
-                case 0:
-                    displayExitMessage();
-                    done = true;
-                    break;
+                switch (option) {
+                    case 1:
+                        displayOrders();
+                        break;
+                    case 2:
+                        addOrder();
+                        break;
+                    case 3:
+                        editOrder();
+                        break;
+                    case 4:
+                        removeOrder();
+                        break;
+                    case 5:
+                        save();
+                        break;
+                    case 0:
+                        displayExitMessage();
+                        done = true;
+                        break;
 
+                }
+
+            } catch (UserWantsOutException ex) {
+                done = true;
+            } catch (UserWantsToDeleteValueException ex) {
+                done = true;
             }
 
         }
@@ -120,6 +135,8 @@ public class FlooringMasteryController {
             }
         } catch (UserWantsOutException ex) {
             consoleIo.printStringToConsole("You Have Choosen To Return To The Main Menu.");
+        } catch (UserWantsToDeleteValueException ex) {
+            consoleIo.printStringToConsole("You Have Choosen To Delete This Value");
         }
 
     }
@@ -162,6 +179,8 @@ public class FlooringMasteryController {
             }
         } catch (UserWantsOutException ex) {
             //Logger.getLogger(FlooringMasteryController.class.getName()).log(Level.SEVERE, null, ex);
+            consoleIo.printStringToConsole(ex.getMessage());
+        } catch (UserWantsToDeleteValueException ex) {
             consoleIo.printStringToConsole(ex.getMessage());
         }
 
@@ -300,11 +319,15 @@ public class FlooringMasteryController {
                 newOrder.setDate(orderDate);
             }
 
-        } catch (UserWantsToDeleteDateException ex) {
+        } catch (UserWantsToDeleteValueException ex) {
             orderDate = null;
             newOrder.setDate(orderDate);
             order.setDate(orderDate);
             //Logger.getLogger(FlooringMasteryController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UserWantsToDeleteDateException ex) {
+            orderDate = null;
+            newOrder.setDate(orderDate);
+            order.setDate(orderDate);
         }
 //
 //        java.util.Date orderDate = consoleIo.getUserDate("Please Enter Order Date: ");
@@ -313,38 +336,30 @@ public class FlooringMasteryController {
         String oldState;
         if (order == null) {
             oldState = "";
-        }else if ( order.getState() != null ){
+        } else if (order.getState() != null) {
             oldState = order.getState().getState();
         } else {
             oldState = "";
         }
 
-
         boolean valid = false;
         while (!valid) {
-            String customerState = consoleIo.getUserStringInput("\n" + oldState + "\nPlease Enter State: ");
-         
-                        com.mycompany.flooringmastery.dto.State state = stateDao.get(customerState);
+            String customerState = consoleIo.getUserStringInputSimple("\n" + oldState + "\nPlease Enter State: ");
 
-            
-            
-        if (customerState.equalsIgnoreCase("")) {
-            customerState = null;
-            valid = true;
-        } else if (customerState.equalsIgnoreCase("-")) {
-            customerState = null;
-            newOrder.setState(null);
-            valid = true;
-        } else {
-            
-             if (state != null) {
+            com.mycompany.flooringmastery.dto.State state = stateDao.get(customerState);
+
+            if (customerState.equalsIgnoreCase("")) {
+                customerState = null;
+                valid = true;
+            } else if (customerState.equalsIgnoreCase("-")) {
+                customerState = null;
+                newOrder.setState(null);
+                valid = true;
+            } else if (state != null) {
                 newOrder.setState(state);
                 valid = true;
-            }
-            //newOrder.setName(customerState);
-        }
+            } //newOrder.setName(customerState);
 
-            
 //            
 //            com.mycompany.flooringmastery.dto.State state = stateDao.get(customerState);
 //            if (state != null) {
@@ -353,31 +368,32 @@ public class FlooringMasteryController {
 //            }
 //        }
 //        
-        
-        
-        
 
-        String oldTaxRate;
-        if (order == null) {
-            oldTaxRate = "";
-        }else if ( order.getTaxRate() != 0.0d ){
-            oldTaxRate = Double.toString(order.getTaxRate());
-        } else {
-            oldTaxRate = "";
+
+        double oldTaxRateDouble = 0.0d;
+            String oldTaxRate;
+            if (order == null) {
+                oldTaxRate = "";
+            } else if (order.getTaxRate() != 0.0d) {
+                oldTaxRate = Double.toString(order.getTaxRate());
+                oldTaxRateDouble = order.getTaxRate();
+            } else {
+                oldTaxRate = "";
+            }
+
+            double taxRate;
+            try {
+                taxRate = consoleIo.getUserDoubleMinMax("\n" + oldTaxRate + "\nPlease Enter Tax Rate: ", 0, 100.00d, oldTaxRateDouble);
+                newOrder.setTaxRate(taxRate);
+
+            } catch (UserWantsToDeleteValueException ex) {
+                newOrder.setTaxRate(0.0d);
+            }
+
         }
 
-        double taxRate = consoleIo.getUserDoubleRange("\n" + oldTaxRate + "\nPlease Enter Tax Rate: ", 0, 100.00d);
+        //newOrder.setTaxRate(taxRate);
 
-
-        newOrder.setTaxRate(taxRate);
-
-        
-        
-        
-        
-        
-        
-        
         boolean validProduct = false;
         while (!validProduct) {
             String customerProduct = consoleIo.getUserStringInput("Please Enter Product Name: ");
