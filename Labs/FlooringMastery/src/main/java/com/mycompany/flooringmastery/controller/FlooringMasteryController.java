@@ -33,14 +33,13 @@ public class FlooringMasteryController {
 //    }
     ConsoleIO consoleIo = new ConsoleIO();
 
-    ProductDao productDao = new ProductDao(configDao);
-    StateDao stateDao = new StateDao(configDao);
-    OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
+    ProductDao productDao;
+    StateDao stateDao;
+    OrderDao orderDao;
     ConfigDao configDao;
     //Config config;
 
-    public void run() {
-
+    private void init() {
         try {
             configDao = new ConfigDao();
         } catch (ConfigurationFileCorruptException ex) {
@@ -54,15 +53,24 @@ public class FlooringMasteryController {
             }
         } catch (FileCreationException ex) {
             Logger.getLogger(FlooringMasteryController.class.getName()).log(Level.SEVERE, null, ex);
-            
+
             try {
                 consoleIo.getUserConfirmation("Please Read The Above Message Before Continuing\n Enter \"Y\" To Continue");
             } catch (UserWantsOutException | UserWantsToDeleteValueException ex1) {
             }
         }
-        
-        //config = configDao.get();
 
+        //config = configDao.get();
+        productDao = new ProductDao(configDao);
+        stateDao = new StateDao(configDao);
+        orderDao = new OrderDao(productDao, stateDao, configDao);
+
+    }
+
+    public void run() {
+
+        init();
+        
         boolean done = false;
 
         //String border = new String(new char[77]).replaceAll('\0','*');
@@ -196,7 +204,7 @@ public class FlooringMasteryController {
         Order newOrder = new Order();
 
         newOrder = editOrder(newOrder);
-        
+
         return newOrder;
 
     }
@@ -431,7 +439,7 @@ public class FlooringMasteryController {
     }
 
     private void askArea(Order order, Order newOrder) throws UserWantsOutException {
-        
+
         double oldAreaDouble = 0.0d;
         String oldArea;
         if (order == null) {

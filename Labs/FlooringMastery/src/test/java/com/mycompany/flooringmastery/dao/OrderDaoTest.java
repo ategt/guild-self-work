@@ -6,6 +6,8 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.dto.Order;
+import com.mycompany.flooringmastery.exceptions.ConfigurationFileCorruptException;
+import com.mycompany.flooringmastery.exceptions.FileCreationException;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -44,9 +46,23 @@ public class OrderDaoTest {
     public void testCreate() {
         System.out.println("create");
 
+
+        boolean isATest = true;
+        ConfigDao configDao = null;
+
+        try {
+             configDao = new ConfigDao();
+        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
+            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
+        }
+        
+        configDao.get().setInTestMode(isATest);
+        
+        
         ProductDao productDao = new ProductDao(true);
         StateDao stateDao = new StateDao(true);
-        OrderDao instance = new OrderDao(productDao, stateDao, true);
+        OrderDao instance = new OrderDao(productDao, stateDao, configDao);
 
         Order order = new Order();
         Order expResult = order;
@@ -76,9 +92,23 @@ public class OrderDaoTest {
         java.io.File tempFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/OrdersTestData-temp.txt");
         testFile.renameTo(tempFile);
 
+        
+        boolean isATest = true;
+        ConfigDao configDao = null;
+
+        try {
+             configDao = new ConfigDao();
+        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
+            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
+        }
+        
+        configDao.get().setInTestMode(isATest);
+        
+        
         ProductDao productDao = new ProductDao(true);
         StateDao stateDao = new StateDao(true);
-        OrderDao instance = new OrderDao(productDao, stateDao, true);
+        OrderDao instance = new OrderDao(productDao, stateDao, configDao);
 
         Order orderOne = new Order();
         Order orderTwo = new Order();
@@ -149,9 +179,21 @@ public class OrderDaoTest {
     @Test
     public void testEncodeAndDecode() {
 
+        boolean isATest = true;
+        ConfigDao configDao = null;
+
+        try {
+             configDao = new ConfigDao();
+        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
+            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
+        }
+        
+        configDao.get().setInTestMode(isATest);
+        
         ProductDao productDao = new ProductDao(true);
         StateDao stateDao = new StateDao(true);
-        OrderDao orderDao = new OrderDao(productDao, stateDao, true);
+        OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
@@ -208,7 +250,7 @@ public class OrderDaoTest {
         //OrderDao secondDao = new OrderDao(true);
         ProductDao secondProductDao = new ProductDao(true);
         StateDao secondStateDao = new StateDao(true);
-        OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, true);
+        OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, configDao);
 
         // Pull a note  using the id number recorded earlier.
         Order thirdOrder = secondOrderDao.get(id);
@@ -236,7 +278,7 @@ public class OrderDaoTest {
         // the note was deleted from the file.
         ProductDao thirdProductDao = new ProductDao(true);
         StateDao thirdStateDao = new StateDao(true);
-        OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, true);
+        OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, configDao);
 
         //OrderDao thirdDao = new OrderDao(true);
         assertEquals(thirdOrderDao.get(id), null);
@@ -246,9 +288,21 @@ public class OrderDaoTest {
     @Test
     public void testEncodeAndDecodeWithCommas() {
 
+        boolean isATest = true;
+        ConfigDao configDao = null;
+
+        try {
+             configDao = new ConfigDao();
+        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
+            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
+        }
+        
+        configDao.get().setInTestMode(isATest);
+        
         ProductDao productDao = new ProductDao(true);
         StateDao stateDao = new StateDao(true);
-        OrderDao orderDao = new OrderDao(productDao, stateDao, true);
+        OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
@@ -305,7 +359,7 @@ public class OrderDaoTest {
         //OrderDao secondDao = new OrderDao(true);
         ProductDao secondProductDao = new ProductDao(true);
         StateDao secondStateDao = new StateDao(true);
-        OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, true);
+        OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, configDao);
 
         // Pull a note  using the id number recorded earlier.
         Order thirdOrder = secondOrderDao.get(id);
@@ -333,7 +387,7 @@ public class OrderDaoTest {
         // the note was deleted from the file.
         ProductDao thirdProductDao = new ProductDao(true);
         StateDao thirdStateDao = new StateDao(true);
-        OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, true);
+        OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, configDao);
 
         //OrderDao thirdDao = new OrderDao(true);
         assertEquals(thirdOrderDao.get(id), null);
@@ -343,11 +397,20 @@ public class OrderDaoTest {
     @Test
     public void testEncodeAndDecodeWithDate() {
 
+        ConfigDao configDao = null;
         boolean isATest = false;
-
+        try {
+             configDao = new ConfigDao();
+        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
+            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
+        }
+        
+        configDao.get().setInTestMode(isATest);
+        
         ProductDao productDao = new ProductDao(true);
         StateDao stateDao = new StateDao(true);
-        OrderDao orderDao = new OrderDao(productDao, stateDao, isATest);
+        OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
@@ -410,7 +473,7 @@ public class OrderDaoTest {
         //OrderDao secondDao = new OrderDao(true);
         ProductDao secondProductDao = new ProductDao(true);
         StateDao secondStateDao = new StateDao(true);
-        OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, isATest);
+        OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, configDao);
 
         // Pull a note  using the id number recorded earlier.
         Order thirdOrder = secondOrderDao.get(id);
@@ -461,7 +524,7 @@ public class OrderDaoTest {
         // the note was deleted from the file.
         ProductDao thirdProductDao = new ProductDao(true);
         StateDao thirdStateDao = new StateDao(true);
-        OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, isATest);
+        OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, configDao);
 
         //OrderDao thirdDao = new OrderDao(true);
         assertEquals(thirdOrderDao.get(id), null);
@@ -472,10 +535,23 @@ public class OrderDaoTest {
     public void testToString() {
 
         boolean isATest = true;
+        
+        
+        ConfigDao configDao = null;
+
+        try {
+             configDao = new ConfigDao();
+        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
+            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
+        }
+        
+        configDao.get().setInTestMode(isATest);
+        
 
         ProductDao productDao = new ProductDao(true);
         StateDao stateDao = new StateDao(true);
-        OrderDao orderDao = new OrderDao(productDao, stateDao, isATest);
+        OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
@@ -594,9 +670,20 @@ public class OrderDaoTest {
         
         boolean isATest = true;
 
+        ConfigDao configDao = null;
+
+        try {
+             configDao = new ConfigDao();
+        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
+            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
+        }
+        
+        configDao.get().setInTestMode(isATest);
+        
         ProductDao productDao = new ProductDao(true);
         StateDao stateDao = new StateDao(true);
-        OrderDao orderDao = new OrderDao(productDao, stateDao, isATest);
+        OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
@@ -659,7 +746,7 @@ public class OrderDaoTest {
         //OrderDao secondDao = new OrderDao(true);
         ProductDao secondProductDao = new ProductDao(true);
         StateDao secondStateDao = new StateDao(true);
-        OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, isATest);
+        OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, configDao);
 
         // Pull a note  using the id number recorded earlier.
         Order thirdOrder = secondOrderDao.get(id);
@@ -710,13 +797,12 @@ public class OrderDaoTest {
         // the note was deleted from the file.
         ProductDao thirdProductDao = new ProductDao(true);
         StateDao thirdStateDao = new StateDao(true);
-        OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, isATest);
+        OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, configDao);
 
         //OrderDao thirdDao = new OrderDao(true);
         assertEquals(thirdOrderDao.get(id), null);
 
     }
 
-    
     
 }

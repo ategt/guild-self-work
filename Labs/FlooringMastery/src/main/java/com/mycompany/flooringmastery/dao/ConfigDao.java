@@ -76,23 +76,23 @@ public class ConfigDao {
             if (taxFile.getParent() != null) {
                 taxParentFile = new java.io.File(taxFile.getParent());
             }
-            
+
             // Get the data directory.
             java.io.File dataDir = config.getDataDirectory();
 
             // If the tax file is an orphan give it a parent.
-            if (taxParentFile == null ) {
+            if (taxParentFile == null) {
                 config.setTaxesFile(new java.io.File((dataDir.getPath() + "/" + config.getTaxesFile().getName()).replaceAll("//", "/")));
             }
 
             java.io.File productFile = config.getProductFile();
             java.io.File productParentFile = null;
 
-            if ( productFile.getParent() != null ){
+            if (productFile.getParent() != null) {
                 productParentFile = new java.io.File(productFile.getParent());
             }
-            
-            if (productParentFile == null ) {
+
+            if (productParentFile == null) {
                 config.setProductFile(new java.io.File((dataDir.getPath() + "/" + config.getProductFile().getName()).replaceAll("//", "/")));
             }
         }
@@ -110,14 +110,13 @@ public class ConfigDao {
 //    private boolean verifyLoading(){
 //        return verifyLoading(config);
 //    }
-    
-    private boolean verifyLoading(){ //com.mycompany.flooringmastery.dto.Config tempConfig) {
+    private boolean verifyLoading() { //com.mycompany.flooringmastery.dto.Config tempConfig) {
         boolean goodLoad = true;
-        
+
         // This loads the defaults and will transfer the default values to any null fields.
         com.mycompany.flooringmastery.dto.Config tempConfig = makeConfig();
         if (config.getProductFile() == null) {
-           config.setProductFile(tempConfig.getProductFile());
+            config.setProductFile(tempConfig.getProductFile());
             goodLoad = false;
         }
 
@@ -140,12 +139,16 @@ public class ConfigDao {
     }
 
     private void buildConfig(java.io.File configFile) {
-        if (configFile.exists()) {
+        if (configFile == null) {
+            config = makeConfig();
+
+        } else if (configFile.exists()) {
             config = decode(configFile);
         } else {
             config = makeConfig();
             encode();
         }
+
     }
 
     public com.mycompany.flooringmastery.dto.Config get() {
