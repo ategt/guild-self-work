@@ -60,6 +60,7 @@ public class FlooringMasteryController {
         boolean done = false;
 
         //String border = new String(new char[77]).replaceAll('\0','*');
+        
         String border = "*****************************************************************************";
 
         String titleString = "Flooring Program";
@@ -78,7 +79,7 @@ public class FlooringMasteryController {
                 + "*\t3. Edit an Order\n"
                 + "*\t4. Remove an Order\n"
                 + "*\t5. Save All Orders\n"
-                + "*\t0. Quit\n"
+                + "*\t6. Quit\n"
                 + "*\n"
                 + border;
 
@@ -104,7 +105,7 @@ public class FlooringMasteryController {
                     case 5:
                         save();
                         break;
-                    case 0:
+                    case 6:
                         displayExitMessage();
                         done = true;
                         break;
@@ -124,7 +125,7 @@ public class FlooringMasteryController {
     private void displayOrders() {
 
         try {
-            java.util.Date orderDate = consoleIo.getUserDate("What Date Would You Like To See Orders For?:\n The System Likes YYYY-MM-DD Format Best.");
+            java.util.Date orderDate = consoleIo.getUserDate("What Date Would You Like To See Orders For?:\n The System Likes DD-MM-YYYY Format Best.");
 
             List<Order> ordersForDate = orderDao.searchByDate(orderDate);
 
@@ -168,7 +169,7 @@ public class FlooringMasteryController {
 
     private String convertOrderToString(Order order) {
         //String orderString = "";
-        String orderString = orderDao.addLabels(order, System.lineSeparator(), ":\t");
+        String orderString = orderDao.addLabels(order, "\n", ":\t");
 
         return orderString;
     }
@@ -354,6 +355,8 @@ public class FlooringMasteryController {
 
         askMaterialCost(order, newOrder);
 
+        askLaborCostPerSquareFoot(order, newOrder);
+        
         askLaborCost(order, newOrder);
 
         askTax(order, newOrder);
@@ -365,7 +368,11 @@ public class FlooringMasteryController {
 
     private void askCustomerName(Order order, Order newOrder) throws UserWantsOutException {
         String oldName;
-        if (order != null) {
+        if (order == null) {
+            oldName = "";
+
+        } else if (order.getName() != null) {
+
             oldName = order.getName();
         } else {
             oldName = "";
@@ -463,7 +470,7 @@ public class FlooringMasteryController {
     }
 
     private void askProduct(Order order, Order newOrder) {
-        boolean valid;
+        //boolean valid;
         //newOrder.setTaxRate(taxRate);
         String oldProduct;
         if (order == null) {
@@ -480,14 +487,14 @@ public class FlooringMasteryController {
 
             if (customerProduct.equalsIgnoreCase("")) {
                 customerProduct = null;
-                valid = true;
+                validProduct = true;
             } else if (customerProduct.equalsIgnoreCase("-")) {
                 customerProduct = null;
                 newOrder.setProduct(null);
-                valid = true;
+                validProduct = true;
             } else if (product != null) {
                 newOrder.setProduct(product);
-                valid = true;
+                validProduct = true;
             }
         }
     }
@@ -680,6 +687,30 @@ public class FlooringMasteryController {
 
     private void displayExitMessage() {
         consoleIo.printStringToConsole("Have A Nice Day!");
+    }
+
+    private void askLaborCostPerSquareFoot(Order order, Order newOrder) throws UserWantsOutException {
+        //double materialCost = consoleIo.getUserDoubleRange("Please Enter Material Cost: ", 0, Double.MAX_VALUE);
+        //newOrder.setMaterialCost(materialCost);
+        double oldLaborCostPerSquareFootDouble = 0.0d;
+        String oldLaborCostPerSquareFoot;
+        if (order == null) {
+            oldLaborCostPerSquareFoot = "";
+        } else if (order.getLaborCostPerSquareFoot() != 0.0d) {
+            oldLaborCostPerSquareFoot = Double.toString(order.getLaborCostPerSquareFoot());
+            oldLaborCostPerSquareFootDouble = order.getLaborCostPerSquareFoot();
+        } else {
+            oldLaborCostPerSquareFoot = "";
+        }
+
+        double laborCostPerSquareFoot;
+        try {
+            laborCostPerSquareFoot = consoleIo.getUserDoubleMinMax("\n" + oldLaborCostPerSquareFoot + "\nPlease Enter Labor Cost Per Square Foot: ", 0, Double.MAX_VALUE, oldLaborCostPerSquareFootDouble);
+            newOrder.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
+
+        } catch (UserWantsToDeleteValueException ex) {
+            newOrder.setLaborCostPerSquareFoot(0.0d);
+        }
     }
 }
 

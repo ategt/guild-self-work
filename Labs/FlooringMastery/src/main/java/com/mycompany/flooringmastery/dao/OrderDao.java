@@ -124,17 +124,16 @@ public class OrderDao {
             }
         }
 
-        
         Date oldDate = null;
         if (found != null) {
             oldDate = found.getDate();
-            
+
             orders.remove(found);
             orders.add(order);
         }
 
         encode(oldDate);
-        
+
         encode(order);
 
     }
@@ -340,19 +339,16 @@ public class OrderDao {
     }
 
     public String addLabels(Order order, final String TOKEN) {
-        return addLabels(toString(order), TOKEN);
+        return addLabels(toString(order, TOKEN), TOKEN);
     }
-    
-    
-    public String addLabels(String orderString, final String TOKEN){
+
+    public String addLabels(String orderString, final String TOKEN) {
         return addLabels(orderString, TOKEN, ": ");
     }
-    
-    
-    public String addLabels(Order order, final String TOKEN, final String SECOND_TOKEN){
-        return addLabels(toString(order), TOKEN, SECOND_TOKEN);
+
+    public String addLabels(Order order, final String TOKEN, final String SECOND_TOKEN) {
+        return addLabels(toString(order, TOKEN), TOKEN, SECOND_TOKEN);
     }
-    
 
     /**
      * The first token is for seperating label-order pairs(it is a comma in the
@@ -366,23 +362,37 @@ public class OrderDao {
      */
     public String addLabels(String orderString, final String TOKEN, final String SECOND_TOKEN) {
 
+//        if (TOKEN.isEmpty()) {
+//            TOKEN = System.lineSeparator();
+//        }
         String labeledOrderString = "";
 
         String[] orderParts = orderString.split(TOKEN);
 
-        labeledOrderString += "Order ID#" + SECOND_TOKEN + orderParts[0] + TOKEN;
-        labeledOrderString += "Customer Name" + SECOND_TOKEN + orderParts[1] + TOKEN;
-        labeledOrderString += "State" + SECOND_TOKEN + orderParts[2] + TOKEN;
-        labeledOrderString += "Tax Rate" + SECOND_TOKEN + orderParts[3] + TOKEN;
-        labeledOrderString += "Product Name" + SECOND_TOKEN + orderParts[4] + TOKEN;
-        labeledOrderString += "Area" + SECOND_TOKEN + orderParts[5] + TOKEN;
-        labeledOrderString += "Cost Per Square Foot" + SECOND_TOKEN + orderParts[6] + TOKEN;
-        labeledOrderString += "Labor Cost Per Square Foot" + SECOND_TOKEN + orderParts[7] + TOKEN;
-        labeledOrderString += "Material Cost" + SECOND_TOKEN + orderParts[8] + TOKEN;
-        labeledOrderString += "Labor Cost" + SECOND_TOKEN + orderParts[9] + TOKEN;
-        labeledOrderString += "Tax" + SECOND_TOKEN + orderParts[10] + TOKEN;
-        labeledOrderString += "Total" + SECOND_TOKEN + orderParts[11];
+//        for (int x = 0 ; x < orderParts.length ; x++){
+//            orderParts[x] = orderParts[x].replaceAll(TOKEN, System.lineSeparator()) ;
+//            
+//        }
+//        
+        //TOKEN.isEmpty() || 
+        
+        if (orderParts.length < 11) {
+            System.out.println("Something Just went wrong on line 373 of the order DAO\n" + " - " + TOKEN + " - " );
+        } else {
 
+            labeledOrderString += "Order ID#" + SECOND_TOKEN + orderParts[0] + TOKEN;
+            labeledOrderString += "Customer Name" + SECOND_TOKEN + orderParts[1] + TOKEN;
+            labeledOrderString += "State" + SECOND_TOKEN + orderParts[2] + TOKEN;
+            labeledOrderString += "Tax Rate" + SECOND_TOKEN + orderParts[3] + TOKEN;
+            labeledOrderString += "Product Name" + SECOND_TOKEN + orderParts[4] + TOKEN;
+            labeledOrderString += "Area" + SECOND_TOKEN + orderParts[5] + TOKEN;
+            labeledOrderString += "Cost Per Square Foot" + SECOND_TOKEN + orderParts[6] + TOKEN;
+            labeledOrderString += "Labor Cost Per Square Foot" + SECOND_TOKEN + orderParts[7] + TOKEN;
+            labeledOrderString += "Material Cost" + SECOND_TOKEN + orderParts[8] + TOKEN;
+            labeledOrderString += "Labor Cost" + SECOND_TOKEN + orderParts[9] + TOKEN;
+            labeledOrderString += "Tax" + SECOND_TOKEN + orderParts[10] + TOKEN;
+            labeledOrderString += "Total" + SECOND_TOKEN + orderParts[11];
+        }
         return labeledOrderString;
 
     }
@@ -609,7 +619,7 @@ public class OrderDao {
                 Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return date;
     }
 
