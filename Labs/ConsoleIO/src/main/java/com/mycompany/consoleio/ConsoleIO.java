@@ -195,7 +195,9 @@ public class ConsoleIO {
         
         String inputString = getUserStringInputSimple(prompt);
         
-        if (inputString.equalsIgnoreCase("0") || inputString.equalsIgnoreCase("exit") || inputString.equalsIgnoreCase("x") || inputString.equalsIgnoreCase("e") || inputString.equalsIgnoreCase("ex")) {
+        if (inputString.equalsIgnoreCase("exit") || inputString.equalsIgnoreCase("x") || inputString.equalsIgnoreCase("e") || inputString.equalsIgnoreCase("ex") || inputString.equalsIgnoreCase("exi")) {
+            // Chris did not like "0" as an escape option, so I removed it. inputString.equalsIgnoreCase("0") || 
+            
             throw new com.mycompany.consoleio.exceptions.UserWantsOutException("The User Has Requested To Return To The Main Menu.");
         } else if (inputString.equalsIgnoreCase("")) {
             returnedString = null;

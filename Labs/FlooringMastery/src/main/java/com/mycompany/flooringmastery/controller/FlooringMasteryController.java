@@ -60,12 +60,33 @@ public class FlooringMasteryController {
             }
         }
 
+        consoleIo = new ConsoleIO();
+
+        int response = 0;
+        
+        try {
+            response = consoleIo.getUserIntInputRange("This program supports two Modes:\n 1 - Test Mode\n 2 - Production Mode\n Please Choose a Mode to Continue", 0, 0, "You must choose a Mode Before Proceeding.");
+        } catch (UserWantsOutException | UserWantsToDeleteValueException ex) {
+        }
+        
+        
+        if (response == 2){
+            // Production Mode
+            configDao.get().setInTestMode(false);
+            
+        }else {
+            // Test Mode
+            configDao.get().setInTestMode(true);
+            
+            
+        
+        }
+        
         //config = configDao.get();
         productDao = new ProductDao(configDao);
         stateDao = new StateDao(configDao);
         orderDao = new OrderDao(productDao, stateDao, configDao);
-        consoleIo = new ConsoleIO();
-
+        
     }
 
     public void run() {
