@@ -32,9 +32,11 @@ public class StateDao {
     public StateDao() {
         this(false);
     }
-
+    
     protected StateDao(boolean isATest) {
 
+        
+        
         if (isATest) {
             stateDataFile = new File("StatesTestData.txt");
         }

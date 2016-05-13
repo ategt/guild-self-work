@@ -79,7 +79,7 @@ public class OrderDao {
                 orders = loadedOrders;
             } else {
                 List<Order> loadedOrders = new ArrayList();
-                java.io.File[] orderFiles = lookForOrders();
+                java.io.File[] orderFiles = lookForOrders(configDao1.get().getOrdersDirectory());
                 for (java.io.File orderFile : orderFiles) {
                     if (!orderFile.getName().endsWith("00000000.txt")) {
                         loadedOrders.addAll(decode(orderFile));
@@ -565,10 +565,10 @@ public class OrderDao {
         return orderList;
     }
     
-    private java.io.File[] lookForOrders() {
-        return lookForOrders(orderDataFile); // .getParentFile());
-    }
-    
+//    private java.io.File[] lookForOrders() {
+//        return lookForOrders(orderDataFile.getParentFile());
+//    }
+//    
     private java.io.File[] lookForOrders(java.io.File file) {
         if (file.isDirectory()) {
             java.io.File[] orderFiles = file.listFiles(new com.mycompany.flooringmastery.utilities.OrderFilter());
@@ -580,7 +580,7 @@ public class OrderDao {
     
     private File determineFile(java.util.Date date) {
         try {
-            return determineFile(orderDataFile, date);
+            return determineFile(configDao.get().getOrdersDirectory(), date);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
             // System.out.println("Something just went very wrong in the determineFile Method!!!");

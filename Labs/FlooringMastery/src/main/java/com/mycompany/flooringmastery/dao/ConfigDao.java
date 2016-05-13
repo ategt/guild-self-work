@@ -27,6 +27,7 @@ public class ConfigDao {
     com.mycompany.flooringmastery.dto.Config config;
     java.io.File defaultTestDirectory = new java.io.File("Test");
     java.io.File defaultDataDirectory = new java.io.File("Data");
+    java.io.File defaultOrdersDirectory = new java.io.File("Orders");
     java.io.File defaultTaxesFile = new java.io.File("Taxes.txt");
     java.io.File defaultProductsFile = new java.io.File("Products.txt");
 
@@ -49,6 +50,7 @@ public class ConfigDao {
 
         validateFolder(config.getTestDirectory());
         validateFolder(config.getDataDirectory());
+validateFolder(config.getOrdersDirectory());
 
         if (!config.getTestDirectory().isDirectory()) {
             throw new FileCreationException("Something went wrong, the test file is not a directory.");
@@ -56,6 +58,10 @@ public class ConfigDao {
 
         if (!config.getDataDirectory().isDirectory()) {
             throw new FileCreationException("Something went wrong, the data file is not a directory.");
+        }
+
+        if (!config.getOrdersDirectory().isDirectory()) {
+            throw new FileCreationException("Something went wrong, the orders file is not a directory.");
         }
     }
 
@@ -95,6 +101,28 @@ public class ConfigDao {
             if (productParentFile == null) {
                 config.setProductFile(new java.io.File((dataDir.getPath() + "/" + config.getProductFile().getName()).replaceAll("//", "/")));
             }
+     
+            
+       //     The orders directory is its own directory, this step is completely unneed.
+//        
+//            // Get the Orders File
+//            java.io.File ordersFile = config.getOrdersDirectory();
+//            java.io.File ordersParentFile = null;
+//
+//            // If the Tax file has a parent define it, otherwise it stays null.
+//            if (ordersFile.getParent() != null) {
+//                ordersParentFile = new java.io.File(ordersFile.getParent());
+//            }
+//
+//            // Get the data directory.
+//            java.io.File ordersDir = config.getOrdersDirectory();
+//
+//            // If the tax file is an orphan give it a parent.
+//            if (ordersParentFile == null) {
+//                config.setOrdersDirectory(new java.io.File((dataDir.getPath() + "/" + config.getTaxesFile().getName()).replaceAll("//", "/")));
+//            }
+//
+//        
         }
     }
 
@@ -132,6 +160,11 @@ public class ConfigDao {
 
         if (config.getDataDirectory() == null) {
             config.setDataDirectory(tempConfig.getDataDirectory());
+            goodLoad = false;
+        }
+
+        if (config.getOrdersDirectory() == null) {
+            config.setOrdersDirectory(tempConfig.getOrdersDirectory());
             goodLoad = false;
         }
 
@@ -191,6 +224,10 @@ public class ConfigDao {
                     String dataDirectoryPath = configLine.replace("DataDirectory:", "");
                     java.io.File dataDirectory = new java.io.File(dataDirectoryPath);
                     tempConfig.setDataDirectory(dataDirectory);
+                } else if (configLine.contains("OrdersDirectory:")) {
+                    String ordersDirectoryPath = configLine.replace("OrdersDirectory:", "");
+                    java.io.File ordersDirectory = new java.io.File(ordersDirectoryPath);
+                    tempConfig.setOrdersDirectory(ordersDirectory);
                 } else if (configLine.contains("InTestMode:")) {
                     String inTestModeString = configLine.replace("InTestMode:", "");
                     boolean inTestMode = true;
@@ -221,6 +258,8 @@ public class ConfigDao {
         tempConfig.setTaxesFile(defaultTaxesFile);
         tempConfig.setTestDirectory(defaultTestDirectory);
         tempConfig.setDataDirectory(defaultDataDirectory);
+        tempConfig.setOrdersDirectory(defaultOrdersDirectory);
+        
 
         placeDataFilesInDataFolder(tempConfig);
 
@@ -235,6 +274,7 @@ public class ConfigDao {
                     + "TaxesFile:" + config.getTaxesFile().getPath() + "\n"
                     + "TestDirectory:" + config.getTestDirectory().getPath() + "\n"
                     + "DataDirectory:" + config.getDataDirectory().getPath() + "\n"
+                    + "OrdersDirectory:" + config.getOrdersDirectory().getPath() + "\n"
                     + "InTestMode:" + config.isInTestMode();
 
             out.print(configString);

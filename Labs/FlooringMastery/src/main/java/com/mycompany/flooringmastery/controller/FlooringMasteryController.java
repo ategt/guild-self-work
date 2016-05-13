@@ -61,8 +61,8 @@ public class FlooringMasteryController {
         }
 
         //config = configDao.get();
-        productDao = new ProductDao(configDao);
-        stateDao = new StateDao(configDao);
+        productDao = new ProductDao();
+        stateDao = new StateDao();
         orderDao = new OrderDao(productDao, stateDao, configDao);
 
     }

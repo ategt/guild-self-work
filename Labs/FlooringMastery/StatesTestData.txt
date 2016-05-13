@@ -1,4 +1,5 @@
 State,TaxRate
+DG,0.0
 IN,0.0
 KC,0.0
 OH,0.0

@@ -14,7 +14,7 @@ public class Config {
     private java.io.File taxesFile;
     private java.io.File testDirectory;
     private java.io.File dataDirectory;
-    
+    private java.io.File ordersDirectory;
     
     private boolean inTestMode;
 
@@ -86,6 +86,20 @@ public class Config {
      */
     public void setDataDirectory(java.io.File dataDirectory) {
         this.dataDirectory = dataDirectory;
+    }
+
+    /**
+     * @return the ordersDirectory
+     */
+    public java.io.File getOrdersDirectory() {
+        return ordersDirectory;
+    }
+
+    /**
+     * @param ordersDirectory the ordersDirectory to set
+     */
+    public void setOrdersDirectory(java.io.File ordersDirectory) {
+        this.ordersDirectory = ordersDirectory;
     }
     
     

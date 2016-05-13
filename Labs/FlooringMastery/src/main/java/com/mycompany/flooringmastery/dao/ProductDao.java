@@ -28,18 +28,16 @@ public class ProductDao {
     //List<Product> products;
     java.util.Map<String, Product> productsMap;
     int nextId;
-    File productDataFile = new File("ProductsData.txt");
+    File productDataFile;   // = new File("ProductsData.txt");
 
-    public ProductDao() {
-        this(false);
-    }
+//    public ProductDao() {
+//        this(false);
+//    }
 
-    protected ProductDao(boolean isATest) {
+    public ProductDao(ConfigDao configDao) {
 
-        if (isATest) {
-            productDataFile = new File("ProductsTestData.txt");
-        }
-
+        productDataFile = configDao.get().getProductFile();
+        
         productsMap = decode();
 
         if (productsMap == null) {

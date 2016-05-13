@@ -1,2 +1,0 @@
-OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
-5,null,null,0.0,null,0.0,0.0,0.0,0.0,0.0,0.0,0.0

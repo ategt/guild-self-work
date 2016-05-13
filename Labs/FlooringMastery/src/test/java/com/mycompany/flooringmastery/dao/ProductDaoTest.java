@@ -6,6 +6,10 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.dto.Product;
+import com.mycompany.flooringmastery.exceptions.ConfigurationFileCorruptException;
+import com.mycompany.flooringmastery.exceptions.FileCreationException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,11 +23,28 @@ public class ProductDaoTest {
 
     java.io.File testFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/ProductsTestData.txt");
 
+    ConfigDao configDao;
+    
     public ProductDaoTest() {
     }
 
     @Before
     public void setUp() {
+        
+        
+        boolean isATest = true;
+        ConfigDao configDao = null;
+
+        try {
+             configDao = new ConfigDao();
+             configDao.get().setProductFile(testFile);
+        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
+            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
+        }
+        
+        configDao.get().setInTestMode(isATest);
+        this.configDao = configDao;
     }
 
     @After
@@ -39,7 +60,7 @@ public class ProductDaoTest {
         // Create should not accept a product with no name.
         System.out.println("create");
         Product product = new Product();
-        ProductDao instance = new ProductDao(true);
+        ProductDao instance = new ProductDao(configDao);
         Product expResult = null;
         Product result = instance.create(product);
         assertEquals(expResult, result);
@@ -50,7 +71,7 @@ public class ProductDaoTest {
         // Create should not accept a null product object.
         System.out.println("create");
         Product product = null;
-        ProductDao instance = new ProductDao(true);
+        ProductDao instance = new ProductDao(configDao);
         Product expResult = null;
         Product result = instance.create(product);
         assertEquals(expResult, result);
@@ -62,7 +83,7 @@ public class ProductDaoTest {
         System.out.println("create");
         Product product = new Product();
         product.setType("Product1");
-        ProductDao instance = new ProductDao(true);
+        ProductDao instance = new ProductDao(configDao);
         Product expResult = product;
         Product result = instance.create(product);
         assertEquals(expResult, result);
@@ -84,7 +105,7 @@ public class ProductDaoTest {
         System.out.println("create");
         Product product = new Product();
         product.setType("Product2");
-        ProductDao instance = new ProductDao(true);
+        ProductDao instance = new ProductDao(configDao);
         Product expResult = product;
         Product result = instance.create(product, product.getType());
         assertEquals(expResult, result);
@@ -96,7 +117,7 @@ public class ProductDaoTest {
         System.out.println("create");
         Product product = new Product();
         product.setType("Product7");
-        ProductDao instance = new ProductDao(true);
+        ProductDao instance = new ProductDao(configDao);
         Product expResult = product;
         Product result = instance.create(product, product.getType());
         assertEquals(expResult, result);
@@ -108,7 +129,7 @@ public class ProductDaoTest {
         System.out.println("create");
         Product product = new Product();
         product.setType("BEST Product ever");
-        ProductDao instance = new ProductDao(true);
+        ProductDao instance = new ProductDao(configDao);
         //Product expResult = product;
         Product result = instance.create(product, product.getType());
         assertEquals("Best Product Ever", result.getType());
@@ -119,7 +140,7 @@ public class ProductDaoTest {
         System.out.println("create");
         Product product = new Product();
         product.setType("Fancy New Product");
-        ProductDao instance = new ProductDao(true);
+        ProductDao instance = new ProductDao(configDao);
         Product expResult = product;
         Product result = instance.create(product);
         assertEquals(expResult, result);
@@ -139,7 +160,7 @@ public class ProductDaoTest {
         System.out.println("create");
         Product product = new Product();
         product.setType("Better Flooring");
-        ProductDao instance = new ProductDao(true);
+        ProductDao instance = new ProductDao(configDao);
         Product expResult = product;
         Product result = instance.create(product);
         assertEquals(expResult, result);
@@ -159,7 +180,7 @@ public class ProductDaoTest {
         System.out.println("create");
         Product product = new Product();
         product.setType("Worlds Best Floor");
-        ProductDao instance = new ProductDao(true);
+        ProductDao instance = new ProductDao(configDao);
         Product expResult = product;
         String productNameLowerCase = "worlds Best FLOOR";
         Product result = instance.create(product);
@@ -180,7 +201,7 @@ public class ProductDaoTest {
         System.out.println("create");
         Product product = new Product();
         product.setType("floor1");
-        ProductDao instance = new ProductDao(true);
+        ProductDao instance = new ProductDao(configDao);
         Product expResult = product;
         String productNameLowerCase = "FLOOR1";
         Product result = instance.create(product);
@@ -201,7 +222,7 @@ public class ProductDaoTest {
         System.out.println("create");
         Product product = new Product();
         product.setType("FLOOR5");
-        ProductDao instance = new ProductDao(true);
+        ProductDao instance = new ProductDao(configDao);
         Product expResult = product;
         String productNameLowerCase = "floor5";
         Product result = instance.create(product);
@@ -226,7 +247,7 @@ public class ProductDaoTest {
 
         Product product = new Product();
         product.setType("best floor");
-        ProductDao instance = new ProductDao(true);
+        ProductDao instance = new ProductDao(configDao);
 
         testFile.renameTo(tempFile);
 
@@ -262,7 +283,7 @@ public class ProductDaoTest {
     public void testEncodeAndDecode() {
 
         // The true parameter in the ProductDao constructor signifies a test.
-        ProductDao productDao = new ProductDao(true);
+        ProductDao productDao = new ProductDao(configDao);
         Product testProduct = new Product();
 
         String productName = "German Bamboo";
@@ -285,7 +306,7 @@ public class ProductDaoTest {
         productDao.update(testProduct);
 
         // Load a new instance of the ProductDao.
-        ProductDao secondDao = new ProductDao(true);
+        ProductDao secondDao = new ProductDao(configDao);
 
         // Pull a product  using the id number recorded earlier.
         Product thirdProduct = secondDao.get(productName);
@@ -302,7 +323,7 @@ public class ProductDaoTest {
 
         // Load a third instance of the Dao and verify that 
         // the product was deleted from the file.
-        ProductDao thirdDao = new ProductDao(true);
+        ProductDao thirdDao = new ProductDao(configDao);
         assertEquals(thirdDao.get(productName), null);
 
     }
