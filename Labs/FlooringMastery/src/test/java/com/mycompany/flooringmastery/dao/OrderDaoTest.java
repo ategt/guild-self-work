@@ -64,15 +64,6 @@ public class OrderDaoTest {
 
 
         boolean isATest = true;
-        ConfigDao configDao = null;
-
-        try {
-             configDao = new ConfigDao();
-        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
-            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
-        }
-        
         configDao.get().setInTestMode(isATest);
         
         
@@ -110,15 +101,6 @@ public class OrderDaoTest {
 
         
         boolean isATest = true;
-        ConfigDao configDao = null;
-
-        try {
-             configDao = new ConfigDao();
-        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
-            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
-        }
-        
         configDao.get().setInTestMode(isATest);
         
         
@@ -203,15 +185,6 @@ public class OrderDaoTest {
     public void testEncodeAndDecode() {
 
         boolean isATest = true;
-        ConfigDao configDao = null;
-
-        try {
-             configDao = new ConfigDao();
-        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
-            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
-        }
-        
         configDao.get().setInTestMode(isATest);
         
         ProductDao productDao = new ProductDao(configDao);
@@ -312,6 +285,7 @@ public class OrderDaoTest {
     public void testEncodeAndDecodeWithCommas() {
 
         boolean isATest = true;
+    configDao.get().setInTestMode(isATest);
     
         ProductDao productDao = new ProductDao(configDao);
         StateDao stateDao = new StateDao(configDao);
@@ -410,15 +384,7 @@ public class OrderDaoTest {
     @Test
     public void testEncodeAndDecodeWithDate() {
 
-        ConfigDao configDao = null;
-        boolean isATest = false;
-        try {
-             configDao = new ConfigDao();
-        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
-            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
-        }
-        
+        boolean isATest = true;
         configDao.get().setInTestMode(isATest);
         
         ProductDao productDao = new ProductDao(configDao);
@@ -460,8 +426,8 @@ public class OrderDaoTest {
         double total = 4051.88;
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2000, Calendar.JANUARY, 1);
-
+        calendar.set(2000, Calendar.JANUARY, 10);
+        
         Date orderDate = calendar.getTime();
         //Date orderDate = new Date();
 
@@ -548,17 +514,6 @@ public class OrderDaoTest {
     public void testToString() {
 
         boolean isATest = true;
-        
-        
-        ConfigDao configDao = null;
-
-        try {
-             configDao = new ConfigDao();
-        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
-            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
-        }
-        
         configDao.get().setInTestMode(isATest);
         
 
@@ -595,7 +550,7 @@ public class OrderDaoTest {
         double total = 4.88;
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2000, Calendar.JANUARY, 1);
+        calendar.set(2000, Calendar.JANUARY, 15);
 
         Date orderDate = calendar.getTime();
 
@@ -669,17 +624,6 @@ public class OrderDaoTest {
     public void testToStringExtreme() {
 
         boolean isATest = true;
-        
-        
-        ConfigDao configDao = null;
-
-        try {
-             configDao = new ConfigDao();
-        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
-            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
-        }
-        
         configDao.get().setInTestMode(isATest);
         
 
@@ -716,7 +660,7 @@ public class OrderDaoTest {
         double total = 4.88;
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2000, Calendar.JANUARY, 1);
+        calendar.set(2000, Calendar.JANUARY, 20);
 
         Date orderDate = calendar.getTime();
 
