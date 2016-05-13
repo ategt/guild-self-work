@@ -30,12 +30,28 @@ import static org.junit.Assert.*;
 public class OrderDaoTest {
 
     java.io.File testFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/OrdersTestData.txt");
+    ConfigDao configDao;
 
     public OrderDaoTest() {
     }
 
     @Before
     public void setUp() {
+        
+            ConfigDao configDao = null;
+
+        try {
+             configDao = new ConfigDao();
+        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
+            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
+        }
+        
+        configDao.get().setInTestMode(true);
+        configDao.get().setTaxesFile(new java.io.File("StatesTestData.txt"));
+        configDao.get().setProductFile(new java.io.File("ProductsTestData.txt"));
+        
+        this.configDao = configDao;
     }
 
     @After
@@ -61,7 +77,7 @@ public class OrderDaoTest {
         
         
         ProductDao productDao = new ProductDao(configDao);
-        StateDao stateDao = new StateDao(true);
+        StateDao stateDao = new StateDao(configDao);
         OrderDao instance = new OrderDao(productDao, stateDao, configDao);
 
         Order order = new Order();
@@ -107,7 +123,7 @@ public class OrderDaoTest {
         
         
         ProductDao productDao = new ProductDao(configDao);
-        StateDao stateDao = new StateDao(true);
+        StateDao stateDao = new StateDao(configDao);
         OrderDao instance = new OrderDao(productDao, stateDao, configDao);
 
         Order orderOne = new Order();
@@ -199,7 +215,7 @@ public class OrderDaoTest {
         configDao.get().setInTestMode(isATest);
         
         ProductDao productDao = new ProductDao(configDao);
-        StateDao stateDao = new StateDao(true);
+        StateDao stateDao = new StateDao(configDao);
         OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
 
         // The true parameter in the Order Dao constructor signifies a test.
@@ -256,7 +272,7 @@ public class OrderDaoTest {
         // Load a new instance of the OrderDao.
         //OrderDao secondDao = new OrderDao(true);
         ProductDao secondProductDao = new ProductDao(configDao);
-        StateDao secondStateDao = new StateDao(true);
+        StateDao secondStateDao = new StateDao(configDao);
         OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, configDao);
 
         // Pull a note  using the id number recorded earlier.
@@ -284,7 +300,7 @@ public class OrderDaoTest {
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
         ProductDao thirdProductDao = new ProductDao(configDao);
-        StateDao thirdStateDao = new StateDao(true);
+        StateDao thirdStateDao = new StateDao(configDao);
         OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, configDao);
 
         //OrderDao thirdDao = new OrderDao(true);
@@ -296,19 +312,9 @@ public class OrderDaoTest {
     public void testEncodeAndDecodeWithCommas() {
 
         boolean isATest = true;
-        ConfigDao configDao = null;
-
-        try {
-             configDao = new ConfigDao();
-        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
-            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
-        }
-        
-        configDao.get().setInTestMode(isATest);
-        
+    
         ProductDao productDao = new ProductDao(configDao);
-        StateDao stateDao = new StateDao(true);
+        StateDao stateDao = new StateDao(configDao);
         OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
 
         // The true parameter in the Order Dao constructor signifies a test.
@@ -365,7 +371,7 @@ public class OrderDaoTest {
         // Load a new instance of the OrderDao.
         //OrderDao secondDao = new OrderDao(true);
         ProductDao secondProductDao = new ProductDao(configDao);
-        StateDao secondStateDao = new StateDao(true);
+        StateDao secondStateDao = new StateDao(configDao);
         OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, configDao);
 
         // Pull a note  using the id number recorded earlier.
@@ -393,7 +399,7 @@ public class OrderDaoTest {
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
         ProductDao thirdProductDao = new ProductDao(configDao);
-        StateDao thirdStateDao = new StateDao(true);
+        StateDao thirdStateDao = new StateDao(configDao);
         OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, configDao);
 
         //OrderDao thirdDao = new OrderDao(true);
@@ -416,7 +422,7 @@ public class OrderDaoTest {
         configDao.get().setInTestMode(isATest);
         
         ProductDao productDao = new ProductDao(configDao);
-        StateDao stateDao = new StateDao(true);
+        StateDao stateDao = new StateDao(configDao);
         OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
 
         // The true parameter in the Order Dao constructor signifies a test.
@@ -479,7 +485,7 @@ public class OrderDaoTest {
         // Load a new instance of the OrderDao.
         //OrderDao secondDao = new OrderDao(true);
         ProductDao secondProductDao = new ProductDao(configDao);
-        StateDao secondStateDao = new StateDao(true);
+        StateDao secondStateDao = new StateDao(configDao);
         OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, configDao);
 
         // Pull a note  using the id number recorded earlier.
@@ -530,7 +536,7 @@ public class OrderDaoTest {
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
         ProductDao thirdProductDao = new ProductDao(configDao);
-        StateDao thirdStateDao = new StateDao(true);
+        StateDao thirdStateDao = new StateDao(configDao);
         OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, configDao);
 
         //OrderDao thirdDao = new OrderDao(true);
@@ -557,7 +563,7 @@ public class OrderDaoTest {
         
 
         ProductDao productDao = new ProductDao(configDao);
-        StateDao stateDao = new StateDao(true);
+        StateDao stateDao = new StateDao(configDao);
         OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
 
         // The true parameter in the Order Dao constructor signifies a test.
@@ -678,7 +684,7 @@ public class OrderDaoTest {
         
 
         ProductDao productDao = new ProductDao(configDao);
-        StateDao stateDao = new StateDao(true);
+        StateDao stateDao = new StateDao(configDao);
         OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
 
         // The true parameter in the Order Dao constructor signifies a test.
@@ -794,7 +800,7 @@ public class OrderDaoTest {
 //        configDao.get().setInTestMode(isATest);
 //        
 //        ProductDao productDao = new ProductDao(configDao);
-//        StateDao stateDao = new StateDao(true);
+//        StateDao stateDao = new StateDao(configDao);
 //        OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
 //
 //        // The true parameter in the Order Dao constructor signifies a test.
@@ -857,7 +863,7 @@ public class OrderDaoTest {
 //        // Load a new instance of the OrderDao.
 //        //OrderDao secondDao = new OrderDao(true);
 //        ProductDao secondProductDao = new ProductDao(configDao);
-//        StateDao secondStateDao = new StateDao(true);
+//        StateDao secondStateDao = new StateDao(configDao);
 //        OrderDao secondOrderDao = new OrderDao(secondProductDao, secondStateDao, configDao);
 //
 //        // Pull a order using the id number recorded earlier.
@@ -912,7 +918,7 @@ public class OrderDaoTest {
 //        // Load a third instance of the Dao and verify that 
 //        // the note was deleted from the file.
 //        ProductDao thirdProductDao = new ProductDao(configDao);
-//        StateDao thirdStateDao = new StateDao(true);
+//        StateDao thirdStateDao = new StateDao(configDao);
 //        OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, configDao);
 //
 //        //OrderDao thirdDao = new OrderDao(true);

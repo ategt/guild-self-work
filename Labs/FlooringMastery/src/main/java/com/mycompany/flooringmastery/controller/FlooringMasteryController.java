@@ -31,7 +31,7 @@ public class FlooringMasteryController {
 //        String menuString = "*****************************************************************************"; 
 //        System.out.println(menuString.length() + " - length.");
 //    }
-    ConsoleIO consoleIo = new ConsoleIO();
+    ConsoleIO consoleIo;
 
     ProductDao productDao;
     StateDao stateDao;
@@ -61,16 +61,17 @@ public class FlooringMasteryController {
         }
 
         //config = configDao.get();
-        productDao = new ProductDao();
-        stateDao = new StateDao();
+        productDao = new ProductDao(configDao);
+        stateDao = new StateDao(configDao);
         orderDao = new OrderDao(productDao, stateDao, configDao);
+        consoleIo = new ConsoleIO();
 
     }
 
     public void run() {
 
         init();
-        
+
         boolean done = false;
 
         //String border = new String(new char[77]).replaceAll('\0','*');
