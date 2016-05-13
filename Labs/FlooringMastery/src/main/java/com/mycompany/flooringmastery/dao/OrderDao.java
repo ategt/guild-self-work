@@ -6,8 +6,6 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.dto.Order;
-import com.mycompany.flooringmastery.exceptions.ConfigurationFileCorruptException;
-import com.mycompany.flooringmastery.exceptions.FileCreationException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,9 +31,7 @@ public class OrderDao {
 
     private List<Order> orders;
     private int nextId;
-    //private File orderDataFile = new File("OrdersData.txt");
-    private File orderDataFile; // = new File(""); // = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/OrdersData.txt");
-    private File testOrderDateFile = new File("OrdersTestData.txt");
+    //private File orderDataFile; 
     private StateDao stateDao;
     private ProductDao productDao;
     private ConfigDao configDao;
@@ -65,57 +61,94 @@ public class OrderDao {
 
     private void init(ConfigDao configDao1) {
         try {
+
+            File directoryToSearch = null;
             if (isATest) {
-                //orderDataFile = testOrderDateFile;
-                //orders = decode(orderDataFile);
+                directoryToSearch = configDao1.get().getTestDirectory();
+            } else {
+                directoryToSearch = configDao1.get().getOrdersDirectory();
+            }
 
-                List<Order> loadedOrders = new ArrayList();
-                java.io.File[] orderFiles = lookForOrders(configDao1.get().getTestDirectory());
-                for (java.io.File orderFile : orderFiles) {
-                    if (!orderFile.getName().endsWith("00000000.txt")) {
-                        loadedOrders.addAll(decode(orderFile));
-                    }
+            List<Order> loadedOrders = new ArrayList();
+            java.io.File[] orderFiles = lookForOrders(directoryToSearch);
+            for (java.io.File orderFile : orderFiles) {
+                if (!orderFile.getName().endsWith("00000000.txt")) {
+                    loadedOrders.addAll(decode(orderFile));
                 }
-                //List<Integer> ids = new ArrayList();
-                java.util.Set<Integer> ids = new java.util.HashSet();
-                for (Order order : loadedOrders) {
-                    ids.add(order.getId());
-                }
+            }
 
-                for (java.io.File orderFile : orderFiles) {
-                    if (orderFile.getName().endsWith("00000000.txt")) {
-                        for (Order order : decode(orderFile)) {
-                            if (!ids.contains(order.getId())) {
-                                loadedOrders.add(order);
-                            }
+            java.util.Set<Integer> ids = new java.util.HashSet();
+            for (Order order : loadedOrders) {
+                ids.add(order.getId());
+            }
+
+            for (java.io.File orderFile : orderFiles) {
+                if (orderFile.getName().endsWith("00000000.txt")) {
+                    for (Order order : decode(orderFile)) {
+                        if (!ids.contains(order.getId())) {
+                            loadedOrders.add(order);
                         }
                     }
                 }
-
-                orders = loadedOrders;
-
-
-            } else {
-                List<Order> loadedOrders = new ArrayList();
-                java.io.File[] orderFiles = lookForOrders(configDao1.get().getOrdersDirectory());
-                for (java.io.File orderFile : orderFiles) {
-                    if (!orderFile.getName().endsWith("00000000.txt")) {
-                        loadedOrders.addAll(decode(orderFile));
-                    }
-                }
-
-                if (orders == null) {
-                    orders = loadedOrders;
-                } else {
-                    orders.addAll(loadedOrders);
-                }
-
-//                for (java.io.File orderFile : orderFiles) {
-//                    if (orderFile.getName().endsWith("00000000.txt")){
-//                        if (get()){
-//                    //loadedOrders.addAll(decode(orderFile));
-//                }}}
             }
+
+            orders = loadedOrders;
+
+//            
+//            
+//            
+//            
+//            
+//            if (isATest) {
+//                //orderDataFile = testOrderDateFile;
+//                //orders = decode(orderDataFile);
+//
+//                List<Order> loadedOrders = new ArrayList();
+//                java.io.File[] orderFiles = lookForOrders(configDao1.get().getTestDirectory());
+//                for (java.io.File orderFile : orderFiles) {
+//                    if (!orderFile.getName().endsWith("00000000.txt")) {
+//                        loadedOrders.addAll(decode(orderFile));
+//                    }
+//                }
+//                //List<Integer> ids = new ArrayList();
+//                java.util.Set<Integer> ids = new java.util.HashSet();
+//                for (Order order : loadedOrders) {
+//                    ids.add(order.getId());
+//                }
+//
+//                for (java.io.File orderFile : orderFiles) {
+//                    if (orderFile.getName().endsWith("00000000.txt")) {
+//                        for (Order order : decode(orderFile)) {
+//                            if (!ids.contains(order.getId())) {
+//                                loadedOrders.add(order);
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                orders = loadedOrders;
+//
+//            } else {
+//                List<Order> loadedOrders = new ArrayList();
+//                java.io.File[] orderFiles = lookForOrders(configDao1.get().getOrdersDirectory());
+//                for (java.io.File orderFile : orderFiles) {
+//                    if (!orderFile.getName().endsWith("00000000.txt")) {
+//                        loadedOrders.addAll(decode(orderFile));
+//                    }
+//                }
+//
+//                if (orders == null) {
+//                    orders = loadedOrders;
+//                } else {
+//                    orders.addAll(loadedOrders);
+//                }
+//
+////                for (java.io.File orderFile : orderFiles) {
+////                    if (orderFile.getName().endsWith("00000000.txt")){
+////                        if (get()){
+////                    //loadedOrders.addAll(decode(orderFile));
+////                }}}
+//            }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -173,9 +206,7 @@ public class OrderDao {
         encode(oldDate);
         encode(extractDate("Orders_00000000.txt"));
 
-
         encode(order);
-        
 
     }
 
@@ -194,7 +225,7 @@ public class OrderDao {
             oldDate = found.getDate();
             orders.remove(found);
         }
-        
+
         encode(extractDate("Orders_00000000.txt"));
 
         encode(oldDate);
@@ -202,6 +233,7 @@ public class OrderDao {
 
     }
 
+    @Deprecated
     public List<Order> getList() {
         List<Order> copy = new ArrayList();
         copy.addAll(orders);
@@ -222,6 +254,70 @@ public class OrderDao {
         }
 
         return specificOrders;
+    }
+
+    public java.util.List<Integer> listOrderNumbers() {
+        java.util.List<Integer> orderNumbers = new ArrayList();
+
+        for (Order order : orders) {
+            orderNumbers.add(order.getId());
+        }
+
+        return orderNumbers;
+    }
+
+    public java.util.List<java.util.Date> listOrderDates() {
+        java.util.List<java.util.Date> orderDates = new ArrayList();
+        java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("dd-MM-");
+
+        java.util.Map<String, java.util.Date> dateMap = new java.util.HashMap();
+        
+        for (Order order : orders) {
+                //orderDates.add(order.getDate());
+                dateMap.putIfAbsent(fmt.format(order.getDate()), order.getDate());
+        }
+
+        orderDates.addAll(dateMap.values());
+        //orderDates.sort();
+        
+        java.util.Collections.sort(orderDates);
+        
+//        for (java.util.Date ){
+//            
+////        }
+//        
+//        java.util.List<java.util.Date> filteredOrderDates = new ArrayList();
+//        java.util.List<String> filteredOrderDateStrings = new ArrayList();
+//        
+//        for (java.util.Date orderDate : orderDates ){
+//            if (filteredOrderDates.contains(fmt)){
+//                
+//            }
+//            
+//        }
+
+        return orderDates;
+    }
+
+    public java.util.List<Order> searchByName(String orderName) {
+        java.util.List<Order> specificOrders = new ArrayList();
+        java.util.List<Order> closeOrders = new ArrayList();
+
+        for (Order order : orders) {
+            if (orderName.equalsIgnoreCase(order.getName())) {
+                specificOrders.add(order);
+            }
+
+            if (order.getName().toLowerCase().startsWith(orderName.toLowerCase()) || order.getName().toLowerCase().startsWith(orderName.toLowerCase())) {
+                closeOrders.add(order);
+            }
+        }
+
+        if (specificOrders.isEmpty()) {
+            return closeOrders;
+        } else {
+            return specificOrders;
+        }
     }
 
     private static boolean isSameDay(java.util.Date date1, java.util.Date date2) {
@@ -439,10 +535,9 @@ public class OrderDao {
 
     }
 
-    private List<Order> decode() throws FileNotFoundException, IOException {
-        return decode(orderDataFile);
-    }
-
+//    private List<Order> decode() throws FileNotFoundException, IOException {
+//        return decode(orderDataFile);
+//    }
     private List<Order> decode(java.io.File orderFile) throws FileNotFoundException, IOException {
 
         if (!orderFile.exists()) {
@@ -477,10 +572,10 @@ public class OrderDao {
 
                     String[] stringParts = currentLine.replaceAll(CSV_ESCAPE, CSV_ESCAPE_TEMP).split(TOKEN);
 
-                    for (String string : stringParts) {
-                        System.out.print(string + " - ");
-                    }
-                    System.out.println("");
+//                    for (String string : stringParts) {
+//                        System.out.print(string + " - ");
+//                    }
+//                    System.out.println("");
 
                     for (int x = 0; x < stringParts.length; x++) {
                         stringParts[x] = stringParts[x].replaceAll(CSV_ESCAPE_TEMP, TOKEN);

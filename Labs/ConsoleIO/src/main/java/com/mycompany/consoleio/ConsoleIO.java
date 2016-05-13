@@ -33,11 +33,11 @@ public class ConsoleIO {
     public ConsoleIO(String input, boolean test) {
 
         this();
-        
-        if (test){
+
+        if (test) {
             this.test = test;
             this.input = input;
-        } 
+        }
 
     }
 
@@ -90,10 +90,10 @@ public class ConsoleIO {
 
                 inputString = getUserStringInput(prompt);
 
-                if (inputString.equalsIgnoreCase("")){
+                if (inputString.equalsIgnoreCase("")) {
                     inputString = input.toString();
                 }
-                
+
                 switch (choice) {
                     case 2:
                         input = Float.parseFloat(inputString);
@@ -179,25 +179,25 @@ public class ConsoleIO {
         System.out.println(stringToPrint);
     }
 
-    public String getUserStringInputSimple(String prompt){
-               printStringToConsole(prompt);
+    public String getUserStringInputSimple(String prompt) {
+        printStringToConsole(prompt);
 
-               if (test){
-                   return input.replace("\n", "").trim();
-               }
-               
+        if (test) {
+            return input.replace("\n", "").trim();
+        }
+
         return keyboard.nextLine().replace("\n", "").trim();
 
     }
-    
+
     public String getUserStringInput(String prompt) throws UserWantsOutException, UserWantsToDeleteValueException {
         String returnedString = null;
-        
+
         String inputString = getUserStringInputSimple(prompt);
-        
+
         if (inputString.equalsIgnoreCase("exit") || inputString.equalsIgnoreCase("x") || inputString.equalsIgnoreCase("e") || inputString.equalsIgnoreCase("ex") || inputString.equalsIgnoreCase("exi")) {
             // Chris did not like "0" as an escape option, so I removed it. inputString.equalsIgnoreCase("0") || 
-            
+
             throw new com.mycompany.consoleio.exceptions.UserWantsOutException("The User Has Requested To Return To The Main Menu.");
         } else if (inputString.equalsIgnoreCase("")) {
             returnedString = null;
@@ -223,8 +223,12 @@ public class ConsoleIO {
     }
 
     public boolean getUserConfirmation(String prompt) throws UserWantsOutException, UserWantsToDeleteValueException {
+        return getUserConfirmation(prompt, "\n Please Enter \"Y\" To Confirm, Or Any Other Key To Abort.");
+    }
+
+    public boolean getUserConfirmation(String prompt, String explanation) throws UserWantsOutException, UserWantsToDeleteValueException {
         boolean confirmed = false;
-        String stringResponse = getUserStringInput(prompt + "\n Please Enter \"Y\" To Confirm, Or Any Other Key To Abort.");
+        String stringResponse = getUserStringInput(prompt + explanation);
 
         if (stringResponse.equalsIgnoreCase("Y") || stringResponse.equalsIgnoreCase("Yes")) {
             confirmed = true;
@@ -277,6 +281,10 @@ public class ConsoleIO {
         return userFloatInput;
     }
 
+    public double getUserDoubleInput(String prompt) throws UserWantsOutException, UserWantsToDeleteValueException {
+        return getUserDoubleInput(prompt, 0.0d);
+    }
+
     public double getUserDoubleInput(String prompt, double oldValue) throws UserWantsOutException, UserWantsToDeleteValueException {
         Number input = oldValue;
         int choice = 3;
@@ -284,6 +292,10 @@ public class ConsoleIO {
         input = getUserInputValidationLoop(input, prompt, choice);
 
         return input.doubleValue();
+    }
+
+    public double getUserDouble(String prompt, double min, double max) throws UserWantsOutException, UserWantsToDeleteValueException {
+        return getUserDoubleInputRange(prompt, min, max);
     }
 
     public double getUserDoubleInputRange(String prompt, double min, double max) throws UserWantsOutException, UserWantsToDeleteValueException {
@@ -297,15 +309,16 @@ public class ConsoleIO {
     }
 
     public double getUserDoubleMinMax(String prompt, double min, double max) throws UserWantsOutException, UserWantsToDeleteValueException {
-        return getUserDoubleMinMax( prompt, min, max, 0.0d);
+        return getUserDoubleMinMax(prompt, min, max, 0.0d);
     }
-public double getUserDoubleMinMax(String prompt, double min, double max, double oldValue) throws UserWantsOutException, UserWantsToDeleteValueException {
+
+    public double getUserDoubleMinMax(String prompt, double min, double max, double oldValue) throws UserWantsOutException, UserWantsToDeleteValueException {
 
         double userDoubleInput = oldValue;
         boolean isValid = false;
 
         while (!isValid) {
-            userDoubleInput = this.getUserDoubleInput(prompt, oldValue );
+            userDoubleInput = this.getUserDoubleInput(prompt, oldValue);
             if (userDoubleInput >= min && userDoubleInput <= max) {
                 isValid = true;
 
