@@ -6,6 +6,10 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.dto.State;
+import com.mycompany.flooringmastery.exceptions.ConfigurationFileCorruptException;
+import com.mycompany.flooringmastery.exceptions.FileCreationException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +20,8 @@ import static org.junit.Assert.*;
  * @author apprentice
  */
 public class StateDaoTest {
+    
+    ConfigDao configDao;
 
     public StateDaoTest() {
     }
@@ -29,6 +35,22 @@ public class StateDaoTest {
         testFile.renameTo(backupTestFile);
         
         
+        
+        
+        boolean isATest = true;
+        ConfigDao configDao = null;
+
+        try {
+             configDao = new ConfigDao();
+             configDao.get().setTaxesFile(testFile);
+        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
+            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
+        }
+        
+        configDao.get().setInTestMode(isATest);
+        this.configDao = configDao;
+        
     }
 
     @After
@@ -39,7 +61,7 @@ public class StateDaoTest {
     public void testCreate() {
         System.out.println("create");
         State state = new State();
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
         State expResult = null;
         State result = instance.create(state);
         assertEquals(expResult, result);
@@ -49,7 +71,7 @@ public class StateDaoTest {
     public void testCreateB() {
         System.out.println("create");
         State state = null;
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
         State expResult = null;
         State result = instance.create(state);
         assertEquals(expResult, result);
@@ -60,7 +82,7 @@ public class StateDaoTest {
         System.out.println("create");
         State state = new State();
         state.setState("GH");
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
         State expResult = state;
         State result = instance.create(state);
         assertEquals(expResult, result);
@@ -71,7 +93,7 @@ public class StateDaoTest {
         System.out.println("create");
         State state = new State();
         state.setState("Z");
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
         State expResult = null;
         State result = instance.create(state);
         assertEquals(expResult, result);
@@ -82,7 +104,7 @@ public class StateDaoTest {
         System.out.println("create");
         State state = new State();
         state.setState("SW");
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
         State expResult = state;
         State result = instance.create(state, state.getState());
         assertEquals(expResult, result);
@@ -93,7 +115,7 @@ public class StateDaoTest {
         System.out.println("create");
         State state = new State();
         state.setState("Mexico");
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
         State expResult = null;
         State result = instance.create(state, state.getState());
         assertEquals(expResult, result);
@@ -104,7 +126,7 @@ public class StateDaoTest {
         System.out.println("create");
         State state = new State();
         state.setState("HQ");
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
         State expResult = null;
         State result = instance.create(state, "HR");
         assertEquals(expResult, result);
@@ -119,7 +141,7 @@ public class StateDaoTest {
         State otherState = new State();
         otherState.setState("SG");
 
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
         State expResult = state;
         State result = instance.create(state);
         State otherResult = instance.create(otherState);
@@ -133,7 +155,7 @@ public class StateDaoTest {
         System.out.println("create");
         State state = new State();
         state.setState("SG");
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
         State expResult = state;
         State result = instance.create(state);
         assertEquals(expResult, result);
@@ -153,7 +175,7 @@ public class StateDaoTest {
         System.out.println("create");
         State state = new State();
         state.setState("SG");
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
         State expResult = state;
         State result = instance.create(state);
         assertEquals(expResult, result);
@@ -173,7 +195,7 @@ public class StateDaoTest {
         System.out.println("create");
         State state = new State();
         state.setState("SG");
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
         State expResult = state;
         String stateNameLowerCase = "sg";
         State result = instance.create(state);
@@ -194,7 +216,7 @@ public class StateDaoTest {
         System.out.println("create");
         State state = new State();
         state.setState("SG");
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
         State expResult = state;
         String stateNameLowerCase = "sG";
         State result = instance.create(state);
@@ -215,7 +237,7 @@ public class StateDaoTest {
 
         State state = new State();
         state.setState("DQ");
-        StateDao instance = new StateDao(true);
+        StateDao instance = new StateDao(configDao);
 
         instance.create(state);
 
@@ -240,7 +262,7 @@ public class StateDaoTest {
     public void testEncodeAndDecode() {
 
         // The true parameter in the StateDao constructor signifies a test.
-        StateDao stateDao = new StateDao(true);
+        StateDao stateDao = new StateDao(configDao);
         State testState = new State();
 
         String stateName = "UK";
@@ -260,7 +282,7 @@ public class StateDaoTest {
         stateDao.update(testState);
 
         // Load a new instance of the StateDao.
-        StateDao secondDao = new StateDao(true);
+        StateDao secondDao = new StateDao(configDao);
 
         // Pull a state  using the id number recorded earlier.
         State thirdState = secondDao.get(stateName);
@@ -276,7 +298,7 @@ public class StateDaoTest {
 
         // Load a third instance of the Dao and verify that 
         // the state was deleted from the file.
-        StateDao thirdDao = new StateDao(true);
+        StateDao thirdDao = new StateDao(configDao);
         assertEquals(thirdDao.get(stateName), null);
 
     }

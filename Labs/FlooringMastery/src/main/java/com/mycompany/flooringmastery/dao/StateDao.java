@@ -29,17 +29,20 @@ public class StateDao {
     private java.util.Map<String, State> statesMap;
     private File stateDataFile = new File("StatesData.txt");
 
-    public StateDao() {
-        this(false);
-    }
-    
-    protected StateDao(boolean isATest) {
+//    public StateDao() {
+//        this(false);
+//    }
+//    
+    //protected StateDao(boolean isATest) {
+public StateDao(ConfigDao configDao) {
 
         
         
-        if (isATest) {
-            stateDataFile = new File("StatesTestData.txt");
-        }
+        //if (isATest) {
+            stateDataFile = configDao.get().getTaxesFile();
+//
+                   ///new File("StatesTestData.txt");
+        //}
 
         statesMap = decode();
 
