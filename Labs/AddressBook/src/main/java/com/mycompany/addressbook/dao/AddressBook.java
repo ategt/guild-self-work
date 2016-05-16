@@ -41,10 +41,10 @@ public class AddressBook {
 
         addresses = decode();
 
-        if (addresses == null) {
-            addresses = new ArrayList();
-            System.out.println("The list was empty, making a new one.");
-        }
+//        if (addresses == null) {
+//            addresses = new ArrayList();
+//            System.out.println("The list was empty, making a new one.");
+//        }
 
         nextId = determineNextId();
     }

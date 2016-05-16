@@ -234,6 +234,7 @@ public class FlooringMasteryController {
 
             if (!orderList.isEmpty()) {
                 String orderNames = "";
+                //orderList.sort(c);
                 for (Order order : orderList) {
                     if (order != null) {
                         orderNames += order.getId() + "\t" + order.getName() + "\t";
@@ -470,39 +471,6 @@ public class FlooringMasteryController {
         return newOrder;
     }
 
-    @Deprecated
-    private Order oldEditOrder(Order order) throws UserWantsOutException {
-        Order newOrder = order;
-
-        if (newOrder == null) {
-            consoleIo.printStringToConsole("To Delete an Existing Entry, Enter a Dash \"-\".");
-            consoleIo.printStringToConsole("You May Leave Lines Empty And Return To Edit Them Later.");
-            newOrder = new Order();
-        }
-
-        askCustomerName(order, newOrder);
-        askOrderDate(order, newOrder);
-        askState(order, newOrder);
-        askTaxRate(order, newOrder);
-        askProduct(order, newOrder);
-
-        askArea(order, newOrder);
-
-        askCostPerSquareFoot(order, newOrder);
-
-        askMaterialCost(order, newOrder);
-
-        askLaborCostPerSquareFoot(order, newOrder);
-
-        askLaborCost(order, newOrder);
-
-        askTax(order, newOrder);
-
-        askTotalCost(order, newOrder);
-
-        return newOrder;
-    }
-
     private void askCustomerName(Order order, Order newOrder) throws UserWantsOutException {
         String oldName;
         String currentValue = "";
@@ -536,7 +504,6 @@ public class FlooringMasteryController {
             oldDate = "";
         } else if (order.getDate() != null) {
             java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("dd-MM-yyyy");
-
             oldDate = fmt.format(order.getDate());
         } else {
             oldDate = "";
