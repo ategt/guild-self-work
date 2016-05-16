@@ -33,11 +33,10 @@ public class ProductDao {
 //    public ProductDao() {
 //        this(false);
 //    }
-
     public ProductDao(ConfigDao configDao) {
 
         productDataFile = configDao.get().getProductFile();
-        
+
         productsMap = decode();
 
         if (productsMap == null) {
@@ -197,6 +196,8 @@ public class ProductDao {
 
         final String TOKEN = ",";
 
+        final String DATAHEADER = "ProductType,CostPerSquareFoot,LaborCostPerSquareFoot";
+
         try {
 
             if (!productDataFile.exists()) {
@@ -206,7 +207,9 @@ public class ProductDao {
             try (Scanner sc = new Scanner(new BufferedReader(new FileReader(productDataFile)))) {
                 while (sc.hasNextLine()) {
                     String currentLine = sc.nextLine();
-                    if (!currentLine.trim().isEmpty()) {
+                    if (currentLine.equalsIgnoreCase(DATAHEADER)) {
+
+                    } else if (!currentLine.trim().isEmpty()) {
                         String[] stringParts = currentLine.split(TOKEN);
 
                         Product product = new Product();

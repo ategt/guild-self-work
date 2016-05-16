@@ -1,0 +1,2 @@
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+6,Paul,OK,0.02,Wood,85.0,7.5,3.0,637.5,255.0,0.0,892.5

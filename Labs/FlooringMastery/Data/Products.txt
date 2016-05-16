@@ -1,0 +1,2 @@
+ProductType,CostPerSquareFoot,LaborCostPerSquareFoot
+Wood,7.5,3.0

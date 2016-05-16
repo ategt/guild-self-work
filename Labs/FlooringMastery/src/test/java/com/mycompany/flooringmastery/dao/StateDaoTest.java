@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  * @author apprentice
  */
 public class StateDaoTest {
-    
+
     ConfigDao configDao;
 
     public StateDaoTest() {
@@ -29,28 +29,33 @@ public class StateDaoTest {
     @Before
     public void setUp() {
 
-        java.io.File testFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/StatesTestData.txt");
-        java.io.File backupTestFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/StatesTestData-Backup.txt");
+        java.io.File testFile = new java.io.File("StatesTestData.txt");
+        java.io.File backupTestFile = new java.io.File("StatesTestData-Backup.txt");
         backupTestFile.deleteOnExit();
         testFile.renameTo(backupTestFile);
-        
-        
-        
-        
+
         boolean isATest = true;
         ConfigDao configDao = null;
 
         try {
-             configDao = new ConfigDao();
-             configDao.get().setTaxesFile(testFile);
+            configDao = new ConfigDao();
+            configDao.get().setTaxesFile(testFile);
         } catch (ConfigurationFileCorruptException | FileCreationException ex) {
             Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
             fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
         }
-        
+
         configDao.get().setInTestMode(isATest);
         this.configDao = configDao;
-        
+
+        StateDao instance = new StateDao(configDao);
+
+        // If There is already an instance of SG in the Dao, delete it.
+        State stateToDelete = instance.get("SG");
+        if (stateToDelete != null) {
+            instance.delete(stateToDelete);
+        }
+
     }
 
     @After
@@ -134,6 +139,7 @@ public class StateDaoTest {
 
     @Test
     public void testCreateG() {
+
         System.out.println("create");
         State state = new State();
         state.setState("SG");
@@ -142,12 +148,17 @@ public class StateDaoTest {
         otherState.setState("SG");
 
         StateDao instance = new StateDao(configDao);
+
         State expResult = state;
         State result = instance.create(state);
         State otherResult = instance.create(otherState);
 
         assertEquals(expResult, result);
         assertEquals(null, otherResult);
+
+        instance.delete(state);
+        instance.delete(otherState);
+
     }
 
     @Test

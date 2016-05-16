@@ -1,0 +1,2 @@
+State,TaxRate
+OK,0.02

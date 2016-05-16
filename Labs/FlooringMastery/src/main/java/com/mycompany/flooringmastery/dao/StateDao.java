@@ -119,6 +119,7 @@ public StateDao(ConfigDao configDao) {
 
                 encode();
             } else {
+                //create(state);
                 System.out.println("Throwing a State Not Found exception!!!!");
                 // Look up exception throwing and consider putting one here, too!
             }

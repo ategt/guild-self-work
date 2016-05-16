@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  */
 public class ProductDaoTest {
 
-    java.io.File testFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/ProductsTestData.txt");
+    java.io.File testFile = new java.io.File("ProductsTestData.txt");
 
     ConfigDao configDao;
     
@@ -241,7 +241,7 @@ public class ProductDaoTest {
     @Test
     public void testSize() {
 
-        java.io.File tempFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/ProductsTestData-temp.txt");
+        java.io.File tempFile = new java.io.File("ProductsTestData-temp.txt");
         // I change the name so the ProductDao can not find it.
         testFile.renameTo(tempFile);
 

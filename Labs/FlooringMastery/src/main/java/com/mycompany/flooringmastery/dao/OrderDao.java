@@ -17,8 +17,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -90,6 +92,17 @@ public class OrderDao {
                         }
                     }
                 }
+            }
+
+            Set<Integer> orderNumbers = new HashSet();
+            for (Order order : loadedOrders) {
+                orderNumbers.add(order.getId());
+            }
+
+            if (orderNumbers.size() == loadedOrders.size()) {
+                System.out.println("ID Integrity Check Passed");
+            } else {
+                System.out.println("ID Integrity Check Failed! \n " + orderNumbers.size() + " different order numbers but " + loadedOrders.size() + " orders.");
             }
 
             orders = loadedOrders;
@@ -186,24 +199,33 @@ public class OrderDao {
     }
 
     public void update(Order order) {
-        Order found = null;
+        //Order found = null;
+        List<Order> foundOrders = new ArrayList();
 
         for (Order currentOrder : orders) {
             if (currentOrder.getId() == order.getId()) {
-                found = currentOrder;
-                break;
+                //found = currentOrder;
+                //break;
+                foundOrders.add(currentOrder);
             }
         }
 
-        Date oldDate = null;
-        if (found != null) {
-            oldDate = found.getDate();
-
-            orders.remove(found);
-            orders.add(order);
+        for (Order foundOrder : foundOrders) {
+            orders.remove(foundOrder);
+            encode(foundOrder.getDate());
         }
 
-        encode(oldDate);
+//        
+//        Date oldDate = null;
+//        if (found != null) {
+//            oldDate = found.getDate();
+//
+//            orders.remove(found);
+//        }
+
+        orders.add(order);
+
+        //encode(oldDate);
         encode(extractDate("Orders_00000000.txt"));
 
         encode(order);
@@ -271,17 +293,17 @@ public class OrderDao {
         java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("dd-MM-");
 
         java.util.Map<String, java.util.Date> dateMap = new java.util.HashMap();
-        
+
         for (Order order : orders) {
-                //orderDates.add(order.getDate());
-                dateMap.putIfAbsent(fmt.format(order.getDate()), order.getDate());
+            //orderDates.add(order.getDate());
+            dateMap.putIfAbsent(fmt.format(order.getDate()), order.getDate());
         }
 
         orderDates.addAll(dateMap.values());
         //orderDates.sort();
-        
+
         java.util.Collections.sort(orderDates);
-        
+
 //        for (java.util.Date ){
 //            
 ////        }
@@ -295,7 +317,6 @@ public class OrderDao {
 //            }
 //            
 //        }
-
         return orderDates;
     }
 
@@ -308,8 +329,10 @@ public class OrderDao {
                 specificOrders.add(order);
             }
 
-            if (order.getName().toLowerCase().startsWith(orderName.toLowerCase()) || order.getName().toLowerCase().startsWith(orderName.toLowerCase())) {
-                closeOrders.add(order);
+            if (order != null) {
+                if (order.getName().toLowerCase().startsWith(orderName.toLowerCase()) || order.getName().toLowerCase().startsWith(orderName.toLowerCase())) {
+                    closeOrders.add(order);
+                }
             }
         }
 
@@ -576,7 +599,6 @@ public class OrderDao {
 //                        System.out.print(string + " - ");
 //                    }
 //                    System.out.println("");
-
                     for (int x = 0; x < stringParts.length; x++) {
                         stringParts[x] = stringParts[x].replaceAll(CSV_ESCAPE_TEMP, TOKEN);
                     }
@@ -761,6 +783,15 @@ public class OrderDao {
         }
 
         return date;
+    }
+
+    public void purgeTestFiles() {
+
+        java.io.File[] testFiles = lookForOrders(configDao.get().getTestDirectory());
+        for (java.io.File testFile : testFiles) {
+            testFile.deleteOnExit();
+
+        }
     }
 
 }
