@@ -14,12 +14,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -221,69 +224,108 @@ public class AddressBookLambdaImpl implements AddressBook {
 
     @Override
     public List<Address> searchByLastName(String lastName) {
-        List<Address> soughtAddress = new ArrayList();
-
-        for (Address address : addresses) {
-            if (address.getLastName() != null && lastName != null) {
-                if (address.getLastName().compareToIgnoreCase(lastName) == 0) {
-                    soughtAddress.add(address);
-                }
-            }
-        }
-
-        return soughtAddress;
+        
+        
+        return addresses
+                .stream()
+                .filter(a -> a.getLastName().equalsIgnoreCase(lastName))
+                .collect(Collectors.toList());
+        
+        
+//        
+//        List<Address> soughtAddress = new ArrayList();
+//
+//        for (Address address : addresses) {
+//            if (address.getLastName() != null && lastName != null) {
+//                if (address.getLastName().compareToIgnoreCase(lastName) == 0) {
+//                    soughtAddress.add(address);
+//                }
+//            }
+//        }
+//
+//        return soughtAddress;
     }
 
     @Override
     public List<Address> searchByCity(String city) {
 
-        List<Address> soughtAddress = new ArrayList();
-
-        for (Address address : addresses) {
-            if (address.getCity() != null && city != null) {
-                if (address.getCity().compareToIgnoreCase(city) == 0) {
-                    soughtAddress.add(address);
-                }
-            }
-        }
-
-        return soughtAddress;
+        
+        return addresses
+                .stream()
+                .filter(a -> a.getCity().equalsIgnoreCase(city))
+                .collect(Collectors.toList());
+        
+        
+        
+        
+//        
+//        
+//        
+//        List<Address> soughtAddress = new ArrayList();
+//
+//        for (Address address : addresses) {
+//            if (address.getCity() != null && city != null) {
+//                if (address.getCity().compareToIgnoreCase(city) == 0) {
+//                    soughtAddress.add(address);
+//                }
+//            }
+//        }
+//
+//        return soughtAddress;
 
     }
 
     @Override
     public List<List<Address>> searchByState(String state) {
+        
+        //List<List<Address>> result = new ArrayList();
+        
+        Map<String, List<Address>> result = new HashMap();
+        
+        addresses
+                .stream()
+                .filter(a -> a.getState().equalsIgnoreCase(state))
+                //.collect(Collectors.toList())
+                .forEach(a -> {
+                    
+                    result.get(a.getCity());
+                    
+                }
+                    
+                    result.
+                });
+                
+                
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         List<List<Address>> result = new ArrayList();
 
         List<Address> addressesFromACertainState = new ArrayList();
         
-        for ( Address address : addresses ) {
-            if (address.getState().equalsIgnoreCase(state))
+        addresses.stream().filter((address) -> (address.getState().equalsIgnoreCase(state))).forEach((address) -> {
             addressesFromACertainState.add(address);
-            
-            
-        }
+        });
         
         
         //List<Address> soughtAddressesOfACertainCity = new ArrayList();
 
         //List<String> cityNames = new ArrayList();
         Set<String> cityNames = new HashSet();
-        for (Address address : addressesFromACertainState) {
-            if (address.getCity() != null) {
+        addressesFromACertainState.stream().filter((address) -> (address.getCity() != null)).filter((address) -> (!cityNames.contains(address.getCity()))).forEach((address) -> {
+            //soughtAddressOfACertainCity.add(address);
+            cityNames.add(address.getCity());
+        });
 
-                if (!cityNames.contains(address.getCity())) {
-                    //soughtAddressOfACertainCity.add(address);
-                    cityNames.add(address.getCity());
-                }
-            }
-        }
-
-        for (String cityName : cityNames) {
-
+        cityNames.stream().map((cityName) -> {
             List<Address> soughtAddressesOfACertainCity = new ArrayList();
-
             for (Address address : addressesFromACertainState) {
 
                 if (address != null && address.getCity() != null) {
@@ -293,10 +335,10 @@ public class AddressBookLambdaImpl implements AddressBook {
                 }
 
             }
-            
+            return soughtAddressesOfACertainCity;            
+        }).forEach((soughtAddressesOfACertainCity) -> {
             result.add(soughtAddressesOfACertainCity);
-
-        }
+        });
 
         return result;
 
@@ -306,17 +348,25 @@ public class AddressBookLambdaImpl implements AddressBook {
     @Override
     public List<Address> searchByZipcode(String zipcode) {
 
-        List<Address> soughtAddress = new ArrayList();
-
-        for (Address address : addresses) {
-            if (address.getZipcode() != null && zipcode != null) {
-                if (address.getZipcode().equalsIgnoreCase(zipcode)) {
-                    soughtAddress.add(address);
-                }
-            }
-        }
-
-        return soughtAddress;
+        
+        return addresses
+                .stream()
+                .filter(a -> a.getZipcode().equalsIgnoreCase(zipcode))
+                .collect(Collectors.toList());
+        
+        
+        
+//        List<Address> soughtAddress = new ArrayList();
+//
+//        for (Address address : addresses) {
+//            if (address.getZipcode() != null && zipcode != null) {
+//                if (address.getZipcode().equalsIgnoreCase(zipcode)) {
+//                    soughtAddress.add(address);
+//                }
+//            }
+//        }
+//
+//        return soughtAddress;
 
     }
 
