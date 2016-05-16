@@ -14,8 +14,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,7 +47,6 @@ public class AddressBook {
 //            addresses = new ArrayList();
 //            System.out.println("The list was empty, making a new one.");
 //        }
-
         nextId = determineNextId();
     }
 
@@ -75,7 +76,7 @@ public class AddressBook {
     public void update(Address address) {
 
         Address foundAddress = null;
-        
+
         for (Address currentAddress : addresses) {
             if (currentAddress.getId() == address.getId()) {
                 foundAddress = currentAddress;
@@ -83,8 +84,8 @@ public class AddressBook {
             }
 
         }
-                addresses.remove(foundAddress);
-                addresses.add(address);
+        addresses.remove(foundAddress);
+        addresses.add(address);
 
         encode();
 
@@ -225,14 +226,99 @@ public class AddressBook {
 
         return soughtAddress;
     }
+
+    public List<Address> searchByCity(String city) {
+
+        List<Address> soughtAddress = new ArrayList();
+
+        for (Address address : addresses) {
+            if (address.getCity() != null && city != null) {
+                if (address.getCity().compareToIgnoreCase(city) == 0) {
+                    soughtAddress.add(address);
+                }
+            }
+        }
+
+        return soughtAddress;
+
+    }
+
+    public List<List<Address>> searchByState(String state) {
+
+        List<List<Address>> result = new ArrayList();
+
+        List<Address> addressesFromACertainState = new ArrayList();
+        
+        for ( Address address : addresses ) {
+            if (address.getState().equalsIgnoreCase(state))
+            addressesFromACertainState.add(address);
+            
+            
+        }
+        
+        
+        //List<Address> soughtAddressesOfACertainCity = new ArrayList();
+
+        //List<String> cityNames = new ArrayList();
+        Set<String> cityNames = new HashSet();
+        for (Address address : addressesFromACertainState) {
+            if (address.getCity() != null) {
+
+                if (!cityNames.contains(address.getCity())) {
+                    //soughtAddressOfACertainCity.add(address);
+                    cityNames.add(address.getCity());
+                }
+            }
+        }
+
+        for (String cityName : cityNames) {
+
+            List<Address> soughtAddressesOfACertainCity = new ArrayList();
+
+            for (Address address : addressesFromACertainState) {
+
+                if (address != null && address.getCity() != null) {
+                    if (address.getCity().equalsIgnoreCase(cityName)) {
+                        soughtAddressesOfACertainCity.add(address);
+                    }
+                }
+
+            }
+            
+            result.add(soughtAddressesOfACertainCity);
+
+        }
+
+        return result;
+
+    }
     
-    public String fixNull(String input){
+    
+    public List<Address> searchByZipcode(String zipcode) {
+
+        List<Address> soughtAddress = new ArrayList();
+
+        for (Address address : addresses) {
+            if (address.getZipcode() != null && zipcode != null) {
+                if (address.getZipcode().equalsIgnoreCase(zipcode)) {
+                    soughtAddress.add(address);
+                }
+            }
+        }
+
+        return soughtAddress;
+
+    }
+
+    public String fixNull(String input) {
         String returnValue = null;
-        if (input.trim().equalsIgnoreCase("null"))
-                input = null;
-        else if (input.trim().equalsIgnoreCase(""))
+        if (input.trim().equalsIgnoreCase("null")) {
             input = null;
-        else returnValue = input;
+        } else if (input.trim().equalsIgnoreCase("")) {
+            input = null;
+        } else {
+            returnValue = input;
+        }
         return returnValue;
     }
 

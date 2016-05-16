@@ -137,7 +137,7 @@ public class AddressBookTest {
         Address thirdNote = secondDao.get(id);
 
         assertTrue(thirdNote != null);
-        
+
         // Check that the update method saved the new text.
         //assertEquals("This Is a test note.", thirdNote.getNoteString());
         assertEquals(city, thirdNote.getCity());
@@ -267,7 +267,7 @@ public class AddressBookTest {
         Address thirdNote = secondDao.get(id);
 
         assertTrue(thirdNote != null);
-        
+
         // Check that the update method saved the new text.
         //assertEquals("This Is a test note.", thirdNote.getNoteString());
         assertEquals(city, thirdNote.getCity());
@@ -288,6 +288,7 @@ public class AddressBookTest {
         assertEquals(thirdDao.get(id), null);
 
     }
+
     /**
      * Test of create method, of class AddressBook.
      */
@@ -396,7 +397,7 @@ public class AddressBookTest {
         Address thirdNote = secondDao.get(id);
 
         assertTrue(thirdNote != null);
-        
+
         // Check that the update method saved the new text.
         //assertEquals("This Is a test note.", thirdNote.getNoteString());
         assertEquals(city, thirdNote.getCity());
@@ -418,5 +419,43 @@ public class AddressBookTest {
 
     }
 
+    @Test
+    public void testTheSearchByCity() {
+        //Dvd dvd = new DvdImplementation();
+        AddressBook noteDao = new AddressBook();
+        Address newNote = new Address();
 
+        assertEquals(noteDao.searchByCity("wooster").size(), 4);
+
+    }
+
+    @Test
+    public void testTheSearchByZipcode() {
+        //Dvd dvd = new DvdImplementation();
+        AddressBook noteDao = new AddressBook();
+        Address newNote = new Address();
+
+        assertEquals(noteDao.searchByZipcode("44287").size(), 3);
+
+    }
+
+    @Test
+    public void testTheSearchByState() {
+        //Dvd dvd = new DvdImplementation();
+        AddressBook noteDao = new AddressBook();
+        Address newNote = new Address();
+
+        
+        List<List<Address>> mess = noteDao.searchByState("OH");
+        assertEquals(mess.size(), 3);
+        
+       // System.out.println(mess);
+        
+
+    }
+
+    
+    
+    
+    
 }
