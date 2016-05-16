@@ -95,10 +95,6 @@ public class OrderDaoTest {
     @Test
     public void testGetAllOrderes() {
         System.out.println("getAllOrderes");
-
-        //java.io.File tempFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/OrdersTestData-temp.txt");
-        //testFile.renameTo(tempFile);
-
         
         boolean isATest = true;
         configDao.get().setInTestMode(isATest);
@@ -130,7 +126,6 @@ public class OrderDaoTest {
             secondDate = fmt.parse(fmt.format(secondDate));
         } catch (ParseException ex) {
             fail("Parse Exception - " + ex.getMessage());
-            //Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         orderOne.setDate(date);
@@ -716,6 +711,104 @@ public class OrderDaoTest {
     }
     
     
+    
+    
+    
+    
+    @Test
+    public void testToStringEscapeAtEnd() {
+
+        boolean isATest = true;
+        configDao.get().setInTestMode(isATest);
+        
+
+        ProductDao productDao = new ProductDao(configDao);
+        StateDao stateDao = new StateDao(configDao);
+        OrderDao orderDao = new OrderDao(productDao, stateDao, configDao);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        Order order = new Order();
+
+        // Create the file in the Dao.
+        //Order returnedOrder = orderDao.create(order);
+
+
+        com.mycompany.flooringmastery.dto.State ohio = new com.mycompany.flooringmastery.dto.State();
+        ohio.setState("DG");
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmastery.dto.Product product = new com.mycompany.flooringmastery.dto.Product();
+        product.setType("Grass");
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = ",,,,,,,,\\,,,,,,,/,,,,\\";
+        double taxRate = 20.25;
+        double area = 150.00;
+        double costPerSquareFoot = 25.15;
+        double laborCostPerSquareFoot = 0.75;
+        double materialCost = 1.55;
+        double laborCost = 400.00;
+        double tax = 3.08;
+        double total = 4.88;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2013, Calendar.JANUARY, 22);
+
+        Date orderDate = calendar.getTime();
+
+        // Set the above values to the appropriate attributes.
+        order.setId(3);
+        order.setName(name);
+        order.setState(ohio);
+        order.setTaxRate(taxRate);
+        order.setProduct(product);
+        order.setArea(area);
+        order.setCostPerSquareFoot(costPerSquareFoot);
+        order.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
+        order.setMaterialCost(materialCost);
+        order.setLaborCost(laborCost);
+        order.setTax(tax);
+        order.setTotal(total);
+        order.setDate(orderDate);
+
+        String thirdOrderString = orderDao.toString(order, System.lineSeparator());
+        java.io.File firstTestFile = new java.io.File("FifthResultTestFile.txt");
+       // firstTestFile.deleteOnExit();
+        
+        try (PrintWriter out = new PrintWriter(new FileWriter(firstTestFile))) {
+
+            out.println(thirdOrderString);
+            out.flush();
+        } catch (IOException ex) {
+            fail("IOException - " + ex.getMessage());
+            //Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        java.io.File secondTestFile = new java.io.File("SixthResultTestFile.txt");
+       // secondTestFile.deleteOnExit();
+        
+        try (PrintWriter out = new PrintWriter(new FileWriter(secondTestFile))) {
+
+            String token = System.lineSeparator();
+            String thirdOrderStringWithLabels = orderDao.addLabels(thirdOrderString, token);
+
+            out.println(thirdOrderStringWithLabels);
+            out.flush();
+        } catch (IOException ex) {
+            fail("IOException - " + ex.getMessage());
+            //Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        java.io.File firstValidTestFile = new java.io.File("FifthExpectedTestFile.txt");
+        java.io.File secondValidTestFile = new java.io.File("SixthExpectedTestFile.txt");
+
+        assertEquals(readFile(firstValidTestFile), readFile(firstTestFile));
+        assertEquals(readFile(secondValidTestFile), readFile(secondTestFile));
+
+    }
     
     
     

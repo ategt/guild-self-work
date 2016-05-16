@@ -33,7 +33,6 @@ public class OrderDao {
 
     private List<Order> orders;
     private int nextId;
-    //private File orderDataFile; 
     private StateDao stateDao;
     private ProductDao productDao;
     private ConfigDao configDao;
@@ -51,7 +50,6 @@ public class OrderDao {
         if (configDao != null) {
             this.configDao = configDao;
 
-            //if (configDao.get().isInTestMode())
             this.isATest = configDao.get().isInTestMode();
 
         } else {
@@ -100,68 +98,13 @@ public class OrderDao {
             }
 
             if (orderNumbers.size() == loadedOrders.size()) {
-                System.out.println("ID Integrity Check Passed");
+                //System.out.println("ID Integrity Check Passed");
             } else {
                 System.out.println("ID Integrity Check Failed! \n " + orderNumbers.size() + " different order numbers but " + loadedOrders.size() + " orders.");
             }
 
             orders = loadedOrders;
 
-//            
-//            
-//            
-//            
-//            
-//            if (isATest) {
-//                //orderDataFile = testOrderDateFile;
-//                //orders = decode(orderDataFile);
-//
-//                List<Order> loadedOrders = new ArrayList();
-//                java.io.File[] orderFiles = lookForOrders(configDao1.get().getTestDirectory());
-//                for (java.io.File orderFile : orderFiles) {
-//                    if (!orderFile.getName().endsWith("00000000.txt")) {
-//                        loadedOrders.addAll(decode(orderFile));
-//                    }
-//                }
-//                //List<Integer> ids = new ArrayList();
-//                java.util.Set<Integer> ids = new java.util.HashSet();
-//                for (Order order : loadedOrders) {
-//                    ids.add(order.getId());
-//                }
-//
-//                for (java.io.File orderFile : orderFiles) {
-//                    if (orderFile.getName().endsWith("00000000.txt")) {
-//                        for (Order order : decode(orderFile)) {
-//                            if (!ids.contains(order.getId())) {
-//                                loadedOrders.add(order);
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                orders = loadedOrders;
-//
-//            } else {
-//                List<Order> loadedOrders = new ArrayList();
-//                java.io.File[] orderFiles = lookForOrders(configDao1.get().getOrdersDirectory());
-//                for (java.io.File orderFile : orderFiles) {
-//                    if (!orderFile.getName().endsWith("00000000.txt")) {
-//                        loadedOrders.addAll(decode(orderFile));
-//                    }
-//                }
-//
-//                if (orders == null) {
-//                    orders = loadedOrders;
-//                } else {
-//                    orders.addAll(loadedOrders);
-//                }
-//
-////                for (java.io.File orderFile : orderFiles) {
-////                    if (orderFile.getName().endsWith("00000000.txt")){
-////                        if (get()){
-////                    //loadedOrders.addAll(decode(orderFile));
-////                }}}
-//            }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -199,13 +142,10 @@ public class OrderDao {
     }
 
     public void update(Order order) {
-        //Order found = null;
         List<Order> foundOrders = new ArrayList();
 
         for (Order currentOrder : orders) {
             if (currentOrder.getId() == order.getId()) {
-                //found = currentOrder;
-                //break;
                 foundOrders.add(currentOrder);
             }
         }
@@ -215,19 +155,9 @@ public class OrderDao {
             encode(foundOrder.getDate());
         }
 
-//        
-//        Date oldDate = null;
-//        if (found != null) {
-//            oldDate = found.getDate();
-//
-//            orders.remove(found);
-//        }
 
         orders.add(order);
-
-        //encode(oldDate);
         encode(extractDate("Orders_00000000.txt"));
-
         encode(order);
 
     }
@@ -251,7 +181,6 @@ public class OrderDao {
         encode(extractDate("Orders_00000000.txt"));
 
         encode(oldDate);
-        //encode(order);
 
     }
 
@@ -295,28 +224,13 @@ public class OrderDao {
         java.util.Map<String, java.util.Date> dateMap = new java.util.HashMap();
 
         for (Order order : orders) {
-            //orderDates.add(order.getDate());
             dateMap.putIfAbsent(fmt.format(order.getDate()), order.getDate());
         }
 
         orderDates.addAll(dateMap.values());
-        //orderDates.sort();
 
         java.util.Collections.sort(orderDates);
 
-//        for (java.util.Date ){
-//            
-////        }
-//        
-//        java.util.List<java.util.Date> filteredOrderDates = new ArrayList();
-//        java.util.List<String> filteredOrderDateStrings = new ArrayList();
-//        
-//        for (java.util.Date orderDate : orderDates ){
-//            if (filteredOrderDates.contains(fmt)){
-//                
-//            }
-//            
-//        }
         return orderDates;
     }
 
@@ -368,16 +282,7 @@ public class OrderDao {
         return highestId++;
     }
 
-//    private void encode() {
-//        encode(orderDataFile);
-//    }
-//    private void encode(PrintWriter printWriter) {
-//        encode(printWriter, orders);
-//    }
-    private void encode(Order order) {
-        //determineFile(order.getDate());
-        // This was the source of a lot of problems earlier.
-
+  private void encode(Order order) {
         encode(order.getDate());
     }
 
@@ -403,8 +308,6 @@ public class OrderDao {
 
     }
 
-    //private void encode(PrintWriter printWriter, List<Order> groupOfOrders) {
-    //}
     private void encode(java.io.File orderFile, List<Order> groupOfOrders) throws IOException {
         encode(new PrintWriter(new FileWriter(orderFile)), groupOfOrders);
     }
@@ -412,7 +315,6 @@ public class OrderDao {
     private void encode(PrintWriter printWriter, List<Order> groupOfOrders) {
 
         final String TOKEN = ",";
-        //final String CSV_ESCAPE = Pattern.quote("\\") + TOKEN;
         final String DATAHEADER = "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCost"
                 + "PerSquareFoot,MaterialCost,LaborCost,Tax,Total";
 
@@ -421,7 +323,6 @@ public class OrderDao {
 
             for (Order order : groupOfOrders) {
 
-                //toString(out, order, TOKEN, nameValue, stateName, productName);
                 String orderString = toString(order, TOKEN);
 
                 out.println(orderString);
@@ -442,7 +343,6 @@ public class OrderDao {
         return toString(order, TOKEN, CSV_ESCAPE);
     }
 
-    //private String toString(final PrintWriter out, Order order, final String TOKEN, String nameValue, String stateName, String productName) {
     public String toString(Order order, final String TOKEN, final String CSV_ESCAPE) {
 
         String stateName = "null";
@@ -463,7 +363,9 @@ public class OrderDao {
 
         String nameValue = null;
         if (order.getName() != null) {
-            nameValue = order.getName().replaceAll(TOKEN, CSV_ESCAPE).replaceAll("Q", "").replaceAll("E", "");
+            String orderName = order.getName();
+            if (order.getName().endsWith("\\")) orderName = orderName + " ";
+            nameValue = orderName.replaceAll(TOKEN, CSV_ESCAPE).replaceAll("Q", "").replaceAll("E", "");
         }
 
         return toString(order, TOKEN, nameValue, stateName, productName);
@@ -524,19 +426,10 @@ public class OrderDao {
      */
     public String addLabels(String orderString, final String TOKEN, final String SECOND_TOKEN) {
 
-//        if (TOKEN.isEmpty()) {
-//            TOKEN = System.lineSeparator();
-//        }
         String labeledOrderString = "";
 
         String[] orderParts = orderString.split(TOKEN);
 
-//        for (int x = 0 ; x < orderParts.length ; x++){
-//            orderParts[x] = orderParts[x].replaceAll(TOKEN, System.lineSeparator()) ;
-//            
-//        }
-//        
-        //TOKEN.isEmpty() || 
         if (orderParts.length < 11) {
             System.out.println("Something Just went wrong on line 373 of the order DAO\n" + " - " + TOKEN + " - ");
         } else {
@@ -558,9 +451,6 @@ public class OrderDao {
 
     }
 
-//    private List<Order> decode() throws FileNotFoundException, IOException {
-//        return decode(orderDataFile);
-//    }
     private List<Order> decode(java.io.File orderFile) throws FileNotFoundException, IOException {
 
         if (!orderFile.exists()) {
@@ -595,10 +485,6 @@ public class OrderDao {
 
                     String[] stringParts = currentLine.replaceAll(CSV_ESCAPE, CSV_ESCAPE_TEMP).split(TOKEN);
 
-//                    for (String string : stringParts) {
-//                        System.out.print(string + " - ");
-//                    }
-//                    System.out.println("");
                     for (int x = 0; x < stringParts.length; x++) {
                         stringParts[x] = stringParts[x].replaceAll(CSV_ESCAPE_TEMP, TOKEN);
                     }
@@ -703,11 +589,7 @@ public class OrderDao {
         return orderList;
     }
 
-//    private java.io.File[] lookForOrders() {
-//        return lookForOrders(orderDataFile.getParentFile());
-//    }
-//    
-    private java.io.File[] lookForOrders(java.io.File file) {
+  private java.io.File[] lookForOrders(java.io.File file) {
         if (file.isDirectory()) {
             java.io.File[] orderFiles = file.listFiles(new com.mycompany.flooringmastery.utilities.OrderFilter());
             return orderFiles;
@@ -721,13 +603,11 @@ public class OrderDao {
             return determineFile(configDao.get().getOrdersDirectory(), date);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
-            // System.out.println("Something just went very wrong in the determineFile Method!!!");
         }
         return null;
     }
 
     private File determineFile(File ordersDirectory, java.util.Date date) throws FileNotFoundException {
-        //File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/OrdersData.txt")
         String dateString;
 
         String orderDirectoryPath = "";
@@ -737,7 +617,6 @@ public class OrderDao {
         } else if (ordersDirectory.isFile()) {
             orderDirectoryPath = ordersDirectory.getParent();
         } else {
-            //throw new FileNotFoundException();
         }
 
         java.util.Date defaultDate = extractDate("Orders_00000000.txt");
@@ -762,7 +641,6 @@ public class OrderDao {
             Calendar calendar = Calendar.getInstance();
             calendar.set(2000, Calendar.JANUARY, 1);
             date = calendar.getTime();
-            // } else if(dateString.equalsIgnoreCase(dateString)){
 
         } else {
             String simplifiedDateString = dateString.replaceAll("Orders_", "").replaceAll(".txt", "");

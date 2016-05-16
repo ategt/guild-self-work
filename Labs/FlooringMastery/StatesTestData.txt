@@ -1,5 +1,5 @@
 State,TaxRate
-FG,0.0
-GH,0.0
-SW,0.0
-DQ,0.0
+DG,0.0
+IN,0.0
+KC,0.0
+OH,0.0

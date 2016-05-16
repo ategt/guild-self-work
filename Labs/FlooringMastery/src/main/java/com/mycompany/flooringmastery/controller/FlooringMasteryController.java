@@ -210,7 +210,6 @@ public class FlooringMasteryController {
                 if (orderForNumber == null) {
                     consoleIo.printStringToConsole("No Records Could Be Found Matching That Number.");
                 } else {
-                    //displayOrder(orderForNumber);
                     displayAndEdit(orderForNumber);
 
                 }
@@ -223,19 +222,6 @@ public class FlooringMasteryController {
         } else {
             consoleIo.printStringToConsole("- The Program Could Not Find Any Orders. - ");
         }
-//
-//            if (consoleIo.getUserConfirmation("Would You Like To Edit This Order?", "\n Please Enter \"Y\" To Edit or \"n\" To Return To The Main Menu.")) {
-//                order = editOrder(order);
-//                if (order != null) {
-//                    orderDao.update(order);
-//                }
-//            }
-//
-//            consoleIo.g displayAndEdit(orderForNumber
-//        
-//    
-//
-//    );
 
     }
 
@@ -249,7 +235,24 @@ public class FlooringMasteryController {
             if (!orderList.isEmpty()) {
                 String orderNames = "";
                 for (Order order : orderList) {
-                    orderNames += order.getId() + "\t" + order.getName() + "\t" + order.getState().getState() + "\t" + order.getProduct().getType() + "\n";
+                    if (order != null) {
+                        orderNames += order.getId() + "\t" + order.getName() + "\t";
+                        if (order.getState() == null) {
+                            orderNames += " - ";
+                        } else {
+                            orderNames += order.getState().getState();
+                        }
+
+                        orderNames += "\t";
+
+                        if (order.getProduct() == null) {
+                            orderNames += " - No Product - ";
+                        } else {
+                            orderNames += order.getProduct().getType();
+                        }
+
+                        orderNames += "\n";
+                    }
                 }
 
                 int orderNum = consoleIo.getUserIntInputPositive("Orders Matching Your Search: \n" + orderNames + "\nPlease Enter an Order Number to View or 0 to Exit.");
@@ -279,7 +282,6 @@ public class FlooringMasteryController {
         displayOrder(order);
         if (consoleIo.getUserConfirmation("Would You Like to Edit This File?")) {
             editOrder(order);
-            //orderDao.update(order);
         }
     }
 
@@ -294,7 +296,6 @@ public class FlooringMasteryController {
             if (orderForNumber == null) {
                 consoleIo.printStringToConsole(" - No Records Could Be Found Matching That Number. - ");
             } else {
-                //displayOrder(orderForNumber);
                 displayAndEdit(orderForNumber);
 
             }
@@ -359,7 +360,6 @@ public class FlooringMasteryController {
             boolean confirm = consoleIo.getUserConfirmation("Is this information correct?", " \n Please Enter \"Y\" To Confirm Or Any Other Key To Escape.");
 
             if (confirm) {
-                //orderDao.create(order);
             } else {
                 orderDao.delete(order);
             }
@@ -370,12 +370,8 @@ public class FlooringMasteryController {
     }
 
     private Order inputOrder() throws UserWantsOutException {
-        //Order newOrder = new Order();
-
         Order newOrder = editOrder(null);
-
         return newOrder;
-
     }
 
     private void editOrder() {
@@ -386,7 +382,6 @@ public class FlooringMasteryController {
                 if (consoleIo.getUserConfirmation("Would You Like To Edit This Order?", "\n Please Enter \"Y\" To Edit or \"n\" To Return To The Main Menu.")) {
                     order = editOrder(order);
                     if (order != null) {
-                        //orderDao.update(order);
                     }
                 }
             } else {
@@ -420,13 +415,11 @@ public class FlooringMasteryController {
     }
 
     private Order editOrder(Order order) throws UserWantsOutException {
-        //Order newOrder = order;
         Order newOrder = new Order();
 
         if (order == null) {
             consoleIo.printStringToConsole("To Delete an Existing Entry, Enter a Dash \"-\".");
             consoleIo.printStringToConsole("You May Leave Lines Empty And Return To Edit Them Later.");
-            //newOrder = new Order();
             orderDao.create(newOrder);
         } else {
             newOrder.setId(order.getId());
@@ -435,11 +428,9 @@ public class FlooringMasteryController {
         askCustomerName(order, newOrder);
         askOrderDate(order, newOrder);
         askState(order, newOrder);
-        //askTaxRate(order, newOrder);
 
         if (newOrder.getState() != null) {
             newOrder.setTaxRate(stateDao.get(newOrder.getState().getState()).getStateTax());
-            //askTax(order, newOrder);
             double taxRate = newOrder.getState().getStateTax();
             newOrder.setTaxRate(taxRate);
         }
@@ -452,24 +443,19 @@ public class FlooringMasteryController {
         double materialCost = 0.0;
         double taxRate = 0.0;
 
-        //askCostPerSquareFoot(order, newOrder);
         if (newOrder.getProduct() != null) {
             newOrder.setCostPerSquareFoot(newOrder.getProduct().getCost());
 
-            //askMaterialCost(order, newOrder);
             materialCost = newOrder.getProduct().getCost() * newOrder.getArea();
             newOrder.setMaterialCost(materialCost);
 
-            //askLaborCostPerSquareFoot(order, newOrder);
-            laborCostPerFoot = newOrder.getProduct().getLaborCost();// * newOrder.getArea();
+            laborCostPerFoot = newOrder.getProduct().getLaborCost();
             newOrder.setLaborCostPerSquareFoot(laborCostPerFoot);
         }
 
-        //askLaborCost(order, newOrder);
         double totalLaborCost = laborCostPerFoot * newOrder.getArea();
         newOrder.setLaborCost(totalLaborCost);
 
-        //askTotalCost(order, newOrder);
         double subTotal = totalLaborCost + materialCost;
 
         double totalTax = (subTotal * (taxRate / 100));
@@ -557,7 +543,7 @@ public class FlooringMasteryController {
         }
 
         try {
-            orderDate = consoleIo.getUserDate("\n" + oldDate + "\nPlease Enter Order Date: ", true);
+            orderDate = consoleIo.getUserDate("\n" + oldDate + "\nPlease Enter Order Date: \n The System Likes DD-MM-YYYY Format Best.", true);
 
             if (orderDate == null) {
 
@@ -570,7 +556,6 @@ public class FlooringMasteryController {
         } catch (UserWantsToDeleteValueException | UserWantsToDeleteDateException ex) {
             orderDate = null;
             newOrder.setDate(orderDate);
-            //order.setDate(orderDate);
         }
     }
 
@@ -596,7 +581,6 @@ public class FlooringMasteryController {
             com.mycompany.flooringmastery.dto.State state = stateDao.get(customerState);
 
             if (customerState.equalsIgnoreCase("")) {
-                // customerState = null;
                 valid = true;
                 newOrder.setState(oldStateObj);
             } else if (customerState.equalsIgnoreCase("-")) {
@@ -615,7 +599,6 @@ public class FlooringMasteryController {
         displayProducts();
 
         String oldProduct;
-        //String currentValue = getAvailibleProducts("\n") + "\n";
         String prompt = "";
         String currentValue = "";
         Product oldProductObj = null;
