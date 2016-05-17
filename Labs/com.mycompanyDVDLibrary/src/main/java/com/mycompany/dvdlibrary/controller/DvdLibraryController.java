@@ -47,9 +47,10 @@ public class DvdLibraryController {
                     + "4. List DVDs by Title\n"
                     + "5. Find DVD by Title\n"
                     + "6. Find DVD by ID Number\n"
+                    + "7. Bonus Menu\n"
                     + "0. Exit\n";
 
-            int userChoice = consoleIo.getUserIntInputRange(mainMenu, 0, 6);
+            int userChoice = consoleIo.getUserIntInputRange(mainMenu, 0, 7);
 
             switch (userChoice) {
                 case 1:
@@ -69,6 +70,9 @@ public class DvdLibraryController {
                     break;
                 case 6:
                     findById();
+                    break;
+                case 7:
+                    bonusMenu();
                     break;
                 case 0:
                     choseToExit = true;
@@ -156,6 +160,11 @@ public class DvdLibraryController {
         listAllDvds();
         int id = consoleIo.getUserIntInputPositive("Please Enter An ID Number To Find:");
 
+        displayAndEdit(id);
+
+    }
+
+    public void displayAndEdit(int id) {
         Dvd dvd = dvdLibrary.get(id);
         consoleIo.printStringToConsole(convertToString(dvd));
 
@@ -167,7 +176,6 @@ public class DvdLibraryController {
 
             }
         }
-
     }
 
     public void editDvdInfo(Dvd dvd) {
@@ -300,16 +308,22 @@ public class DvdLibraryController {
             dvdInfo += "Rating: " + dvd.getMPAA() + "\n";
         }
 
-        if ( dvd.getNotes() != null ) {
+        if (dvd.getNotes() != null) {
             dvdInfo += "Notes:";
-            for ( Note note : dvd.getNotes() ) {
-                if ( note != null ) {
+            for (Note note : dvd.getNotes()) {
+                if (note != null) {
                     dvdInfo += "  " + note.getNoteString() + "\n";
                 }
             }
         }
 
         return dvdInfo;
+    }
+
+    private void bonusMenu() {
+        new AdditionalMenu( this, consoleIo, 
+            noteDao,
+            dvdLibrary).run();
     }
 
 }
