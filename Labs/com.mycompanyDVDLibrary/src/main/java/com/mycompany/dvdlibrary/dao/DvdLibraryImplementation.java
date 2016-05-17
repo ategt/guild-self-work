@@ -291,6 +291,120 @@ public class DvdLibraryImplementation implements DvdLibrary {
         return soughtDvd;
     }
 
+    public List<Dvd> searchByAge(Date date) {
+        List<Dvd> result = new ArrayList();
+
+        for (Dvd dvd : dvdList) {
+
+            if (dvd.getReleaseDate().after(date)) {
+                result.add(dvd);
+            }
+
+        }
+
+        return result;
+    }
+
+    public List<Dvd> searchByRating(String rating) {
+        List<Dvd> result = new ArrayList();
+
+        for (Dvd dvd : dvdList) {
+
+            if (dvd.getMPAA().equalsIgnoreCase(rating)) {
+                result.add(dvd);
+            }
+
+        }
+
+        return result;
+    }
+
+    public List<Dvd> searchByStudio(String studio) {
+        List<Dvd> result = new ArrayList();
+
+        for (Dvd dvd : dvdList) {
+
+            if (dvd.getStudio().equalsIgnoreCase(studio)) {
+                result.add(dvd);
+            }
+        }
+        return result;
+    }
+
+    public Date averageAge() {
+        List<Dvd> result = new ArrayList();
+        Date date = new Date();
+        long milliseconds = 0;
+        long dvdCounter = 0;
+        long averageMills;
+
+        for (Dvd dvd : dvdList) {
+            milliseconds += dvd.getReleaseDate().getTime();
+            dvdCounter++;
+        }
+
+        averageMills = (milliseconds / dvdCounter);
+
+        date.setTime(averageMills);
+
+        return date;
+    }
+    
+        public Dvd findNewestDvd() {
+        Date date = new Date();
+        date.setTime(0);
+        Dvd newestDvd = null;
+        
+        for (Dvd dvd : dvdList) {
+
+            if (dvd.getReleaseDate().after(date)) {
+                date = dvd.getReleaseDate();
+                newestDvd = dvd;
+            }
+
+        }
+
+        return newestDvd;
+    }
+
+        public Dvd findOldestDvd() {
+        Date date = new Date();
+        Dvd oldestDvd = null;
+        
+        for (Dvd dvd : dvdList) {
+
+            if (dvd.getReleaseDate().before(date)) {
+                date = dvd.getReleaseDate();
+                oldestDvd = dvd;
+            }
+
+        }
+
+        return oldestDvd;
+    }
+
+    public Float findAverageNumberOfNotes() {
+        Float noteCount = 0f;
+        Float dvdCount = 0f;
+        
+        for (Dvd dvd : dvdList) {
+
+            noteCount += dvd.getNotes().size();
+            dvdCount++;
+            
+        }
+
+        return ( noteCount / dvdCount );
+    }
+
+    public java.util.Map<String /* Rating  */ , List<Dvd> > searchByDirector(){
+        
+        
+        
+        
+    }
+    
+    
     @Override
     public String fixNull(String input) {
         String returnValue = null;
