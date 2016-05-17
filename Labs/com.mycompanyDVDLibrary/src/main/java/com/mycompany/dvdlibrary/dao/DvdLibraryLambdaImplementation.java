@@ -410,114 +410,62 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
     }
 
     public Float findAverageNumberOfNotes(List<Dvd> testList) {
-        //return
-        int noteCounter = 0;
-        int dvdCounter = 0;
-        //List<Note> noteList = new ArrayList();
-        List<List<Note>> noteList = new ArrayList();
-        
-        
+
         Double testAverage = testList.stream()
                 .mapToInt(d -> d.getNotes().size())
-                //.map(d -> d.getNotes().size())
                 .average()
                 .getAsDouble();
-                //.collect(Collectors.)
-               
+
         return testAverage.floatValue();
-        
-        
-        //return Float.
-        //Double averageNoteCount = 
-                //dvdList
-                //.stream()
-                //.mapToInt( d -> d.getNotes().size() )
-//                .map( d -> d.getNotes() )
-//                .forEach( n -> {noteList.add(n);
-//                                //dvdCounter++;
-//                        
-//                        });
-//                //.collect(Collectors.toCollection(() -> new java.util.HashSet<Note>()));
-                
-//                noteList.size();
-//                return 7f;
-//                 //return averageNoteCount.floatValue();
-                
-                
-//                .mapToInt( d -> d.size())
-//                .average()
-//                .getAsDouble();
-                
-                
-                
-                
-                //.collect(supplier, accumulator, combiner)
-
-
-
-
-
-
-
-                //.average()
-                //.getAsDouble();
-                
-                
-       
-        
-                
-//                .map(Dvd::getNotes)
-//                //.collect(Collectors.)
-//                
-//                .forEach(d -> {
-//                    if (d.getNotes() != null) {
-//                        noteCounter += d.getNotes().size();
-//                        
-//                    }
-//
-//                });
-
-//        Float noteCount = 0f;
-//        Float dvdCount = 0f;
-//
-//        for (Dvd dvd : testList) {
-//
-//            noteCount += dvd.getNotes().size();
-//            dvdCount++;
-//
-//        }
-//
-//        return (noteCount / dvdCount);
     }
 
     public java.util.Map<String /* Rating  */, List<Dvd>> searchByDirector(String director) {
 
-        java.util.Map<String, List<Dvd>> results = new java.util.HashMap();
-        java.util.List<Dvd> directedDvds = new ArrayList();
-
-        for (Dvd dvd : dvdList) {
-            if (dvd != null && dvd.getDirectorsName() != null && dvd.getDirectorsName().equalsIgnoreCase(director)) {
-                directedDvds.add(dvd);
-            }
-        }
-
-        String token = "\n\t\n";
-        String rating = "";
-        for (Dvd dvd : directedDvds) {
-            if (!rating.contains(dvd.getMPAA())) {
-                rating += dvd.getMPAA() + token;
-            }
-        }
-
-        for (String rate : rating.split(token)) {
-
-            if (rate.trim().length() > 0) {
-                results.put(rate, searchByRating(rate));
-            }
-
-        }
-
-        return results;
+        return dvdList.stream()
+                .filter(d -> d != null)
+                .filter(d -> d.getDirectorsName() != null)
+                .filter(d -> d.getMPAA() != null)
+                .filter(d -> d.getDirectorsName().equalsIgnoreCase(director))
+                .collect(Collectors.groupingBy(d -> d.getMPAA(), Collectors.toList()));
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//        java.util.Map<String, List<Dvd>> results = new java.util.HashMap();
+//        java.util.List<Dvd> directedDvds = new ArrayList();
+//
+//        for (Dvd dvd : dvdList) {
+//            if (dvd != null && dvd.getDirectorsName() != null && dvd.getDirectorsName().equalsIgnoreCase(director)) {
+//                directedDvds.add(dvd);
+//            }
+//        }
+//
+//        String token = "\n\t\n";
+//        String rating = "";
+//        for (Dvd dvd : directedDvds) {
+//            if (!rating.contains(dvd.getMPAA())) {
+//                rating += dvd.getMPAA() + token;
+//            }
+//        }
+//
+//        for (String rate : rating.split(token)) {
+//
+//            if (rate.trim().length() > 0) {
+//                results.put(rate, searchByRating(rate));
+//            }
+//
+//        }
+//
+//        return results;
     }
 
     @Override
