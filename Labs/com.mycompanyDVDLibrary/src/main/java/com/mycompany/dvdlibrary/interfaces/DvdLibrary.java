@@ -6,7 +6,9 @@
 package com.mycompany.dvdlibrary.interfaces;
 
 import com.mycompany.dvdlibrary.interfaces.Dvd;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -14,9 +16,19 @@ import java.util.List;
  */
 public interface DvdLibrary {
 
+    Date averageAge();
+    Date averageAge(List<Dvd> listOfDvdObjects);
+    
     Dvd create(Dvd dvd);
 
     void delete(Dvd dvd);
+
+    Float findAverageNumberOfNotes();
+    Float findAverageNumberOfNotes(List<Dvd> listOfDvdObjects);
+
+    Dvd findNewestDvd();
+
+    Dvd findOldestDvd();
 
     String fixNull(String input);
 
@@ -24,10 +36,19 @@ public interface DvdLibrary {
 
     List<Dvd> getAllDvds();
 
+    List<Dvd> searchByAge(Date date);
+
+    Map<String, List<Dvd>> searchByDirector(String director);
+
+    List<Dvd> searchByRating(String rating);
+
+    List<Dvd> searchByStudio(String studio);
+
     List<Dvd> searchByTitle(String title);
 
     int size();
 
     void update(Dvd dvd);
+    
     
 }

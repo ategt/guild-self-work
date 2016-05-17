@@ -33,18 +33,18 @@ import java.util.regex.Pattern;
  *
  * @author apprentice
  */
-public class DvdLibraryImplementation implements DvdLibrary {
+public class DvdLibraryLambdaImplementation implements DvdLibrary {
 
     List<Dvd> dvdList;
     int nextId = 1;
     File dvdLibraryFile = new File("dvdData.txt");
     NoteDao noteDao;
 
-    public DvdLibraryImplementation(NoteDao noteDao) {
+    public DvdLibraryLambdaImplementation(NoteDao noteDao) {
         this(false, noteDao);
     }
 
-    protected DvdLibraryImplementation(boolean isATest, NoteDao noteDao) {
+    protected DvdLibraryLambdaImplementation(boolean isATest, NoteDao noteDao) {
 
         this.noteDao = noteDao;
 
@@ -198,7 +198,7 @@ public class DvdLibraryImplementation implements DvdLibrary {
             out.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(DvdLibraryImplementation.class
+            Logger.getLogger(DvdLibraryLambdaImplementation.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -269,7 +269,7 @@ public class DvdLibraryImplementation implements DvdLibrary {
             sc.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DvdLibraryImplementation.class
+            Logger.getLogger(DvdLibraryLambdaImplementation.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
