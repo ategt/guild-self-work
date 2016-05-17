@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.logging.Level;
@@ -252,10 +253,13 @@ public class AddressBookImpl implements AddressBook {
     }
 
     @Override
-    public List<List<Address>> searchByState(String state) {
+    //public List<List<Address>> searchByState(String state) {
+    public Map<String /* City */, List<Address>> searchByState(String state){
+            
+        //List<List<Address>> result = new ArrayList();
 
-        List<List<Address>> result = new ArrayList();
-
+        Map<String /* City */, List<Address>> result = new java.util.HashMap();
+        
         List<Address> addressesFromACertainState = new ArrayList();
         
         for ( Address address : addresses ) {
@@ -266,15 +270,11 @@ public class AddressBookImpl implements AddressBook {
         }
         
         
-        //List<Address> soughtAddressesOfACertainCity = new ArrayList();
-
-        //List<String> cityNames = new ArrayList();
         Set<String> cityNames = new HashSet();
         for (Address address : addressesFromACertainState) {
             if (address.getCity() != null) {
 
                 if (!cityNames.contains(address.getCity())) {
-                    //soughtAddressOfACertainCity.add(address);
                     cityNames.add(address.getCity());
                 }
             }
@@ -294,7 +294,8 @@ public class AddressBookImpl implements AddressBook {
 
             }
             
-            result.add(soughtAddressesOfACertainCity);
+            //result.add(soughtAddressesOfACertainCity);
+            result.put(cityName, soughtAddressesOfACertainCity);
 
         }
 

@@ -7,6 +7,7 @@ package com.mycompany.addressbook.dao;
 
 import com.mycompany.addressbook.dto.Address;
 import java.util.List;
+import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +17,9 @@ import static org.junit.Assert.*;
  *
  * @author apprentice
  */
-public class AddressBookTest {
+public class AddressBookImplTest {
 
-    public AddressBookTest() {
+    public AddressBookImplTest() {
     }
 
     @Before
@@ -36,7 +37,7 @@ public class AddressBookTest {
     public void testCreate() {
         System.out.println("create");
         Address address = new Address();
-        AddressBook instance = new AddressBook(true);
+        AddressBook instance = new AddressBookImpl(true);
         Address expResult = address;
         Address result = instance.create(address);
         assertEquals(expResult, result);
@@ -60,7 +61,7 @@ public class AddressBookTest {
     @Test
     public void testGetAllAddresses() {
         System.out.println("getAllAddresses");
-        AddressBook instance = new AddressBook(true);
+        AddressBook instance = new AddressBookImpl(true);
 
         Address addressOne = new Address();
         Address addressTwo = new Address();
@@ -94,7 +95,7 @@ public class AddressBookTest {
     public void testEncodeAndDecode() {
 
         // The true parameter in the Address Book constructor signifies a test.
-        AddressBook noteDao = new AddressBook(true);
+        AddressBook noteDao = new AddressBookImpl(true);
         Address newNote = new Address();
 
         // Create the file in the Dao.
@@ -131,7 +132,7 @@ public class AddressBookTest {
         noteDao.update(newNote);
 
         // Load a new instance of the NoteDao.
-        AddressBook secondDao = new AddressBook(true);
+        AddressBook secondDao = new AddressBookImpl(true);
 
         // Pull a note  using the id number recorded earlier.
         Address thirdNote = secondDao.get(id);
@@ -154,7 +155,7 @@ public class AddressBookTest {
 
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
-        AddressBook thirdDao = new AddressBook(true);
+        AddressBook thirdDao = new AddressBookImpl(true);
         assertEquals(thirdDao.get(id), null);
 
     }
@@ -166,7 +167,7 @@ public class AddressBookTest {
     public void testCreateB() {
         System.out.println("create");
         Address address = new Address();
-        AddressBook instance = new AddressBook(true);
+        AddressBook instance = new AddressBookImpl(true);
         Address expResult = address;
         Address result = instance.create(address);
         assertEquals(expResult, result);
@@ -190,7 +191,7 @@ public class AddressBookTest {
     @Test
     public void testGetAllAddressesB() {
         System.out.println("getAllAddresses");
-        AddressBook instance = new AddressBook(true);
+        AddressBook instance = new AddressBookImpl(true);
 
         Address addressOne = new Address();
         Address addressTwo = new Address();
@@ -224,7 +225,7 @@ public class AddressBookTest {
     public void testEncodeAndDecodeB() {
 
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBook(true);
+        AddressBook noteDao = new AddressBookImpl(true);
         Address newNote = new Address();
 
         // Create the file in the Dao.
@@ -261,7 +262,7 @@ public class AddressBookTest {
         noteDao.update(newNote);
 
         // Load a new instance of the NoteDao.
-        AddressBook secondDao = new AddressBook(true);
+        AddressBook secondDao = new AddressBookImpl(true);
 
         // Pull a note  using the id number recorded earlier.
         Address thirdNote = secondDao.get(id);
@@ -284,7 +285,7 @@ public class AddressBookTest {
 
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
-        AddressBook thirdDao = new AddressBook(true);
+        AddressBook thirdDao = new AddressBookImpl(true);
         assertEquals(thirdDao.get(id), null);
 
     }
@@ -296,7 +297,7 @@ public class AddressBookTest {
     public void testCreateC() {
         System.out.println("create");
         Address address = new Address();
-        AddressBook instance = new AddressBook(true);
+        AddressBook instance = new AddressBookImpl(true);
         Address expResult = address;
         Address result = instance.create(address);
         assertEquals(expResult, result);
@@ -320,7 +321,7 @@ public class AddressBookTest {
     @Test
     public void testGetAllAddressesC() {
         System.out.println("getAllAddresses");
-        AddressBook instance = new AddressBook(true);
+        AddressBook instance = new AddressBookImpl(true);
 
         Address addressOne = new Address();
         Address addressTwo = new Address();
@@ -354,7 +355,7 @@ public class AddressBookTest {
     public void testEncodeAndDecodeC() {
 
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBook(true);
+        AddressBook noteDao = new AddressBookImpl(true);
         Address newNote = new Address();
 
         // Create the file in the Dao.
@@ -391,7 +392,7 @@ public class AddressBookTest {
         noteDao.update(newNote);
 
         // Load a new instance of the NoteDao.
-        AddressBook secondDao = new AddressBook(true);
+        AddressBook secondDao = new AddressBookImpl(true);
 
         // Pull a note  using the id number recorded earlier.
         Address thirdNote = secondDao.get(id);
@@ -414,7 +415,7 @@ public class AddressBookTest {
 
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
-        AddressBook thirdDao = new AddressBook(true);
+        AddressBook thirdDao = new AddressBookImpl(true);
         assertEquals(thirdDao.get(id), null);
 
     }
@@ -422,7 +423,7 @@ public class AddressBookTest {
     @Test
     public void testTheSearchByCity() {
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBook();
+        AddressBook noteDao = new AddressBookImpl();
         Address newNote = new Address();
 
         assertEquals(noteDao.searchByCity("wooster").size(), 4);
@@ -432,7 +433,7 @@ public class AddressBookTest {
     @Test
     public void testTheSearchByZipcode() {
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBook();
+        AddressBook noteDao = new AddressBookImpl();
         Address newNote = new Address();
 
         assertEquals(noteDao.searchByZipcode("44287").size(), 3);
@@ -442,11 +443,12 @@ public class AddressBookTest {
     @Test
     public void testTheSearchByState() {
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBook();
+        AddressBook noteDao = new AddressBookImpl();
         Address newNote = new Address();
 
         
-        List<List<Address>> mess = noteDao.searchByState("OH");
+        //List<List<Address>> mess = noteDao.searchByState("OH");
+        Map<String /* City */, List<Address>> mess = noteDao.searchByState("OH");
         assertEquals(mess.size(), 3);
         
        // System.out.println(mess);

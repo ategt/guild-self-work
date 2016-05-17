@@ -7,6 +7,7 @@ package com.mycompany.addressbook.dao;
 
 import com.mycompany.addressbook.dto.Address;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -28,7 +29,7 @@ public interface AddressBook {
 
     List<Address> searchByLastName(String lastName);
 
-    List<List<Address>> searchByState(String state);
+    Map<String /* City */, List<Address>>  searchByState(String state);
 
     List<Address> searchByZipcode(String zipcode);
 

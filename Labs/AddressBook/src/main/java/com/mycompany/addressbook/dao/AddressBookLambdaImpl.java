@@ -22,7 +22,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
+import java.util.stream.Collector;
+//import java.util.stream.Collectors;
 
 /**
  *
@@ -224,14 +225,12 @@ public class AddressBookLambdaImpl implements AddressBook {
 
     @Override
     public List<Address> searchByLastName(String lastName) {
-        
-        
+
         return addresses
                 .stream()
-                .filter(a -> a.getLastName().equalsIgnoreCase(lastName))
-                .collect(Collectors.toList());
-        
-        
+                .filter((Address a) -> lastName.equalsIgnoreCase(a.getLastName()))
+                .collect(java.util.stream.Collectors.toList());
+
 //        
 //        List<Address> soughtAddress = new ArrayList();
 //
@@ -249,15 +248,11 @@ public class AddressBookLambdaImpl implements AddressBook {
     @Override
     public List<Address> searchByCity(String city) {
 
-        
         return addresses
                 .stream()
                 .filter(a -> a.getCity().equalsIgnoreCase(city))
-                .collect(Collectors.toList());
-        
-        
-        
-        
+                .collect(java.util.stream.Collectors.toList());
+
 //        
 //        
 //        
@@ -272,90 +267,156 @@ public class AddressBookLambdaImpl implements AddressBook {
 //        }
 //
 //        return soughtAddress;
-
     }
 
+//    @Override
+//    public List<List<Address>> searchByState(String state) {
+//        return null;
+//    }
+
+    //@Override
+    //public List<List<Address>> searchByState(String state) {
+    
     @Override
-    public List<List<Address>> searchByState(String state) {
-        
-        //List<List<Address>> result = new ArrayList();
-        
-        Map<String, List<Address>> result = new HashMap();
-        
-        addresses
+    public Map<String /* City */, List<Address> /*Addresses Sorted By City*/> searchByState(String state) {
+
+//        
+//         Map<Gender, Map<Object, String>> personsByGenderAndDobMonth
+//           = Employee.persons()
+//            .stream()
+//            .collect(Collectors.groupingBy(Employee::getGender,
+//              Collectors.groupingBy(p -> p.getDob().getMonth(),
+//              Collectors.mapping(Employee::getName, 
+//                     Collectors.joining(", ")))));
+//
+//    System.out.println(personsByGenderAndDobMonth);
+        //String city 
+//        //Map<String, Set<String>> namesByCity
+//         Map<String, List<String>> namesByCity
+//         = addresses
+//                 .stream()
+//                 .collect(
+//                         groupingBy(
+//                                 //Address::getCity,
+//                                 a -> a.getCity,
+//                                              mapping(
+//                                                      a -> a.getLastName, toSet())));
+//        Map<String, List<Address>> namesByCity;
+//        namesByCity = addresses
+//                .stream()
+//                .collect(
+//                        java.util.stream.Collectors.groupingBy(
+//                                //Address::getCity,
+//                                (Address a) -> a.getCity()),
+//                        java.util.stream.Collectors.mapping(
+//                                (Address a) -> a.getLastName(), java.util.stream.Collectors.toList()
+//                        )
+//                );
+//        Map<String, Address> addressLambdaMess
+//                = addresses.stream().collect(
+//                        java.util.stream.Collectors.toMap(
+//                                (Address a) -> a.getLastName(), (Address a) -> a
+//                        )
+//                );
+        Map<String /* City */, List<Address> /*Addresses Sorted By City*/> secondAddressLambdaMess
+                = addresses
                 .stream()
-                .filter(a -> a.getState().equalsIgnoreCase(state))
-                //.collect(Collectors.toList())
-                .forEach(a -> {
-                    
-                    result.get(a.getCity());
-                    
-                }
-                    
-                    result.
-                });
-                
-                
-        
-        
-        
-        
-        
-        
-        
-        
-        
+                .filter((Address a) -> a.getState().equalsIgnoreCase(state))
+                .collect(
+                        java.util.stream.Collectors.groupingBy(
+                                (Address a) -> a.getCity(),
+                                java.util.stream.Collectors.toList()
+                        )
+                );
 
-        List<List<Address>> result = new ArrayList();
+        return secondAddressLambdaMess;
 
-        List<Address> addressesFromACertainState = new ArrayList();
-        
-        addresses.stream().filter((address) -> (address.getState().equalsIgnoreCase(state))).forEach((address) -> {
-            addressesFromACertainState.add(address);
-        });
-        
-        
-        //List<Address> soughtAddressesOfACertainCity = new ArrayList();
-
-        //List<String> cityNames = new ArrayList();
-        Set<String> cityNames = new HashSet();
-        addressesFromACertainState.stream().filter((address) -> (address.getCity() != null)).filter((address) -> (!cityNames.contains(address.getCity()))).forEach((address) -> {
-            //soughtAddressOfACertainCity.add(address);
-            cityNames.add(address.getCity());
-        });
-
-        cityNames.stream().map((cityName) -> {
-            List<Address> soughtAddressesOfACertainCity = new ArrayList();
-            for (Address address : addressesFromACertainState) {
-
-                if (address != null && address.getCity() != null) {
-                    if (address.getCity().equalsIgnoreCase(cityName)) {
-                        soughtAddressesOfACertainCity.add(address);
-                    }
-                }
-
-            }
-            return soughtAddressesOfACertainCity;            
-        }).forEach((soughtAddressesOfACertainCity) -> {
-            result.add(soughtAddressesOfACertainCity);
-        });
-
-        return result;
-
+//        Map<String, List<Address>> namesByCity;
+//        namesByCity = addresses
+//                .stream()
+//                .collect(
+//                        java.util.stream.Collectors.groupingBy(
+//                                //Address::getCity,
+//                                (Address a) -> a.getCity()),
+//                                java.util.stream.Collectors.mapping(
+//                                        (Address a) -> a.getLastName()), java.util.stream.Collectors.toList()
+//                                )
+//                        )
+//                );
+// 
+//                Map<String, Address> map = new HashMap();
+//                map.
+        //List<List<Address>> result = new ArrayList();
+//        Map<String, List<Address>> result = new HashMap();
+//
+//        addresses
+//                .stream()
+//                //.filter(a -> a.getState().equalsIgnoreCase(state))
+//                //.collect(Collectors.());
+//                .collect(Collectors.groupingBy(Address::getCity, mapping(Address::getCity))) //.collect(Collectors.toList())
+//                //.forEach(a -> {
+//                //                    
+//                //                    //result.get(a.getCity());
+//                //                    a.
+//                //                }
+//                //                    
+//                //                    result.
+//                //                });
+//                //                
+//                
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//        
+//
+//        List<List<Address>> result = new ArrayList();
+//
+//        List<Address> addressesFromACertainState = new ArrayList();
+//
+//        addresses.stream().filter((address) -> (address.getState().equalsIgnoreCase(state))).forEach((address) -> {
+//            addressesFromACertainState.add(address);
+//        });
+//
+//        //List<Address> soughtAddressesOfACertainCity = new ArrayList();
+//        //List<String> cityNames = new ArrayList();
+//        Set<String> cityNames = new HashSet();
+//        addressesFromACertainState.stream().filter((address) -> (address.getCity() != null)).filter((address) -> (!cityNames.contains(address.getCity()))).forEach((address) -> {
+//            //soughtAddressOfACertainCity.add(address);
+//            cityNames.add(address.getCity());
+//        });
+//
+//        cityNames.stream().map((cityName) -> {
+//            List<Address> soughtAddressesOfACertainCity = new ArrayList();
+//            for (Address address : addressesFromACertainState) {
+//
+//                if (address != null && address.getCity() != null) {
+//                    if (address.getCity().equalsIgnoreCase(cityName)) {
+//                        soughtAddressesOfACertainCity.add(address);
+//                    }
+//                }
+//
+//            }
+//            return soughtAddressesOfACertainCity;
+//        }).forEach((soughtAddressesOfACertainCity) -> {
+//            result.add(soughtAddressesOfACertainCity);
+//        });
+//
+//        return result;
     }
-    
-    
+
     @Override
     public List<Address> searchByZipcode(String zipcode) {
 
-        
         return addresses
                 .stream()
                 .filter(a -> a.getZipcode().equalsIgnoreCase(zipcode))
-                .collect(Collectors.toList());
-        
-        
-        
+                .collect(java.util.stream.Collectors.toList());
+
 //        List<Address> soughtAddress = new ArrayList();
 //
 //        for (Address address : addresses) {
@@ -367,7 +428,6 @@ public class AddressBookLambdaImpl implements AddressBook {
 //        }
 //
 //        return soughtAddress;
-
     }
 
     @Override
