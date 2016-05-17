@@ -74,6 +74,55 @@ public class DvdLibraryLambdaImplementationTest {
         assertEquals(returnedDvd, null);
 
     }
+    
+    
+    
+    @Test
+    public void testCreateB() {
+
+        Dvd dvd = new DvdImplementation();
+        Dvd secondDvd = new DvdImplementation();
+        NoteDao noteDao = new NoteDaoImplementation();
+
+        // Load the test File
+        DvdLibrary instance = new DvdLibraryLambdaImplementation(true, noteDao);
+        Dvd expResult = dvd;
+        Dvd result = instance.create(dvd);
+
+        // Check to see that create() passed back to same file.
+        assertEquals(expResult, result);
+
+        // Check to see that create() assigned the Object a valid ID.
+        int id = result.getId();
+        assertTrue(result.getId() != 0);
+        assertTrue(result.getId() >= instance.size());
+
+        // Check to verify that the create Method did not get confused.
+        Dvd secondResult = instance.create(secondDvd); 
+        assertEquals(secondResult, secondDvd);
+        
+        // Verify that the create method gave the second DVD Object the appriate ID.
+        int secondId = secondResult.getId();
+        assertEquals(secondId, id + 1);
+        
+        // Test get method.
+        Dvd returnedDvd = instance.get(id);
+        assertEquals(returnedDvd, result);
+        instance.delete(dvd);
+
+        Dvd thirdReturnedDvd = instance.get(secondId);
+        assertEquals(thirdReturnedDvd, secondResult);
+        instance.delete(thirdReturnedDvd);
+
+        // Test that the Delete method erased it.
+        returnedDvd = instance.get(id);
+        assertEquals(returnedDvd, null);
+
+        returnedDvd = instance.get(secondId);
+        assertEquals(returnedDvd, null);
+
+    }
+
 
     @Test
     public void testEncode() {

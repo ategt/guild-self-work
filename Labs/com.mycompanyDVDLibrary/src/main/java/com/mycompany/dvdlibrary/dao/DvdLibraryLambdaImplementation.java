@@ -136,6 +136,8 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
     }
 
     private int determineNextId() {
+
+
         int highestId = 1;
 
         for (Dvd dvd : dvdList) {
@@ -229,8 +231,6 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
             
 
             while (sc.hasNextLine()) {
-                
-                
                 String currentLine = sc.nextLine();
 
                 String[] stringParts = currentLine.split(TOKEN);
