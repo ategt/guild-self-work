@@ -77,12 +77,11 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
 
     @Override
     public Dvd get(Integer id) {
-
+ 
         for (Dvd dvd : dvdList) {
             if (dvd.getId() == id) {
                 return dvd;
             }
-
         }
 
         return null;
@@ -98,7 +97,6 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
                 foundDvd = currentDvd;
                 break;
             }
-
         }
         dvdList.remove(foundDvd);
         dvdList.add(dvd);
@@ -155,9 +153,9 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
         final String TOKEN = "::";
         final String TOKENB = ":||:";
 
-        try {
+        try (PrintWriter out = new PrintWriter(new FileWriter(dvdLibraryFile))){
 
-            PrintWriter out = new PrintWriter(new FileWriter(dvdLibraryFile));
+            
 
             for (Dvd dvd : dvdList) {
 
@@ -324,14 +322,8 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
                 = testList
                 .stream()
                 .filter(d -> d.getReleaseDate() != null)
-                //.filter(d -> d.getReleaseDate())
-                //.collect(Collectors.collectingAndThen(Collectors.averagingLong((Dvd d) -> d.getReleaseDate().getTime()), ));
-                //.forEach(Dvd::getReleaseDate);
                 .map(Dvd::getReleaseDate)
                 .mapToLong(Date::getTime)
-                //.collect(Collectors.averagingLong((Date date) -> date.getTime()));
-                //.average();
-                //.collect(supplier, accumulator, combiner)
                 .average()
                 .getAsDouble();
 
@@ -340,22 +332,6 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
 
         return date;
 
-//        Date date = new Date();
-//        long milliseconds = 0;
-//        long dvdCounter = 0;
-//        long averageMills;
-//
-//        for (Dvd dvd : testList) {
-//            if (dvd != null && dvd.getReleaseDate() != null) {
-//                milliseconds += dvd.getReleaseDate().getTime();
-//                dvdCounter++;
-//            }
-//        }
-//
-//        averageMills = (milliseconds / dvdCounter);
-//        date.setTime(averageMills);
-//
-//        return date;
     }
 
     public Dvd findNewestDvd() {
@@ -364,23 +340,6 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
                 .filter(d -> d.getReleaseDate() != null)
                 .max((dvd1, dvd2) -> dvd1.getReleaseDate().compareTo(dvd2.getReleaseDate()))
                 .get();
-
-        //.max(Collator.getInstance().);
-        //.max(Dvd::getReleaseDate);
-//        Date date = new Date();
-//        date.setTime(0);
-//        Dvd newestDvd = null;
-//
-//        for (Dvd dvd : dvdList) {
-//
-//            if (dvd.getReleaseDate() != null && dvd.getReleaseDate().after(date)) {
-//                date = dvd.getReleaseDate();
-//                newestDvd = dvd;
-//            }
-//
-//        }
-//
-//        return newestDvd;
     }
 
     public Dvd findOldestDvd() {
@@ -390,19 +349,6 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
                 .min((dvd1, dvd2) -> dvd1.getReleaseDate().compareTo(dvd2.getReleaseDate()))
                 .get();
 
-//        Date date = new Date();
-//        Dvd oldestDvd = null;
-//
-//        for (Dvd dvd : dvdList) {
-//
-//            if (dvd.getReleaseDate() != null && dvd.getReleaseDate().before(date)) {
-//                date = dvd.getReleaseDate();
-//                oldestDvd = dvd;
-//            }
-//
-//        }
-//
-//        return oldestDvd;
     }
 
     public Float findAverageNumberOfNotes() {
@@ -420,52 +366,12 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
     }
 
     public java.util.Map<String /* Rating  */, List<Dvd>> searchByDirector(String director) {
-
         return dvdList.stream()
                 .filter(d -> d != null)
                 .filter(d -> d.getDirectorsName() != null)
                 .filter(d -> d.getMPAA() != null)
                 .filter(d -> d.getDirectorsName().equalsIgnoreCase(director))
                 .collect(Collectors.groupingBy(d -> d.getMPAA(), Collectors.toList()));
-//        
-//        
-//        
-//        
-//        
-//        
-//        
-//        
-//        
-//        
-//        
-//        
-//        
-//        java.util.Map<String, List<Dvd>> results = new java.util.HashMap();
-//        java.util.List<Dvd> directedDvds = new ArrayList();
-//
-//        for (Dvd dvd : dvdList) {
-//            if (dvd != null && dvd.getDirectorsName() != null && dvd.getDirectorsName().equalsIgnoreCase(director)) {
-//                directedDvds.add(dvd);
-//            }
-//        }
-//
-//        String token = "\n\t\n";
-//        String rating = "";
-//        for (Dvd dvd : directedDvds) {
-//            if (!rating.contains(dvd.getMPAA())) {
-//                rating += dvd.getMPAA() + token;
-//            }
-//        }
-//
-//        for (String rate : rating.split(token)) {
-//
-//            if (rate.trim().length() > 0) {
-//                results.put(rate, searchByRating(rate));
-//            }
-//
-//        }
-//
-//        return results;
     }
 
     @Override
