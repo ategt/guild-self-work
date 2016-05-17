@@ -249,11 +249,10 @@ public class AddressBookLambdaImpl implements AddressBook {
         Map<String, List<Address> > secondAddressLambdaMess
                 = addresses
                 .stream()
-                //.filter((Address a) -> a.getState().equalsIgnoreCase(state))
                 .filter((Address a) -> a.getState().equalsIgnoreCase(state))
                 .collect(
                         groupingBy(
-                                //(Address a) -> a.getCity(),
+                                //(Address a) -> a.getCity(),  // This does the same as the line below it.
                                 Address::getCity,
                                 java.util.stream.Collectors.toList()
                         )
