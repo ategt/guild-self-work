@@ -77,7 +77,7 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
 
     @Override
     public Dvd get(Integer id) {
- 
+
         for (Dvd dvd : dvdList) {
             if (dvd.getId() == id) {
                 return dvd;
@@ -153,46 +153,13 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
         final String TOKEN = "::";
         final String TOKENB = ":||:";
 
-        try (PrintWriter out = new PrintWriter(new FileWriter(dvdLibraryFile))){
+        try (PrintWriter out = new PrintWriter(new FileWriter(dvdLibraryFile))) {
 
-            
-
-            for (Dvd dvd : dvdList) {
-
-                out.print(dvd.getId());
-                out.print(TOKEN);
-                out.print(dvd.getTitle());
-                out.print(TOKEN);
-
-                if (dvd.getReleaseDate() != null) {
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-                    out.print(dateFormat.format(dvd.getReleaseDate()));
-                }
-
-                out.print(TOKEN);
-                out.print(dvd.getMPAA());
-                out.print(TOKEN);
-                out.print(dvd.getDirectorsName());
-                out.print(TOKEN);
-                out.print(dvd.getStudio());
-                out.print(TOKEN);
-
-                List<Note> notes = dvd.getNotes();
-
-                if (notes != null) {
-                    for (com.mycompany.dvdlibrary.interfaces.Note note : notes) {
-                        if (note != null) {
-                            out.print(note.getId());
-                            out.print(TOKENB);
-                        }
-                    }
-
-                }
-
-                out.println("");
-
-            }
+            dvdList.stream()
+                    .map( dvd -> covertToString(dvd, TOKEN, TOKENB))
+                    .forEach((outputString) -> {
+                        out.println(outputString);
+                    });
 
             out.flush();
             out.close();
@@ -204,6 +171,53 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
 
     }
 
+    private String covertToString(Dvd dvd, final String TOKEN, final String TOKENB) {
+        String encodedLine = "";
+
+        encodedLine += dvd.getId();
+        encodedLine += TOKEN;
+        encodedLine += dvd.getTitle();
+        encodedLine += TOKEN;
+
+        encodedLine += getFormattedReleaseDate(dvd);
+
+        encodedLine += TOKEN;
+        encodedLine += dvd.getMPAA();
+        encodedLine += TOKEN;
+        encodedLine += dvd.getDirectorsName();
+        encodedLine += TOKEN;
+        encodedLine += dvd.getStudio();
+        encodedLine += TOKEN;
+
+        encodedLine += getEncodeableNotes(dvd, TOKENB);
+
+        return encodedLine;
+    }
+
+    private String getEncodeableNotes(Dvd dvd, final String TOKENB) {
+        String encodedLine = "";
+        List<Note> notes = dvd.getNotes();
+        if (notes != null) {
+            for (com.mycompany.dvdlibrary.interfaces.Note note : notes) {
+                if (note != null) {
+                    encodedLine += note.getId();
+                    encodedLine += TOKENB;
+                }
+            }
+
+        }
+        return encodedLine;
+    }
+
+    private String getFormattedReleaseDate(Dvd dvd) {
+        if (dvd.getReleaseDate() != null) {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            return dateFormat.format(dvd.getReleaseDate());
+        }
+        return "";
+    }
+
     private List<Dvd> decode() {
 
         List<Dvd> dvdList = new ArrayList<>();
@@ -211,10 +225,12 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
         final String TOKEN = "::";
         final String TOKENB = ":||:";
 
-        try {
-            Scanner sc = new Scanner(new BufferedReader(new FileReader(dvdLibraryFile)));
+        try (Scanner sc = new Scanner(new BufferedReader(new FileReader(dvdLibraryFile)))) {
+            
 
             while (sc.hasNextLine()) {
+                
+                
                 String currentLine = sc.nextLine();
 
                 String[] stringParts = currentLine.split(TOKEN);
