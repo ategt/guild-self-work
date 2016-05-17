@@ -136,16 +136,16 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
     }
 
     private int determineNextId() {
+        
+        int highestId = dvdList.stream()
+                .mapToInt(a -> a.getId())
+                .max()
+                .getAsInt();
+        
+        int startingId = 1;
 
-
-        int highestId = 1;
-
-        for (Dvd dvd : dvdList) {
-            if (highestId < dvd.getId()) {
-                highestId = dvd.getId();
-            }
-        }
-
+        highestId = ( startingId > highestId ) ? startingId : highestId;
+       
         highestId++;
         return highestId++;
     }
