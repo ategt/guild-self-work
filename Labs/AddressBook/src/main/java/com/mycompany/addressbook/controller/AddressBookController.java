@@ -6,6 +6,8 @@
 package com.mycompany.addressbook.controller;
 
 import com.mycompany.addressbook.dao.AddressBook;
+import com.mycompany.addressbook.dao.AddressBookImpl;
+import com.mycompany.addressbook.dao.AddressBookLambdaImpl;
 import com.mycompany.addressbook.dto.Address;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +19,20 @@ import java.util.List;
 public class AddressBookController {
 
     ConsoleIO consoleIo = new ConsoleIO();
-    AddressBook addressBook = new AddressBook();
+    AddressBook addressBook;
 
     public void run() {
+
+        String lambdaMenu = "Would You Like To Use Lambdas Or Enhanced For Loops?\n"
+                + "   1. For Loops\n"
+                + "   2. Lambdas";
+
+        int lambdaChoice = consoleIo.getUserIntInputRange(lambdaMenu, 1, 2, "Please Enter Either \"1\" or \"2\"");
+        if (lambdaChoice == 1) {
+            addressBook = new AddressBookImpl();
+        } else {
+            addressBook = new AddressBookLambdaImpl();
+        }
 
         boolean choseToExit = false;
         while (!choseToExit) {
@@ -31,9 +44,11 @@ public class AddressBookController {
                     + "4. List Addresses\n"
                     + "5. Find Address by Last Name\n"
                     + "6. Find Address by ID Number\n"
+                    + "7. Find Address by City\n"
+                    + "8. Find Address by State\n"
                     + "0. Exit\n";
 
-            int userChoice = consoleIo.getUserIntInputRange(mainMenu, 0, 6);
+            int userChoice = consoleIo.getUserIntInputRange(mainMenu, 0, 8);
 
             switch (userChoice) {
                 case 1:
@@ -53,6 +68,12 @@ public class AddressBookController {
                     break;
                 case 6:
                     editById();
+                    break;
+                case 7:
+                    searchByCity();
+                    break;
+                case 8:
+                    searchByState();
                     break;
                 case 0:
                     choseToExit = true;
@@ -265,6 +286,45 @@ public class AddressBookController {
 
         editAddress(addressToEdit);
         addressBook.update(addressToEdit);
+
+    }
+
+    private void searchByCity() {
+
+        String city = consoleIo.getUserStringInput("Please Enter A City Name To Search For:");
+        List<Address> addressesByCity = addressBook.searchByCity(city);
+
+        if (addressesByCity.size() < 1) {
+            consoleIo.printStringToConsole("No Entries Could Be Found For That City.");
+        } else {
+            for (Address address : addressesByCity) {
+
+                String addressString = address.toString();
+
+                consoleIo.printStringToConsole(addressString);
+            }
+        }
+
+    }
+
+    private void searchByState() {
+
+        String state = consoleIo.getUserStringInput("Please Enter A State Name To Search For:");
+        java.util.Map<String, List<Address>> addressesByState = addressBook.searchByState(state);
+
+        if (addressesByState.size() < 1) {
+            consoleIo.printStringToConsole("No Entries Could Be Found For That City.");
+        } else {
+            for (String cityName : addressesByState.keySet()) {
+                consoleIo.printStringToConsole(cityName + ": ");
+                for (Address address : addressesByState.get(cityName)) {
+
+                    String addressString = address.toString();
+
+                    consoleIo.printStringToConsole("\t" + addressString);
+                }
+            }
+        }
 
     }
 

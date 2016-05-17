@@ -253,10 +253,8 @@ public class AddressBookImpl implements AddressBook {
     }
 
     @Override
-    //public List<List<Address>> searchByState(String state) {
     public Map<String /* City */, List<Address>> searchByState(String state){
             
-        //List<List<Address>> result = new ArrayList();
 
         Map<String /* City */, List<Address>> result = new java.util.HashMap();
         
@@ -294,7 +292,6 @@ public class AddressBookImpl implements AddressBook {
 
             }
             
-            //result.add(soughtAddressesOfACertainCity);
             result.put(cityName, soughtAddressesOfACertainCity);
 
         }
