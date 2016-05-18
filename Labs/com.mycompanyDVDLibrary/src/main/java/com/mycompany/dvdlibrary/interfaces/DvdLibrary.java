@@ -50,5 +50,7 @@ public interface DvdLibrary {
 
     void update(Dvd dvd);
     
+    String searchingTechnique();
+
     
 }

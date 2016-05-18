@@ -350,6 +350,13 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
                 .collect(Collectors.toList());
         
         if ( results.isEmpty() )
+            results = dvdList
+                .stream()
+                .filter(d -> d.getStudio() != null)
+                .filter(d -> d.getStudio().toLowerCase().contains(studio.toLowerCase()))
+                .collect(Collectors.toList());
+        
+        return results;
     }
 
     public Date averageAge() {
@@ -406,12 +413,23 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
     }
 
     public java.util.Map<String /* Rating  */, List<Dvd>> searchByDirector(String director) {
-        return dvdList.stream()
+        //return 
+        java.util.Map<String , List<Dvd>> results = dvdList.stream()
                 .filter(d -> d != null)
                 .filter(d -> d.getDirectorsName() != null)
                 .filter(d -> d.getMPAA() != null)
                 .filter(d -> d.getDirectorsName().equalsIgnoreCase(director))
                 .collect(Collectors.groupingBy(d -> d.getMPAA(), Collectors.toList()));
+        
+        if (results.isEmpty())
+            results = dvdList.stream()
+                .filter(d -> d != null)
+                .filter(d -> d.getDirectorsName() != null)
+                .filter(d -> d.getMPAA() != null)
+                .filter(d -> d.getDirectorsName().toLowerCase().contains(director))
+                .collect(Collectors.groupingBy(d -> d.getMPAA(), Collectors.toList()));
+        
+        return results;
     }
 
     @Override
@@ -427,4 +445,9 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
         return returnValue;
     }
 
+    @Override
+    public String searchingTechnique(){
+        return "Currently Using Lambdas";
+    }
+    
 }

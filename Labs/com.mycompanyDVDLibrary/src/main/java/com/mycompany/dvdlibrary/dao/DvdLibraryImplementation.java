@@ -449,4 +449,7 @@ public class DvdLibraryImplementation implements DvdLibrary {
         return returnValue;
     }
 
+    public String searchingTechnique() {
+        return "Currently Using For Loops";
+    }
 }

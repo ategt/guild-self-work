@@ -7,9 +7,9 @@ package com.mycompany.dvdlibrary.controller;
 
 import com.mycompany.dvdlibrary.interfaces.DvdLibrary;
 import com.mycompany.dvdlibrary.dao.DvdLibraryImplementation;
+import com.mycompany.dvdlibrary.dao.DvdLibraryLambdaImplementation;
 import com.mycompany.dvdlibrary.interfaces.NoteDao;
 import com.mycompany.dvdlibrary.dao.NoteDaoImplementation;
-import com.mycompany.dvdlibrary.interfaces.Dvd;
 import com.mycompany.dvdlibrary.interfaces.Dvd;
 import com.mycompany.dvdlibrary.dto.DvdImplementation;
 import com.mycompany.dvdlibrary.interfaces.Note;
@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -30,17 +29,19 @@ import java.util.regex.Pattern;
  */
 public class DvdLibraryController {
 
-    ConsoleIO consoleIo = new ConsoleIO();
-    NoteDao noteDao = new NoteDaoImplementation();
-    DvdLibrary dvdLibrary = new DvdLibraryImplementation(noteDao);
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    ConsoleIO consoleIo;
+    NoteDao noteDao;
+    DvdLibrary dvdLibrary;
+    DateFormat dateFormat;
 
     public void run() {
+
+        init();
 
         boolean choseToExit = false;
         while (!choseToExit) {
 
-            String mainMenu = "== Main Menu == \n"
+            String mainMenu = "\n== Main Menu == \n"
                     + "1. Add DVD\n"
                     + "2. Remove DVD\n"
                     + "3. Number of DVD's in The Library\n"
@@ -81,10 +82,17 @@ public class DvdLibraryController {
         }
     }
 
+    private void init() {
+
+        this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        this.consoleIo = new ConsoleIO();
+        this.noteDao = new NoteDaoImplementation();
+        this.dvdLibrary = askForLibrarySearchingTechnique();
+    }
+
     private void addDvd() {
         Dvd newDvd = inputDvd();
         dvdLibrary.create(newDvd);
-
     }
 
     public void removeDvd() {
@@ -152,7 +160,6 @@ public class DvdLibraryController {
                 }
             }
         }
-
     }
 
     public void findById() {
@@ -161,7 +168,6 @@ public class DvdLibraryController {
         int id = consoleIo.getUserIntInputPositive("Please Enter An ID Number To Find:");
 
         displayAndEdit(id);
-
     }
 
     public void displayAndEdit(int id) {
@@ -173,7 +179,6 @@ public class DvdLibraryController {
             if (editInput.equalsIgnoreCase("Y")) {
                 editDvdInfo(dvd);
                 dvdLibrary.update(dvd);
-
             }
         }
     }
@@ -183,7 +188,6 @@ public class DvdLibraryController {
 
             String title = consoleIo.getUserStringInput("Please Enter a DVD Title:");
             if (title.equalsIgnoreCase("")) {
-
             } else if (title.equalsIgnoreCase("-")) {
                 title = null;
                 dvd.setTitle(title);
@@ -199,9 +203,7 @@ public class DvdLibraryController {
             } else if (inputString.equalsIgnoreCase("-")) {
                 inputString = null;
                 dvd.setDirectorsName(inputString);
-
             } else {
-
                 dvd.setDirectorsName(inputString);
             }
 
@@ -232,9 +234,7 @@ public class DvdLibraryController {
             } else if (inputString.equalsIgnoreCase("-")) {
                 inputString = null;
                 dvd.setMPAA(inputString);
-
             } else {
-
                 dvd.setMPAA(inputString);
             }
 
@@ -245,9 +245,7 @@ public class DvdLibraryController {
             } else if (inputString.equalsIgnoreCase("-")) {
                 inputString = null;
                 dvd.setStudio(inputString);
-
             } else {
-
                 dvd.setStudio(inputString);
             }
 
@@ -261,9 +259,7 @@ public class DvdLibraryController {
                 if (inputString.equalsIgnoreCase("")) {
                     inputString = null;
                     moreNotes = false;
-
                 } else {
-
                     note.setNoteString(inputString);
                     noteDao.create(note);
 
@@ -321,9 +317,27 @@ public class DvdLibraryController {
     }
 
     private void bonusMenu() {
-        new AdditionalMenu( this, consoleIo, 
-            noteDao,
-            dvdLibrary).run();
+        new AdditionalMenu(this, consoleIo,
+                noteDao,
+                dvdLibrary).run();
     }
 
+    private DvdLibrary askForLibrarySearchingTechnique() {
+
+        int intInput = consoleIo.getUserIntInputPositive("Would You Like To Use For Loops or Lambdas?\n\t1. For Loops\n\t2. Lambdas");
+
+        DvdLibrary result = dvdLibraryFactory(intInput);
+
+        consoleIo.printStringToConsole(result.searchingTechnique());
+
+        return result;
+    }
+
+    private DvdLibrary dvdLibraryFactory(int intInput) {
+        if (intInput == 1) {
+            return new DvdLibraryImplementation(noteDao);
+        } else {
+            return new DvdLibraryLambdaImplementation(noteDao);
+        }
+    }
 }
