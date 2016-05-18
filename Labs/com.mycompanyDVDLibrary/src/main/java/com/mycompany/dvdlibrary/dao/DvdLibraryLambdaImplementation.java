@@ -136,16 +136,16 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
     }
 
     private int determineNextId() {
-        
+
         int highestId = dvdList.stream()
                 .mapToInt(a -> a.getId())
                 .max()
                 .getAsInt();
-        
+
         int startingId = 1;
 
-        highestId = ( startingId > highestId ) ? startingId : highestId;
-       
+        highestId = (startingId > highestId) ? startingId : highestId;
+
         highestId++;
         return highestId++;
     }
@@ -158,7 +158,7 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
         try (PrintWriter out = new PrintWriter(new FileWriter(dvdLibraryFile))) {
 
             dvdList.stream()
-                    .map( dvd -> covertToString(dvd, TOKEN, TOKENB))
+                    .map(dvd -> covertToString(dvd, TOKEN, TOKENB))
                     .forEach((outputString) -> {
                         out.println(outputString);
                     });
@@ -228,7 +228,6 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
         final String TOKENB = ":||:";
 
         try (Scanner sc = new Scanner(new BufferedReader(new FileReader(dvdLibraryFile)))) {
-            
 
             while (sc.hasNextLine()) {
                 String currentLine = sc.nextLine();
@@ -294,7 +293,7 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
 
     @Override
     public List<Dvd> searchByTitle(String title) {
-        return dvdList
+        List<Dvd> results = dvdList
                 .stream()
                 .filter(d -> d.getTitle() != null)
                 .filter(
@@ -302,6 +301,19 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
                         .equalsIgnoreCase(title)
                 )
                 .collect(Collectors.toList());
+
+        if (results.isEmpty()) {
+            results = dvdList
+                    .stream()
+                    .filter(d -> d.getTitle() != null)
+                    .filter(
+                            d -> d.getTitle().toLowerCase().contains(title.toLowerCase())
+                    //.equalsIgnoreCase(title)
+                    )
+                    .collect(Collectors.toList());
+        }
+
+        return results;
     }
 
     public List<Dvd> searchByAge(Date date) {
@@ -313,19 +325,31 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
     }
 
     public List<Dvd> searchByRating(String rating) {
-        return dvdList
+        List<Dvd> results = dvdList
                 .stream()
                 .filter(d -> d.getMPAA() != null)
                 .filter(d -> d.getMPAA().equalsIgnoreCase(rating))
                 .collect(Collectors.toList());
+        
+        if (results.isEmpty()){
+            results = dvdList
+                .stream()
+                .filter(d -> d.getMPAA() != null)
+                .filter(d -> d.getMPAA().toLowerCase().contains(rating.toLowerCase()))
+                .collect(Collectors.toList());
+        }
+        
+        return results;
     }
 
     public List<Dvd> searchByStudio(String studio) {
-        return dvdList
+        List<Dvd> results = dvdList
                 .stream()
                 .filter(d -> d.getStudio() != null)
                 .filter(d -> d.getStudio().equalsIgnoreCase(studio))
                 .collect(Collectors.toList());
+        
+        if ( results.isEmpty() )
     }
 
     public Date averageAge() {
