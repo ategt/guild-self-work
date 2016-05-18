@@ -138,7 +138,7 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
     private int determineNextId() {
 
         int highestId = dvdList.stream()
-                .mapToInt(a -> a.getId())
+                .mapToInt(Dvd::getId)
                 .max()
                 .getAsInt();
 
@@ -419,7 +419,7 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
                 .filter(d -> d.getDirectorsName() != null)
                 .filter(d -> d.getMPAA() != null)
                 .filter(d -> d.getDirectorsName().equalsIgnoreCase(director))
-                .collect(Collectors.groupingBy(d -> d.getMPAA(), Collectors.toList()));
+                .collect(Collectors.groupingBy(Dvd::getMPAA, Collectors.toList()));
         
         if (results.isEmpty())
             results = dvdList.stream()
@@ -427,7 +427,7 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
                 .filter(d -> d.getDirectorsName() != null)
                 .filter(d -> d.getMPAA() != null)
                 .filter(d -> d.getDirectorsName().toLowerCase().contains(director))
-                .collect(Collectors.groupingBy(d -> d.getMPAA(), Collectors.toList()));
+                .collect(Collectors.groupingBy(Dvd::getMPAA, Collectors.toList()));
         
         return results;
     }
