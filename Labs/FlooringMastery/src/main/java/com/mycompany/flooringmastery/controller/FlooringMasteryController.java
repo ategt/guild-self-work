@@ -108,20 +108,39 @@ public class FlooringMasteryController {
 //                + "*" + padText(75, "") + "*\n"
 //                + border;
 
-        String menuString = border + "\n"
-                + "*\t\n"
-                + "*\t" + titleString + "\n"
-                + "*\t1. Display Orders\n"
-                + "*\t2. Add an Order\n"
-                + "*\t3. Edit an Order\n"
-                + "*\t4. Remove an Order\n"
-                + "*\t5. Save All Orders\n"
-                + "*\t6. Administration Menu\n"
-                + "*\t7. Quit\n"
-                + "*\n"
-                + border;
+//        String menuString = border + "\n"
+//                + "*\t\n"
+//                + "*\t" + titleString + "\n"
+//                + "*\t1. Display Orders\n"
+//                + "*\t2. Add an Order\n"
+//                + "*\t3. Edit an Order\n"
+//                + "*\t4. Remove an Order\n"
+//                + "*\t5. Save All Orders\n"
+//                + "*\t6. Administration Menu\n"
+//                + "*\t7. Quit\n"
+//                + "*\n"
+//                + border;
 
-        while (!done) {
+  //String menuString =  //border + ""
+                //+ ""
+                
+                List<String> menu = new java.util.ArrayList();
+                 menu.add(titleString);
+                 menu.add("");
+                 menu.add("1. Display Orders");
+                 menu.add("2. Add an Order");
+                 menu.add("3. Edit an Order");
+                 menu.add("4. Remove an Order");
+                 menu.add("5. Save All Orders");
+                 menu.add("6. Administration Menu");
+                 menu.add("7. Quit");
+
+                 com.mycompany.flooringmastery.utilities.ViewUtilities viewUtilities = new com.mycompany.flooringmastery.utilities.ViewUtilities();
+                 //String menuString = viewUtilities.borderMaker(menu, 0, '-', '|', '+', "center", 1, 10, 10);
+                 String menuString = viewUtilities.borderMaker(menu, 40, '\u2550', '\u2551', '\u256c', "center", 1, 10, 10);
+                 
+                 
+while (!done) {
             try {
                 int option;
 
@@ -234,7 +253,6 @@ public class FlooringMasteryController {
 
             if (!orderList.isEmpty()) {
                 String orderNames = "";
-                //orderList.sort(c);
                 for (Order order : orderList) {
                     if (order != null) {
                         orderNames += order.getId() + "\t" + order.getName() + "\t";

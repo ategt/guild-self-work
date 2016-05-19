@@ -11,41 +11,83 @@ package com.mycompany.flooringmastery.utilities;
  */
 public class ViewUtilities {
 
-    public String bordermaker(java.util.List<String> content, int width, char borderChar) {
+    public String borderMaker(java.util.List<String> content, int width, char borderChar) {
+        return borderMaker(content, width, borderChar, borderChar, borderChar, 0, 0, 0);
+    }
 
-        int length = content.size();
+    public String borderMaker(java.util.List<String> content, int width, char borderChar, char edgeChar, char cornerChar, int vPadding, int hPadding, int hMargin) {
+        return borderMaker(content, width, borderChar, edgeChar, cornerChar, null, vPadding, hPadding, hMargin);
+    }
 
-        int widest = content.stream()
+    public String borderMaker(java.util.List<String> content, int width, char borderChar, char edgeChar, char cornerChar, String align, int vPadding, int hPadding, int hMargin) {
+
+//    }
+//    return bordermaker(content, width, borderChar, edgeChar, cornerChar, vPadding, hPadding, hMargin);
+//
+//    public String bordermaker(java.util.List<String> content, int width, char borderChar) {
+        int length = content.size();    
+        int widest = 0;
+        
+        if (width == 0){
+        
+        widest = content.stream()
                 //.mapToInt(a -> a.length())
                 .mapToInt(String::length)
                 .max()
                 .getAsInt();
-
-        int widthOfMenu = width - 2;
         
-        
-        
-        java.util.List<String> newContent = new java.util.ArrayList();
-        
-        newContent.add(makeChars(width, borderChar));
-        for (String string : content) {
-         newContent.add(borderChar + stringToLengthCenter(string, widthOfMenu) + borderChar);
+        width = widest + 2;
         }
-        newContent.add(makeChars(width, borderChar));
+        
+        
+        
+        int widthOfMenu = width - 2;
+
+        java.util.List<String> newContent = new java.util.ArrayList();
+
+        String topLine = makeSpaces(hMargin) + cornerChar + makeChars((width - 2) + (hPadding * 2) , borderChar) + cornerChar + makeSpaces(hMargin) ;
+        String bottomLine = topLine;
+
+        newContent.add(topLine);
+
+        for (int i = 0; i < vPadding; i++) {
+            newContent.add(makeSpaces(hMargin) + edgeChar + makeSpaces(hPadding) + makeSpaces(width - 2) + makeSpaces(hPadding) + edgeChar + makeSpaces(hMargin) );
+        }
+
+        for (String string : content) {
+
+            String formatedContent;
+
+            if (align == null){
+                formatedContent = stringToLengthCenter(string, widthOfMenu);
+            } else if (align.equalsIgnoreCase("left") || align.equalsIgnoreCase("l")) {
+                formatedContent = stringToLengthLeft(string, widthOfMenu);
+            } else if (align.equalsIgnoreCase("right") || align.equalsIgnoreCase("r")) {
+                formatedContent = stringToLengthRight(string, widthOfMenu);
+            } else {
+                formatedContent = stringToLengthCenter(string, widthOfMenu);
+            }
+
+            newContent.add(makeSpaces(hMargin) + edgeChar + makeSpaces(hPadding) + formatedContent + makeSpaces(hPadding) + edgeChar + makeSpaces(hMargin));
+        }
+
+        for (int i = 0; i < vPadding; i++) {
+            newContent.add(makeSpaces(hMargin) + edgeChar + makeSpaces(hPadding) + makeSpaces(width - 2) + makeSpaces(hPadding) + edgeChar + makeSpaces(hMargin));
+        }
+
+        newContent.add(bottomLine);
 
 //        for (String string : newContent) {
 //            string = borderChar + string + borderChar;
 //        }
-        
         String result = "";
         for (String string : newContent) {
             result += string + "\n";
         }
 
         return result;
-        
-    }
 
+    }
 
     public String stringToLengthLeft(String content, int desiredLength) {
 
@@ -91,7 +133,7 @@ public class ViewUtilities {
         }
 
         int rightRemaining = desiredLength - result.length();
-        
+
         if (rightRemaining == 0) {
             return result;
         } else if (rightRemaining > 0) {

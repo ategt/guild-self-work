@@ -14,6 +14,7 @@ import com.mycompany.flooringmastery.dao.ProductDao;
 import com.mycompany.flooringmastery.dao.StateDao;
 import com.mycompany.flooringmastery.dto.Product;
 import com.mycompany.flooringmastery.dto.State;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,20 +45,29 @@ public class AdminPanelController {
     private void displayAdminMenu() {
 
         boolean done = false;
+
+        String menuString = "Administration Menu\n"
+                + "1. View State Taxes On File\n"
+                + "2. Add/Edit State \n"
+                //+ "2. Edit State \n"
+                + "3. Remove State \n"
+                //+ "4. Add Product \n"
+                + "4. View Product Information On File \n"
+                + "5. Add/Edit Product \n"
+                + "6. Remove Product \n"
+                + "7. Return to Main Menu";
+
+        List<String> menu = new java.util.ArrayList();
+
+        menu.addAll(Arrays.asList(menuString.split("\n")));
+
+        com.mycompany.flooringmastery.utilities.ViewUtilities viewUtilities = new com.mycompany.flooringmastery.utilities.ViewUtilities();
+        String menuWithBorder = viewUtilities.borderMaker(menu, 40, '\u2550', '\u2551', '\u256c', "center", 1, 10, 10);
+
         while (!done) {
             try {
-                String menu = "Administration Menu\n"
-                        + "1. View State Taxes On File\n"
-                        + "2. Add/Edit State \n"
-                        //+ "2. Edit State \n"
-                        + "3. Remove State \n"
-                        //+ "4. Add Product \n"
-                        + "4. View Product Information On File \n"
-                        + "5. Add/Edit Product \n"
-                        + "6. Remove Product \n"
-                        + "7. Return to Main Menu";
 
-                switch (consoleIo.getUserIntInputRange(menu, 0, 7)) {
+                switch (consoleIo.getUserIntInputRange(menuWithBorder, 0, 7)) {
                     case 1:
                         listStates();
                         break;

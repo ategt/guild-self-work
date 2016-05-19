@@ -46,7 +46,7 @@ public class ViewUtilitiesTest {
                            "* ssc *\n"
                         +  "* ssq *\n"
                         +  "*******\n";
-        String result = instance.bordermaker(content, width, borderChar);
+        String result = instance.borderMaker(content, width, borderChar);
         assertEquals(expResult, result);
     }
 
