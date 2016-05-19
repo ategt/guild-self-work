@@ -5,6 +5,8 @@
  */
 package com.mycompany.flooringmastery.utilities;
 
+import java.util.Arrays;
+
 /**
  *
  * @author apprentice
@@ -19,46 +21,47 @@ public class ViewUtilities {
         return borderMaker(content, width, borderChar, edgeChar, cornerChar, null, vPadding, hPadding, hMargin);
     }
 
+    public String borderMaker(String content, int width, char borderChar, char edgeChar, char cornerChar, String align, int vPadding, int hPadding, int hMargin) {
+
+        return borderMaker(splitStringsByToken(content), width, borderChar, edgeChar, cornerChar, align, vPadding, hPadding, hMargin);
+    }
+
     public String borderMaker(java.util.List<String> content, int width, char borderChar, char edgeChar, char cornerChar, String align, int vPadding, int hPadding, int hMargin) {
 
 //    }
 //    return bordermaker(content, width, borderChar, edgeChar, cornerChar, vPadding, hPadding, hMargin);
 //
 //    public String bordermaker(java.util.List<String> content, int width, char borderChar) {
-        int length = content.size();    
-        int widest = 0;
+        int length = content.size();
         
-        if (width == 0){
-        
-        widest = content.stream()
+        int widest = content.stream()
                 //.mapToInt(a -> a.length())
                 .mapToInt(String::length)
                 .max()
                 .getAsInt();
-        
-        width = widest + 2;
+
+        if (width < widest) {
+            width = widest + 2;
         }
-        
-        
-        
+
         int widthOfMenu = width - 2;
 
         java.util.List<String> newContent = new java.util.ArrayList();
 
-        String topLine = makeSpaces(hMargin) + cornerChar + makeChars((width - 2) + (hPadding * 2) , borderChar) + cornerChar + makeSpaces(hMargin) ;
+        String topLine = makeSpaces(hMargin) + cornerChar + makeChars((width - 2) + (hPadding * 2), borderChar) + cornerChar + makeSpaces(hMargin);
         String bottomLine = topLine;
 
         newContent.add(topLine);
 
         for (int i = 0; i < vPadding; i++) {
-            newContent.add(makeSpaces(hMargin) + edgeChar + makeSpaces(hPadding) + makeSpaces(width - 2) + makeSpaces(hPadding) + edgeChar + makeSpaces(hMargin) );
+            newContent.add(makeSpaces(hMargin) + edgeChar + makeSpaces(hPadding) + makeSpaces(width - 2) + makeSpaces(hPadding) + edgeChar + makeSpaces(hMargin));
         }
 
         for (String string : content) {
 
             String formatedContent;
 
-            if (align == null){
+            if (align == null) {
                 formatedContent = stringToLengthCenter(string, widthOfMenu);
             } else if (align.equalsIgnoreCase("left") || align.equalsIgnoreCase("l")) {
                 formatedContent = stringToLengthLeft(string, widthOfMenu);
@@ -155,5 +158,16 @@ public class ViewUtilities {
         java.util.Arrays.fill(charArray, borderItem);
         String str = new String(charArray);
         return str;
+    }
+
+    public java.util.List<String> splitStringsByToken(String content) {
+        return splitStringsByToken(content, "\n");
+    }
+
+    public java.util.List<String> splitStringsByToken(String content, final String TOKEN) {
+
+        java.util.List<String> newList = new java.util.ArrayList();
+        newList.addAll(Arrays.asList(content.split(TOKEN)));
+        return newList;
     }
 }

@@ -36,6 +36,7 @@ public class FlooringMasteryController {
     StateDao stateDao;
     OrderDao orderDao;
     ConfigDao configDao;
+    com.mycompany.flooringmastery.utilities.ViewUtilities viewUtilities;
 
     private void init() {
         try {
@@ -74,6 +75,7 @@ public class FlooringMasteryController {
             setTestMode();
         }
 
+        viewUtilities = new com.mycompany.flooringmastery.utilities.ViewUtilities();
         productDao = new ProductDao(configDao);
         stateDao = new StateDao(configDao);
         orderDao = new OrderDao(productDao, stateDao, configDao);
@@ -120,27 +122,23 @@ public class FlooringMasteryController {
 //                + "*\t7. Quit\n"
 //                + "*\n"
 //                + border;
+        //String menuString =  //border + ""
+        //+ ""
+        List<String> menu = new java.util.ArrayList();
+        menu.add(titleString);
+        menu.add("");
+        menu.add("1. Display Orders");
+        menu.add("2. Add an Order");
+        menu.add("3. Edit an Order");
+        menu.add("4. Remove an Order");
+        menu.add("5. Save All Orders");
+        menu.add("6. Administration Menu");
+        menu.add("7. Quit");
 
-  //String menuString =  //border + ""
-                //+ ""
-                
-                List<String> menu = new java.util.ArrayList();
-                 menu.add(titleString);
-                 menu.add("");
-                 menu.add("1. Display Orders");
-                 menu.add("2. Add an Order");
-                 menu.add("3. Edit an Order");
-                 menu.add("4. Remove an Order");
-                 menu.add("5. Save All Orders");
-                 menu.add("6. Administration Menu");
-                 menu.add("7. Quit");
+        //String menuString = viewUtilities.borderMaker(menu, 0, '-', '|', '+', "center", 1, 10, 10);
+        String menuString = viewUtilities.borderMaker(menu, 40, '\u2550', '\u2551', '\u256c', "center", 1, 10, 10);
 
-                 com.mycompany.flooringmastery.utilities.ViewUtilities viewUtilities = new com.mycompany.flooringmastery.utilities.ViewUtilities();
-                 //String menuString = viewUtilities.borderMaker(menu, 0, '-', '|', '+', "center", 1, 10, 10);
-                 String menuString = viewUtilities.borderMaker(menu, 40, '\u2550', '\u2551', '\u256c', "center", 1, 10, 10);
-                 
-                 
-while (!done) {
+        while (!done) {
             try {
                 int option;
 
@@ -357,8 +355,11 @@ while (!done) {
     }
 
     private void displayOrder(Order order) {
-        String orderString = convertOrderToString(order);
-        consoleIo.printStringToConsole(orderString);
+        String orderString = convertOrderToString(order).replaceAll("\t","  ");
+        
+        String orderWithBorder = viewUtilities.borderMaker(orderString, 40, '\u2550', '\u2551', '\u256c', "left", 1, 10, 10);
+
+        consoleIo.printStringToConsole(orderWithBorder);
 
     }
 
