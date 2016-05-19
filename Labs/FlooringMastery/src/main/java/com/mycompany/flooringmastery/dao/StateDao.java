@@ -29,20 +29,9 @@ public class StateDao {
     private java.util.Map<String, State> statesMap;
     private File stateDataFile = new File("StatesData.txt");
 
-//    public StateDao() {
-//        this(false);
-//    }
-//    
-    //protected StateDao(boolean isATest) {
-public StateDao(ConfigDao configDao) {
+    public StateDao(ConfigDao configDao) {
 
-        
-        
-        //if (isATest) {
-            stateDataFile = configDao.get().getTaxesFile();
-//
-                   ///new File("StatesTestData.txt");
-        //}
+        stateDataFile = configDao.get().getTaxesFile();
 
         statesMap = decode();
 
@@ -119,7 +108,6 @@ public StateDao(ConfigDao configDao) {
 
                 encode();
             } else {
-                //create(state);
                 System.out.println("Throwing a State Not Found exception!!!!");
                 // Look up exception throwing and consider putting one here, too!
             }
@@ -149,16 +137,6 @@ public StateDao(ConfigDao configDao) {
         return statesMap.size();
     }
 
-//    
-//    public String formatTax(State state){
-//        return formatTax(state.getStateTax());
-//    }
-//    
-//    public String formatTax(double input){      
-//        java.text.DecimalFormat df = new java.text.DecimalFormat("#.##");
-//        return df.format(input);
-//    }
-    
     private void encode() {
 
         final String TOKEN = ",";
@@ -174,7 +152,6 @@ public StateDao(ConfigDao configDao) {
 
                     out.print(state.getState());
                     out.print(TOKEN);
-                    //out.print(formatTax(state.getStateTax()));
                     out.print(state.getStateTax());
                     out.println("");
                 }

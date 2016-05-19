@@ -25,14 +25,10 @@ import java.util.logging.Logger;
  */
 public class ProductDao {
 
-    //List<Product> products;
     java.util.Map<String, Product> productsMap;
     int nextId;
-    File productDataFile;   // = new File("ProductsData.txt");
+    File productDataFile;
 
-//    public ProductDao() {
-//        this(false);
-//    }
     public ProductDao(ConfigDao configDao) {
 
         productDataFile = configDao.get().getProductFile();
@@ -44,7 +40,6 @@ public class ProductDao {
             System.out.println("The list was empty, making a new one.");
         }
 
-        //nextId = determineNextId();
     }
 
     public Product create(Product product) {
@@ -100,14 +95,6 @@ public class ProductDao {
     public void update(Product product) {
         Product foundProduct = productsMap.get(product.getType());
 
-//        Product found = null;
-//
-//        for (Product currentProduct : products) {
-//            if (currentProduct.getId() == product.getId()) {
-//                found = currentProduct;
-//                break;
-//            }
-//        }
         if (foundProduct != null) {
 
             if (foundProduct.getType().equals(product.getType())) {
@@ -126,18 +113,6 @@ public class ProductDao {
     }
 
     public void delete(Product product) {
-//        Product found = null;
-//
-//        for (Product currentProduct : products) {
-//            if (currentProduct.getId() == product.getId()) {
-//                found = currentProduct;
-//                break;
-//            }
-//        }
-//
-//        if (found != null) {
-//            products.remove(found);
-//        }
 
         if (productsMap.containsKey(product.getType())) {
             productsMap.remove(product.getType());
@@ -166,7 +141,6 @@ public class ProductDao {
             try (PrintWriter out = new PrintWriter(new FileWriter(productDataFile))) {
                 out.println(DATAHEADER);
 
-                //for (Product product : products) {
                 for (String productType : getList()) {
 
                     Product product = get(productType);
@@ -188,10 +162,8 @@ public class ProductDao {
 
     }
 
-    //private List<Product> decode() {
     private java.util.Map<String, Product> decode() {
 
-        //List<Product> productList = new ArrayList<>();
         java.util.Map<String, Product> productMap = new java.util.HashMap();
 
         final String TOKEN = ",";

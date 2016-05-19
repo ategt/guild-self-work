@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -78,9 +79,9 @@ public class OrderDao {
             }
 
             java.util.Set<Integer> ids = new java.util.HashSet();
-            for (Order order : loadedOrders) {
+            loadedOrders.stream().forEach(order -> {
                 ids.add(order.getId());
-            }
+            });
 
             for (java.io.File orderFile : orderFiles) {
                 if (orderFile.getName().endsWith("00000000.txt")) {
@@ -98,7 +99,6 @@ public class OrderDao {
             }
 
             if (orderNumbers.size() == loadedOrders.size()) {
-                //System.out.println("ID Integrity Check Passed");
             } else {
                 System.out.println("ID Integrity Check Failed! \n " + orderNumbers.size() + " different order numbers but " + loadedOrders.size() + " orders.");
             }
@@ -144,17 +144,21 @@ public class OrderDao {
     public void update(Order order) {
         List<Order> foundOrders = new ArrayList();
 
-        for (Order currentOrder : orders) {
-            if (currentOrder.getId() == order.getId()) {
-                foundOrders.add(currentOrder);
-            }
-        }
+        orders.stream()
+                .filter(currentOrder -> currentOrder.getId() == order.getId())
+                .forEach(currentOrder -> {
+                    foundOrders.add(currentOrder);
+                });
 
-        for (Order foundOrder : foundOrders) {
-            orders.remove(foundOrder);
-            encode(foundOrder.getDate());
-        }
-
+        foundOrders.stream()
+                .forEach(f -> {
+                    orders.remove(f);
+                    encode(f.getDate());
+                });
+//        for (Order foundOrder : foundOrders) {
+//            orders.remove(foundOrder);
+//            encode(foundOrder.getDate());
+//        }
 
         orders.add(order);
         encode(extractDate("Orders_00000000.txt"));
@@ -198,11 +202,16 @@ public class OrderDao {
     public java.util.List<Order> searchByDate(java.util.Date date) {
         java.util.List<Order> specificOrders = new ArrayList();
 
-        for (Order order : orders) {
-            if (isSameDay(order.getDate(), date)) {
-                specificOrders.add(order);
-            }
-        }
+        orders.stream()
+              .filter(o -> isSameDay(o.getDate(), date))
+                      .forEach(o -> specificOrders.add(o));
+                
+        
+//        for (Order order : orders) {
+//            if (isSameDay(order.getDate(), date)) {
+//                specificOrders.add(order);
+//            }
+//        }
 
         return specificOrders;
     }
@@ -210,9 +219,14 @@ public class OrderDao {
     public java.util.List<Integer> listOrderNumbers() {
         java.util.List<Integer> orderNumbers = new ArrayList();
 
-        for (Order order : orders) {
-            orderNumbers.add(order.getId());
-        }
+        orders.stream()
+                .forEach(o -> orderNumbers.add(o.getId()));
+        
+        Collections.sort(orderNumbers);
+        
+//        for (Order order : orders) {
+//            orderNumbers.add(order.getId());
+//        }
 
         return orderNumbers;
     }
@@ -282,7 +296,7 @@ public class OrderDao {
         return highestId++;
     }
 
-  private void encode(Order order) {
+    private void encode(Order order) {
         encode(order.getDate());
     }
 
@@ -364,7 +378,9 @@ public class OrderDao {
         String nameValue = null;
         if (order.getName() != null) {
             String orderName = order.getName();
-            if (order.getName().endsWith("\\")) orderName = orderName + " ";
+            if (order.getName().endsWith("\\")) {
+                orderName = orderName + " ";
+            }
             nameValue = orderName.replaceAll(TOKEN, CSV_ESCAPE).replaceAll("Q", "").replaceAll("E", "");
         }
 
@@ -589,7 +605,7 @@ public class OrderDao {
         return orderList;
     }
 
-  private java.io.File[] lookForOrders(java.io.File file) {
+    private java.io.File[] lookForOrders(java.io.File file) {
         if (file.isDirectory()) {
             java.io.File[] orderFiles = file.listFiles(new com.mycompany.flooringmastery.utilities.OrderFilter());
             return orderFiles;
