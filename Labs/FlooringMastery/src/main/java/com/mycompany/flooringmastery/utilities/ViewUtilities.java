@@ -11,7 +11,7 @@ package com.mycompany.flooringmastery.utilities;
  */
 public class ViewUtilities {
 
-    public String bordermaker(java.util.List<String> content, int width) {
+    public String bordermaker(java.util.List<String> content, int width, char borderChar) {
 
         int length = content.size();
 
@@ -20,16 +20,97 @@ public class ViewUtilities {
                 .mapToInt(String::length)
                 .max()
                 .getAsInt();
-        
-        
-        
-        
 
+        int widthOfMenu = width - 2;
+        
+        
+        
+        java.util.List<String> newContent = new java.util.ArrayList();
+        
+        newContent.add(makeChars(width, borderChar));
+        for (String string : content) {
+         newContent.add(borderChar + stringToLengthCenter(string, widthOfMenu) + borderChar);
+        }
+        newContent.add(makeChars(width, borderChar));
+
+//        for (String string : newContent) {
+//            string = borderChar + string + borderChar;
+//        }
+        
+        String result = "";
+        for (String string : newContent) {
+            result += string + "\n";
+        }
+
+        return result;
+        
+    }
+
+
+    public String stringToLengthLeft(String content, int desiredLength) {
+
+        String result = content;
+        int sizeRemaining = desiredLength - result.length();
+
+        if (sizeRemaining > 0) {
+            return result + makeSpaces(sizeRemaining);
+        } else if (sizeRemaining == 0) {
+            return result;
+        } else {
+            return null;
+        }
+    }
+
+    public String stringToLengthRight(String content, int desiredLength) {
+
+        String result = content;
+        int sizeRemaining = desiredLength - result.length();
+
+        if (sizeRemaining > 0) {
+            return makeSpaces(sizeRemaining) + result;
+        } else if (sizeRemaining == 0) {
+            return result;
+        } else {
+            return null;
+        }
+    }
+
+    public String stringToLengthCenter(String content, int desiredLength) {
+
+        String result = content;
+        int sizeRemaining = desiredLength - result.length();
+
+        int leftRemaining = (sizeRemaining / 2);
+
+        if (sizeRemaining == 0) {
+            return result;
+        } else if (leftRemaining > 0) {
+            result = makeSpaces(leftRemaining) + result;
+        } else {
+            return null;
+        }
+
+        int rightRemaining = desiredLength - result.length();
+        
+        if (rightRemaining == 0) {
+            return result;
+        } else if (rightRemaining > 0) {
+            return result + makeSpaces(rightRemaining);
+        } else {
+            return null;
+        }
     }
 
     public String makeSpaces(int length) {
         char[] charArray = new char[length];
         java.util.Arrays.fill(charArray, ' ');
+        String str = new String(charArray);
+        return str;
+    }
+
+    public String makeChars(int length, char borderItem) {
+        char[] charArray = new char[length];
+        java.util.Arrays.fill(charArray, borderItem);
         String str = new String(charArray);
         return str;
     }
