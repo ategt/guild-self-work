@@ -26,7 +26,7 @@ public class StackArrayImpl<T> implements Stack<T> {
     private void growArray() {
 
         int newSize = Math.round(stack.length * (1 + percentToChangeBy));
-        System.out.println("Stack was: " + stack.length + "\t Growing to : " + newSize );
+        System.out.println("Stack was: " + stack.length + "\t Growing to : " + newSize);
         System.out.println("Pointer is at : " + pointerNum + "\n");
         Object[] tempStack = java.util.Arrays.copyOf(stack, newSize);
 
@@ -36,42 +36,69 @@ public class StackArrayImpl<T> implements Stack<T> {
 
     private void shrinkArray() {
         int newSize = Math.round(stack.length * (1 - percentToChangeBy));
-        System.out.println("Stack was: " + stack.length + "\t Shrinking to : " + newSize );
+        System.out.println("Stack was: " + stack.length + "\t Shrinking to : " + newSize);
         System.out.println("Pointer is at : " + pointerNum + "\n");
         Object[] tempStack = java.util.Arrays.copyOf(stack, newSize);
         stack = tempStack;
     }
 
-    private void considerGrowingStack(){
-        
-        if ( stack.length <= pointerNum + 1) {
+    private void considerGrowingStack() {
+
+        if (stack.length <= pointerNum + 1) {
             growArray();
         }
     }
+
+    private void considerShrinkingStack() {
+//            System.out.println("Math is : + ("+stack.length+" * (1 - "+percentToChangeBy+")) >= "+pointerNum+" * (1 - ("+percentToChangeBy+" / 2))");
+//            System.out.println("            ("+stack.length+" * "+ (1 - percentToChangeBy)+") >= "+pointerNum+" * "+(1 - (percentToChangeBy / 2))+"");
+//            System.out.println("            ("+(stack.length * (1 - percentToChangeBy)) +">= "+(pointerNum*(1 - (percentToChangeBy / 2)))+"");
+//            System.out.println("            ("+((stack.length * (1 - percentToChangeBy)) >= (pointerNum*(1 - (percentToChangeBy / 2)))) +")");
+
+//    double proposedNewSize = stack.length * (1 - percentToChangeBy);
+//    double newPointerLocation = pointerNum * (1 - (percentToChangeBy / 2));
+    //double altPointerLocation = (oldsize + newsize) / 2 ;
     
-    private void considerShrinkingStack(){
+        System.out.println("Math here: (("+stack.length+" +("+stack.length+" * (1 - "+percentToChangeBy+"))) / 2) > "+pointerNum +")");
+        System.out.println("           (("+stack.length+" +("+stack.length+" * "+(1 - +percentToChangeBy)+")) / 2) > "+pointerNum +")");
+        System.out.println("           (("+(stack.length +"("+(stack.length * (1 - percentToChangeBy)))+")) / 2) > "+pointerNum +")");
+        System.out.println("           (" + ((stack.length + (stack.length * (1 - percentToChangeBy) ) ) / 2) + " > "+pointerNum +")");
+        System.out.println("             " + (  ((stack.length +(stack.length * (1 - percentToChangeBy))) / 2) < pointerNum ));
         
-        if ( stack.length * (1 - percentToChangeBy)  >= pointerNum * (1 - (percentToChangeBy*2)) ) {
+        
+    if (  ((stack.length +(stack.length * (1 - percentToChangeBy))) / 2) < pointerNum ){
+    
+
+        //if (stack.length * (1 - percentToChangeBy) >= pointerNum * (1 - (percentToChangeBy / 2))) {
             shrinkArray();
         }
     }
-    
-    
+
     @Override
     public void push(T element) {
-        stack[pointerNum] = element;
-        pointerNum++;
+        if (element != null) {
 
-        considerGrowingStack();
+            stack[pointerNum] = element;
+            pointerNum++;
+
+            considerGrowingStack();
+        }
     }
 
     @Override
     public T pop() {
-        
-        considerShrinkingStack();
-        
+
         if (pointerNum >= 0) {
-            return (T) stack[pointerNum--];
+            pointerNum--;
+
+            if (pointerNum < 0){
+                
+                pointerNum = 0;
+                return null;
+            }
+            
+            considerShrinkingStack();
+            return (T) stack[pointerNum];
         } else {
             return null;
         }
@@ -79,16 +106,16 @@ public class StackArrayImpl<T> implements Stack<T> {
 
     @Override
     public boolean isEmpty() {
-        if (pointerNum < 0) {
-            return true;
-        } else {
+        if (pointerNum > 0) {
             return false;
+        } else {
+            return true;
         }
     }
 
     @Override
     public int size() {
-        return (pointerNum + 1);
+        return (pointerNum);
     }
 
 }

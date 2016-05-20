@@ -82,10 +82,10 @@ public class StackArrayImplTest {
     public void testPushE() {
 
         System.out.println("push");
-        Integer elementOne = 5;
-        Integer elementTwo = 6;
-        Integer elementThree = 9;
-        Integer elementFour = 7;
+        Integer elementOne = 1;
+        Integer elementTwo = 2;
+        Integer elementThree = 3;
+        Integer elementFour = 4;
 
         Stack<Integer> instance = new StackArrayImpl();
 
