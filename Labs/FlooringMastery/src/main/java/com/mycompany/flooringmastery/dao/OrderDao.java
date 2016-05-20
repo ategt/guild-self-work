@@ -50,9 +50,7 @@ public class OrderDao {
 
         if (configDao != null) {
             this.configDao = configDao;
-
             this.isATest = configDao.get().isInTestMode();
-
         } else {
             this.isATest = true;
         }
@@ -72,6 +70,7 @@ public class OrderDao {
 
             List<Order> loadedOrders = new ArrayList();
             java.io.File[] orderFiles = lookForOrders(directoryToSearch);
+            
             for (java.io.File orderFile : orderFiles) {
                 if (!orderFile.getName().endsWith("00000000.txt")) {
                     loadedOrders.addAll(decode(orderFile));
@@ -335,12 +334,11 @@ public class OrderDao {
         try (PrintWriter out = printWriter) {
             out.println(DATAHEADER);
 
-            for (Order order : groupOfOrders) {
-
-                String orderString = toString(order, TOKEN);
-
-                out.println(orderString);
-            }
+            groupOfOrders.stream()
+                        .map((order) -> toString(order, TOKEN))
+                        .forEach((orderString) -> {
+                                                out.println(orderString);
+                        });
 
             out.flush();
         }
@@ -657,7 +655,6 @@ public class OrderDao {
             Calendar calendar = Calendar.getInstance();
             calendar.set(2000, Calendar.JANUARY, 1);
             date = calendar.getTime();
-
         } else {
             String simplifiedDateString = dateString.replaceAll("Orders_", "").replaceAll(".txt", "");
             java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("MMddyyyy");
@@ -667,7 +664,6 @@ public class OrderDao {
             try {
                 if (simplifiedDateString.matches(regex)) {
                     date = fmt.parse(simplifiedDateString);
-
                 } else {
                     System.out.println("Date String: " + dateString + "\nDate unparsable exception thrown here!!!!!\n");
                 }
