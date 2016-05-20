@@ -17,14 +17,17 @@ public class QueueImpl<T> implements Queue<T> {
 
     @Override
     public T dequeue() {
+        return null;
     }
 
     @Override
     public boolean isEmpty() {
+        return false;
     }
 
     @Override
     public int size() {
+        return 0;
     }
     
 }

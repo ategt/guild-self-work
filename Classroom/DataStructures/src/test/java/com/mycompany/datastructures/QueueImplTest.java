@@ -16,16 +16,16 @@ import static org.junit.Assert.*;
  *
  * @author apprentice
  */
-public class StackArrayImplTest {
+public class QueueImplTest {
+    
+        Queue<String> instance;
 
-    Stack<String> instance;
-
-    public StackArrayImplTest() {
+    public QueueImplTest() {
     }
 
     @Before
     public void setUp() {
-        instance = new StackArrayImpl();
+        instance = new QueueImpl();
     }
 
     @After
@@ -47,19 +47,19 @@ public class StackArrayImplTest {
         assertEquals(emptySize, 0);
         assertEquals(instance.isEmpty(), true);
 
-        instance.push(elementOne);
-        instance.push(elementTwo);
-        instance.push(elementThree);
-        instance.push(elementFour);
+        instance.enqueue(elementOne);
+        instance.enqueue(elementTwo);
+        instance.enqueue(elementThree);
+        instance.enqueue(elementFour);
 
         int fourSize = instance.size();
         assertEquals(fourSize, 4);
         assertEquals(instance.isEmpty(), false);
 
-        String resultFour = instance.pop();
-        String resultThree = instance.pop();
-        String resultTwo = instance.pop();
-        String resultOne = instance.pop();
+        String resultOne = instance.dequeue();
+        String resultTwo = instance.dequeue();
+        String resultThree = instance.dequeue();
+        String resultFour = instance.dequeue();
 
         assertEquals(elementOne, resultOne);
         assertEquals(elementTwo, resultTwo);
@@ -70,53 +70,7 @@ public class StackArrayImplTest {
         assertEquals(zeroSize, 0);
         assertEquals(instance.isEmpty(), true);
 
-        String shouldBeNull = instance.pop();
-
-        assertEquals(shouldBeNull, null);
-
-        assertEquals(instance.size(), 0);
-        assertEquals(instance.isEmpty(), true);
-
-    }
-    @Test
-    public void testPushE() {
-
-        System.out.println("push");
-        Integer elementOne = 5;
-        Integer elementTwo = 6;
-        Integer elementThree = 9;
-        Integer elementFour = 7;
-
-        Stack<Integer> instance = new StackArrayImpl();
-
-        int emptySize = instance.size();
-        assertEquals(emptySize, 0);
-        assertEquals(instance.isEmpty(), true);
-
-        instance.push(elementOne);
-        instance.push(elementTwo);
-        instance.push(elementThree);
-        instance.push(elementFour);
-
-        int fourSize = instance.size();
-        assertEquals(fourSize, 4);
-        assertEquals(instance.isEmpty(), false);
-
-        Integer resultFour = instance.pop();
-        Integer resultThree = instance.pop();
-        Integer resultTwo = instance.pop();
-        Integer resultOne = instance.pop();
-
-        assertEquals(elementOne, resultOne);
-        assertEquals(elementTwo, resultTwo);
-        assertEquals(elementThree, resultThree);
-        assertEquals(elementFour, resultFour);
-
-        int zeroSize = instance.size();
-        assertEquals(zeroSize, 0);
-        assertEquals(instance.isEmpty(), true);
-
-        Integer shouldBeNull = instance.pop();
+        String shouldBeNull = instance.dequeue();
 
         assertEquals(shouldBeNull, null);
 
@@ -143,19 +97,20 @@ public class StackArrayImplTest {
         assertEquals(emptySize, 0);
         assertEquals(instance.isEmpty(), true);
 
-        instance.push(elementOne);
-        instance.push(elementTwo);
-        instance.push(elementThree);
-        instance.push(elementFour);
+        instance.enqueue(elementOne);
+        instance.enqueue(elementTwo);
+        instance.enqueue(elementThree);
+        instance.enqueue(elementFour);
 
         int fourSize = instance.size();
         assertEquals(fourSize, 0);
         assertEquals(instance.isEmpty(), true);
 
-        String resultFour = instance.pop();
-        String resultThree = instance.pop();
-        String resultTwo = instance.pop();
-        String resultOne = instance.pop();
+        String resultOne = instance.dequeue();
+        String resultTwo = instance.dequeue();
+        String resultThree = instance.dequeue();
+        String resultFour = instance.dequeue();
+
 
         assertEquals(elementOne, resultOne);
         assertEquals(elementTwo, resultTwo);
@@ -166,7 +121,7 @@ public class StackArrayImplTest {
         assertEquals(zeroSize, 0);
         assertEquals(instance.isEmpty(), true);
 
-        String shouldBeNull = instance.pop();
+        String shouldBeNull = instance.dequeue();
 
         assertEquals(shouldBeNull, null);
 
@@ -193,21 +148,21 @@ public class StackArrayImplTest {
         assertEquals(emptySize, 0);
         assertEquals(instance.isEmpty(), true);
 
-        instance.push(elementOne);
-        instance.push(elementTwo);
-        instance.push(elementThree);
+        instance.enqueue(elementOne);
+        instance.enqueue(elementTwo);
+        instance.enqueue(elementThree);
 
         int fourSize = instance.size();
         assertEquals(fourSize, 3);
         assertEquals(instance.isEmpty(), false);
 
-        String resultThree = instance.pop();
-        String resultTwo = instance.pop();
+        String resultOne = instance.dequeue();
+        String resultTwo = instance.dequeue();
+        instance.enqueue(elementFour);
+        String resultThree = instance.dequeue();
 
-        instance.push(elementFour);
-        String resultFour = instance.pop();
+        String resultFour = instance.dequeue();
 
-        String resultOne = instance.pop();
 
         assertEquals(elementOne, resultOne);
         assertEquals(elementTwo, resultTwo);
@@ -218,7 +173,7 @@ public class StackArrayImplTest {
         assertEquals(zeroSize, 0);
         assertEquals(instance.isEmpty(), true);
 
-        String shouldBeNull = instance.pop();
+        String shouldBeNull = instance.dequeue();
 
         assertEquals(shouldBeNull, null);
 
@@ -252,16 +207,17 @@ public class StackArrayImplTest {
         assertEquals(instance.isEmpty(), true);
 
         for (String string : elementList) {
-            instance.push(string);
+            instance.enqueue(string);
         }
 
         int fourSize = instance.size();
         assertEquals(fourSize, sizeTest);
         assertEquals(instance.isEmpty(), false);
 
-        for (int i = sizeTest; i > 0; i--) {
+        //for (int i = sizeTest; i > 0; i--) {
+        for (int i = 0; i < sizeTest; i++) {
 
-            String result = instance.pop();
+            String result = instance.dequeue();
 
             String expected = elementList.get(i);
 
@@ -273,7 +229,7 @@ public class StackArrayImplTest {
         assertEquals(zeroSize, 0);
         assertEquals(instance.isEmpty(), true);
 
-        String shouldBeNull = instance.pop();
+        String shouldBeNull = instance.dequeue();
 
         assertEquals(shouldBeNull, null);
 
