@@ -16,16 +16,16 @@ import static org.junit.Assert.*;
  *
  * @author apprentice
  */
-public class QueueImplTest {
+public class QueueArrayImplTest {
     
         Queue<String> instance;
 
-    public QueueImplTest() {
+    public QueueArrayImplTest() {
     }
 
     @Before
     public void setUp() {
-        instance = new QueueImpl();
+        instance = new QueueArrayImpl();
     }
 
     @After
