@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Stack Tests By Adam Tegtmeier
  */
 package com.mycompany.datastructures;
 
@@ -14,7 +12,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author apprentice
+ * @author Adam Tegtmeier
  */
 public class StackArrayImplTest {
 
@@ -33,7 +31,7 @@ public class StackArrayImplTest {
     }
 
     @Test
-    public void testPush() {
+    public void testPushAndPopA() {
 
         System.out.println("push");
         String elementOne = "Bill";
@@ -42,7 +40,6 @@ public class StackArrayImplTest {
         String elementFour = "Dave";
 
         //Stack<String> instance = new StackArrayImpl();
-
         int emptySize = instance.size();
         assertEquals(emptySize, 0);
         assertEquals(instance.isEmpty(), true);
@@ -78,8 +75,9 @@ public class StackArrayImplTest {
         assertEquals(instance.isEmpty(), true);
 
     }
+
     @Test
-    public void testPushE() {
+    public void testPushAndPopB() {
 
         System.out.println("push");
         Integer elementOne = 1;
@@ -129,7 +127,7 @@ public class StackArrayImplTest {
      * Test of push method, of class StackArrayImpl.
      */
     @Test
-    public void testPushB() {
+    public void testPushAndPopC() {
 
         System.out.println("pushB - All Nulls");
         String elementOne = null;
@@ -138,7 +136,6 @@ public class StackArrayImplTest {
         String elementFour = null;
 
         //Stack<String> instance = new StackArrayImpl();
-
         int emptySize = instance.size();
         assertEquals(emptySize, 0);
         assertEquals(instance.isEmpty(), true);
@@ -179,7 +176,7 @@ public class StackArrayImplTest {
      * Test of pop method, of class StackArrayImpl.
      */
     @Test
-    public void testPopC() {
+    public void testPushAndPopD() {
         System.out.println("popC - Out of Order");
 
         String elementOne = "Bill";
@@ -188,7 +185,6 @@ public class StackArrayImplTest {
         String elementFour = "Dave";
 
         //Stack<String> instance = new StackArrayImpl();
-
         int emptySize = instance.size();
         assertEquals(emptySize, 0);
         assertEquals(instance.isEmpty(), true);
@@ -231,9 +227,9 @@ public class StackArrayImplTest {
      * Test of isEmpty method, of class StackArrayImpl.
      */
     @Test
-    public void testIsEmpty() {
+    public void testPushAndPopPerformance() {
 
-        System.out.println("isEmpty");
+        System.out.println("Test Push And Pop Using Large Numbers");
 
         int sizeTest = 50;
 
@@ -263,7 +259,7 @@ public class StackArrayImplTest {
 
             String result = instance.pop();
 
-            String expected = elementList.get(i-1);
+            String expected = elementList.get(i - 1);
 
             assertEquals(expected, result);
 
@@ -283,16 +279,215 @@ public class StackArrayImplTest {
     }
 
     /**
-     * Test of size method, of class StackArrayImpl.
+     * Test of isEmpty method, of class StackArrayImpl.
      */
-//    @Test
-//    public void testSize() {
-//        System.out.println("size");
-//        StackArrayImpl instance = new StackArrayImpl();
-//        int expResult = 0;
-//        int result = instance.size();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+    @Test
+    public void testBigStack() {
+
+        System.out.println("isEmpty");
+
+        int sizeTest = 500;
+
+        List<String> elementList = new ArrayList();
+        String tempString = "";
+
+        for (int i = 0; i < sizeTest; i++) {
+
+            tempString = tempString + "z";
+            elementList.add(tempString);
+
+        }
+
+        int emptySize = instance.size();
+        assertEquals(emptySize, 0);
+        assertEquals(instance.isEmpty(), true);
+
+        for (String string : elementList) {
+            instance.push(string);
+        }
+
+        int fourSize = instance.size();
+        assertEquals(fourSize, sizeTest);
+        assertEquals(instance.isEmpty(), false);
+
+        for (int i = sizeTest; i > 0; i--) {
+
+            String result = instance.pop();
+
+            String expected = elementList.get(i - 1);
+
+            assertEquals(expected, result);
+
+        }
+
+        int zeroSize = instance.size();
+        assertEquals(zeroSize, 0);
+        assertEquals(instance.isEmpty(), true);
+
+        String shouldBeNull = instance.pop();
+
+        assertEquals(shouldBeNull, null);
+
+        assertEquals(instance.size(), 0);
+        assertEquals(instance.isEmpty(), true);
+
+    }
+
+    /**
+     * Test of isEmpty method, of class StackArrayImpl.
+     */
+    @Test
+    public void testBiggerStack() {
+
+        System.out.println("isEmpty");
+
+        int sizeTest = 5000;
+
+        List<String> elementList = new ArrayList();
+        String tempString = "";
+
+        for (int i = 0; i < sizeTest; i++) {
+
+            tempString = tempString + "z";
+            elementList.add(tempString);
+
+        }
+
+        int emptySize = instance.size();
+        assertEquals(emptySize, 0);
+        assertEquals(instance.isEmpty(), true);
+
+        for (String string : elementList) {
+            instance.push(string);
+        }
+
+        int fourSize = instance.size();
+        assertEquals(fourSize, sizeTest);
+        assertEquals(instance.isEmpty(), false);
+
+        for (int i = sizeTest; i > 0; i--) {
+
+            String result = instance.pop();
+
+            String expected = elementList.get(i - 1);
+
+            assertEquals(expected, result);
+
+        }
+
+        int zeroSize = instance.size();
+        assertEquals(zeroSize, 0);
+        assertEquals(instance.isEmpty(), true);
+
+        String shouldBeNull = instance.pop();
+
+        assertEquals(shouldBeNull, null);
+
+        assertEquals(instance.size(), 0);
+        assertEquals(instance.isEmpty(), true);
+
+    }
+
+    /**
+     * Test of isEmpty method, of class StackArrayImpl.
+     */
+    @Test
+    public void testMassiveStack() {
+
+        System.out.println("isEmpty");
+
+        int sizeTest = 10000;
+
+        List<String> elementList = new ArrayList();
+        String tempString = "";
+
+        for (int i = 0; i < sizeTest; i++) {
+
+            tempString = tempString + "z";
+            elementList.add(tempString);
+
+        }
+
+        int emptySize = instance.size();
+        assertEquals(emptySize, 0);
+        assertEquals(instance.isEmpty(), true);
+
+        for (String string : elementList) {
+            instance.push(string);
+        }
+
+        int fourSize = instance.size();
+        assertEquals(fourSize, sizeTest);
+        assertEquals(instance.isEmpty(), false);
+
+        for (int i = sizeTest; i > 0; i--) {
+
+            String result = instance.pop();
+
+            String expected = elementList.get(i - 1);
+
+            assertEquals(expected, result);
+
+        }
+
+        int zeroSize = instance.size();
+        assertEquals(zeroSize, 0);
+        assertEquals(instance.isEmpty(), true);
+
+        String shouldBeNull = instance.pop();
+
+        assertEquals(shouldBeNull, null);
+
+        assertEquals(instance.size(), 0);
+        assertEquals(instance.isEmpty(), true);
+
+    }
+
+    /**
+     * Test of isEmpty method, of class StackArrayImpl.
+     */
+    @Test
+    public void testMassiveStackOfNothing() {
+
+        System.out.println("isEmpty");
+
+        int sizeTest = 10000;
+        int expectedSize = 0;
+        
+        String tempString = null;
+        String expected = null;
+        
+        int emptySize = instance.size();
+        assertEquals(emptySize, 0);
+        assertEquals(instance.isEmpty(), true);
+
+        for (int i = 0; i < sizeTest; i++) {
+            instance.push(tempString);
+        }
+
+        int fourSize = instance.size();
+        assertEquals(fourSize, expectedSize);
+        assertEquals(instance.isEmpty(), true);
+
+        for (int i = sizeTest; i > 0; i--) {
+
+            String result = instance.pop();
+
+            assertEquals(expected, result);
+
+        }
+
+        int zeroSize = instance.size();
+        assertEquals(zeroSize, 0);
+        assertEquals(instance.isEmpty(), true);
+
+        String shouldBeNull = instance.pop();
+
+        assertEquals(shouldBeNull, null);
+
+        assertEquals(instance.size(), 0);
+        assertEquals(instance.isEmpty(), true);
+
+    }
+
 }

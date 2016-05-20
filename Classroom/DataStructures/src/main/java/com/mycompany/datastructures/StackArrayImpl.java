@@ -29,8 +29,6 @@ public class StackArrayImpl<T> implements Stack<T> {
     private void growArray() {
 
         int newSize = Math.round(stack.length * (1 + percentToChangeBy));
-        System.out.println("Stack was: " + stack.length + "\t Growing to : " + newSize);
-        System.out.println("Pointer is at : " + pointerNum + "\n");
         Object[] tempStack = java.util.Arrays.copyOf(stack, newSize);
 
         stack = tempStack;
@@ -39,8 +37,6 @@ public class StackArrayImpl<T> implements Stack<T> {
 
     private void shrinkArray() {
         int newSize = Math.round(stack.length * (1 - percentToChangeBy));
-        System.out.println("Stack was: " + stack.length + "\t Shrinking to : " + newSize);
-        System.out.println("Pointer is at : " + pointerNum + "\n");
         Object[] tempStack = java.util.Arrays.copyOf(stack, newSize);
         stack = tempStack;
     }
@@ -53,36 +49,15 @@ public class StackArrayImpl<T> implements Stack<T> {
     }
 
     private void considerShrinkingStack() {
-//            System.out.println("Math is : + ("+stack.length+" * (1 - "+percentToChangeBy+")) >= "+pointerNum+" * (1 - ("+percentToChangeBy+" / 2))");
-//            System.out.println("            ("+stack.length+" * "+ (1 - percentToChangeBy)+") >= "+pointerNum+" * "+(1 - (percentToChangeBy / 2))+"");
-//            System.out.println("            ("+(stack.length * (1 - percentToChangeBy)) +">= "+(pointerNum*(1 - (percentToChangeBy / 2)))+"");
-//            System.out.println("            ("+((stack.length * (1 - percentToChangeBy)) >= (pointerNum*(1 - (percentToChangeBy / 2)))) +")");
-
-//    double proposedNewSize = stack.length * (1 - percentToChangeBy);
-//    double newPointerLocation = pointerNum * (1 - (percentToChangeBy / 2));
-    //double altPointerLocation = (oldsize + newsize) / 2 ;
-    
-//        System.out.println("Math here: (("+stack.length+" +("+stack.length+" * (1 - "+percentToChangeBy+"))) / 2) < "+pointerNum +")");
-//        System.out.println("           (("+stack.length+" +("+stack.length+" * "+(1 - +percentToChangeBy)+")) / 2) < "+pointerNum +")");
-//        System.out.println("           (("+(stack.length +"("+(stack.length * (1 - percentToChangeBy)))+")) / 2) < "+pointerNum +")");
-//        System.out.println("           (" + ((stack.length + (stack.length * (1 - percentToChangeBy) ) ) / 2) + " < "+pointerNum +")");
-//        System.out.println("             " + (  Math.round((stack.length +(stack.length * (1 - percentToChangeBy))) / 2) < Math.round(pointerNum )));
-        
         
     int oneShrink = Math.round(stack.length * (1 - percentToChangeBy));
     int twoShrinks = Math.round(oneShrink * (1 - percentToChangeBy));
     int halfWayBetween = Math.round( (oneShrink + twoShrinks) / 2 );
     
-        System.out.println("Current Size: " + stack.length + "\t One Shrink: " + oneShrink + "\t Two Shrinks: " + twoShrinks + "\t Half: " + halfWayBetween);
+        //System.out.println("Current Size: " + stack.length + "\t One Shrink: " + oneShrink + "\t Two Shrinks: " + twoShrinks + "\t Half: " + halfWayBetween);
     
     if ( halfWayBetween > pointerNum && oneShrink > minimumSize) {
-
-
-    //if (  ((stack.length +(stack.length * (1 - percentToChangeBy))) / 2) < pointerNum ){
-    
-        System.out.println("Array Shrinking!");
-        //if (stack.length * (1 - percentToChangeBy) >= pointerNum * (1 - (percentToChangeBy / 2))) {
-            shrinkArray();
+              shrinkArray();
         }
     }
 
