@@ -59,21 +59,17 @@ public class QueueArrayImpl<T> implements Queue<T> {
 
         }
 
-        //int  = pushNum - pullNum;
-        //Object[] tempStack = java.util.Arrays.copyOf(queue, newSize);
         Object[] tempQueue = new Object[newSize];
 
         if (wrap) {
-            //for ( int i = 0 ; i < queue.length ;  i++ ) {
 
             for (int i = 0; i < pushNum; i++) {
                 tempQueue[i] = queue[i];
             }
 
             // Skip the Blank Spaces
-            //for (int i = changeInSize + pullNum; i < tempQueue.length; i++) {
-            for (int i = pullNum; i < tempQueue.length; i++) {
-                tempQueue[i + changeInSize] = queue[i];
+            for (int i = pullNum, x = newPull; i < queue.length; i++,x++) {
+                tempQueue[x] = queue[i];
             }
         } else {
             for (int i = 0; i < queue.length; i++) {
@@ -106,6 +102,7 @@ public class QueueArrayImpl<T> implements Queue<T> {
         } else {
             wrap = true;
 
+            
             // The occupied part does wrap around.
             // The new spaces will go in the middle.
             newPush = pushNum;
@@ -114,30 +111,38 @@ public class QueueArrayImpl<T> implements Queue<T> {
             int pullDistanceFromEnd = queue.length - pullNum;
 
             newPull = newSize - pullDistanceFromEnd;
+            //System.out.println("Wraps- Size Change: " + changeInSize + "\t Pull Distance: " + pullDistanceFromEnd + "\tNew Pull: "+ newPull);
 
         }
 
-        //int  = pushNum - pullNum;
-        //Object[] tempStack = java.util.Arrays.copyOf(queue, newSize);
         Object[] tempQueue = new Object[newSize];
 
+        System.out.println("The Does It Wrap property is : "+wrap+"\n");
+        
         if (wrap) {
-            //for ( int i = 0 ; i < queue.length ;  i++ ) {
+            System.out.println("\nProcessing Shrink Wrap........");
 
             for (int i = 0; i < pushNum; i++) {
+                //System.out.println("Old Pull: " + i + "\t New Pull: " + i + "\t Length of Old: "+ queue.length+ "\t Length of New: "+ tempQueue.length);
+                //System.out.println("\t\t Content: " + queue[i] + "\n");
                 tempQueue[i] = queue[i];
             }
 
+            System.out.println("\n Skipping Blank Spaces.");
+            
             // Skip the Blank Spaces
-            //for (int i = changeInSize + pullNum; i < tempQueue.length; i++) {
-            for (int i = pullNum; i < tempQueue.length; i++) {
-                tempQueue[i - changeInSize] = queue[i];
+            for (int i = pullNum, x = newPull ; i < queue.length; i++,x++) {
+                //tempQueue[i - changeInSize] = queue[i];
+                System.out.println("Old Pull: " + i + "\t New Pull: " + x + "\t Length of Old: "+ queue.length+ "\t Length of New: "+ tempQueue.length);
+                System.out.println("\t\t Content: " + queue[i] + "\n");
+                tempQueue[x] = queue[i];
             }
+
+            System.out.println("\n Done Shrinking.\n");
+
         } else {
-            System.out.println("\n");
             int highestPush = 0;
             for (int i = pullNum,x = 0; i < pushNum ; x++, i++) {
-                System.out.println("temp[" + x + "]: " + tempQueue[x] + " queue[" + i + "]: " + queue[i]);
                 tempQueue[x] = queue[i];
                 highestPush = x+1;
             }
@@ -152,40 +157,28 @@ public class QueueArrayImpl<T> implements Queue<T> {
         pushNum = newPush;
         pullNum = newPull;
 
-        //Object[] tempStack = java.util.Arrays.copyOf(queue, newSize);
         queue = tempQueue;
     }
 
     private void considerGrowingQueue() {
 
         int freeSpace = queue.length - size();
+        System.out.println("FreeSpace is: " + freeSpace);
         if (freeSpace < 2) {
+            System.out.println("Growing Array.");
             growArray();
         }
     }
 
     private void considerShrinkingQueue() {
 
-        int freeSpaceNow = queue.length - size();
-
         int oneShrink = Math.round(queue.length * (1 - percentToChangeBy));
-
         int freeSpaceAfterOneShrink = oneShrink - size();
-
         int twoShrinks = Math.round(oneShrink * (1 - percentToChangeBy));
-
         int freeSpaceAfterTwoShrinks = twoShrinks - size();
-
-        //int halfWayBetween = Math.round((oneShrink + twoShrinks) / 2);
-        int halfWayBetweenFreeSpace = Math.round((freeSpaceAfterOneShrink + freeSpaceAfterTwoShrinks) / 2);
-
         int freeSpaceAfterOneAndAHalfShrinks = freeSpaceAfterOneShrink + (freeSpaceAfterTwoShrinks / 2);
-
-        System.out.println("\t 1 1/2: " + freeSpaceAfterOneAndAHalfShrinks + "\t Free After Two: " + freeSpaceAfterTwoShrinks);
         
-        // When freespace after 1 1/2 shrinks is 0.
         if (freeSpaceAfterOneAndAHalfShrinks > 0 && freeSpaceAfterTwoShrinks < 0 && oneShrink > minimumSize) {
-            System.out.println("\t\tShrinking....");
             shrinkArray();
         }
     }
@@ -208,8 +201,7 @@ public class QueueArrayImpl<T> implements Queue<T> {
 
             // The occupied part does not wrap around.
             // The new spaces will go on the end.
-            //newPull = pullNum;
-            // newPush = pushNum;
+
             size = pushNum - pullNum;
 
         } else {
@@ -217,13 +209,10 @@ public class QueueArrayImpl<T> implements Queue<T> {
 
             // The occupied part does wrap around.
             // The new spaces will go in the middle.
-            //newPush = pushNum;
-            //changeInSize = newSize - queue.length;
             int pullDistanceFromEnd = queue.length - pullNum;
 
             size = pullDistanceFromEnd + pushNum;
-
-            //newPull = newSize - pullDistanceFromEnd;
+            
         }
 
         return size;
@@ -252,17 +241,17 @@ public class QueueArrayImpl<T> implements Queue<T> {
     @Override
     public T dequeue() {
 
-        System.out.println("Push: " + pushNum + " , Pull: " + pullNum + " , Queue Length: " + queue.length);
-        System.out.println("\t Size: " + size());
+//        System.out.println("Push: " + pushNum + " , Pull: " + pullNum + " , Queue Length: " + queue.length);
+//        System.out.println("\t Size: " + size()+"\n");
         if (pullNum != pushNum && pullNum >= 0 && pullNum < queue.length) {
             
-            System.out.println("Made it to the first block.");
+            //System.out.println("Made it to the first block.");
             
             Object returnObject = queue[pullNum];
             queue[pullNum] = null;
 
             if (returnObject != null) {
-                System.out.println("Made it to the second block.");
+                //System.out.println("Made it to the second block.");
                 incrementPullNumber();
                 considerShrinkingQueue();
                 return (T) returnObject;

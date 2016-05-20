@@ -17,8 +17,8 @@ import static org.junit.Assert.*;
  * @author apprentice
  */
 public class QueueArrayImplTest {
-    
-        Queue<String> instance;
+
+    Queue<String> instance;
 
     public QueueArrayImplTest() {
     }
@@ -42,7 +42,6 @@ public class QueueArrayImplTest {
         String elementFour = "Dave";
 
         //Stack<String> instance = new StackArrayImpl();
-
         int emptySize = instance.size();
         assertEquals(emptySize, 0);
         assertEquals(instance.isEmpty(), true);
@@ -92,7 +91,6 @@ public class QueueArrayImplTest {
         String elementFour = null;
 
         //Stack<String> instance = new StackArrayImpl();
-
         int emptySize = instance.size();
         assertEquals(emptySize, 0);
         assertEquals(instance.isEmpty(), true);
@@ -110,7 +108,6 @@ public class QueueArrayImplTest {
         String resultTwo = instance.dequeue();
         String resultThree = instance.dequeue();
         String resultFour = instance.dequeue();
-
 
         assertEquals(elementOne, resultOne);
         assertEquals(elementTwo, resultTwo);
@@ -143,7 +140,6 @@ public class QueueArrayImplTest {
         String elementFour = "Dave";
 
         //Stack<String> instance = new StackArrayImpl();
-
         int emptySize = instance.size();
         assertEquals(emptySize, 0);
         assertEquals(instance.isEmpty(), true);
@@ -162,7 +158,6 @@ public class QueueArrayImplTest {
         String resultThree = instance.dequeue();
 
         String resultFour = instance.dequeue();
-
 
         assertEquals(elementOne, resultOne);
         assertEquals(elementTwo, resultTwo);
@@ -220,7 +215,6 @@ public class QueueArrayImplTest {
             String result = instance.dequeue();
 
             String expected = elementList.get(i);
-            System.out.println(i + ") " + result + "\t" + expected );
             assertEquals(expected, result);
 
         }
@@ -239,16 +233,240 @@ public class QueueArrayImplTest {
     }
 
     /**
-     * Test of size method, of class StackArrayImpl.
+     * Test of isEmpty method, of class StackArrayImpl.
      */
-//    @Test
-//    public void testSize() {
-//        System.out.println("size");
-//        StackArrayImpl instance = new StackArrayImpl();
-//        int expResult = 0;
-//        int result = instance.size();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+    @Test
+    public void testWrapShrinker() {
+
+        String elementOne = "One";
+        String elementTwo = "Two";
+        String elementThree = "Three";
+        String elementFour = "Four";
+        String elementFive = "Five";
+        String elementSix = "Six";
+        String elementSeven = "Seven";
+        String elementEight = "Eight";
+        String elementNine = "Nine";
+        String elementTen = "Ten";
+        String elementEleven = "Eleven";
+        String elementTweleve = "Tweleve";
+        String elementThirteen = "Thirteen";
+        String elementFourteen = "Fourteen";
+        String elementFifteen = "Fifteen";
+        String elementSixteen = "Sixteen";
+
+        instance.enqueue(elementOne);
+        instance.enqueue(elementTwo);
+        instance.enqueue(elementThree);
+        instance.enqueue(elementFour);
+        instance.enqueue(elementFive);
+
+//        instance.enqueue(elementTwo);
+//        instance.enqueue(elementThree);
+//        instance.enqueue(elementFour);
+        assertEquals(instance.isEmpty(), false);
+        assertEquals(instance.size(), 5);
+
+        String result = instance.dequeue();
+        assertEquals(elementOne, result);
+
+        result = instance.dequeue();
+        assertEquals(elementTwo, result);
+
+        result = instance.dequeue();
+        assertEquals(elementThree, result);
+
+        result = instance.dequeue();
+        assertEquals(elementFour, result);
+
+        result = instance.dequeue();
+        assertEquals(elementFive, result);
+
+        assertEquals(instance.isEmpty(), true);
+        assertEquals(instance.size(), 0);
+
+        instance.enqueue(elementSix);
+        instance.enqueue(elementSeven);
+        instance.enqueue(elementEight);
+        instance.enqueue(elementNine);
+        instance.enqueue(elementTen);
+        instance.enqueue(elementEleven);
+        instance.enqueue(elementTweleve);
+        instance.enqueue(elementThirteen);
+        instance.enqueue(elementFourteen);
+        instance.enqueue(elementFifteen);
+
+        assertEquals(instance.isEmpty(), false);
+        assertEquals(instance.size(), 10);
+
+        result = instance.dequeue();
+        assertEquals(elementSix, result);
+
+        result = instance.dequeue();
+        assertEquals(elementSeven, result);
+
+        result = instance.dequeue();
+        assertEquals(elementEight, result);
+
+        result = instance.dequeue();
+        assertEquals(elementNine, result);
+
+        result = instance.dequeue();
+        assertEquals(elementTen, result);
+
+        assertEquals(instance.isEmpty(), false);
+        assertEquals(instance.size(), 5);
+
+        result = instance.dequeue();
+        assertEquals(elementEleven, result);
+
+        result = instance.dequeue();
+        assertEquals(elementTweleve, result);
+
+        result = instance.dequeue();
+        assertEquals(elementThirteen, result);
+
+        result = instance.dequeue();
+        assertEquals(elementFourteen, result);
+
+        result = instance.dequeue();
+        assertEquals(elementFifteen, result);
+
+        assertEquals(instance.isEmpty(), true);
+        assertEquals(instance.size(), 0);
+
+        result = instance.dequeue();
+        assertEquals(null, result);
+
+        assertEquals(instance.isEmpty(), true);
+        assertEquals(instance.size(), 0);
+
+        instance.enqueue(elementSixteen);
+
+        result = instance.dequeue();
+        assertEquals(elementSixteen, result);
+
+        assertEquals(instance.isEmpty(), true);
+        assertEquals(instance.size(), 0);
+
+    }
+
+    
+    
+    @Test
+    public void testWrapShrinkerB() {
+
+        
+    Queue<String> instance = new QueueArrayImpl(5);
+        
+        String elementOne = "One";
+        String elementTwo = "Two";
+        String elementThree = "Three";
+        String elementFour = "Four";
+        String elementFive = "Five";
+        String elementSix = "Six";
+        String elementSeven = "Seven";
+        String elementEight = "Eight";
+        String elementNine = "Nine";
+        String elementTen = "Ten";
+        String elementEleven = "Eleven";
+        String elementTweleve = "Tweleve";
+        String elementThirteen = "Thirteen";
+        String elementFourteen = "Fourteen";
+        String elementFifteen = "Fifteen";
+        String elementSixteen = "Sixteen";
+
+        instance.enqueue(elementOne);
+        instance.enqueue(elementTwo);
+        instance.enqueue(elementThree);
+        instance.enqueue(elementFour);
+        instance.enqueue(elementFive);
+
+        assertEquals(instance.isEmpty(), false);
+        assertEquals(instance.size(), 5);
+
+        String result = instance.dequeue();
+        assertEquals(elementOne, result);
+
+        result = instance.dequeue();
+        assertEquals(elementTwo, result);
+
+        result = instance.dequeue();
+        assertEquals(elementThree, result);
+
+        result = instance.dequeue();
+        assertEquals(elementFour, result);
+
+        result = instance.dequeue();
+        assertEquals(elementFive, result);
+
+        assertEquals(instance.isEmpty(), true);
+        assertEquals(instance.size(), 0);
+
+        instance.enqueue(elementSix);
+        instance.enqueue(elementSeven);
+        instance.enqueue(elementEight);
+        instance.enqueue(elementNine);
+        instance.enqueue(elementTen);
+        instance.enqueue(elementEleven);
+        instance.enqueue(elementTweleve);
+        instance.enqueue(elementThirteen);
+        instance.enqueue(elementFourteen);
+        instance.enqueue(elementFifteen);
+
+        assertEquals(instance.isEmpty(), false);
+        assertEquals(instance.size(), 10);
+
+        result = instance.dequeue();
+        assertEquals(elementSix, result);
+
+        result = instance.dequeue();
+        assertEquals(elementSeven, result);
+
+        result = instance.dequeue();
+        assertEquals(elementEight, result);
+
+        result = instance.dequeue();
+        assertEquals(elementNine, result);
+
+        result = instance.dequeue();
+        assertEquals(elementTen, result);
+
+        assertEquals(instance.isEmpty(), false);
+        assertEquals(instance.size(), 5);
+
+        result = instance.dequeue();
+        assertEquals(elementEleven, result);
+
+        result = instance.dequeue();
+        assertEquals(elementTweleve, result);
+
+        result = instance.dequeue();
+        assertEquals(elementThirteen, result);
+
+        result = instance.dequeue();
+        assertEquals(elementFourteen, result);
+
+        result = instance.dequeue();
+        assertEquals(elementFifteen, result);
+
+        assertEquals(instance.isEmpty(), true);
+        assertEquals(instance.size(), 0);
+
+        result = instance.dequeue();
+        assertEquals(null, result);
+
+        assertEquals(instance.isEmpty(), true);
+        assertEquals(instance.size(), 0);
+
+        instance.enqueue(elementSixteen);
+
+        result = instance.dequeue();
+        assertEquals(elementSixteen, result);
+
+        assertEquals(instance.isEmpty(), true);
+        assertEquals(instance.size(), 0);
+
+    }
+
 }
