@@ -134,9 +134,18 @@ public class QueueArrayImpl<T> implements Queue<T> {
                 tempQueue[i - changeInSize] = queue[i];
             }
         } else {
-            for (int i = 0; i < tempQueue.length; i++) {
-                tempQueue[i] = queue[i];
+            System.out.println("\n");
+            int highestPush = 0;
+            for (int i = pullNum,x = 0; i < pushNum ; x++, i++) {
+                System.out.println("temp[" + x + "]: " + tempQueue[x] + " queue[" + i + "]: " + queue[i]);
+                tempQueue[x] = queue[i];
+                highestPush = x+1;
             }
+            
+            System.out.println("\n");
+            newPull = 0;
+            newPush = highestPush;
+
         }
 
         queue = tempQueue;
@@ -150,7 +159,7 @@ public class QueueArrayImpl<T> implements Queue<T> {
     private void considerGrowingQueue() {
 
         int freeSpace = queue.length - size();
-        if (freeSpace <= 0) {
+        if (freeSpace < 2) {
             growArray();
         }
     }
@@ -164,17 +173,19 @@ public class QueueArrayImpl<T> implements Queue<T> {
         int freeSpaceAfterOneShrink = oneShrink - size();
 
         int twoShrinks = Math.round(oneShrink * (1 - percentToChangeBy));
-        
+
         int freeSpaceAfterTwoShrinks = twoShrinks - size();
-        
+
         //int halfWayBetween = Math.round((oneShrink + twoShrinks) / 2);
         int halfWayBetweenFreeSpace = Math.round((freeSpaceAfterOneShrink + freeSpaceAfterTwoShrinks) / 2);
-        
-        int freeSpaceAfterOneAndAHalfShrinks = freeSpaceAfterOneShrink + ( freeSpaceAfterTwoShrinks / 2 );
+
+        int freeSpaceAfterOneAndAHalfShrinks = freeSpaceAfterOneShrink + (freeSpaceAfterTwoShrinks / 2);
+
+        System.out.println("\t 1 1/2: " + freeSpaceAfterOneAndAHalfShrinks + "\t Free After Two: " + freeSpaceAfterTwoShrinks);
         
         // When freespace after 1 1/2 shrinks is 0.
-        
-        if ( freeSpaceAfterOneAndAHalfShrinks < 0 && oneShrink > minimumSize ) {
+        if (freeSpaceAfterOneAndAHalfShrinks > 0 && freeSpaceAfterTwoShrinks < 0 && oneShrink > minimumSize) {
+            System.out.println("\t\tShrinking....");
             shrinkArray();
         }
     }
@@ -189,33 +200,32 @@ public class QueueArrayImpl<T> implements Queue<T> {
 
         int size;
         boolean wrap;
-        
-        if (pushNum > pullNum) {
+
+        if (pushNum == pullNum) {
+            size = 0;
+        } else if (pushNum > pullNum) {
             wrap = false;
 
             // The occupied part does not wrap around.
             // The new spaces will go on the end.
             //newPull = pullNum;
-           // newPush = pushNum;
-           
+            // newPush = pushNum;
             size = pushNum - pullNum;
-           
+
         } else {
             wrap = true;
 
             // The occupied part does wrap around.
             // The new spaces will go in the middle.
             //newPush = pushNum;
-
             //changeInSize = newSize - queue.length;
             int pullDistanceFromEnd = queue.length - pullNum;
 
             size = pullDistanceFromEnd + pushNum;
-            
-            //newPull = newSize - pullDistanceFromEnd;
 
+            //newPull = newSize - pullDistanceFromEnd;
         }
-        
+
         return size;
     }
 
@@ -242,13 +252,23 @@ public class QueueArrayImpl<T> implements Queue<T> {
     @Override
     public T dequeue() {
 
-        if (pullNum >= 0 && pullNum < queue.length) {
+        System.out.println("Push: " + pushNum + " , Pull: " + pullNum + " , Queue Length: " + queue.length);
+        System.out.println("\t Size: " + size());
+        if (pullNum != pushNum && pullNum >= 0 && pullNum < queue.length) {
+            
+            System.out.println("Made it to the first block.");
+            
             Object returnObject = queue[pullNum];
             queue[pullNum] = null;
 
-            incrementPullNumber();
-            considerShrinkingQueue();
-            return (T) returnObject;
+            if (returnObject != null) {
+                System.out.println("Made it to the second block.");
+                incrementPullNumber();
+                considerShrinkingQueue();
+                return (T) returnObject;
+            } else {
+                return null;
+            }
         } else {
             return null;
         }

@@ -210,8 +210,8 @@ public class QueueArrayImplTest {
             instance.enqueue(string);
         }
 
-        int fourSize = instance.size();
-        assertEquals(fourSize, sizeTest);
+        int afterSize = instance.size();
+        assertEquals(afterSize, sizeTest);
         assertEquals(instance.isEmpty(), false);
 
         //for (int i = sizeTest; i > 0; i--) {
@@ -220,7 +220,7 @@ public class QueueArrayImplTest {
             String result = instance.dequeue();
 
             String expected = elementList.get(i);
-
+            System.out.println(i + ") " + result + "\t" + expected );
             assertEquals(expected, result);
 
         }
