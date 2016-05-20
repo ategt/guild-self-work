@@ -263,7 +263,7 @@ public class StackArrayImplTest {
 
             String result = instance.pop();
 
-            String expected = elementList.get(i);
+            String expected = elementList.get(i-1);
 
             assertEquals(expected, result);
 
