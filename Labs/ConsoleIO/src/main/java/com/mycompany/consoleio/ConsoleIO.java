@@ -25,6 +25,9 @@ public class ConsoleIO {
     boolean test = false;
     String input = null;
 
+    private String[] exitArray = {"exit", "x", "e", "ex", "exi"};
+    private String[] deleteCommands = {"-"};
+
     public ConsoleIO() {
         this.keyboard = new Scanner(System.in);
 
@@ -198,10 +201,7 @@ public class ConsoleIO {
         //if (inputString.equalsIgnoreCase("exit") || inputString.equalsIgnoreCase("x") || inputString.equalsIgnoreCase("e") || inputString.equalsIgnoreCase("ex") || inputString.equalsIgnoreCase("exi")) {
         // Chris did not like "0" as an escape option, so I removed it. inputString.equalsIgnoreCase("0") || 
         //if (inputString.equalsIgnoreCase("exit") || inputString.equalsIgnoreCase("x") || inputString.equalsIgnoreCase("e") || inputString.equalsIgnoreCase("ex") || inputString.equalsIgnoreCase("exi")) {
-        String[] exitArray = {"exit", "x", "e", "ex", "exi"};
-        String[] deleteCommands = {"-"};
-
-        for (String exitCommand : exitArray) {
+        for (String exitCommand : getExitArray()) {
             if (inputString.equalsIgnoreCase(exitCommand)) {
                 throw new com.mycompany.consoleio.exceptions.UserWantsOutException("The User Has Requested To Return To The Main Menu.");
             }
@@ -218,7 +218,7 @@ public class ConsoleIO {
         //} else if (inputString.equalsIgnoreCase("-")) {
         //} else if (inputString.equalsIgnoreCase("-")) {
         // if (allowNullDate) {
-        for (String deleteCommand : deleteCommands) {
+        for (String deleteCommand : getDeleteCommands()) {
             if (inputString.equalsIgnoreCase(deleteCommand)) {
                 throw new com.mycompany.consoleio.exceptions.UserWantsToDeleteValueException("The User Has Requested To Delete The Existing Value.");
             }
@@ -370,14 +370,15 @@ public class ConsoleIO {
             String inputText = getUserStringInput(prompt);
 
             try {
-                if (inputText.equalsIgnoreCase("0") || inputText.equalsIgnoreCase("exit") || inputText.equalsIgnoreCase("x") || inputText.equalsIgnoreCase("e") || inputText.equalsIgnoreCase("ex")) {
-                    throw new com.mycompany.consoleio.exceptions.UserWantsOutException("The User Has Requested To Return To The Main Menu.");
-                } else if (inputText.equalsIgnoreCase("")) {
+//                if (inputText.equalsIgnoreCase("0") || inputText.equalsIgnoreCase("exit") || inputText.equalsIgnoreCase("x") || inputText.equalsIgnoreCase("e") || inputText.equalsIgnoreCase("ex")) {
+//                    throw new com.mycompany.consoleio.exceptions.UserWantsOutException("The User Has Requested To Return To The Main Menu.");
+//                } else
+                if (inputText.equalsIgnoreCase("")) {
                     passedInDate = null;
                     if (allowNullDate) {
                         valid = true;
                     }
-                } else if (inputText.equalsIgnoreCase("-")) {
+                    //   } else if (inputText.equalsIgnoreCase("-")) {
                     if (allowNullDate) {
                         throw new com.mycompany.consoleio.exceptions.UserWantsToDeleteDateException("The User Has Requested To Delete The Existing Date.");
                     } else {
@@ -395,6 +396,34 @@ public class ConsoleIO {
 
         }
         return passedInDate;
+    }
+
+    /**
+     * @return the exitArray
+     */
+    public String[] getExitArray() {
+        return exitArray;
+    }
+
+    /**
+     * @param exitArray the exitArray to set
+     */
+    public void setExitArray(String[] exitArray) {
+        this.exitArray = exitArray;
+    }
+
+    /**
+     * @return the deleteCommands
+     */
+    public String[] getDeleteCommands() {
+        return deleteCommands;
+    }
+
+    /**
+     * @param deleteCommands the deleteCommands to set
+     */
+    public void setDeleteCommands(String[] deleteCommands) {
+        this.deleteCommands = deleteCommands;
     }
 
 }
