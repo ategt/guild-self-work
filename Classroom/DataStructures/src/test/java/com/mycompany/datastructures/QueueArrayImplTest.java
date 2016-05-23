@@ -351,14 +351,11 @@ public class QueueArrayImplTest {
 
     }
 
-    
-    
     @Test
     public void testWrapShrinkerB() {
 
-        
-    Queue<String> instance = new QueueArrayImpl(5);
-        
+        Queue<String> instance = new QueueArrayImpl(5);
+
         String elementOne = "One";
         String elementTwo = "Two";
         String elementThree = "Three";
@@ -466,6 +463,220 @@ public class QueueArrayImplTest {
 
         assertEquals(instance.isEmpty(), true);
         assertEquals(instance.size(), 0);
+
+    }
+
+    @Test
+    public void testWrapShrinkerC() {
+
+        Queue<String> instance = new QueueArrayImpl(5);
+
+        String elementOne = "One";
+        String elementTwo = "Two";
+        String elementThree = "Three";
+        String elementFour = "Four";
+        String elementFive = "Five";
+
+        instance.enqueue(elementOne);
+        instance.enqueue(elementTwo);
+        instance.enqueue(elementThree);
+        instance.enqueue(elementFour);
+        instance.enqueue(elementFive);
+
+        assertEquals(instance.isEmpty(), false);
+        assertEquals(instance.size(), 5);
+
+        String result = instance.dequeue();
+        assertEquals(elementOne, result);
+
+        result = instance.dequeue();
+        assertEquals(elementTwo, result);
+
+        result = instance.dequeue();
+        assertEquals(elementThree, result);
+
+        result = instance.dequeue();
+        assertEquals(elementFour, result);
+
+        result = instance.dequeue();
+        assertEquals(elementFive, result);
+
+        assertEquals(instance.isEmpty(), true);
+        assertEquals(instance.size(), 0);
+
+        List<String> testList = new ArrayList();
+
+        for (int i = 6; i < 200; i++) {
+            String testString = new String();
+            testList.add(testString);
+            instance.enqueue(testString);
+        }
+
+        String lastTestString = new String();
+        instance.enqueue(lastTestString);
+
+        int expectedSize = 201 - 6;
+
+        for (String testListItem : testList) {
+            String secondPassResult = instance.dequeue();
+            expectedSize--;
+            assertEquals(testListItem, secondPassResult);
+            int resultSize = instance.size();
+            assertEquals(expectedSize, resultSize);
+            assertEquals(instance.isEmpty(), false);
+        }
+
+        String thirdPassResult = instance.dequeue();
+        expectedSize--;
+        assertEquals(lastTestString, thirdPassResult);
+        int resultSize = instance.size();
+        assertEquals(expectedSize, resultSize);
+        assertEquals(0, resultSize);
+        assertEquals(instance.isEmpty(), true);
+
+        result = instance.dequeue();
+        assertEquals(null, result);
+
+        assertEquals(instance.isEmpty(), true);
+        assertEquals(instance.size(), 0);
+
+    }
+
+    @Test
+    public void testWrapShrinkerD() {
+        // Same as C only without the unique constructor.
+
+        String elementOne = "One";
+        String elementTwo = "Two";
+        String elementThree = "Three";
+        String elementFour = "Four";
+        String elementFive = "Five";
+
+        instance.enqueue(elementOne);
+        instance.enqueue(elementTwo);
+        instance.enqueue(elementThree);
+        instance.enqueue(elementFour);
+        instance.enqueue(elementFive);
+
+        assertEquals(instance.isEmpty(), false);
+        assertEquals(instance.size(), 5);
+
+        String result = instance.dequeue();
+        assertEquals(elementOne, result);
+
+        result = instance.dequeue();
+        assertEquals(elementTwo, result);
+
+        result = instance.dequeue();
+        assertEquals(elementThree, result);
+
+        result = instance.dequeue();
+        assertEquals(elementFour, result);
+
+        result = instance.dequeue();
+        assertEquals(elementFive, result);
+
+        assertEquals(instance.isEmpty(), true);
+        assertEquals(instance.size(), 0);
+
+        List<String> testList = new ArrayList();
+
+        for (int i = 6; i < 200; i++) {
+            String testString = new String();
+            testList.add(testString);
+            instance.enqueue(testString);
+        }
+
+        String lastTestString = new String();
+        instance.enqueue(lastTestString);
+
+        int expectedSize = 201 - 6;
+
+        for (String testListItem : testList) {
+            String secondPassResult = instance.dequeue();
+            expectedSize--;
+            assertEquals(testListItem, secondPassResult);
+            int resultSize = instance.size();
+            assertEquals(expectedSize, resultSize);
+            assertEquals(instance.isEmpty(), false);
+        }
+
+        String thirdPassResult = instance.dequeue();
+        expectedSize--;
+        assertEquals(lastTestString, thirdPassResult);
+        int resultSize = instance.size();
+        assertEquals(expectedSize, resultSize);
+        assertEquals(0, resultSize);
+        assertEquals(instance.isEmpty(), true);
+
+        result = instance.dequeue();
+        assertEquals(null, result);
+
+        assertEquals(instance.isEmpty(), true);
+        assertEquals(instance.size(), 0);
+
+    }
+
+    @Test
+    public void testWrapShrinkerE() {
+        // Random enqueue and dequeue
+        System.out.println("Random Queue Test");
+        
+        List<String> testList = new ArrayList();
+        java.util.Random random = new java.util.Random();
+        int expectedSize = 0;
+        int highestTry = 0;
+        
+
+        for (int i = 0; i < 10000000; i++) {
+
+            if (random.nextBoolean()) {
+
+                String testString = String.valueOf(i);
+                //String testString = new String();
+                testList.add(testString);
+                instance.enqueue(testString);
+                expectedSize++;
+
+                //System.out.println("*********Just Put One In: " + expectedSize);
+                assertEquals(expectedSize, instance.size());
+                if ( expectedSize > highestTry ){
+                    highestTry = expectedSize;
+                }
+                
+            } else {
+
+               // System.out.println("******Taking One Out: " + expectedSize);
+                String testString = instance.dequeue();
+                //testList.remove(testString);
+                //instance.enqueue(testString);
+                expectedSize--;
+                if (expectedSize < 0) {
+                    expectedSize = 0;
+                    assertEquals(instance.isEmpty(), true);
+                }
+
+                String expectedString;
+                if (testList.isEmpty()) {
+                    expectedString = null;
+                } else {
+                    expectedString = testList.get(0);
+                }
+
+                assertEquals(expectedString, testString);
+
+                if (!testList.isEmpty()) {
+                    testList.remove(0);
+                }
+                assertEquals(expectedSize, instance.size());
+
+            }
+            
+
+        }
+
+
+            System.out.println("Highest Random Size: " + highestTry);
 
     }
 
