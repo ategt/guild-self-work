@@ -5,6 +5,9 @@
  */
 package com.mycompany.dvdlibrary.controller;
 
+import com.mycompany.consoleio.ConsoleIO;
+import com.mycompany.consoleio.exceptions.UserWantsOutException;
+import com.mycompany.consoleio.exceptions.UserWantsToDeleteValueException;
 import com.mycompany.dvdlibrary.interfaces.DvdLibrary;
 import com.mycompany.dvdlibrary.dao.DvdLibraryImplementation;
 import com.mycompany.dvdlibrary.dao.DvdLibraryLambdaImplementation;
@@ -41,42 +44,47 @@ public class DvdLibraryController {
         boolean choseToExit = false;
         while (!choseToExit) {
 
-            String mainMenu = "\n== Main Menu == \n"
-                    + "1. Add DVD\n"
-                    + "2. Remove DVD\n"
-                    + "3. Number of DVD's in The Library\n"
-                    + "4. List DVDs by Title\n"
-                    + "5. Find DVD by Title\n"
-                    + "6. Find DVD by ID Number\n"
-                    + "7. Bonus Menu\n"
-                    + "0. Exit\n";
+            try {
+                String mainMenu = "\n== Main Menu == \n"
+                        + "1. Add DVD\n"
+                        + "2. Remove DVD\n"
+                        + "3. Number of DVD's in The Library\n"
+                        + "4. List DVDs by Title\n"
+                        + "5. Find DVD by Title\n"
+                        + "6. Find DVD by ID Number\n"
+                        + "7. Bonus Menu\n"
+                        + "0. Exit\n";
 
-            int userChoice = consoleIo.getUserIntInputRange(mainMenu, 0, 7);
+                int userChoice = consoleIo.getUserIntInputRange(mainMenu, 0, 7);
 
-            switch (userChoice) {
-                case 1:
-                    addDvd();
-                    break;
-                case 2:
-                    removeDvd();
-                    break;
-                case 3:
-                    showDvdLibrarySize();
-                    break;
-                case 4:
-                    listAllDvds();
-                    break;
-                case 5:
-                    findByTitle();
-                    break;
-                case 6:
-                    findById();
-                    break;
-                case 7:
-                    bonusMenu();
-                    break;
-                case 0:
-                    choseToExit = true;
+                switch (userChoice) {
+                    case 1:
+                        addDvd();
+                        break;
+                    case 2:
+                        removeDvd();
+                        break;
+                    case 3:
+                        showDvdLibrarySize();
+                        break;
+                    case 4:
+                        listAllDvds();
+                        break;
+                    case 5:
+                        findByTitle();
+                        break;
+                    case 6:
+                        findById();
+                        break;
+                    case 7:
+                        bonusMenu();
+                        break;
+                    case 0:
+                        choseToExit = true;
+                }
+
+            } catch (UserWantsOutException | UserWantsToDeleteValueException ex) {
+                consoleIo.printStringToConsole("The User Has Requested to Return To The Main Menu.");
             }
 
         }
