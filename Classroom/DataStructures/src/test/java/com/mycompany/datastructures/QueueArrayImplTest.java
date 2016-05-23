@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Stack Tests By Adam Tegtmeier
  */
 package com.mycompany.datastructures;
 
@@ -14,7 +12,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author apprentice
+ * @author Adam Tegtmeier
  */
 public class QueueArrayImplTest {
 
@@ -41,7 +39,6 @@ public class QueueArrayImplTest {
         String elementThree = "Tim";
         String elementFour = "Dave";
 
-        //Stack<String> instance = new StackArrayImpl();
         int emptySize = instance.size();
         assertEquals(emptySize, 0);
         assertEquals(instance.isEmpty(), true);
@@ -90,7 +87,6 @@ public class QueueArrayImplTest {
         String elementThree = null;
         String elementFour = null;
 
-        //Stack<String> instance = new StackArrayImpl();
         int emptySize = instance.size();
         assertEquals(emptySize, 0);
         assertEquals(instance.isEmpty(), true);
@@ -132,14 +128,12 @@ public class QueueArrayImplTest {
      */
     @Test
     public void testPopC() {
-        System.out.println("popC - Out of Order");
 
         String elementOne = "Bill";
         String elementTwo = "Steve";
         String elementThree = "Tim";
         String elementFour = "Dave";
 
-        //Stack<String> instance = new StackArrayImpl();
         int emptySize = instance.size();
         assertEquals(emptySize, 0);
         assertEquals(instance.isEmpty(), true);

@@ -54,8 +54,6 @@ public class StackArrayImpl<T> implements Stack<T> {
     int twoShrinks = Math.round(oneShrink * (1 - percentToChangeBy));
     int halfWayBetween = Math.round( (oneShrink + twoShrinks) / 2 );
     
-        //System.out.println("Current Size: " + stack.length + "\t One Shrink: " + oneShrink + "\t Two Shrinks: " + twoShrinks + "\t Half: " + halfWayBetween);
-    
     if ( halfWayBetween > pointerNum && oneShrink > minimumSize) {
               shrinkArray();
         }
