@@ -33,20 +33,16 @@
         <constructor-arg ref="curling" />
     </bean>-->
 
-<!--    SimpleDateFormat dateFormat, ConsoleIO consoleIo, DvdLibrary dvdLibrary, NoteDaoImplementation noteDao-->
-
-    <bean id="dateFormatString" class="java.lang.String">
-        <constructor-arg ref="yyyy-MM-dd" />
-    </bean>
+    <!--    SimpleDateFormat dateFormat, ConsoleIO consoleIo, DvdLibrary dvdLibrary, NoteDaoImplementation noteDao-->
 
     <bean id="dateFormat" class="java.text.SimpleDateFormat">
-        <constructor-arg ref="dateFormatString">
+        <constructor-arg type="java.lang.String" value="yyyy-MM-dd"/>    
     </bean>
     
     <bean id="noteDao" class="com.mycompany.dvdlibrary.dao.NoteDaoImplementation" />
     
     <bean id="forDvdDao" class="com.mycompany.dvdlibrary.dao.DvdLibraryImplementation">
-        <constructor-arg ref="noteDao">
+        <constructor-arg ref="noteDao" />
     </bean>
     
     <bean id="lambdaDvdDao" class="com.mycompany.dvdlibrary.dao.DvdLibraryLambdaImplementation">
