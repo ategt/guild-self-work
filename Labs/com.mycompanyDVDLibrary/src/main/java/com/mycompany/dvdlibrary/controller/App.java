@@ -5,6 +5,9 @@
  */
 package com.mycompany.dvdlibrary.controller;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 /**
  *
  * @author apprentice
@@ -12,6 +15,13 @@ package com.mycompany.dvdlibrary.controller;
 public class App {
 
     public static void main(String[] args) {
-        new DvdLibraryController().run();
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+        DvdLibraryController dvdLibraryController = (DvdLibraryController) ctx.getBean("dvdLibraryController", DvdLibraryController.class);
+
+        dvdLibraryController.run();
+        
+        //  public DvdLibraryController(SimpleDateFormat dateFormat, ConsoleIO consoleIo, DvdLibrary dvdLibrary, NoteDaoImplementation noteDao) {
+        //new DvdLibraryController().run();
     }
 }

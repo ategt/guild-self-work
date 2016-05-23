@@ -32,10 +32,10 @@ import java.util.logging.Logger;
  */
 public class DvdLibraryController {
 
-    ConsoleIO consoleIo;
-    NoteDao noteDao;
-    DvdLibrary dvdLibrary;
-    DateFormat dateFormat;
+    private ConsoleIO consoleIo;
+    private NoteDao noteDao;
+    private DvdLibrary dvdLibrary;
+    private DateFormat dateFormat;
 
     public DvdLibraryController(SimpleDateFormat dateFormat, ConsoleIO consoleIo, DvdLibrary dvdLibrary, NoteDaoImplementation noteDao) {
 
@@ -107,8 +107,8 @@ public class DvdLibraryController {
         if (this.dateFormat == null) {
             this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         }
-        this.consoleIo = new ConsoleIO();
-        this.noteDao = new NoteDaoImplementation();
+//        this.consoleIo = new ConsoleIO();
+//        this.noteDao = new NoteDaoImplementation();
         if (this.dvdLibrary == null) {
             this.dvdLibrary = askForLibrarySearchingTechnique();
         }
