@@ -16,12 +16,7 @@ public class App {
 
     public static void main(String[] args) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-
         DvdLibraryController dvdLibraryController = (DvdLibraryController) ctx.getBean("dvdLibraryController", DvdLibraryController.class);
-
         dvdLibraryController.run();
-        
-        //  public DvdLibraryController(SimpleDateFormat dateFormat, ConsoleIO consoleIo, DvdLibrary dvdLibrary, NoteDaoImplementation noteDao) {
-        //new DvdLibraryController().run();
     }
 }

@@ -15,21 +15,31 @@
  http://www.springframework.org/schema/aop
  http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
  
-    
-    
-    
-    <!-- Bean definitions go here -->
-
-    <!--<bean id="skiJumper" class="com.mycompany.olympian.SkiJumper" />-->
-
-    <bean id="skiJump" class="com.mycompany.olympian.SkiJumpEvent" />
-    <bean id="curling" class="com.mycompany.olympian.CurlingEvent" />
-    
-    <bean id="usaSkiJumper" class="com.mycompany.olympian.Olympian">
-        <constructor-arg ref="curling" />
+ 
+    <bean id="dateFormat" class="java.text.SimpleDateFormat">
+        <constructor-arg type="java.lang.String" value="yyyy-MM-dd"/>    
     </bean>
     
-    <bean id="curlingDude" class="com.mycompany.olympian.Olympian">
-        <constructor-arg ref="curling" />
+    <bean id="noteDao" class="com.mycompany.dvdlibrary.dao.NoteDaoImplementation" />
+    
+    <bean id="forDvdDao" class="com.mycompany.dvdlibrary.dao.DvdLibraryImplementation">
+        <constructor-arg ref="noteDao" />
     </bean>
+    
+    <bean id="lambdaDvdDao" class="com.mycompany.dvdlibrary.dao.DvdLibraryLambdaImplementation">
+        <constructor-arg ref="noteDao" />
+    </bean>
+    
+    
+    <bean id="consoleIo" class="com.mycompany.consoleio.ConsoleIO" />
+    
+    <bean id="dvdLibraryController" class="com.mycompany.dvdlibrary.controller.DvdLibraryController">
+        <constructor-arg ref="dateFormat" />
+        <constructor-arg ref="consoleIo" />
+        <constructor-arg ref="forDvdDao" />
+        <constructor-arg ref="noteDao" />
+        
+    </bean>
+    
+
 </beans>
