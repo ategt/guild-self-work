@@ -6,8 +6,8 @@
 package com.mycompany.dvdlibrary.controller;
 
 import com.mycompany.consoleio.ConsoleIO;
-import com.mycompany.dvdlibrary.dao.DvdLibraryImplementation;
-import com.mycompany.dvdlibrary.dao.NoteDaoImplementation;
+import com.mycompany.consoleio.exceptions.UserWantsOutException;
+import com.mycompany.consoleio.exceptions.UserWantsToDeleteValueException;
 import com.mycompany.dvdlibrary.interfaces.Dvd;
 import com.mycompany.dvdlibrary.interfaces.DvdLibrary;
 import com.mycompany.dvdlibrary.interfaces.NoteDao;
@@ -17,8 +17,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -57,38 +55,42 @@ class AdditionalMenu {
         boolean done = false;
         while (!done) {
 
-            switch (consoleIo.getUserIntInputRange(menu, 0, 9)) {
-                case 1:
-                    displayAverageAge();
-                    break;
-                case 2:
-                    displayAverageNumberOfNotes();
-                    break;
-                case 3:
-                    displayNewestDvd();
-                    break;
-                case 4:
-                    displayOldestDvd();
-                    break;
-                case 5:
-                    displayDvdsByAge();
-                    break;
-                case 6:
-                    displayDvdsByDirector();
-                    break;
-                case 7:
-                    displayDvdsByRating();
-                    break;
-                case 8:
-                    displayDvdsByStudio();
-                    break;
-                case 9:
-                    displayDvdsByTitle();
-                    break;
-                case 0:
-                    done = true;
-                    break;
-
+            try {
+                switch (consoleIo.getUserIntInputRange(menu, 0, 9)) {
+                    case 1:
+                        displayAverageAge();
+                        break;
+                    case 2:
+                        displayAverageNumberOfNotes();
+                        break;
+                    case 3:
+                        displayNewestDvd();
+                        break;
+                    case 4:
+                        displayOldestDvd();
+                        break;
+                    case 5:
+                        displayDvdsByAge();
+                        break;
+                    case 6:
+                        displayDvdsByDirector();
+                        break;
+                    case 7:
+                        displayDvdsByRating();
+                        break;
+                    case 8:
+                        displayDvdsByStudio();
+                        break;
+                    case 9:
+                        displayDvdsByTitle();
+                        break;
+                    case 0:
+                        done = true;
+                        break;
+                        
+                }
+            } catch (UserWantsOutException | UserWantsToDeleteValueException ex) {
+                consoleIo.printStringToConsole(menu);
             }
 
         }
@@ -113,14 +115,14 @@ class AdditionalMenu {
         String preface = "The Newest Dvd In This Collection Would Be :\n\t\t";
         consoleIo.printStringToConsole(preface + dvd.getTitle() + "\t" + dvd.getReleaseDate());
 
-        String response = consoleIo.getUserStringInput("Would You Like To See The Details For This Title? [Y/n]");
+        String response = consoleIo.getUserStringInputSimple("Would You Like To See The Details For This Title? [Y/n]");
 
         if (response.equalsIgnoreCase("Y")) {
             mainController.displayAndEdit(dvd.getId());
         }
     }
 
-    private void displayOldestDvd() {
+    private void displayOldestDvd()  throws UserWantsOutException, UserWantsToDeleteValueException{
         Dvd dvd = dvdLibrary.findOldestDvd();
         String preface = "The Newest Dvd In This Collection Would Be :\n\t\t";
         consoleIo.printStringToConsole(preface + dvd.getTitle() + "\t" + dvd.getReleaseDate());
@@ -132,7 +134,7 @@ class AdditionalMenu {
         }
     }
 
-    private void displayDvdsByAge() {
+    private void displayDvdsByAge() throws UserWantsOutException, UserWantsToDeleteValueException {
         try {
             String dateString = consoleIo.getUserStringInput("Please Enter A Date In \"DD-MM-YYYY\" Format");
             DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
@@ -159,7 +161,7 @@ class AdditionalMenu {
 
     }
 
-    private void displayDvdsByDirector() {
+    private void displayDvdsByDirector()  throws UserWantsOutException, UserWantsToDeleteValueException{
         String director = consoleIo.getUserStringInput("Please Enter A Director's Name:");
 
         Map<String, List< Dvd>> mapListDvds = dvdLibrary.searchByDirector(director);
@@ -182,7 +184,7 @@ class AdditionalMenu {
 
     }
 
-    private void displayDvdsByRating() {
+    private void displayDvdsByRating()  throws UserWantsOutException, UserWantsToDeleteValueException{
         String rating = consoleIo.getUserStringInput("Please Enter A Rating To Search For:");
 
         List< Dvd> listOfDvds = dvdLibrary.searchByRating(rating);
@@ -200,7 +202,7 @@ class AdditionalMenu {
 
     }
 
-    private void displayDvdsByStudio() {
+    private void displayDvdsByStudio()  throws UserWantsOutException, UserWantsToDeleteValueException{
         String studio = consoleIo.getUserStringInput("Please Enter A Studio To Search For:");
 
         List< Dvd> listOfDvds = dvdLibrary.searchByStudio(studio);

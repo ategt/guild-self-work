@@ -37,65 +37,86 @@ public class DvdLibraryController {
     DvdLibrary dvdLibrary;
     DateFormat dateFormat;
 
+    public DvdLibraryController(SimpleDateFormat dateFormat, ConsoleIO consoleIo, DvdLibrary dvdLibrary, NoteDaoImplementation noteDao) {
+
+        this.dateFormat = dateFormat;
+        this.consoleIo = consoleIo;
+        this.noteDao = noteDao;
+        this.dvdLibrary = dvdLibrary;
+    }
+
     public void run() {
 
-        init();
+        try {
+            init();
 
-        boolean choseToExit = false;
-        while (!choseToExit) {
+            boolean choseToExit = false;
+            while (!choseToExit) {
 
-            try {
-                String mainMenu = "\n== Main Menu == \n"
-                        + "1. Add DVD\n"
-                        + "2. Remove DVD\n"
-                        + "3. Number of DVD's in The Library\n"
-                        + "4. List DVDs by Title\n"
-                        + "5. Find DVD by Title\n"
-                        + "6. Find DVD by ID Number\n"
-                        + "7. Bonus Menu\n"
-                        + "0. Exit\n";
+                try {
+                    String mainMenu = "\n== Main Menu == \n"
+                            + "1. Add DVD\n"
+                            + "2. Remove DVD\n"
+                            + "3. Number of DVD's in The Library\n"
+                            + "4. List DVDs by Title\n"
+                            + "5. Find DVD by Title\n"
+                            + "6. Find DVD by ID Number\n"
+                            + "7. Bonus Menu\n"
+                            + "0. Exit\n";
 
-                int userChoice = consoleIo.getUserIntInputRange(mainMenu, 0, 7);
+                    int userChoice = consoleIo.getUserIntInputRange(mainMenu, 0, 7);
 
-                switch (userChoice) {
-                    case 1:
-                        addDvd();
-                        break;
-                    case 2:
-                        removeDvd();
-                        break;
-                    case 3:
-                        showDvdLibrarySize();
-                        break;
-                    case 4:
-                        listAllDvds();
-                        break;
-                    case 5:
-                        findByTitle();
-                        break;
-                    case 6:
-                        findById();
-                        break;
-                    case 7:
-                        bonusMenu();
-                        break;
-                    case 0:
-                        choseToExit = true;
+                    switch (userChoice) {
+                        case 1:
+                            addDvd();
+                            break;
+                        case 2:
+                            removeDvd();
+                            break;
+                        case 3:
+                            showDvdLibrarySize();
+                            break;
+                        case 4:
+                            listAllDvds();
+                            break;
+                        case 5:
+                            findByTitle();
+                            break;
+                        case 6:
+                            findById();
+                            break;
+                        case 7:
+                            bonusMenu();
+                            break;
+                        case 0:
+                            choseToExit = true;
+                    }
+
+                } catch (UserWantsOutException | UserWantsToDeleteValueException ex) {
+                    consoleIo.printStringToConsole("The User Has Requested to Return To The Main Menu.");
                 }
 
-            } catch (UserWantsOutException | UserWantsToDeleteValueException ex) {
-                consoleIo.printStringToConsole("The User Has Requested to Return To The Main Menu.");
             }
-
+        } catch (UserWantsOutException | UserWantsToDeleteValueException ex) {
+            consoleIo.printStringToConsole("The User Has Requested To Exit The Program.");
         }
     }
 
-    private void init() {
+    private void init() throws UserWantsOutException, UserWantsToDeleteValueException {
 
-        this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (this.dateFormat == null) {
+            this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        }
         this.consoleIo = new ConsoleIO();
         this.noteDao = new NoteDaoImplementation();
-        this.dvdLibrary = askForLibrarySearchingTechnique();
+        if (this.dvdLibrary == null) {
+            this.dvdLibrary = askForLibrarySearchingTechnique();
+        }
+        String[] exitArray = {"exit", "x", "e", "ex", "exi"};
+        String[] deleteCommands = {"-"};
+
+        consoleIo.setDeleteCommands(deleteCommands);
+        consoleIo.setExitArray(exitArray);
     }
 
     private void addDvd() {
@@ -103,7 +124,7 @@ public class DvdLibraryController {
         dvdLibrary.create(newDvd);
     }
 
-    public void removeDvd() {
+    public void removeDvd() throws UserWantsOutException, UserWantsToDeleteValueException {
 
         listAllDvds();
 
@@ -114,7 +135,7 @@ public class DvdLibraryController {
         if (dvd != null) {
             consoleIo.printStringToConsole(convertToString(dvd));
             consoleIo.printStringToConsole("Are you sure you want to delete this dvd?");
-            String confirm = consoleIo.getUserStringInput("Press \"1\" to continue or anything else to abort:");
+            String confirm = consoleIo.getUserStringInputSimple("Press \"1\" to continue or anything else to abort:");
 
             if (confirm.equals("1")) {
                 dvdLibrary.delete(dvd);
@@ -146,7 +167,7 @@ public class DvdLibraryController {
     public void findByTitle() {
 
         listAllDvds();
-        String dvdTitle = consoleIo.getUserStringInput("Please Enter A Title To Find:");
+        String dvdTitle = consoleIo.getUserStringInputSimple("Please Enter A Title To Find:");
 
         String dvdString = "";
         List<Dvd> foundDvds = dvdLibrary.searchByTitle(dvdTitle);
@@ -158,7 +179,7 @@ public class DvdLibraryController {
         consoleIo.printStringToConsole(dvdString);
 
         if (foundDvds.size() == 1) {
-            String editInput = consoleIo.getUserStringInput("Would You Like To Edit This DVD Information?\n Press \"Y\" to edit.");
+            String editInput = consoleIo.getUserStringInputSimple("Would You Like To Edit This DVD Information?\n Press \"Y\" to edit.");
             if (editInput != null && foundDvds.get(0) != null) {
                 if (editInput.equalsIgnoreCase("Y")) {
                     Dvd dvdToEdit = foundDvds.get(0);
@@ -170,7 +191,7 @@ public class DvdLibraryController {
         }
     }
 
-    public void findById() {
+    public void findById() throws UserWantsOutException, UserWantsToDeleteValueException {
 
         listAllDvds();
         int id = consoleIo.getUserIntInputPositive("Please Enter An ID Number To Find:");
@@ -182,7 +203,7 @@ public class DvdLibraryController {
         Dvd dvd = dvdLibrary.get(id);
         consoleIo.printStringToConsole(convertToString(dvd));
 
-        String editInput = consoleIo.getUserStringInput("Would You Like To Edit This DVD Information?\n Press \"Y\" to edit.");
+        String editInput = consoleIo.getUserStringInputSimple("Would You Like To Edit This DVD Information?\n Press \"Y\" to edit.");
         if (editInput != null) {
             if (editInput.equalsIgnoreCase("Y")) {
                 editDvdInfo(dvd);
@@ -194,7 +215,7 @@ public class DvdLibraryController {
     public void editDvdInfo(Dvd dvd) {
         if (dvd != null) {
 
-            String title = consoleIo.getUserStringInput("Please Enter a DVD Title:");
+            String title = consoleIo.getUserStringInputSimple("Please Enter a DVD Title:");
             if (title.equalsIgnoreCase("")) {
             } else if (title.equalsIgnoreCase("-")) {
                 title = null;
@@ -204,7 +225,7 @@ public class DvdLibraryController {
 
             }
 
-            String inputString = consoleIo.getUserStringInput("Please Enter Director's Name:");
+            String inputString = consoleIo.getUserStringInputSimple("Please Enter Director's Name:");
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
@@ -215,7 +236,7 @@ public class DvdLibraryController {
                 dvd.setDirectorsName(inputString);
             }
 
-            inputString = consoleIo.getUserStringInput("Please Enter Release Date in yyyy-MM-dd format:");
+            inputString = consoleIo.getUserStringInputSimple("Please Enter Release Date in yyyy-MM-dd format:");
 
             Date date = null;
 
@@ -235,7 +256,7 @@ public class DvdLibraryController {
                 dvd.setReleaseDate(date);
             }
 
-            inputString = consoleIo.getUserStringInput("Please Enter MPAA rating:");
+            inputString = consoleIo.getUserStringInputSimple("Please Enter MPAA rating:");
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
@@ -246,7 +267,7 @@ public class DvdLibraryController {
                 dvd.setMPAA(inputString);
             }
 
-            inputString = consoleIo.getUserStringInput("Please Enter Studio Name:");
+            inputString = consoleIo.getUserStringInputSimple("Please Enter Studio Name:");
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
@@ -260,7 +281,7 @@ public class DvdLibraryController {
             boolean moreNotes = true;
             while (moreNotes) {
 
-                inputString = consoleIo.getUserStringInput("Would you like to enter a note:\n You may enter a blank line when finished.");
+                inputString = consoleIo.getUserStringInputSimple("Would you like to enter a note:\n You may enter a blank line when finished.");
 
                 Note note = new NoteImplementation();
 
@@ -330,7 +351,7 @@ public class DvdLibraryController {
                 dvdLibrary).run();
     }
 
-    private DvdLibrary askForLibrarySearchingTechnique() {
+    private DvdLibrary askForLibrarySearchingTechnique() throws UserWantsOutException, UserWantsToDeleteValueException {
 
         int intInput = consoleIo.getUserIntInputPositive("Would You Like To Use For Loops or Lambdas?\n\t1. For Loops\n\t2. Lambdas");
 
