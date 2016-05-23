@@ -16,30 +16,34 @@
  http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
  
  
-    <bean id="dateFormat" class="java.text.SimpleDateFormat">
+<!--    <bean id="dateFormat" class="java.text.SimpleDateFormat">
         <constructor-arg type="java.lang.String" value="yyyy-MM-dd"/>    
-    </bean>
+    </bean>-->
+    
+    <bean id="dvd" class="com.mycompany.dvdlibrary.dto.DvdImplementation" />
     
     <bean id="noteDao" class="com.mycompany.dvdlibrary.dao.NoteDaoImplementation" />
     
     <bean id="forDvdDao" class="com.mycompany.dvdlibrary.dao.DvdLibraryImplementation">
-        <constructor-arg ref="noteDao" />
+        <!--<constructor-arg index="0" type="java.lang.Boolean" value="true" />-->
+        <constructor-arg index="0" type="boolean" value="true" />
+        <constructor-arg index="1" type="com.mycompany.dvdlibrary.interfaces.NoteDao" ref="noteDao" />
     </bean>
     
-    <bean id="lambdaDvdDao" class="com.mycompany.dvdlibrary.dao.DvdLibraryLambdaImplementation">
+<!--    <bean id="lambdaDvdDao" class="com.mycompany.dvdlibrary.dao.DvdLibraryLambdaImplementation">
+        <constructor-arg type="java.lang.Boolean" value="true" />
         <constructor-arg ref="noteDao" />
-    </bean>
+    </bean>-->
     
+    <!--<bean id="consoleIo" class="com.mycompany.consoleio.ConsoleIO" />-->
     
-    <bean id="consoleIo" class="com.mycompany.consoleio.ConsoleIO" />
-    
-    <bean id="dvdLibraryController" class="com.mycompany.dvdlibrary.controller.DvdLibraryController">
+<!--    <bean id="dvdLibraryController" class="com.mycompany.dvdlibrary.controller.DvdLibraryController">
         <constructor-arg ref="dateFormat" />
         <constructor-arg ref="consoleIo" />
         <constructor-arg ref="forDvdDao" />
         <constructor-arg ref="noteDao" />
         
-    </bean>
+    </bean>-->
     
 
 </beans>

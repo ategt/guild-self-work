@@ -115,8 +115,8 @@ public class DvdLibraryController {
         String[] exitArray = {"exit", "x", "e", "ex", "exi"};
         String[] deleteCommands = {"-"};
 
-        consoleIo.setDeleteCommands(deleteCommands);
-        consoleIo.setExitArray(exitArray);
+        this.consoleIo.setDeleteCommands(deleteCommands);
+        this.consoleIo.setExitArray(exitArray);
     }
 
     private void addDvd() {

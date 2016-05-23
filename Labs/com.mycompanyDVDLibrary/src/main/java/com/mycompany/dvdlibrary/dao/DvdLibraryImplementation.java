@@ -44,7 +44,7 @@ public class DvdLibraryImplementation implements DvdLibrary {
         this(false, noteDao);
     }
 
-    protected DvdLibraryImplementation(boolean isATest, NoteDao noteDao) {
+    public DvdLibraryImplementation(boolean isATest, NoteDao noteDao) {
 
         this.noteDao = noteDao;
 
