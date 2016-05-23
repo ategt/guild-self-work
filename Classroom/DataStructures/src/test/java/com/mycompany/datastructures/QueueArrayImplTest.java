@@ -209,7 +209,6 @@ public class QueueArrayImplTest {
         assertEquals(afterSize, sizeTest);
         assertEquals(instance.isEmpty(), false);
 
-        //for (int i = sizeTest; i > 0; i--) {
         for (int i = 0; i < sizeTest; i++) {
 
             String result = instance.dequeue();
@@ -261,9 +260,6 @@ public class QueueArrayImplTest {
         instance.enqueue(elementFour);
         instance.enqueue(elementFive);
 
-//        instance.enqueue(elementTwo);
-//        instance.enqueue(elementThree);
-//        instance.enqueue(elementFour);
         assertEquals(instance.isEmpty(), false);
         assertEquals(instance.size(), 5);
 
@@ -618,38 +614,32 @@ public class QueueArrayImplTest {
     }
 
     @Test
-    public void testWrapShrinkerE() {
+    public void testQueueRandom() {
         // Random enqueue and dequeue
         System.out.println("Random Queue Test");
-        
+
         List<String> testList = new ArrayList();
         java.util.Random random = new java.util.Random();
         int expectedSize = 0;
         int highestTry = 0;
-        
 
         for (int i = 0; i < 10000000; i++) {
 
             if (random.nextBoolean()) {
 
                 String testString = String.valueOf(i);
-                //String testString = new String();
                 testList.add(testString);
                 instance.enqueue(testString);
                 expectedSize++;
 
-                //System.out.println("*********Just Put One In: " + expectedSize);
                 assertEquals(expectedSize, instance.size());
-                if ( expectedSize > highestTry ){
+                if (expectedSize > highestTry) {
                     highestTry = expectedSize;
                 }
-                
+
             } else {
 
-               // System.out.println("******Taking One Out: " + expectedSize);
                 String testString = instance.dequeue();
-                //testList.remove(testString);
-                //instance.enqueue(testString);
                 expectedSize--;
                 if (expectedSize < 0) {
                     expectedSize = 0;
@@ -669,15 +659,8 @@ public class QueueArrayImplTest {
                     testList.remove(0);
                 }
                 assertEquals(expectedSize, instance.size());
-
             }
-            
-
         }
-
-
-            System.out.println("Highest Random Size: " + highestTry);
-
+        System.out.println("Highest Random Size: " + highestTry);
     }
-
 }
