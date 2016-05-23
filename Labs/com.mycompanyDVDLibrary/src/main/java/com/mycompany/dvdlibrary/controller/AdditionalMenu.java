@@ -5,6 +5,7 @@
  */
 package com.mycompany.dvdlibrary.controller;
 
+import com.mycompany.consoleio.ConsoleIO;
 import com.mycompany.dvdlibrary.dao.DvdLibraryImplementation;
 import com.mycompany.dvdlibrary.dao.NoteDaoImplementation;
 import com.mycompany.dvdlibrary.interfaces.Dvd;
