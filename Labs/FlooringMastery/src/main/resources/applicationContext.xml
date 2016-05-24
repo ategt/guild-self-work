@@ -17,8 +17,6 @@
  
  
 
-    <!--    <bean id="addressDaoLambda" class="com.mycompany.addressbook.dao.AddressBookLambdaImpl" />
-    <bean id="addressDaoForLoop" class="com.mycompany.addressbook.dao.AddressBookImpl" />-->
     <bean id="viewUtilities" class="com.mycompany.flooringmastery.utilities.ViewUtilities" />
     <bean id="configDao" class="com.mycompany.flooringmastery.dao.ConfigDao" />
     <bean id="consoleIo" class="com.mycompany.consoleio.ConsoleIO" />
@@ -33,13 +31,7 @@
         <constructor-arg ref="stateDao" />
         <constructor-arg ref="configDao" />
     </bean>
-    
-    
-    <!--    <bean id="addressBookController" class="com.mycompany.addressbook.controller.AddressBookController">
-        <constructor-arg ref="addressDaoLambda" />
-        <constructor-arg ref="consoleIo" />
-    </bean>-->
-    
+        
     <bean id="flooringMasteryController" class="com.mycompany.flooringmastery.controller.FlooringMasteryController">
         <constructor-arg ref="consoleIo" />
         <constructor-arg ref="productDao" />
@@ -49,11 +41,21 @@
         <constructor-arg ref="viewUtilities" />
     </bean>
     
-    <!--    ConsoleIO consoleIo,
-    ProductDao productDao,
-    StateDao stateDao,
-    OrderDao orderDao,
-    ConfigDao configDao,
-    com.mycompany.flooringmastery.utilities.ViewUtilities viewUtilities-->
+    <bean id="auditAspect" class="com.mycompany.flooringmastery.aop" />
+        
+    <aop:config>
+        <aop:aspect ref="auditAspect">
+            
+            <aop:around method=
+            
+<!--            <aop:after method="createAuditEntry"
+                       pointcut="execution(* com.mycompany.flooringmastery.dao.OrderDao.create(..))"
+            />-->
+            
+        </aop:aspect>
+        
+    </aop:config>
     
+<!--    This is the main project context file.-->
+            
 </beans>

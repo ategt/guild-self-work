@@ -5,6 +5,8 @@
  */
 package com.mycompany.flooringmastery.dto;
 
+import java.io.File;
+
 /**
  *
  * @author apprentice
@@ -15,6 +17,15 @@ public class Config {
     private java.io.File testDirectory;
     private java.io.File dataDirectory;
     private java.io.File ordersDirectory;
+    private java.io.File auditLogFile;
+
+    public File getAuditLogFile() {
+        return auditLogFile;
+    }
+
+    public void setAuditLogFile(File auditLogFile) {
+        this.auditLogFile = auditLogFile;
+    }
     
     private boolean inTestMode;
 

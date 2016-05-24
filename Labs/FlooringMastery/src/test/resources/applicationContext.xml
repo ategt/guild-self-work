@@ -20,6 +20,17 @@
         <constructor-arg type="java.lang.String" value="testConfigFile.txt" />
     </bean> 
 
+    <bean id="testAuditLog" class="java.io.File" >
+        <constructor-arg type="java.lang.String" value="auditLog.txt" />
+    </bean> 
+    
+    <bean id="auditLogDaoWithAuditLog" class="com.mycompany.flooringmastery.dao.AuditLogDao" >
+        <constructor-arg ref="testAuditLog" />
+    </bean>
+    
+<!--    <bean id="configDaoWithAuditLog" -->
+    
+
      <bean id="configDaoWithNull" class="com.mycompany.flooringmastery.dao.ConfigDao" >
          <constructor-arg value="null" />
      </bean>
