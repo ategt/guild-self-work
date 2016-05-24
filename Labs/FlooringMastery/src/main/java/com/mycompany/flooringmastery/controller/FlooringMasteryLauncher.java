@@ -16,12 +16,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class FlooringMasteryLauncher {
     
     public static void main(String[] args) {
-        
-        
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        
         FlooringMasteryController flooringMasteryController = ctx.getBean(FlooringMasteryController.class);
-        
         flooringMasteryController.run();
     }
     

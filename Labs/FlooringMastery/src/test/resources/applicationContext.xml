@@ -15,10 +15,19 @@
  http://www.springframework.org/schema/aop
  http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
  
- 
+       
+    <bean id="testConfigFile" class="java.io.File" >
+        <constructor-arg type="java.lang.String" value="testConfigFile.txt" />
+    </bean> 
 
-    <!--    <bean id="addressDaoLambda" class="com.mycompany.addressbook.dao.AddressBookLambdaImpl" />
-    <bean id="addressDaoForLoop" class="com.mycompany.addressbook.dao.AddressBookImpl" />-->
+     <bean id="configDaoWithNull" class="com.mycompany.flooringmastery.dao.ConfigDao" >
+         <constructor-arg value="null" />
+     </bean>
+   
+     <bean id="configDaoWithTestFile" class="com.mycompany.flooringmastery.dao.ConfigDao" lazy-init="true" >
+         <constructor-arg ref="testConfigFile" />
+     </bean>
+   
     <bean id="viewUtilities" class="com.mycompany.flooringmastery.utilities.ViewUtilities" />
     <bean id="configDao" class="com.mycompany.flooringmastery.dao.ConfigDao" />
     <bean id="consoleIo" class="com.mycompany.consoleio.ConsoleIO" />
@@ -35,10 +44,6 @@
     </bean>
     
     
-    <!--    <bean id="addressBookController" class="com.mycompany.addressbook.controller.AddressBookController">
-        <constructor-arg ref="addressDaoLambda" />
-        <constructor-arg ref="consoleIo" />
-    </bean>-->
     
     <bean id="flooringMasteryController" class="com.mycompany.flooringmastery.controller.FlooringMasteryController">
         <constructor-arg ref="consoleIo" />
@@ -49,11 +54,5 @@
         <constructor-arg ref="viewUtilities" />
     </bean>
     
-    <!--    ConsoleIO consoleIo,
-    ProductDao productDao,
-    StateDao stateDao,
-    OrderDao orderDao,
-    ConfigDao configDao,
-    com.mycompany.flooringmastery.utilities.ViewUtilities viewUtilities-->
     
 </beans>

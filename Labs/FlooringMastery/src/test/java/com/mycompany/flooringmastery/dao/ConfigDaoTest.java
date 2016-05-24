@@ -5,6 +5,7 @@
  */
 package com.mycompany.flooringmastery.dao;
 
+import com.mycompany.flooringmastery.controller.FlooringMasteryController;
 import com.mycompany.flooringmastery.exceptions.ConfigurationFileCorruptException;
 import com.mycompany.flooringmastery.exceptions.FileCreationException;
 import java.util.logging.Level;
@@ -13,6 +14,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -20,7 +23,10 @@ import static org.junit.Assert.*;
  */
 public class ConfigDaoTest {
 
+    ApplicationContext ctx;
+
     public ConfigDaoTest() {
+        ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
     }
 
     @Before
@@ -34,36 +40,45 @@ public class ConfigDaoTest {
     @Test
     public void testTheFileConstructorNull() {
         ConfigDao configDao = null;
-        try {
-            configDao = new ConfigDao(null);
-        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
-            fail("The test was not supposed to throw an exception here.");
-            Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(" Exception Message: " + ex.getMessage());
+        //try {
+            configDao = ctx.getBean( "configDaoWithNull", ConfigDao.class );
+            //configDao = new ConfigDao(null);
+//        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
+//            fail("The test was not supposed to throw an exception here.");
+//            Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+//            System.out.println(" Exception Message: " + ex.getMessage());
+//        }
 
-        }
-
-        assertEquals(true , configDao.get().isInTestMode());
+        assertEquals(true, configDao.get().isInTestMode());
 
     }
 
     @Test
     public void testTheFileConstructor() {
 
-        java.io.File testConfigFile = new java.io.File("testConfigFile.txt");
+        //java.io.File testConfigFile = new java.io.File("testConfigFile.txt");
 
         ConfigDao configDao = null;
         try {
-            configDao = new ConfigDao(testConfigFile);
+            configDao = ctx.getBean( "configDaoWithTestFile", ConfigDao.class );
+            //configDao = new ConfigDao(testConfigFile);
             fail("The test was supposed to throw an exception here.");
-        } catch (ConfigurationFileCorruptException ex) {
+        } catch ( org.springframework.beans.factory.BeanCreationException | org.springframework.beans.BeanInstantiationException ex ) {        
+//} catch (ConfigurationFileCorruptException ex) {
             System.out.println("This Test Checks to see if the exception thrower works right.");
             System.out.println(" Exception Message: " + ex.getMessage());
+            //Throwable initThrown = ex.initCause(ex);
+            //Throwable causeThrown = ex.getCause();  // class that threw the error
+            //Throwable specificThrown = ex.getMostSpecificCause();   // has the message before
+            Throwable rootThrown = ex.getRootCause();               // This one looks promising.
+            //Throwable[] listOfSuppressedThrown = ex.getSuppressed();
+            System.out.println("Root thrown message: " + rootThrown.getMessage());
+            //System.out.println(ex instanceof ConfigurationFileCorruptException);
             System.out.println("End Exception Thrower test.");
-        } catch (FileCreationException ex) {
-            fail("The test was not supposed to throw an exception here.");
-            Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(" Exception Message: " + ex.getMessage());
+        //} catch (FileCreationException ex) {
+            //fail("The test was not supposed to throw an exception here.");
+          //  Logger.getLogger(ConfigDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+           // System.out.println(" Exception Message: " + ex.getMessage());
         }
 
         assertEquals(null, configDao);
@@ -227,6 +242,4 @@ public class ConfigDaoTest {
 
     }
 
-    
-    
 }
