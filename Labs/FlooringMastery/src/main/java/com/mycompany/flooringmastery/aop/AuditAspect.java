@@ -8,12 +8,6 @@ package com.mycompany.flooringmastery.aop;
 import com.mycompany.flooringmastery.dao.AuditDao;
 import com.mycompany.flooringmastery.dto.Audit;
 import com.mycompany.flooringmastery.dto.Order;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.context.ApplicationContext;
@@ -63,7 +57,7 @@ public class AuditAspect {
         return order;
     }
 
-    public void createAuditEntry(ProceedingJoinPoint jp) throws Throwable {
+    public void createAuditEntry(JoinPoint jp) throws Throwable {
 
         Order order = processJoinPoint(jp);
         System.out.println("Making an audit entry.");

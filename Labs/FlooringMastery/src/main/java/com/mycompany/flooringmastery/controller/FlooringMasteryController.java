@@ -11,6 +11,7 @@ import com.mycompany.consoleio.exceptions.UserWantsToDeleteDateException;
 import com.mycompany.consoleio.exceptions.UserWantsToDeleteValueException;
 import com.mycompany.flooringmastery.dao.ConfigDao;
 import com.mycompany.flooringmastery.dao.OrderDao;
+import com.mycompany.flooringmastery.dao.OrderDaoImpl;
 import com.mycompany.flooringmastery.dao.ProductDao;
 import com.mycompany.flooringmastery.dao.StateDao;
 import com.mycompany.flooringmastery.dto.Order;
@@ -95,7 +96,7 @@ public class FlooringMasteryController {
         viewUtilities = new com.mycompany.flooringmastery.utilities.ViewUtilities();
         productDao = new ProductDao(configDao);
         stateDao = new StateDao(configDao);
-        orderDao = new OrderDao(productDao, stateDao, configDao);
+        orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
 
     }
 

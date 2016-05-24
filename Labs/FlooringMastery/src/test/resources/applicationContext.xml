@@ -24,7 +24,7 @@
         <constructor-arg type="java.lang.String" value="auditLog.txt" />
     </bean> 
     
-    <bean id="auditLogDaoWithAuditLog" class="com.mycompany.flooringmastery.dao.AuditLogDao" >
+    <bean id="auditLogDaoWithAuditLog" class="com.mycompany.flooringmastery.dao.AuditDao" >
         <constructor-arg ref="testAuditLog" />
     </bean>
     
@@ -48,7 +48,7 @@
     <bean id="stateDao" class="com.mycompany.flooringmastery.dao.StateDao">
         <constructor-arg ref="configDao" />
     </bean>
-    <bean id="orderDao" class="com.mycompany.flooringmastery.dao.OrderDao">
+    <bean id="orderDao" class="com.mycompany.flooringmastery.dao.OrderDaoImpl">
         <constructor-arg ref="productDao" />
         <constructor-arg ref="stateDao" />
         <constructor-arg ref="configDao" />
@@ -65,5 +65,5 @@
         <constructor-arg ref="viewUtilities" />
     </bean>
     
-    
+<!--     This is the test Context.-->
 </beans>

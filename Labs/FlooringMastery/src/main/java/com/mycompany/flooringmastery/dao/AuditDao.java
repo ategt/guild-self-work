@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,7 +57,7 @@ public class AuditDao {
     private void encode(Audit audit) {
         encode(audit, auditLogFile);
     }
-    
+
     private void encode(Audit audit, File auditLogFile) {
 
         final String TOKEN = "\t";
@@ -131,25 +130,27 @@ public class AuditDao {
 
         List<Audit> tempAuditList = new ArrayList();
 
-        try (Scanner sc = new Scanner(new BufferedReader(new FileReader(auditLogFile)))) {
-            while (sc.hasNextLine()) {
-                String currentLine = sc.nextLine();
-                if (currentLine.equalsIgnoreCase(DATAHEADER)) {
+        if (auditLogFile.exists()) {
 
-                } else if (!currentLine.trim().isEmpty()) {
+            try (Scanner sc = new Scanner(new BufferedReader(new FileReader(auditLogFile)))) {
+                while (sc.hasNextLine()) {
+                    String currentLine = sc.nextLine();
+                    if (currentLine.equalsIgnoreCase(DATAHEADER)) {
 
-                    String[] stringParts = currentLine.split(TOKEN);
+                    } else if (!currentLine.trim().isEmpty()) {
 
-                    for (String auditString : stringParts) {
-                        Audit audit = buildAuditFromString(auditString);
-                        tempAuditList.add(audit);
+                        String[] stringParts = currentLine.split(TOKEN);
+
+                        for (String auditString : stringParts) {
+                            Audit audit = buildAuditFromString(auditString);
+                            tempAuditList.add(audit);
+                        }
                     }
                 }
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(AuditDao.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(AuditDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         return tempAuditList;
     }
 }
