@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  *
  * @author apprentice
  */
-public class OrderDao {
+public class OrderDao implements OrderDaoInt {
 
     private List<Order> orders;
     private int nextId;
@@ -116,6 +116,7 @@ public class OrderDao {
         nextId = determineNextId();
     }
 
+    @Override
     public Order create(Order order) {
         order.setId(nextId);
         nextId++;
@@ -127,6 +128,7 @@ public class OrderDao {
         return order;
     }
 
+    @Override
     public Order get(Integer id) {
 
         for (Order order : orders) {
@@ -140,6 +142,7 @@ public class OrderDao {
         return null;
     }
 
+    @Override
     public void update(Order order) {
         List<Order> foundOrders = new ArrayList();
 
@@ -165,6 +168,7 @@ public class OrderDao {
 
     }
 
+    @Override
     public void delete(Order order) {
         Order found = null;
 
@@ -188,16 +192,19 @@ public class OrderDao {
     }
 
     @Deprecated
+    @Override
     public List<Order> getList() {
         List<Order> copy = new ArrayList();
         copy.addAll(orders);
         return copy;
     }
 
+    @Override
     public int size() {
         return orders.size();
     }
 
+    @Override
     public java.util.List<Order> searchByDate(java.util.Date date) {
         java.util.List<Order> specificOrders = new ArrayList();
 
@@ -215,6 +222,7 @@ public class OrderDao {
         return specificOrders;
     }
 
+    @Override
     public java.util.List<Integer> listOrderNumbers() {
         java.util.List<Integer> orderNumbers = new ArrayList();
 
@@ -230,6 +238,7 @@ public class OrderDao {
         return orderNumbers;
     }
 
+    @Override
     public java.util.List<java.util.Date> listOrderDates() {
         java.util.List<java.util.Date> orderDates = new ArrayList();
         java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("dd-MM-");
@@ -247,6 +256,7 @@ public class OrderDao {
         return orderDates;
     }
 
+    @Override
     public java.util.List<Order> searchByName(String orderName) {
         java.util.List<Order> specificOrders = new ArrayList();
         java.util.List<Order> closeOrders = new ArrayList();
@@ -345,16 +355,19 @@ public class OrderDao {
 
     }
 
+    @Override
     public String toString(Order order) {
         return toString(order, "");
     }
 
+    @Override
     public String toString(Order order, final String TOKEN) {
         final String CSV_ESCAPE = Pattern.quote("\\") + TOKEN;
 
         return toString(order, TOKEN, CSV_ESCAPE);
     }
 
+    @Override
     public String toString(Order order, final String TOKEN, final String CSV_ESCAPE) {
 
         String stateName = "null";
@@ -416,14 +429,17 @@ public class OrderDao {
         return orderString;
     }
 
+    @Override
     public String addLabels(Order order, final String TOKEN) {
         return addLabels(toString(order, TOKEN), TOKEN);
     }
 
+    @Override
     public String addLabels(String orderString, final String TOKEN) {
         return addLabels(orderString, TOKEN, ": ");
     }
 
+    @Override
     public String addLabels(Order order, final String TOKEN, final String SECOND_TOKEN) {
         return addLabels(toString(order, TOKEN), TOKEN, SECOND_TOKEN);
     }
@@ -438,6 +454,7 @@ public class OrderDao {
      * @param SECOND_TOKEN
      * @return
      */
+    @Override
     public String addLabels(String orderString, final String TOKEN, final String SECOND_TOKEN) {
 
         String labeledOrderString = "";
@@ -675,6 +692,7 @@ public class OrderDao {
         return date;
     }
 
+    @Override
     public void purgeTestFiles() {
 
         java.io.File[] testFiles = lookForOrders(configDao.get().getTestDirectory());

@@ -8,14 +8,28 @@ package com.mycompany.flooringmastery.aop;
 import com.mycompany.flooringmastery.dao.AuditDao;
 import com.mycompany.flooringmastery.dto.Audit;
 import com.mycompany.flooringmastery.dto.Order;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
  * @author apprentice
  */
 public class AuditAspect {
+
+    ApplicationContext ctx;
+
+    public AuditAspect() {
+        ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+    }
 
     public String log(ProceedingJoinPoint jp) throws Throwable {
         System.out.println("Spring AOP: Around advice");
@@ -38,7 +52,7 @@ public class AuditAspect {
         if (args[0] instanceof Order) {
             order = (Order) args[0];
         }
-        
+
         if (args.length > 0) {
             System.out.print("Arguments passed: ");
             for (int i = 0; i < args.length; i++) {
@@ -51,20 +65,25 @@ public class AuditAspect {
 
     public void createAuditEntry(ProceedingJoinPoint jp) throws Throwable {
 
-        
         Order order = processJoinPoint(jp);
         System.out.println("Making an audit entry.");
-        
-        Audit audit = buildAuditObject(order);
-        AuditDao.create(audit);
-        
-        
+        if (order != null) {
+            String actionName = jp.getSignature().getName();
+            Audit audit = buildAuditObject(order, actionName);
+            AuditDao auditDao = ctx.getBean("auditDao", AuditDao.class);
+            auditDao.create(audit);
+        }
     }
 
-    public Audit buildAuditObject( Order order ) {
-        
-        
-        
+    public Audit buildAuditObject(Order order, String actionName) {
+
+        Audit audit = new Audit();
+
+        audit.setDate(order.getDate());
+        audit.setOrderid(order.getId());
+        audit.setActionPerformed(actionName);
+
+        return audit;
     }
-    
+
 }

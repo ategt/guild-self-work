@@ -58,8 +58,6 @@ public class AuditDao {
     private void encode(Audit audit) {
         encode(audit, auditLogFile);
     }
-
-    
     
     private void encode(Audit audit, File auditLogFile) {
 
