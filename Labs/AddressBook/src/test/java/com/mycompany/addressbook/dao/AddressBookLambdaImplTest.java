@@ -13,6 +13,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -20,7 +22,10 @@ import static org.junit.Assert.*;
  */
 public class AddressBookLambdaImplTest {
 
+    ApplicationContext ctx;
+
     public AddressBookLambdaImplTest() {
+       ctx = new ClassPathXmlApplicationContext("lambdaApplicationContext.xml");
     }
 
     @Before
@@ -34,8 +39,10 @@ public class AddressBookLambdaImplTest {
     @Test
     public void TestMessyLambdaMethod() {
 
-        AddressBookLambdaImpl mess = new AddressBookLambdaImpl();
-
+        //AddressBookLambdaImpl mess = ctx.getBean("productionAddressDao" , AddressBookLambdaImpl.class);
+        AddressBook mess = ctx.getBean("productionAddressDao" , AddressBookLambdaImpl.class);
+        //= ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
+        
         java.util.Map<String, List<Address>> messyResults = mess.searchByState("OH");
 
         //messyResults.forEach();
@@ -65,7 +72,7 @@ public class AddressBookLambdaImplTest {
     public void testCreate() {
         System.out.println("create");
         Address address = new Address();
-        AddressBook instance = new AddressBookLambdaImpl(true);
+        AddressBook instance = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
         Address expResult = address;
         Address result = instance.create(address);
         assertEquals(expResult, result);
@@ -89,7 +96,7 @@ public class AddressBookLambdaImplTest {
     @Test
     public void testGetAllAddresses() {
         System.out.println("getAllAddresses");
-        AddressBook instance = new AddressBookLambdaImpl(true);
+        AddressBook instance = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
 
         Address addressOne = new Address();
         Address addressTwo = new Address();
@@ -123,7 +130,7 @@ public class AddressBookLambdaImplTest {
     public void testEncodeAndDecode() {
 
         // The true parameter in the Address Book constructor signifies a test.
-        AddressBook noteDao = new AddressBookLambdaImpl(true);
+        AddressBook noteDao = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
         Address newNote = new Address();
 
         // Create the file in the Dao.
@@ -160,7 +167,7 @@ public class AddressBookLambdaImplTest {
         noteDao.update(newNote);
 
         // Load a new instance of the NoteDao.
-        AddressBook secondDao = new AddressBookLambdaImpl(true);
+        AddressBook secondDao = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
 
         // Pull a note  using the id number recorded earlier.
         Address thirdNote = secondDao.get(id);
@@ -183,7 +190,7 @@ public class AddressBookLambdaImplTest {
 
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
-        AddressBook thirdDao = new AddressBookLambdaImpl(true);
+        AddressBook thirdDao = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
         assertEquals(thirdDao.get(id), null);
 
     }
@@ -195,7 +202,7 @@ public class AddressBookLambdaImplTest {
     public void testCreateB() {
         System.out.println("create");
         Address address = new Address();
-        AddressBook instance = new AddressBookLambdaImpl(true);
+        AddressBook instance = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
         Address expResult = address;
         Address result = instance.create(address);
         assertEquals(expResult, result);
@@ -219,7 +226,7 @@ public class AddressBookLambdaImplTest {
     @Test
     public void testGetAllAddressesB() {
         System.out.println("getAllAddresses");
-        AddressBook instance = new AddressBookLambdaImpl(true);
+        AddressBook instance = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
 
         Address addressOne = new Address();
         Address addressTwo = new Address();
@@ -253,7 +260,7 @@ public class AddressBookLambdaImplTest {
     public void testEncodeAndDecodeB() {
 
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBookLambdaImpl(true);
+        AddressBook noteDao = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
         Address newNote = new Address();
 
         // Create the file in the Dao.
@@ -290,7 +297,7 @@ public class AddressBookLambdaImplTest {
         noteDao.update(newNote);
 
         // Load a new instance of the NoteDao.
-        AddressBook secondDao = new AddressBookLambdaImpl(true);
+        AddressBook secondDao = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
 
         // Pull a note  using the id number recorded earlier.
         Address thirdNote = secondDao.get(id);
@@ -313,7 +320,7 @@ public class AddressBookLambdaImplTest {
 
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
-        AddressBook thirdDao = new AddressBookLambdaImpl(true);
+        AddressBook thirdDao = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
         assertEquals(thirdDao.get(id), null);
 
     }
@@ -325,7 +332,7 @@ public class AddressBookLambdaImplTest {
     public void testCreateC() {
         System.out.println("create");
         Address address = new Address();
-        AddressBook instance = new AddressBookLambdaImpl(true);
+        AddressBook instance = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
         Address expResult = address;
         Address result = instance.create(address);
         assertEquals(expResult, result);
@@ -349,7 +356,7 @@ public class AddressBookLambdaImplTest {
     @Test
     public void testGetAllAddressesC() {
         System.out.println("getAllAddresses");
-        AddressBook instance = new AddressBookLambdaImpl(true);
+        AddressBook instance = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
 
         Address addressOne = new Address();
         Address addressTwo = new Address();
@@ -383,7 +390,7 @@ public class AddressBookLambdaImplTest {
     public void testEncodeAndDecodeC() {
 
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBookLambdaImpl(true);
+        AddressBook noteDao = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
         Address newNote = new Address();
 
         // Create the file in the Dao.
@@ -420,7 +427,7 @@ public class AddressBookLambdaImplTest {
         noteDao.update(newNote);
 
         // Load a new instance of the NoteDao.
-        AddressBook secondDao = new AddressBookLambdaImpl(true);
+        AddressBook secondDao = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
 
         // Pull a note  using the id number recorded earlier.
         Address thirdNote = secondDao.get(id);
@@ -443,7 +450,7 @@ public class AddressBookLambdaImplTest {
 
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
-        AddressBook thirdDao = new AddressBookLambdaImpl(true);
+        AddressBook thirdDao = ctx.getBean("testAddressDao" , AddressBookLambdaImpl.class);
         assertEquals(thirdDao.get(id), null);
 
     }
@@ -451,7 +458,7 @@ public class AddressBookLambdaImplTest {
     @Test
     public void testTheSearchByCity() {
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBookLambdaImpl();
+        AddressBook noteDao = ctx.getBean("productionAddressDao" , AddressBookLambdaImpl.class);
         Address newNote = new Address();
 
         assertEquals(noteDao.searchByCity("wooster").size(), 4);
@@ -461,7 +468,7 @@ public class AddressBookLambdaImplTest {
     @Test
     public void testTheSearchByZipcode() {
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBookLambdaImpl();
+        AddressBook noteDao = ctx.getBean("productionAddressDao" , AddressBookLambdaImpl.class);
         Address newNote = new Address();
 
         assertEquals(noteDao.searchByZipcode("44287").size(), 3);
@@ -471,7 +478,7 @@ public class AddressBookLambdaImplTest {
     @Test
     public void testTheSearchByState() {
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBookLambdaImpl();
+        AddressBook noteDao = ctx.getBean("productionAddressDao" , AddressBookLambdaImpl.class);
         Address newNote = new Address();
 
         //List<List<Address>> mess = noteDao.searchByState("OH");
@@ -482,3 +489,5 @@ public class AddressBookLambdaImplTest {
     }
 
 }
+
+

@@ -12,6 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -19,7 +21,10 @@ import static org.junit.Assert.*;
  */
 public class AddressBookImplTest {
 
+    ApplicationContext ctx;
+
     public AddressBookImplTest() {
+        ctx = new ClassPathXmlApplicationContext("forLoopApplicationContext.xml");
     }
 
     @Before
@@ -37,7 +42,7 @@ public class AddressBookImplTest {
     public void testCreate() {
         System.out.println("create");
         Address address = new Address();
-        AddressBook instance = new AddressBookImpl(true);
+        AddressBook instance = ctx.getBean("testAddressDao", AddressBookImpl.class);
         Address expResult = address;
         Address result = instance.create(address);
         assertEquals(expResult, result);
@@ -61,7 +66,7 @@ public class AddressBookImplTest {
     @Test
     public void testGetAllAddresses() {
         System.out.println("getAllAddresses");
-        AddressBook instance = new AddressBookImpl(true);
+        AddressBook instance = ctx.getBean("testAddressDao", AddressBookImpl.class);
 
         Address addressOne = new Address();
         Address addressTwo = new Address();
@@ -95,7 +100,7 @@ public class AddressBookImplTest {
     public void testEncodeAndDecode() {
 
         // The true parameter in the Address Book constructor signifies a test.
-        AddressBook noteDao = new AddressBookImpl(true);
+        AddressBook noteDao = ctx.getBean("testAddressDao", AddressBookImpl.class);
         Address newNote = new Address();
 
         // Create the file in the Dao.
@@ -132,7 +137,7 @@ public class AddressBookImplTest {
         noteDao.update(newNote);
 
         // Load a new instance of the NoteDao.
-        AddressBook secondDao = new AddressBookImpl(true);
+        AddressBook secondDao = ctx.getBean("testAddressDao", AddressBookImpl.class);
 
         // Pull a note  using the id number recorded earlier.
         Address thirdNote = secondDao.get(id);
@@ -155,7 +160,7 @@ public class AddressBookImplTest {
 
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
-        AddressBook thirdDao = new AddressBookImpl(true);
+        AddressBook thirdDao = ctx.getBean("testAddressDao", AddressBookImpl.class);
         assertEquals(thirdDao.get(id), null);
 
     }
@@ -167,7 +172,7 @@ public class AddressBookImplTest {
     public void testCreateB() {
         System.out.println("create");
         Address address = new Address();
-        AddressBook instance = new AddressBookImpl(true);
+        AddressBook instance = ctx.getBean("testAddressDao", AddressBookImpl.class);
         Address expResult = address;
         Address result = instance.create(address);
         assertEquals(expResult, result);
@@ -191,7 +196,7 @@ public class AddressBookImplTest {
     @Test
     public void testGetAllAddressesB() {
         System.out.println("getAllAddresses");
-        AddressBook instance = new AddressBookImpl(true);
+        AddressBook instance = ctx.getBean("testAddressDao", AddressBookImpl.class);
 
         Address addressOne = new Address();
         Address addressTwo = new Address();
@@ -225,7 +230,7 @@ public class AddressBookImplTest {
     public void testEncodeAndDecodeB() {
 
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBookImpl(true);
+        AddressBook noteDao = ctx.getBean("testAddressDao", AddressBookImpl.class);
         Address newNote = new Address();
 
         // Create the file in the Dao.
@@ -262,7 +267,7 @@ public class AddressBookImplTest {
         noteDao.update(newNote);
 
         // Load a new instance of the NoteDao.
-        AddressBook secondDao = new AddressBookImpl(true);
+        AddressBook secondDao = ctx.getBean("testAddressDao", AddressBookImpl.class);
 
         // Pull a note  using the id number recorded earlier.
         Address thirdNote = secondDao.get(id);
@@ -285,7 +290,7 @@ public class AddressBookImplTest {
 
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
-        AddressBook thirdDao = new AddressBookImpl(true);
+        AddressBook thirdDao = ctx.getBean("testAddressDao", AddressBookImpl.class);
         assertEquals(thirdDao.get(id), null);
 
     }
@@ -297,7 +302,7 @@ public class AddressBookImplTest {
     public void testCreateC() {
         System.out.println("create");
         Address address = new Address();
-        AddressBook instance = new AddressBookImpl(true);
+        AddressBook instance = ctx.getBean("testAddressDao", AddressBookImpl.class);
         Address expResult = address;
         Address result = instance.create(address);
         assertEquals(expResult, result);
@@ -321,7 +326,7 @@ public class AddressBookImplTest {
     @Test
     public void testGetAllAddressesC() {
         System.out.println("getAllAddresses");
-        AddressBook instance = new AddressBookImpl(true);
+        AddressBook instance = ctx.getBean("testAddressDao", AddressBookImpl.class);
 
         Address addressOne = new Address();
         Address addressTwo = new Address();
@@ -355,7 +360,7 @@ public class AddressBookImplTest {
     public void testEncodeAndDecodeC() {
 
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBookImpl(true);
+        AddressBook noteDao = ctx.getBean("testAddressDao", AddressBookImpl.class);
         Address newNote = new Address();
 
         // Create the file in the Dao.
@@ -392,7 +397,7 @@ public class AddressBookImplTest {
         noteDao.update(newNote);
 
         // Load a new instance of the NoteDao.
-        AddressBook secondDao = new AddressBookImpl(true);
+        AddressBook secondDao = ctx.getBean("testAddressDao", AddressBookImpl.class);
 
         // Pull a note  using the id number recorded earlier.
         Address thirdNote = secondDao.get(id);
@@ -415,7 +420,7 @@ public class AddressBookImplTest {
 
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
-        AddressBook thirdDao = new AddressBookImpl(true);
+        AddressBook thirdDao = ctx.getBean("testAddressDao", AddressBookImpl.class);
         assertEquals(thirdDao.get(id), null);
 
     }
@@ -423,7 +428,7 @@ public class AddressBookImplTest {
     @Test
     public void testTheSearchByCity() {
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBookImpl();
+        AddressBook noteDao = ctx.getBean("productionAddressDao", AddressBookImpl.class);
         Address newNote = new Address();
 
         assertEquals(noteDao.searchByCity("wooster").size(), 4);
@@ -433,7 +438,7 @@ public class AddressBookImplTest {
     @Test
     public void testTheSearchByZipcode() {
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBookImpl();
+        AddressBook noteDao = ctx.getBean("productionAddressDao", AddressBookImpl.class);
         Address newNote = new Address();
 
         assertEquals(noteDao.searchByZipcode("44287").size(), 3);
@@ -443,21 +448,14 @@ public class AddressBookImplTest {
     @Test
     public void testTheSearchByState() {
         //Dvd dvd = new DvdImplementation();
-        AddressBook noteDao = new AddressBookImpl();
+        AddressBook noteDao = ctx.getBean("productionAddressDao", AddressBookImpl.class);
         Address newNote = new Address();
 
-        
         //List<List<Address>> mess = noteDao.searchByState("OH");
         Map<String /* City */, List<Address>> mess = noteDao.searchByState("OH");
         assertEquals(mess.size(), 3);
-        
-       // System.out.println(mess);
-        
 
+        // System.out.println(mess);
     }
 
-    
-    
-    
-    
 }

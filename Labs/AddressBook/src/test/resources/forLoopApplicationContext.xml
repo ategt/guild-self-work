@@ -15,21 +15,13 @@
  http://www.springframework.org/schema/aop
  http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
  
-    
-    
-    
-    <!-- Bean definitions go here -->
 
-    <!--<bean id="skiJumper" class="com.mycompany.olympian.SkiJumper" />-->
-
-    <bean id="skiJump" class="com.mycompany.olympian.SkiJumpEvent" />
-    <bean id="curling" class="com.mycompany.olympian.CurlingEvent" />
-    
-    <bean id="usaSkiJumper" class="com.mycompany.olympian.Olympian">
-        <constructor-arg ref="curling" />
+    <bean id="testAddressDao" class="com.mycompany.addressbook.dao.AddressBookImpl" scope="prototype">
+            <constructor-arg type="boolean" value="true" />
     </bean>
     
-    <bean id="curlingDude" class="com.mycompany.olympian.Olympian">
-        <constructor-arg ref="curling" />
-    </bean>
+    <bean id="productionAddressDao" class="com.mycompany.addressbook.dao.AddressBookImpl" scope="prototype" />
+    
+    <bean id="consoleIo" class="com.mycompany.addressbook.controller.ConsoleIO" />
+    
 </beans>

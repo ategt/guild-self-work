@@ -21,6 +21,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -28,11 +30,16 @@ import static org.junit.Assert.*;
  */
 public class NoteDaoImplementationTest {
 
+    NoteDao instance;
+    ApplicationContext ctx;
+
     public NoteDaoImplementationTest() {
+        ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
     }
 
     @Before
     public void setUp() {
+          instance = ctx.getBean("noteDao", NoteDaoImplementation.class);
     }
 
     @After
@@ -45,7 +52,7 @@ public class NoteDaoImplementationTest {
     @Test
     public void testCreate() {
         System.out.println("create");
-        NoteDaoImplementation instance = new NoteDaoImplementation(true);
+       // NoteDaoImplementation instance = ctx.getBean("noteDao", NoteDaoImplementation.class);
         Note expResult = new NoteImplementation();
         Note result = instance.create(expResult);
         assertEquals(expResult, result);
@@ -68,7 +75,7 @@ public class NoteDaoImplementationTest {
      */
     @Test
     public void testGetAllDvds() {
-        NoteDaoImplementation noteDao = new NoteDaoImplementation(true);
+        NoteDaoImplementation noteDao = ctx.getBean("noteDao", NoteDaoImplementation.class);
 
         Note note1 = new NoteImplementation();
         noteDao.create(note1);
@@ -94,7 +101,7 @@ public class NoteDaoImplementationTest {
     public void testEncodeAndDecode() {
 
         //Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
+        NoteDao noteDao = ctx.getBean("productionNoteDao", NoteDaoImplementation.class);
         Note newNote = new NoteImplementation();
 
         // Create the file in the Dao.
@@ -114,7 +121,7 @@ public class NoteDaoImplementationTest {
         noteDao.update(newNote);
 
         // Load a new instance of the NoteDao.
-        NoteDao secondDao = new NoteDaoImplementation();
+        NoteDao secondDao = ctx.getBean("productionNoteDao", NoteDaoImplementation.class);
 
         // Pull a note  using the id number recorded earlier.
         Note thirdNote = secondDao.get(id);
@@ -128,7 +135,7 @@ public class NoteDaoImplementationTest {
         
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
-        NoteDao thirdDao = new NoteDaoImplementation();
+        NoteDao thirdDao = ctx.getBean("productionNoteDao", NoteDaoImplementation.class);
         assertEquals(thirdDao.get(id), null);
 
     }
@@ -140,7 +147,7 @@ public class NoteDaoImplementationTest {
     @Test
     public void testCreateb() {
         System.out.println("create");
-        NoteDaoImplementation instance = new NoteDaoImplementation(true);
+        // NoteDaoImplementation instance = ctx.getBean("noteDao", NoteDaoImplementation.class);
         Note expResult = new NoteImplementation();
         Note result = instance.create(expResult);
         assertEquals(expResult, result);
@@ -163,7 +170,7 @@ public class NoteDaoImplementationTest {
      */
     @Test
     public void testGetAllDvdsb() {
-        NoteDaoImplementation noteDao = new NoteDaoImplementation(true);
+        NoteDaoImplementation noteDao = ctx.getBean("noteDao", NoteDaoImplementation.class);
 
         Note note1 = new NoteImplementation();
         noteDao.create(note1);
@@ -189,7 +196,7 @@ public class NoteDaoImplementationTest {
     public void testEncodeAndDecodeb() {
 
         //Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
+        NoteDao noteDao = ctx.getBean("productionNoteDao", NoteDaoImplementation.class);
         Note newNote = new NoteImplementation();
 
         // Create the file in the Dao.
@@ -209,7 +216,7 @@ public class NoteDaoImplementationTest {
         noteDao.update(newNote);
 
         // Load a new instance of the NoteDao.
-        NoteDao secondDao = new NoteDaoImplementation();
+        NoteDao secondDao = ctx.getBean("productionNoteDao", NoteDaoImplementation.class);
 
         // Pull a note  using the id number recorded earlier.
         Note thirdNote = secondDao.get(id);
@@ -223,7 +230,7 @@ public class NoteDaoImplementationTest {
         
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
-        NoteDao thirdDao = new NoteDaoImplementation();
+        NoteDao thirdDao = ctx.getBean("productionNoteDao", NoteDaoImplementation.class);
         assertEquals(thirdDao.get(id), null);
 
     }
@@ -236,7 +243,7 @@ public class NoteDaoImplementationTest {
     @Test
     public void testCreatec() {
         System.out.println("create");
-        NoteDaoImplementation instance = new NoteDaoImplementation(true);
+        // NoteDaoImplementation instance = ctx.getBean("noteDao", NoteDaoImplementation.class);
         Note expResult = new NoteImplementation();
         Note result = instance.create(expResult);
         assertEquals(expResult, result);
@@ -259,7 +266,7 @@ public class NoteDaoImplementationTest {
      */
     @Test
     public void testGetAllDvdsc() {
-        NoteDaoImplementation noteDao = new NoteDaoImplementation(true);
+        NoteDaoImplementation noteDao = ctx.getBean("noteDao", NoteDaoImplementation.class);
 
         Note note1 = new NoteImplementation();
         noteDao.create(note1);
@@ -285,7 +292,7 @@ public class NoteDaoImplementationTest {
     public void testEncodeAndDecodec() {
 
         //Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
+        NoteDao noteDao = ctx.getBean("productionNoteDao", NoteDaoImplementation.class);
         Note newNote = new NoteImplementation();
 
         // Create the file in the Dao.
@@ -305,7 +312,7 @@ public class NoteDaoImplementationTest {
         noteDao.update(newNote);
 
         // Load a new instance of the NoteDao.
-        NoteDao secondDao = new NoteDaoImplementation();
+        NoteDao secondDao = ctx.getBean("productionNoteDao", NoteDaoImplementation.class);
 
         // Pull a note  using the id number recorded earlier.
         Note thirdNote = secondDao.get(id);
@@ -319,7 +326,7 @@ public class NoteDaoImplementationTest {
         
         // Load a third instance of the Dao and verify that 
         // the note was deleted from the file.
-        NoteDao thirdDao = new NoteDaoImplementation();
+        NoteDao thirdDao = ctx.getBean("productionNoteDao", NoteDaoImplementation.class);
         assertEquals(thirdDao.get(id), null);
 
     }

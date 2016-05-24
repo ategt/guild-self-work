@@ -15,12 +15,12 @@
  http://www.springframework.org/schema/aop
  http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
  
-    <bean id="dvd" class="com.mycompany.dvdlibrary.dto.DvdImplementation" scope="prototype" />
-    <bean id="noteDao" class="com.mycompany.dvdlibrary.dao.NoteDaoImplementation" scope="prototype" >
+    <bean id="testAddressDao" class="com.mycompany.addressbook.dao.AddressBookLambdaImpl" scope="prototype">
         <constructor-arg type="boolean" value="true" />
     </bean>
-        
-    <bean id="productionNoteDao" class="com.mycompany.dvdlibrary.dao.NoteDaoImplementation" scope="prototype" >
-    </bean>
+    
+    <bean id="productionAddressDao" class="com.mycompany.addressbook.dao.AddressBookLambdaImpl" scope="prototype" />
 
+    <bean id="consoleIo" class="com.mycompany.addressbook.controller.ConsoleIO" />
+    
 </beans>
