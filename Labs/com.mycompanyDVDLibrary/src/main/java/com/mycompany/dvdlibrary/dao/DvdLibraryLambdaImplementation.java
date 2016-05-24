@@ -325,37 +325,54 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
     }
 
     public List<Dvd> searchByRating(String rating) {
-        List<Dvd> results = dvdList
-                .stream()
-                .filter(d -> d.getMPAA() != null)
-                .filter(d -> d.getMPAA().equalsIgnoreCase(rating))
-                .collect(Collectors.toList());
-        
-        if (results.isEmpty()){
+        List<Dvd> results = null;
+
+        if (rating == null) {
             results = dvdList
-                .stream()
-                .filter(d -> d.getMPAA() != null)
-                .filter(d -> d.getMPAA().toLowerCase().contains(rating.toLowerCase()))
-                .collect(Collectors.toList());
+                    .stream()
+                    .filter(d -> d.getMPAA() == null)
+                    .collect(Collectors.toList());
+        } else {
+            results = dvdList
+                    .stream()
+                    .filter(d -> d.getMPAA() != null)
+                    .filter(d -> d.getMPAA().equalsIgnoreCase(rating))
+                    .collect(Collectors.toList());
+
+            if (results.isEmpty()) {
+                results = dvdList
+                        .stream()
+                        .filter(d -> d.getMPAA() != null)
+                        .filter(d -> d.getMPAA().toLowerCase().contains(rating.toLowerCase()))
+                        .collect(Collectors.toList());
+            }
         }
-        
         return results;
     }
 
     public List<Dvd> searchByStudio(String studio) {
-        List<Dvd> results = dvdList
-                .stream()
-                .filter(d -> d.getStudio() != null)
-                .filter(d -> d.getStudio().equalsIgnoreCase(studio))
-                .collect(Collectors.toList());
-        
-        if ( results.isEmpty() )
+        List<Dvd> results = null;
+        if (studio == null) {
             results = dvdList
-                .stream()
-                .filter(d -> d.getStudio() != null)
-                .filter(d -> d.getStudio().toLowerCase().contains(studio.toLowerCase()))
-                .collect(Collectors.toList());
-        
+                    .stream()
+                    .filter(d -> d.getStudio() == null)
+                    .collect(Collectors.toList());
+
+        } else {
+            results = dvdList
+                    .stream()
+                    .filter(d -> d.getStudio() != null)
+                    .filter(d -> d.getStudio().equalsIgnoreCase(studio))
+                    .collect(Collectors.toList());
+
+            if (results.isEmpty()) {
+                results = dvdList
+                        .stream()
+                        .filter(d -> d.getStudio() != null)
+                        .filter(d -> d.getStudio().toLowerCase().contains(studio.toLowerCase()))
+                        .collect(Collectors.toList());
+            }
+        }
         return results;
     }
 
@@ -414,21 +431,22 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
 
     public java.util.Map<String /* Rating  */, List<Dvd>> searchByDirector(String director) {
         //return 
-        java.util.Map<String , List<Dvd>> results = dvdList.stream()
+        java.util.Map<String, List<Dvd>> results = dvdList.stream()
                 .filter(d -> d != null)
                 .filter(d -> d.getDirectorsName() != null)
                 .filter(d -> d.getMPAA() != null)
                 .filter(d -> d.getDirectorsName().equalsIgnoreCase(director))
                 .collect(Collectors.groupingBy(Dvd::getMPAA, Collectors.toList()));
-        
-        if (results.isEmpty())
+
+        if (results.isEmpty()) {
             results = dvdList.stream()
-                .filter(d -> d != null)
-                .filter(d -> d.getDirectorsName() != null)
-                .filter(d -> d.getMPAA() != null)
-                .filter(d -> d.getDirectorsName().toLowerCase().contains(director))
-                .collect(Collectors.groupingBy(Dvd::getMPAA, Collectors.toList()));
-        
+                    .filter(d -> d != null)
+                    .filter(d -> d.getDirectorsName() != null)
+                    .filter(d -> d.getMPAA() != null)
+                    .filter(d -> d.getDirectorsName().toLowerCase().contains(director))
+                    .collect(Collectors.groupingBy(Dvd::getMPAA, Collectors.toList()));
+        }
+
         return results;
     }
 
@@ -446,8 +464,8 @@ public class DvdLibraryLambdaImplementation implements DvdLibrary {
     }
 
     @Override
-    public String searchingTechnique(){
+    public String searchingTechnique() {
         return "Currently Using Lambdas";
     }
-    
+
 }
