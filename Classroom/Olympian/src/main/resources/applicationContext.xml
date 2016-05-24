@@ -26,10 +26,32 @@
     <bean id="curling" class="com.mycompany.olympian.CurlingEvent" />
     
     <bean id="usaSkiJumper" class="com.mycompany.olympian.Olympian">
-        <constructor-arg ref="curling" />
+        <constructor-arg ref="skiJump" />
+        <constructor-arg type="String" value="Timmy" />
     </bean>
     
     <bean id="curlingDude" class="com.mycompany.olympian.Olympian">
         <constructor-arg ref="curling" />
+        <constructor-arg type="String" value="Doug" />
+        
+        <property name="country" value="Canada" />
     </bean>
+    
+    <bean id="olympicOfficial" class="com.mycompany.olympian.OlympicOfficial" />
+    
+    <aop:config>
+        <aop:aspect ref="olympicOfficial">
+            <aop:before method="inspectEquipment"
+                        pointcut="execution(* com.mycompany.olympian.Event.compete(..))"
+            />
+            
+            <aop:after method="testForDrugs"
+                       pointcut="execution(* com.mycompany.olympian.Event.compete(..))"
+            />
+            
+        </aop:aspect>
+        
+        
+    </aop:config>
+    
 </beans>

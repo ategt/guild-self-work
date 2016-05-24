@@ -13,18 +13,20 @@ public class Olympian {
 
     private Event event;
     private String country = "USA";
+    private String olympiansName = "";
     
-    public Olympian(Event event){
+    public Olympian(Event event, String olympiansName){
         this.event = event;
+        this.olympiansName = olympiansName;
     }
 
     public String competeInEvent(){
-        System.out.println("Now Competeing For " + country + ":");
+        System.out.println("Now Competeing For " + country + ": " + olympiansName);
         return event.compete();
     }
     
-    
-    
-    
+    public void setCountry(String country){
+        this.country = country;
+    }
     
 }
