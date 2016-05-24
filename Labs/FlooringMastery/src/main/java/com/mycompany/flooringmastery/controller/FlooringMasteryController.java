@@ -38,6 +38,23 @@ public class FlooringMasteryController {
     ConfigDao configDao;
     com.mycompany.flooringmastery.utilities.ViewUtilities viewUtilities;
 
+    public FlooringMasteryController(ConsoleIO consoleIo,
+            ProductDao productDao,
+            StateDao stateDao,
+            OrderDao orderDao,
+            ConfigDao configDao,
+            com.mycompany.flooringmastery.utilities.ViewUtilities viewUtilities
+    ) {
+
+        this.consoleIo = consoleIo;
+            this.productDao = productDao;
+            this.stateDao = stateDao;
+            this.orderDao = orderDao;
+            this.configDao = configDao;
+            this.viewUtilities = viewUtilities;
+        
+    }
+
     private void init() {
         try {
             configDao = new ConfigDao();
@@ -95,7 +112,7 @@ public class FlooringMasteryController {
 
     public void run() {
 
-        init();
+        //init();
 
         boolean done = false;
 
@@ -355,8 +372,8 @@ public class FlooringMasteryController {
     }
 
     private void displayOrder(Order order) {
-        String orderString = convertOrderToString(order).replaceAll("\t","  ");
-        
+        String orderString = convertOrderToString(order).replaceAll("\t", "  ");
+
         String orderWithBorder = viewUtilities.borderMaker(orderString, 40, '\u2550', '\u2551', '\u256c', "left", 1, 10, 10);
 
         consoleIo.printStringToConsole(orderWithBorder);

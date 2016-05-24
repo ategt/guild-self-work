@@ -14,14 +14,13 @@
  http://www.springframework.org/schema/context/spring-context.xsd
  http://www.springframework.org/schema/aop
  http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
- 
-    <bean id="dvd" class="com.mycompany.dvdlibrary.dto.DvdImplementation" scope="prototype" />
-    
-    <bean id="noteDao" class="com.mycompany.dvdlibrary.dao.NoteDaoImplementation" scope="prototype" />
-    
-    <bean id="lambdaDvdDao" class="com.mycompany.dvdlibrary.dao.DvdLibraryLambdaImplementation" scope="prototype">
+
+    <import resource="applicationContext.xml" />
+
+    <bean id="DvdDao" class="com.mycompany.dvdlibrary.dao.DvdLibraryImplementation" scope="prototype">
         <constructor-arg index="0" type="boolean" value="true" />
         <constructor-arg index="1" type="com.mycompany.dvdlibrary.interfaces.NoteDao" ref="noteDao" />
     </bean>
     
+
 </beans>

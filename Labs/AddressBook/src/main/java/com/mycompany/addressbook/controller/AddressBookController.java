@@ -18,21 +18,18 @@ import java.util.List;
  */
 public class AddressBookController {
 
-    ConsoleIO consoleIo = new ConsoleIO();
+    ConsoleIO consoleIo;
     AddressBook addressBook;
+    
+    public AddressBookController( AddressBook addressBook, ConsoleIO consoleIo ) {
+        this.addressBook = addressBook;
+        this.consoleIo = consoleIo;
+    }
 
     public void run() {
 
-        String lambdaMenu = "Would You Like To Use Lambdas Or Enhanced For Loops?\n"
-                + "   1. For Loops\n"
-                + "   2. Lambdas";
-
-        int lambdaChoice = consoleIo.getUserIntInputRange(lambdaMenu, 1, 2, "Please Enter Either \"1\" or \"2\"");
-        if (lambdaChoice == 1) {
-            addressBook = new AddressBookImpl();
-        } else {
-            addressBook = new AddressBookLambdaImpl();
-        }
+        if ( addressBook == null ) 
+        addressBook = chooseASearchMethod();
 
         boolean choseToExit = false;
         while (!choseToExit) {
@@ -80,6 +77,21 @@ public class AddressBookController {
             }
 
         }
+    }
+
+    private AddressBook chooseASearchMethod() {
+        AddressBook addressBook = null;
+        String lambdaMenu = "Would You Like To Use Lambdas Or Enhanced For Loops?\n"
+                + "   1. For Loops\n"
+                + "   2. Lambdas";
+        
+        int lambdaChoice = consoleIo.getUserIntInputRange(lambdaMenu, 1, 2, "Please Enter Either \"1\" or \"2\"");
+        if (lambdaChoice == 1) {
+            addressBook = new AddressBookImpl();
+        } else {
+            addressBook = new AddressBookLambdaImpl();
+        }
+        return addressBook;
     }
 
     private void addAddress() {

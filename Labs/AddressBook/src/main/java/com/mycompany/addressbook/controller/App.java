@@ -5,12 +5,19 @@
  */
 package com.mycompany.addressbook.controller;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 /**
  *
  * @author apprentice
  */
 public class App {
     public static void main(String[] args) {
-        new AddressBookController().run();
+        
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        
+        AddressBookController addressBookController = ctx.getBean(AddressBookController.class);
+        addressBookController.run();
     }
 }

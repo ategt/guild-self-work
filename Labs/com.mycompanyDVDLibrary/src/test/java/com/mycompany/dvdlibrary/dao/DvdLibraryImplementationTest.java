@@ -5,6 +5,7 @@
  */
 package com.mycompany.dvdlibrary.dao;
 
+import com.mycompany.dvdlibrary.controller.DvdLibraryController;
 import com.mycompany.dvdlibrary.interfaces.NoteDao;
 import com.mycompany.dvdlibrary.interfaces.DvdLibrary;
 import com.mycompany.dvdlibrary.dto.DvdImplementation;
@@ -23,6 +24,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -30,11 +33,26 @@ import static org.junit.Assert.*;
  */
 public class DvdLibraryImplementationTest {
 
+    Dvd dvd;
+    NoteDao noteDao;
+    DvdLibrary instance;
+
+    ApplicationContext ctx;
+
     public DvdLibraryImplementationTest() {
+        ctx = new ClassPathXmlApplicationContext("forLoopTestContext.xml");
     }
 
     @Before
     public void setUp() {
+
+        dvd = ctx.getBean("dvd", DvdImplementation.class);
+        noteDao = ctx.getBean("noteDao", NoteDaoImplementation.class);
+
+        // Load the test File
+        //instance = ( DvdLibrary ) ctx.getBean( "DvdDao" );
+        instance = ( DvdLibrary ) ctx.getBean( "DvdDao" );
+        
     }
 
     @After
@@ -47,11 +65,7 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testCreate() {
 
-        Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+        //Code was removed from here and moved to the setupMethod.
         Dvd expResult = dvd;
         Dvd result = instance.create(dvd);
 
@@ -79,10 +93,10 @@ public class DvdLibraryImplementationTest {
 
         Dvd dvd = new DvdImplementation();
         Dvd secondDvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
+        //NoteDao noteDao = new NoteDaoImplementation();
 
         // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+        DvdLibrary instance = ( DvdLibrary ) ctx.getBean( "DvdDao" );
         Dvd expResult = dvd;
         Dvd result = instance.create(dvd);
 
@@ -124,10 +138,10 @@ public class DvdLibraryImplementationTest {
     public void testEncode() {
 
         //Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         // Check to see if a fictional Dvd is on the list.
         String title = "Steel Drum";
@@ -168,9 +182,10 @@ public class DvdLibraryImplementationTest {
         // Load a new Instance of everything and verify that everything loaded.
         // Instantiate a DvdLibrary object using the test constructor.
         // This constructor loads a seperate test file.
-        NoteDao newNoteDao = new NoteDaoImplementation();
-        DvdLibrary newInstance = new DvdLibraryImplementation(true, newNoteDao);
+//        NoteDao newNoteDao = new NoteDaoImplementation();
+//        DvdLibrary newInstance = new DvdLibraryImplementation(true, newNoteDao);
 
+        DvdLibrary newInstance = ( DvdLibrary ) ctx.getBean( "DvdDao" );
         // Verify that my made up Dvd title was loaded from the saved file.
         String titleb = "Steel Drum";
         List<Dvd> titleSearchb = newInstance.searchByTitle(titleb);
@@ -199,11 +214,11 @@ public class DvdLibraryImplementationTest {
      */
     @Test
     public void testGetAllDvdsB() {
-
-        // Instantiate a DvdLibrary object using the test constructor.
-        // This constructor loads a seperate test file.
-        NoteDao noteDao = new NoteDaoImplementation();
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//
+//        // Instantiate a DvdLibrary object using the test constructor.
+//        // This constructor loads a seperate test file.
+//        NoteDao noteDao = new NoteDaoImplementation();
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         Dvd dvdOne = new DvdImplementation();
         Dvd dvdTwo = new DvdImplementation();
@@ -251,11 +266,11 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testCreateb() {
 
-        Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        Dvd dvd = new DvdImplementation();
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+ //       DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
         Dvd expResult = dvd;
         Dvd result = instance.create(dvd);
 
@@ -281,11 +296,11 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testEncodeb() {
 
-        //Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        //Dvd dvd = new DvdImplementation();
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         // Check to see if a fictional Dvd is on the list.
         String title = "Steel Drum";
@@ -326,9 +341,12 @@ public class DvdLibraryImplementationTest {
         // Load a new Instance of everything and verify that everything loaded.
         // Instantiate a DvdLibrary object using the test constructor.
         // This constructor loads a seperate test file.
-        NoteDao newNoteDao = new NoteDaoImplementation();
-        DvdLibrary newInstance = new DvdLibraryImplementation(true, newNoteDao);
+        //NoteDao newNoteDao = new NoteDaoImplementation();
+        //DvdLibrary newInstance = new DvdLibraryImplementation(true, newNoteDao);
 
+        DvdLibrary newInstance = ( DvdLibrary ) ctx.getBean( "DvdDao" );
+      //  NoteDao newNoteDao = ctx.getBean("noteDao", NoteDaoImplementation.class);
+        
         // Verify that my made up Dvd title was loaded from the saved file.
         String titleb = "Steel Drum";
         List<Dvd> titleSearchb = newInstance.searchByTitle(titleb);
@@ -360,8 +378,8 @@ public class DvdLibraryImplementationTest {
 
         // Instantiate a DvdLibrary object using the test constructor.
         // This constructor loads a seperate test file.
-        NoteDao noteDao = new NoteDaoImplementation();
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        NoteDao noteDao = new NoteDaoImplementation();
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         Dvd dvdOne = new DvdImplementation();
         Dvd dvdTwo = new DvdImplementation();
@@ -409,11 +427,12 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testCreateC() {
 
-        Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
+//        Dvd dvd = new DvdImplementation();
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
         Dvd expResult = dvd;
         Dvd result = instance.create(dvd);
 
@@ -439,11 +458,11 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testEncodeC() {
 
-        //Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        //Dvd dvd = new DvdImplementation();
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         // Check to see if a fictional Dvd is on the list.
         String title = "Steel Drum";
@@ -484,8 +503,9 @@ public class DvdLibraryImplementationTest {
         // Load a new Instance of everything and verify that everything loaded.
         // Instantiate a DvdLibrary object using the test constructor.
         // This constructor loads a seperate test file.
-        NoteDao newNoteDao = new NoteDaoImplementation();
-        DvdLibrary newInstance = new DvdLibraryImplementation(true, newNoteDao);
+//        NoteDao newNoteDao = new NoteDaoImplementation();
+//        DvdLibrary newInstance = new DvdLibraryImplementation(true, newNoteDao);
+        DvdLibrary newInstance = ( DvdLibrary ) ctx.getBean( "DvdDao" );
 
         // Verify that my made up Dvd title was loaded from the saved file.
         String titleb = "Steel Drum";
@@ -518,8 +538,8 @@ public class DvdLibraryImplementationTest {
 
         // Instantiate a DvdLibrary object using the test constructor.
         // This constructor loads a seperate test file.
-        NoteDao noteDao = new NoteDaoImplementation();
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        NoteDao noteDao = new NoteDaoImplementation();
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         Dvd dvdOne = new DvdImplementation();
         Dvd dvdTwo = new DvdImplementation();
@@ -564,11 +584,11 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testSearchByAge() {
 
-        Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        Dvd dvd = new DvdImplementation();
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 //        Dvd expResult = dvd;
 //        Dvd result = instance.create(dvd);    
 
@@ -589,11 +609,11 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testSearchByRating() {
 
-        Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        Dvd dvd = new DvdImplementation();
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         List<Dvd> goodMoviesInLibrary = instance.searchByRating("A+");
 
@@ -606,11 +626,11 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testSearchByStudio() {
 
-        Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        Dvd dvd = new DvdImplementation();
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         List<Dvd> searchResultsInLibrary = instance.searchByStudio("La Studios");
 
@@ -623,11 +643,11 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testAverageAge() {
 
-        Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        Dvd dvd = new DvdImplementation();
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         Date dateOne = new Date();
         dateOne.setTime(300);
@@ -657,11 +677,11 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testFindNewest() {
 
-        Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        Dvd dvd = new DvdImplementation();
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         Date dateOne = new Date();
 
@@ -690,11 +710,11 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testFindOldest() {
 
-        Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        Dvd dvd = new DvdImplementation();
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         Date dateOne = new Date();
         dateOne.setTime(Long.MIN_VALUE);
@@ -736,11 +756,11 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testFindAverageNotesCount() {
 
-        Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        Dvd dvd = new DvdImplementation();
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         List<Note> notesListOne = new ArrayList();
 
@@ -775,11 +795,11 @@ public class DvdLibraryImplementationTest {
     @Test
     public void testSearchByDirector() {
 
-        Dvd dvd = new DvdImplementation();
-        NoteDao noteDao = new NoteDaoImplementation();
-
-        // Load the test File
-        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
+//        Dvd dvd = new DvdImplementation();
+//        NoteDao noteDao = new NoteDaoImplementation();
+//
+//        // Load the test File
+//        DvdLibrary instance = new DvdLibraryImplementation(true, noteDao);
 
         // java.util.Map<String /* Rating  */, List<Dvd>> 
         String directorsName = "Luc Besson";
