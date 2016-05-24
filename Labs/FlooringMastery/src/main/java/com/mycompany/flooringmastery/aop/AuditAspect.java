@@ -5,6 +5,8 @@
  */
 package com.mycompany.flooringmastery.aop;
 
+import com.mycompany.flooringmastery.dao.AuditDao;
+import com.mycompany.flooringmastery.dto.Audit;
 import com.mycompany.flooringmastery.dto.Order;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -49,11 +51,12 @@ public class AuditAspect {
 
     public void createAuditEntry(ProceedingJoinPoint jp) throws Throwable {
 
+        
         Order order = processJoinPoint(jp);
         System.out.println("Making an audit entry.");
         
         Audit audit = buildAuditObject(order);
-        AuditDao
+        AuditDao.create(audit);
         
         
     }

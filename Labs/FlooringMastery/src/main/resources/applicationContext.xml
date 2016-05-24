@@ -41,14 +41,24 @@
         <constructor-arg ref="viewUtilities" />
     </bean>
     
+    <bean id="auditLogFile" class="java.io.File" >
+        <constructor-arg type="java.lang.String" value="auditLog.txt" />
+    </bean>
+    
     <bean id="auditAspect" class="com.mycompany.flooringmastery.aop" />
+    
+    <bean id="auditDao" class="com.mycompany.flooringmastery.dao.AuditDao" >
+        <constructor-arg ref="auditLogFile" />
+    </bean>
         
     <aop:config>
         <aop:aspect ref="auditAspect">
             
-            <aop:around method=
-            
-<!--            <aop:after method="createAuditEntry"
+            <aop:after method="createAuditEntry"
+                               pointcut="execution(* (..))"
+            />
+    
+            <!--            <aop:after method="createAuditEntry"
                        pointcut="execution(* com.mycompany.flooringmastery.dao.OrderDao.create(..))"
             />-->
             
@@ -56,6 +66,6 @@
         
     </aop:config>
     
-<!--    This is the main project context file.-->
+    <!--    This is the main project context file.-->
             
 </beans>
