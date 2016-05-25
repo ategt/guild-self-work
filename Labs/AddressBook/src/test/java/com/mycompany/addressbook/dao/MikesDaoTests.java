@@ -5,8 +5,6 @@
  */
 package com.mycompany.addressbook.dao;
 
-
-
 import com.thesoftwareguild.interfaces.dao.AddressBookDao;
 //import com.thesoftwareguild.interfaces.dao.AddressBookDaoImpl;
 
@@ -24,7 +22,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author apprentice
  */
 public class MikesDaoTests {
-    
+
     public MikesDaoTests() {
     }
 
@@ -47,9 +45,8 @@ public class MikesDaoTests {
 
     @Test
     public void testAddressBook() {
-        
-        //If it doesn't work, check your Impl nextId.
 
+        //If it doesn't work, check your Impl nextId.
         //Create empty Address Object
         Address myAddress = new Address();
 
@@ -66,8 +63,10 @@ public class MikesDaoTests {
         //Add the address to the list.
         dao.create(myAddress);
 
+        myAddress.setId(-7); // I added this line.
+
         //Find and get the address just created from the list.
-        Address actual2 = dao.get(1);
+        Address actual2 = dao.get(-7); // I edited this line.
 
         //Check attributes of Address Object pulled from the list.
         Assert.assertEquals("THIS", actual2.getFirstName());
@@ -79,10 +78,10 @@ public class MikesDaoTests {
         Assert.assertEquals("12345", actual2.getZip());
 
         //Delete address
-        dao.delete(1);
+        dao.delete(-7);
 
         //Attempt to pull deleted Address Object
-        Address actual3 = dao.get(1);
+        Address actual3 = dao.get(-7);
 
         //Confirm  attempt returns null(no address).
         Assert.assertEquals(null, actual3);
@@ -104,7 +103,8 @@ public class MikesDaoTests {
 
         dao.create(myAddress);
 
-        Address actual2 = dao.get(1);
+        int addressId = myAddress.getId();
+        Address actual2 = dao.get(addressId);
 
         Assert.assertEquals("MICHAEL", actual2.getFirstName());
         Assert.assertEquals("MOXLEY", actual2.getLastName());
@@ -114,9 +114,9 @@ public class MikesDaoTests {
         Assert.assertEquals("OHIO", actual2.getState());
         Assert.assertEquals("54321", actual2.getZip());
 
-        dao.delete(1);
+        dao.delete(addressId);
 
-        Address actual3 = dao.get(1);
+        Address actual3 = dao.get(addressId);
 
         Assert.assertEquals(null, actual3);
     }
@@ -136,8 +136,10 @@ public class MikesDaoTests {
         myAddress.setId(3333);
 
         dao.create(myAddress);
+        int addressId = myAddress.getId();
 
-        Address actual2 = dao.get(1);
+        
+        Address actual2 = dao.get(addressId);
 
         Assert.assertEquals("FIRST", actual2.getFirstName());
         Assert.assertEquals("LAST", actual2.getLastName());
@@ -147,9 +149,9 @@ public class MikesDaoTests {
         Assert.assertEquals("STATE", actual2.getState());
         Assert.assertEquals("69696", actual2.getZip());
 
-        dao.delete(1);
+        dao.delete(addressId);
 
-        Address actual3 = dao.get(1);
+        Address actual3 = dao.get(addressId);
 
         Assert.assertEquals(null, actual3);
     }

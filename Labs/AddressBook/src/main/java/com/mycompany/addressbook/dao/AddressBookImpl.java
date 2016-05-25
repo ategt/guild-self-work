@@ -32,7 +32,7 @@ public class AddressBookImpl implements com.thesoftwareguild.interfaces.dao.Addr
 
     List<Address> addresses;
     int nextId = 1;
-    File addressFile = new File("guildAddressData.txt");
+    File addressFile = new File("guildGroupAddressData.txt");
 
     public AddressBookImpl() {
         this(false);
@@ -41,7 +41,7 @@ public class AddressBookImpl implements com.thesoftwareguild.interfaces.dao.Addr
     protected AddressBookImpl(boolean isATest) {
 
         if (isATest) {
-            addressFile = new File("testGuildAddressData.txt");
+            addressFile = new File("testGuildGroupAddressData.txt");
         }
 
         addresses = decode();
