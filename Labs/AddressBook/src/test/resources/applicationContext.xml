@@ -19,9 +19,5 @@
     <bean id="addressDao" class="com.mycompany.addressbook.dao.AddressBookImpl" scope="prototype">
             <constructor-arg type="boolean" value="true" />
     </bean>
-    
-    <!--<bean id="productionAddressDao" class="com.mycompany.addressbook.dao.AddressBookImpl" scope="prototype" />-->
-    
-    <!--<bean id="consoleIo" class="com.mycompany.addressbook.controller.ConsoleIO" />-->
-    
+        
 </beans>
