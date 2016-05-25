@@ -288,6 +288,7 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
 
         return addresses
                 .stream()
+                .filter(a -> a.getZip() != null)
                 .filter(a -> a.getZip().equalsIgnoreCase(zipcode))
                 .collect(java.util.stream.Collectors.toList());
 

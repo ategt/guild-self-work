@@ -111,9 +111,9 @@ public class AddressBookLambdaImplTest {
         instance.delete(addressTwo.getId());
         instance.delete(addressThree.getId());
 
-//        int expSizeResult = 3;
-//        int sizeResult = instance.size();
-//        assertEquals(expSizeResult, sizeResult);
+        int expSizeResult = 3;
+        int sizeResult = instance.list().size();
+        assertEquals(expSizeResult, sizeResult);
         String lastName = "Steve";
         List<Address> result = instance.searchByLastName(lastName);
         assertEquals(true, result.isEmpty());
@@ -542,7 +542,7 @@ public class AddressBookLambdaImplTest {
         //List<List<Address>> mess = noteDao.searchByState("OH");
         //Map<String /* City */, List<Address>> mess = noteDao.searchByState("OH");
         List<Address> mess = noteDao.searchByState("OH");
-        assertEquals(mess.size(), 3);
+        assertEquals(mess.size(), 6);
 
         // System.out.println(mess);
     }
