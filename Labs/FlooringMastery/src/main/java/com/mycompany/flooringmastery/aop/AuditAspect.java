@@ -11,7 +11,6 @@ import com.mycompany.flooringmastery.dto.Order;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -22,8 +21,9 @@ public class AuditAspect {
     private ApplicationContext ctx;
 
     public AuditAspect() {
-        
+        //ctx = ApplicationContextProvider.getApplicationContext.getBean("BeanId", MyBean.class);
         //ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        ctx = com.mycompany.flooringmastery.aop.ApplicationContextProvider.getApplicationContext();
     }
 
     public String log(ProceedingJoinPoint jp) throws Throwable {
@@ -65,7 +65,8 @@ public class AuditAspect {
         if (order != null) {
             String actionName = jp.getSignature().getName();
             Audit audit = buildAuditObject(order, actionName);
-            AuditDao auditDao =  new AuditDao(new java.io.File("auditLog.txt")); //ctx.getBean("auditDao", AuditDao.class);
+            //AuditDao auditDao =  //new AuditDao(new java.io.File("auditLog.txt")); //ctx.getBean("auditDao", AuditDao.class);
+              AuditDao auditDao = ctx.getBean("auditDao", AuditDao.class);
             auditDao.create(audit);
         }
     }
@@ -77,7 +78,7 @@ public class AuditAspect {
         audit.setDate(order.getDate());
         audit.setOrderid(order.getId());
         audit.setActionPerformed(actionName);
-
+        audit.setLogDate(new java.util.Date());
         return audit;
     }
 

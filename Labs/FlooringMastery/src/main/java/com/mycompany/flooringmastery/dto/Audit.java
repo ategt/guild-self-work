@@ -16,6 +16,15 @@ public class Audit {
     private Date date;
     private int orderid;
     private String actionPerformed;
+    private Date logDate;
+
+    public Date getLogDate() {
+        return logDate;
+    }
+
+    public void setLogDate(Date logDate) {
+        this.logDate = logDate;
+    }
 
     /**
      * @return the date

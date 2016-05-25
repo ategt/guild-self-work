@@ -16,7 +16,7 @@
  http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
  
  
-
+    <bean id="applicationContextProvder" class="com.mycompany.flooringmastery.aop.ApplicationContextProvider"/>
     <bean id="viewUtilities" class="com.mycompany.flooringmastery.utilities.ViewUtilities" />
     <bean id="configDao" class="com.mycompany.flooringmastery.dao.ConfigDao" />
     <bean id="consoleIo" class="com.mycompany.consoleio.ConsoleIO" />

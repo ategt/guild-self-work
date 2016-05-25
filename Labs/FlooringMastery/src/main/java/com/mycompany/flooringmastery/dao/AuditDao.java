@@ -90,7 +90,7 @@ public class AuditDao {
     }
 
     private String convertAuditToString(Audit audit, String TOKEN) {
-        String auditString = audit.getDate() + TOKEN + audit.getOrderid() + TOKEN + audit.getActionPerformed();
+        String auditString = audit.getLogDate()+ TOKEN + audit.getOrderid() + TOKEN + audit.getActionPerformed() + TOKEN + audit.getDate();
         return auditString;
     }
 
@@ -100,14 +100,13 @@ public class AuditDao {
         Audit audit = new Audit();
 
         try {
-            Calendar cal = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
-
-            cal.setTime(sdf.parse(auditStringArray[0]));
-            Date date = new Date();
-            date.setTime(cal.getTimeInMillis());
-            audit.setDate(date);
-
+            
+            
+            
+            audit.setLogDate(getDateFromString(auditStringArray[0]));
+            if ( auditStringArray.length > 3 ) {
+            audit.setDate(getDateFromString(auditStringArray[3]));
+            }
         } catch (ParseException ex) {
            // Logger.getLogger(AuditDao.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Audit Builder was unable to parse the date.");
@@ -124,6 +123,15 @@ public class AuditDao {
 
         //String auditString = audit.getDate() + TOKEN + audit.getOrderid() + TOKEN + audit.getActionPerformed();
         return audit;
+    }
+
+    private Date getDateFromString(String stringToParse) throws ParseException {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+        cal.setTime(sdf.parse(stringToParse));
+        Date date = new Date();
+        date.setTime(cal.getTimeInMillis());
+        return date;
     }
 
     private List<Audit> decode() {
