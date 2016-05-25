@@ -261,6 +261,9 @@ public class OrderDaoImpl implements OrderDao {
         java.util.List<Order> specificOrders = new ArrayList();
         java.util.List<Order> closeOrders = new ArrayList();
 
+        if (orderName == null)
+            orderName = "";
+        
         for (Order order : orders) {
             if (orderName.equalsIgnoreCase(order.getName())) {
                 specificOrders.add(order);

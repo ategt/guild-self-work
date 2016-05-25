@@ -23,6 +23,7 @@
     
     <bean id="auditDao" class="com.mycompany.flooringmastery.dao.AuditDao" >
         <constructor-arg ref="auditLogFile" />
+        <!--<constructor-arg type="java.lang.String" value="z" />--> 
     </bean>
     
     
@@ -44,14 +45,14 @@
                                pointcut="execution(* com.mycompany.flooringmastery.dao.OrderDao.delete(..))"
             />
     
-            <!--            <aop:after method="createAuditEntry"
+                        <aop:after method="createAuditEntry"
                        pointcut="execution(* com.mycompany.flooringmastery.dao.OrderDao.create(..))"
-            />-->
+            />
             
         </aop:aspect>
         
     </aop:config>
     
-    <!--    This is the main project context file.-->
+        <!--This is the main project context file.-->
             
 </beans>

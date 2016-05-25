@@ -19,10 +19,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class AuditAspect {
 
-    ApplicationContext ctx;
+    private ApplicationContext ctx;
 
     public AuditAspect() {
-        ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        
+        //ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
     }
 
     public String log(ProceedingJoinPoint jp) throws Throwable {
@@ -64,7 +65,7 @@ public class AuditAspect {
         if (order != null) {
             String actionName = jp.getSignature().getName();
             Audit audit = buildAuditObject(order, actionName);
-            AuditDao auditDao = ctx.getBean("auditDao", AuditDao.class);
+            AuditDao auditDao =  new AuditDao(new java.io.File("auditLog.txt")); //ctx.getBean("auditDao", AuditDao.class);
             auditDao.create(audit);
         }
     }
@@ -78,6 +79,14 @@ public class AuditAspect {
         audit.setActionPerformed(actionName);
 
         return audit;
+    }
+
+    public ApplicationContext getCtx() {
+        return ctx;
+    }
+
+    public void setCtx(ApplicationContext ctx) {
+        this.ctx = ctx;
     }
 
 }

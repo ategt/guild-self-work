@@ -248,7 +248,7 @@ public class ConsoleIO {
         boolean confirmed = false;
         String stringResponse = getUserStringInput(prompt + explanation);
 
-        if (stringResponse.equalsIgnoreCase("Y") || stringResponse.equalsIgnoreCase("Yes")) {
+        if ("Y".equalsIgnoreCase(stringResponse) || "Yes".equalsIgnoreCase(stringResponse)) {
             confirmed = true;
         }
 
@@ -373,7 +373,7 @@ public class ConsoleIO {
 //                if (inputText.equalsIgnoreCase("0") || inputText.equalsIgnoreCase("exit") || inputText.equalsIgnoreCase("x") || inputText.equalsIgnoreCase("e") || inputText.equalsIgnoreCase("ex")) {
 //                    throw new com.mycompany.consoleio.exceptions.UserWantsOutException("The User Has Requested To Return To The Main Menu.");
 //                } else
-                if (inputText.equalsIgnoreCase("")) {
+                if (inputText != null && inputText.equalsIgnoreCase("")) {
                     passedInDate = null;
                     if (allowNullDate) {
                         valid = true;
@@ -387,8 +387,11 @@ public class ConsoleIO {
                     }
                 }
 
+                if (inputText != null){
                 passedInDate = dateFormat.parse(inputText);
                 valid = true;
+                }
+                
             } catch (ParseException ex) {
                 //Logger.getLogger(ConsoleIO.class.getName()).log(Level.SEVERE, null, ex);
                 printStringToConsole("The System Could Understand That Date. \n - Please Enter The Date In DD-MM-yyyy Format or 0 to exit. -\n");
