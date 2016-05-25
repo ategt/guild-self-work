@@ -9,7 +9,7 @@ package com.mycompany.addressbook.dto;
  *
  * @author apprentice
  */
-public class Address {
+public class OldAddress {
 
     private String firstName;
     private String lastName;

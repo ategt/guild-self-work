@@ -5,7 +5,8 @@
  */
 package com.mycompany.addressbook.dao;
 
-import com.mycompany.addressbook.dto.Address;
+//import com.mycompany.addressbook.dto.Address;
+import com.thesoftwareguild.interfaces.dto.Address;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,7 +31,7 @@ import static java.util.stream.Collectors.groupingBy;
  *
  * @author apprentice
  */
-public class AddressBookLambdaImpl implements AddressBook {
+public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.dao.AddressBookDao {
 
     List<Address> addresses;
     int nextId = 1;
@@ -55,7 +56,6 @@ public class AddressBookLambdaImpl implements AddressBook {
         nextId = determineNextId();
     }
 
-    @Override
     public Address create(Address address) {
         address.setId(nextId);
         nextId++;
@@ -80,7 +80,6 @@ public class AddressBookLambdaImpl implements AddressBook {
         return null;
     }
 
-    @Override
     public void update(Address address) {
 
         Address foundAddress = null;
@@ -99,12 +98,11 @@ public class AddressBookLambdaImpl implements AddressBook {
 
     }
 
-    @Override
-    public void delete(Address address) {
+    public void delete(Integer id) {
         Address found = null;
 
         for (Address currentAddress : addresses) {
-            if (currentAddress.getId() == address.getId()) {
+            if (currentAddress.getId() == id ) {
                 found = currentAddress;
                 break;
             }
@@ -119,16 +117,15 @@ public class AddressBookLambdaImpl implements AddressBook {
     }
 
     @Override
-    public List<Address> getAllAddresses() {
+    public List<Address> list() {
 
         return addresses;
     }
 
-    @Override
-    public int size() {
-        return addresses.size();
-    }
-
+//    @Override
+//    public int size() {
+//        return addresses.size();
+//    }
     private int determineNextId() {
         int highestId = 1;
 
@@ -157,27 +154,28 @@ public class AddressBookLambdaImpl implements AddressBook {
                 out.print(TOKEN);
                 out.print(address.getLastName());
                 out.print(TOKEN);
-                out.print(address.getType());
+                out.print(address.getStreetNumber());
                 out.print(TOKEN);
-                out.print(address.getStreetAddress());
+                out.print(address.getStreetName());
                 out.print(TOKEN);
                 out.print(address.getState());
                 out.print(TOKEN);
                 out.print(address.getCity());
                 out.print(TOKEN);
-                out.print(address.getCountry());
-                out.print(TOKEN);
-                out.print(address.getPoBox());
-                out.print(TOKEN);
-                out.print(address.getZipcode());
+                out.print(address.getZip());
                 out.println("");
+
+//                out.print(address.getCountry());
+//                out.print(TOKEN);
+//                out.print(address.getPoBox());
+//                out.print(TOKEN);
             }
 
             out.flush();
             out.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(AddressBook.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(com.thesoftwareguild.interfaces.dao.AddressBookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -189,6 +187,10 @@ public class AddressBookLambdaImpl implements AddressBook {
         final String TOKEN = "::";
 
         try {
+            
+            if ( !addressFile.exists() ) {
+                addressFile.createNewFile();
+            }
             Scanner sc = new Scanner(new BufferedReader(new FileReader(addressFile)));
 
             while (sc.hasNextLine()) {
@@ -203,22 +205,39 @@ public class AddressBookLambdaImpl implements AddressBook {
 
                 address.setFirstName(fixNull(stringParts[1]));
                 address.setLastName(fixNull(stringParts[2]));
-                address.setType(fixNull(stringParts[3]));
-                address.setStreetAddress(fixNull(stringParts[4]));
+                address.setStreetNumber(fixNull(stringParts[3]));
+                address.setStreetName(fixNull(stringParts[4]));
                 address.setState(fixNull(stringParts[5]));
                 address.setCity(fixNull(stringParts[6]));
-                address.setCountry(fixNull(stringParts[7]));
+                address.setZip(fixNull(stringParts[7]));
+
+                /*
                 address.setPoBox(fixNull(stringParts[8]));
                 address.setZipcode(fixNull(stringParts[9]));
 
+                
+                out.print(TOKEN);
+                out.print(address.getStreetNumber());
+                out.print(TOKEN);
+                out.print(address.getStreetName());
+                out.print(TOKEN);
+                out.print(address.getState());
+                out.print(TOKEN);
+                out.print(address.getCity());
+                out.print(TOKEN);
+                out.print(address.getZip());
+                
+                 */
                 addressList.add(address);
             }
 
             sc.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(AddressBook.class
+            Logger.getLogger(com.thesoftwareguild.interfaces.dao.AddressBookDao.class
                     .getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AddressBookLambdaImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return addressList;
@@ -242,20 +261,22 @@ public class AddressBookLambdaImpl implements AddressBook {
                 .filter(a -> a.getCity().equalsIgnoreCase(city))
                 .collect(java.util.stream.Collectors.toList());
     }
-    
-    @Override
-    public Map<String /* City */, List<Address> /*Addresses Sorted By City*/> searchByState(String state) {
 
-        Map<String, List<Address> > secondAddressLambdaMess
+    @Override
+    //public Map<String /* City */, List<Address> /*Addresses Sorted By City*/> searchByState(String state) {
+    public List<Address> searchByState(String state) {
+
+        List<Address> secondAddressLambdaMess
                 = addresses
                 .stream()
                 .filter((Address a) -> a.getState().equalsIgnoreCase(state))
                 .collect(
-                        groupingBy(
-                                //(Address a) -> a.getCity(),  // This does the same as the line below it.
-                                Address::getCity,
-                                java.util.stream.Collectors.toList()
-                        )
+                        java.util.stream.Collectors.toList()
+                //                        groupingBy(
+                //                                //(Address a) -> a.getCity(),  // This does the same as the line below it.
+                //                                Address::getCity,
+                //                                java.util.stream.Collectors.toList()
+                //                        )
                 );
 
         return secondAddressLambdaMess;
@@ -263,16 +284,16 @@ public class AddressBookLambdaImpl implements AddressBook {
     }
 
     @Override
-    public List<Address> searchByZipcode(String zipcode) {
+    public List<Address> searchByZip(String zipcode) {
 
         return addresses
                 .stream()
-                .filter(a -> a.getZipcode().equalsIgnoreCase(zipcode))
+                .filter(a -> a.getZip().equalsIgnoreCase(zipcode))
                 .collect(java.util.stream.Collectors.toList());
 
     }
 
-    @Override
+    
     public String fixNull(String input) {
         String returnValue = null;
         if (input.trim().equalsIgnoreCase("null")) {

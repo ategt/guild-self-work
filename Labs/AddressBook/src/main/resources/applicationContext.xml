@@ -15,12 +15,12 @@
  http://www.springframework.org/schema/aop
  http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
  
-    <bean id="addressDaoLambda" class="com.mycompany.addressbook.dao.AddressBookLambdaImpl" />
-    <bean id="addressDaoForLoop" class="com.mycompany.addressbook.dao.AddressBookImpl" />
+    <bean id="addressDao" class="com.mycompany.addressbook.dao.AddressBookLambdaImpl" />
+    <!--<bean id="addressDaoForLoop" class="com.mycompany.addressbook.dao.AddressBookImpl" />-->
     <bean id="consoleIo" class="com.mycompany.addressbook.controller.ConsoleIO" />
     
     <bean id="addressBookController" class="com.mycompany.addressbook.controller.AddressBookController">
-        <constructor-arg ref="addressDaoLambda" />
+        <constructor-arg ref="addressDao" />
         <constructor-arg ref="consoleIo" />
     </bean>
     

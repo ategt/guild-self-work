@@ -5,10 +5,12 @@
  */
 package com.mycompany.addressbook.controller;
 
-import com.mycompany.addressbook.dao.AddressBook;
+//import com.mycompany.addressbook.dao.AddressBook;
 import com.mycompany.addressbook.dao.AddressBookImpl;
 import com.mycompany.addressbook.dao.AddressBookLambdaImpl;
-import com.mycompany.addressbook.dto.Address;
+import com.thesoftwareguild.interfaces.dao.AddressBookDao;
+import com.thesoftwareguild.interfaces.dto.Address;
+//import com.mycompany.addressbook.dto.Address;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,17 +21,18 @@ import java.util.List;
 public class AddressBookController {
 
     ConsoleIO consoleIo;
-    AddressBook addressBook;
-    
-    public AddressBookController( AddressBook addressBook, ConsoleIO consoleIo ) {
+    AddressBookDao addressBook;
+
+    public AddressBookController(AddressBookDao addressBook, ConsoleIO consoleIo) {
         this.addressBook = addressBook;
         this.consoleIo = consoleIo;
     }
 
     public void run() {
 
-        if ( addressBook == null ) 
-        addressBook = chooseASearchMethod();
+        if (addressBook == null) {
+            addressBook = chooseASearchMethod();
+        }
 
         boolean choseToExit = false;
         while (!choseToExit) {
@@ -79,12 +82,12 @@ public class AddressBookController {
         }
     }
 
-    private AddressBook chooseASearchMethod() {
-        AddressBook addressBook = null;
+    private AddressBookDao chooseASearchMethod() {
+        AddressBookDao addressBook = null;
         String lambdaMenu = "Would You Like To Use Lambdas Or Enhanced For Loops?\n"
                 + "   1. For Loops\n"
                 + "   2. Lambdas";
-        
+
         int lambdaChoice = consoleIo.getUserIntInputRange(lambdaMenu, 1, 2, "Please Enter Either \"1\" or \"2\"");
         if (lambdaChoice == 1) {
             addressBook = new AddressBookImpl();
@@ -114,7 +117,7 @@ public class AddressBookController {
             String confirm = consoleIo.getUserStringInput("Press \"1\" to continue or anything else to abort:");
 
             if (confirm.equals("1")) {
-                addressBook.delete(address);
+                addressBook.delete(address.getId());
             } else {
                 consoleIo.printStringToConsole(" No Action Was Performed.");
             }
@@ -124,14 +127,21 @@ public class AddressBookController {
     }
 
     public void showBookSize() {
-        consoleIo.printStringToConsole("  " + addressBook.size() + " Entries in address book.");
+        //consoleIo.printStringToConsole("  " + addressBook.size() + " Entries in address book.");
+        consoleIo.printStringToConsole("  This Feature is no longer supported .");
     }
 
     public void listAllAddresses() {
-        for (Address address : addressBook.getAllAddresses()) {
+        for (Address address : addressBook.list()) {
 
-            String addressString = address.toString();
-
+            //String addressString = address.toString();
+            String addressString = "First Name: " + address.getFirstName() + "\n" +
+                                    "Last Name: " + address.getLastName() + "\n" +
+                                    "Street Name: " + address.getStreetName() + "\n" +
+                                    "Street Number: " + address.getStreetNumber()+ "\n" +
+                                    "Street: " + address.getState()+ "\n" +
+                                    "Zip: " + address.getZip()+ "\n";
+ 
             consoleIo.printStringToConsole(addressString);
         }
 
@@ -193,8 +203,32 @@ public class AddressBookController {
 
                 address.setLastName(inputString);
             }
+//
+//            inputString = consoleIo.getUserStringInput("What type of address is this?:");
+//
+//            if (inputString.equalsIgnoreCase("")) {
+//                inputString = null;
+//            } else if (inputString.equalsIgnoreCase("-")) {
+//                inputString = null;
+//                address.setLastName(inputString);
+//            } else {
+//                address.setType(inputString);
+//
+//            }
+//
+//            inputString = consoleIo.getUserStringInput("Please Enter PO Box:");
+//
+//            if (inputString.equalsIgnoreCase("")) {
+//                inputString = null;
+//            } else if (inputString.equalsIgnoreCase("-")) {
+//                inputString = null;
+//                address.setLastName(inputString);
+//            } else {
+//                address.setPoBox(inputString);
+//
+//            }
 
-            inputString = consoleIo.getUserStringInput("What type of address is this?:");
+            inputString = consoleIo.getUserStringInput("Please Enter Street Number:");
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
@@ -202,23 +236,10 @@ public class AddressBookController {
                 inputString = null;
                 address.setLastName(inputString);
             } else {
-                address.setType(inputString);
+                address.setStreetNumber(inputString);
 
             }
-
-            inputString = consoleIo.getUserStringInput("Please Enter PO Box:");
-
-            if (inputString.equalsIgnoreCase("")) {
-                inputString = null;
-            } else if (inputString.equalsIgnoreCase("-")) {
-                inputString = null;
-                address.setLastName(inputString);
-            } else {
-                address.setPoBox(inputString);
-
-            }
-
-            inputString = consoleIo.getUserStringInput("Please Enter Street Address:");
+            inputString = consoleIo.getUserStringInput("Please Enter Street Name:");
 
             if (inputString.equalsIgnoreCase("")) {
                 inputString = null;
@@ -226,7 +247,7 @@ public class AddressBookController {
                 inputString = null;
                 address.setLastName(inputString);
             } else {
-                address.setStreetAddress(inputString);
+                address.setStreetName(inputString);
 
             }
 
@@ -262,21 +283,21 @@ public class AddressBookController {
                 inputString = null;
                 address.setLastName(inputString);
             } else {
-                address.setZipcode(inputString);
+                address.setZip(inputString);
 
             }
-
-            inputString = consoleIo.getUserStringInput("Please Enter Country:");
-
-            if (inputString.equalsIgnoreCase("")) {
-                inputString = null;
-            } else if (inputString.equalsIgnoreCase("-")) {
-                inputString = null;
-                address.setLastName(inputString);
-            } else {
-                address.setCountry(inputString);
-
-            }
+//
+//            inputString = consoleIo.getUserStringInput("Please Enter Country:");
+//
+//            if (inputString.equalsIgnoreCase("")) {
+//                inputString = null;
+//            } else if (inputString.equalsIgnoreCase("-")) {
+//                inputString = null;
+//                address.setLastName(inputString);
+//            } else {
+//                address.setCountry(inputString);
+//
+//            }
 
         }
     }
@@ -322,22 +343,23 @@ public class AddressBookController {
     private void searchByState() {
 
         String state = consoleIo.getUserStringInput("Please Enter A State Name To Search For:");
-        java.util.Map<String, List<Address>> addressesByState = addressBook.searchByState(state);
+        //java.util.Map<String, List<Address>> addressesByState = addressBook.searchByState(state);
+        java.util.List<Address> addressesByState = addressBook.searchByState(state);
 
         if (addressesByState.size() < 1) {
             consoleIo.printStringToConsole("No Entries Could Be Found For That City.");
         } else {
-            for (String cityName : addressesByState.keySet()) {
-                consoleIo.printStringToConsole(cityName + ": ");
-                for (Address address : addressesByState.get(cityName)) {
+            // for (String cityName : addressesByState.keySet()) {
+            // consoleIo.printStringToConsole(cityName + ": ");
+            consoleIo.printStringToConsole("Everything: ");
+            //for (Address address : addressesByState.get(cityName)) {
+            for (Address address : addressesByState) {
 
-                    String addressString = address.toString();
+                String addressString = address.toString();
 
-                    consoleIo.printStringToConsole("\t" + addressString);
-                }
+                consoleIo.printStringToConsole("\t" + addressString);
             }
         }
-
     }
 
 }

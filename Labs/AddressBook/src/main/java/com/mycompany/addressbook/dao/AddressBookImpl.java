@@ -5,7 +5,8 @@
  */
 package com.mycompany.addressbook.dao;
 
-import com.mycompany.addressbook.dto.Address;
+//import com.mycompany.addressbook.dto.Address;
+import com.thesoftwareguild.interfaces.dto.Address;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,14 +24,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Used to implement AddressBook
  *
  * @author apprentice
  */
-public class AddressBookImpl implements AddressBook {
+public class AddressBookImpl implements com.thesoftwareguild.interfaces.dao.AddressBookDao {
 
     List<Address> addresses;
     int nextId = 1;
-    File addressFile = new File("addressData.txt");
+    File addressFile = new File("guildAddressData.txt");
 
     public AddressBookImpl() {
         this(false);
@@ -39,7 +41,7 @@ public class AddressBookImpl implements AddressBook {
     protected AddressBookImpl(boolean isATest) {
 
         if (isATest) {
-            addressFile = new File("testAddressData.txt");
+            addressFile = new File("testGuildAddressData.txt");
         }
 
         addresses = decode();
@@ -95,7 +97,6 @@ public class AddressBookImpl implements AddressBook {
 
     }
 
-    @Override
     public void delete(Address address) {
         Address found = null;
 
@@ -114,15 +115,27 @@ public class AddressBookImpl implements AddressBook {
 
     }
 
-    @Override
+    public void delete(Integer id) {
+        Address found = null;
+
+        for (Address currentAddress : addresses) {
+            if (currentAddress.getId() == id) {
+                found = currentAddress;
+                break;
+            }
+        }
+
+        if (found != null) {
+            addresses.remove(found);
+        }
+
+        encode();
+
+    }
+
     public List<Address> getAllAddresses() {
 
         return addresses;
-    }
-
-    @Override
-    public int size() {
-        return addresses.size();
     }
 
     private int determineNextId() {
@@ -153,27 +166,28 @@ public class AddressBookImpl implements AddressBook {
                 out.print(TOKEN);
                 out.print(address.getLastName());
                 out.print(TOKEN);
-                out.print(address.getType());
+                out.print(address.getStreetNumber());
                 out.print(TOKEN);
-                out.print(address.getStreetAddress());
+                out.print(address.getStreetName());
                 out.print(TOKEN);
                 out.print(address.getState());
                 out.print(TOKEN);
                 out.print(address.getCity());
                 out.print(TOKEN);
-                out.print(address.getCountry());
-                out.print(TOKEN);
-                out.print(address.getPoBox());
-                out.print(TOKEN);
-                out.print(address.getZipcode());
+                out.print(address.getZip());
                 out.println("");
+
+//                out.print(address.getCountry());
+//                out.print(TOKEN);
+//                out.print(address.getPoBox());
+//                out.print(TOKEN);
             }
 
             out.flush();
             out.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(AddressBook.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(com.thesoftwareguild.interfaces.dao.AddressBookDao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -199,21 +213,36 @@ public class AddressBookImpl implements AddressBook {
 
                 address.setFirstName(fixNull(stringParts[1]));
                 address.setLastName(fixNull(stringParts[2]));
-                address.setType(fixNull(stringParts[3]));
-                address.setStreetAddress(fixNull(stringParts[4]));
+                address.setStreetNumber(fixNull(stringParts[3]));
+                address.setStreetName(fixNull(stringParts[4]));
                 address.setState(fixNull(stringParts[5]));
                 address.setCity(fixNull(stringParts[6]));
-                address.setCountry(fixNull(stringParts[7]));
+                address.setZip(fixNull(stringParts[7]));
+
+                /*
                 address.setPoBox(fixNull(stringParts[8]));
                 address.setZipcode(fixNull(stringParts[9]));
 
+                
+                out.print(TOKEN);
+                out.print(address.getStreetNumber());
+                out.print(TOKEN);
+                out.print(address.getStreetName());
+                out.print(TOKEN);
+                out.print(address.getState());
+                out.print(TOKEN);
+                out.print(address.getCity());
+                out.print(TOKEN);
+                out.print(address.getZip());
+                
+                 */
                 addressList.add(address);
             }
 
             sc.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(AddressBook.class
+            Logger.getLogger(com.thesoftwareguild.interfaces.dao.AddressBookDao.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -251,64 +280,109 @@ public class AddressBookImpl implements AddressBook {
         return soughtAddress;
 
     }
+//
+//    @Override
+//    public Map<String /* City */, List<Address>> searchByState(String state){
+//            
+//
+//        Map<String /* City */, List<Address>> result = new java.util.HashMap();
+//        
+//        List<Address> addressesFromACertainState = new ArrayList();
+//        
+//        for ( Address address : addresses ) {
+//            if (address.getState().equalsIgnoreCase(state))
+//            addressesFromACertainState.add(address);
+//            
+//            
+//        }
+//        
+//        
+//        Set<String> cityNames = new HashSet();
+//        for (Address address : addressesFromACertainState) {
+//            if (address.getCity() != null) {
+//
+//                if (!cityNames.contains(address.getCity())) {
+//                    cityNames.add(address.getCity());
+//                }
+//            }
+//        }
+//
+//        for (String cityName : cityNames) {
+//
+//            List<Address> soughtAddressesOfACertainCity = new ArrayList();
+//
+//            for (Address address : addressesFromACertainState) {
+//
+//                if (address != null && address.getCity() != null) {
+//                    if (address.getCity().equalsIgnoreCase(cityName)) {
+//                        soughtAddressesOfACertainCity.add(address);
+//                    }
+//                }
+//
+//            }
+//            
+//            result.put(cityName, soughtAddressesOfACertainCity);
+//
+//        }
+//
+//        return result;
+//
+//    }
 
     @Override
-    public Map<String /* City */, List<Address>> searchByState(String state){
-            
+    public List<Address> searchByState(String state) {
 
-        Map<String /* City */, List<Address>> result = new java.util.HashMap();
-        
+        //Map<String /* City */, List<Address>> result = new java.util.HashMap();
         List<Address> addressesFromACertainState = new ArrayList();
-        
-        for ( Address address : addresses ) {
-            if (address.getState().equalsIgnoreCase(state))
-            addressesFromACertainState.add(address);
-            
-            
-        }
-        
-        
-        Set<String> cityNames = new HashSet();
-        for (Address address : addressesFromACertainState) {
-            if (address.getCity() != null) {
 
-                if (!cityNames.contains(address.getCity())) {
-                    cityNames.add(address.getCity());
-                }
+        for (Address address : addresses) {
+            if (address.getState().equalsIgnoreCase(state)) {
+                addressesFromACertainState.add(address);
             }
-        }
-
-        for (String cityName : cityNames) {
-
-            List<Address> soughtAddressesOfACertainCity = new ArrayList();
-
-            for (Address address : addressesFromACertainState) {
-
-                if (address != null && address.getCity() != null) {
-                    if (address.getCity().equalsIgnoreCase(cityName)) {
-                        soughtAddressesOfACertainCity.add(address);
-                    }
-                }
-
-            }
-            
-            result.put(cityName, soughtAddressesOfACertainCity);
 
         }
 
-        return result;
+        return addressesFromACertainState;
 
+//        Set<String> cityNames = new HashSet();
+//        for (Address address : addressesFromACertainState) {
+//            if (address.getCity() != null) {
+//
+//                if (!cityNames.contains(address.getCity())) {
+//                    cityNames.add(address.getCity());
+//                }
+//            }
+//        }
+//
+//        for (String cityName : cityNames) {
+//
+//            List<Address> soughtAddressesOfACertainCity = new ArrayList();
+//
+//            for (Address address : addressesFromACertainState) {
+//
+//                if (address != null && address.getCity() != null) {
+//                    if (address.getCity().equalsIgnoreCase(cityName)) {
+//                        soughtAddressesOfACertainCity.add(address);
+//                    }
+//                }
+//
+//            }
+//            
+//            result.put(cityName, soughtAddressesOfACertainCity);
+//
+//        }
+//
+//        return result;
     }
-    
-    
+
     @Override
-    public List<Address> searchByZipcode(String zipcode) {
+    public List<Address> searchByZip(String zipcode) {
 
         List<Address> soughtAddress = new ArrayList();
 
         for (Address address : addresses) {
-            if (address.getZipcode() != null && zipcode != null) {
-                if (address.getZipcode().equalsIgnoreCase(zipcode)) {
+            if (address.getZip() != null && zipcode != null) {
+                if (address.getZip().equalsIgnoreCase(zipcode)) {
                     soughtAddress.add(address);
                 }
             }
@@ -317,8 +391,12 @@ public class AddressBookImpl implements AddressBook {
         return soughtAddress;
 
     }
+    
+      public List<Address> list(){
+          
+          return addresses;
+      }
 
-    @Override
     public String fixNull(String input) {
         String returnValue = null;
         if (input.trim().equalsIgnoreCase("null")) {
