@@ -61,5 +61,6 @@ public interface OrderDao {
     String toString(Order order, final String TOKEN, final String CSV_ESCAPE);
 
     void update(Order order);
-    
+
+    Date extractDate(String dateString);
 }

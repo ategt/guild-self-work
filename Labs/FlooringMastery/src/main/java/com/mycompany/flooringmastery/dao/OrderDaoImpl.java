@@ -38,6 +38,8 @@ public class OrderDaoImpl implements OrderDao {
     private ProductDao productDao;
     private ConfigDao configDao;
     private boolean isATest;
+    private com.mycompany.flooringmastery.utilities.OrderDaoFileIO orderIo;
+    
 
     public OrderDaoImpl(ProductDao productDao, StateDao stateDao) {
         this(productDao, stateDao, null);
@@ -56,6 +58,7 @@ public class OrderDaoImpl implements OrderDao {
         }
 
         init(configDao);
+        this.orderIo = new com.mycompany.flooringmastery.utilities.OrderDaoFileIO(this, stateDao, productDao);
     }
 
     private void init(ConfigDao configDao1) {
@@ -73,7 +76,7 @@ public class OrderDaoImpl implements OrderDao {
             
             for (java.io.File orderFile : orderFiles) {
                 if (!orderFile.getName().endsWith("00000000.txt")) {
-                    loadedOrders.addAll(decode(orderFile));
+                    loadedOrders.addAll(orderIo.decode(orderFile));
                 }
             }
 
@@ -84,7 +87,7 @@ public class OrderDaoImpl implements OrderDao {
 
             for (java.io.File orderFile : orderFiles) {
                 if (orderFile.getName().endsWith("00000000.txt")) {
-                    for (Order order : decode(orderFile)) {
+                    for (Order order : orderIo.decode(orderFile)) {
                         if (!ids.contains(order.getId())) {
                             loadedOrders.add(order);
                         }
@@ -335,27 +338,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     private void encode(java.io.File orderFile, List<Order> groupOfOrders) throws IOException {
-        encode(new PrintWriter(new FileWriter(orderFile)), groupOfOrders);
-    }
-
-    private void encode(PrintWriter printWriter, List<Order> groupOfOrders) {
-
-        final String TOKEN = ",";
-        final String DATAHEADER = "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCost"
-                + "PerSquareFoot,MaterialCost,LaborCost,Tax,Total";
-
-        try (PrintWriter out = printWriter) {
-            out.println(DATAHEADER);
-
-            groupOfOrders.stream()
-                        .map((order) -> toString(order, TOKEN))
-                        .forEach((orderString) -> {
-                                                out.println(orderString);
-                        });
-
-            out.flush();
-        }
-
+        orderIo.encode(new PrintWriter(new FileWriter(orderFile)), groupOfOrders);
     }
 
     @Override
@@ -485,143 +468,7 @@ public class OrderDaoImpl implements OrderDao {
 
     }
 
-    private List<Order> decode(java.io.File orderFile) throws FileNotFoundException, IOException {
-
-        if (!orderFile.exists()) {
-            orderFile.createNewFile();
-        }
-
-        String dateString = orderFile.getName();
-
-        return decode(new BufferedReader(new FileReader(orderFile)), dateString);
-
-    }
-
-    private List<Order> decode(BufferedReader bufferedReader, String dateString) {
-
-        List<Order> orderList = new ArrayList<>();
-
-        final String TOKEN = ",";
-        final String CSV_ESCAPE = Pattern.quote("\\") + TOKEN;
-        final String CSV_ESCAPE_TEMP = "::==::";
-
-        final String DATAHEADER = "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCost"
-                + "PerSquareFoot,MaterialCost,LaborCost,Tax,Total";
-
-        java.util.Date orderDate = extractDate(dateString);
-
-        try (Scanner sc = new Scanner(bufferedReader)) {
-            while (sc.hasNextLine()) {
-                String currentLine = sc.nextLine();
-                if (currentLine.equalsIgnoreCase(DATAHEADER)) {
-
-                } else if (!currentLine.trim().isEmpty()) {
-
-                    String[] stringParts = currentLine.replaceAll(CSV_ESCAPE, CSV_ESCAPE_TEMP).split(TOKEN);
-
-                    for (int x = 0; x < stringParts.length; x++) {
-                        stringParts[x] = stringParts[x].replaceAll(CSV_ESCAPE_TEMP, TOKEN);
-                    }
-
-                    Order order = new Order();
-
-                    String orderIdString = stringParts[0];
-
-                    try {
-                        int orderId = Integer.parseInt(orderIdString);
-                        order.setId(orderId);
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-
-                    String name = stringParts[1];
-                    order.setName(name);
-
-                    String state = stringParts[2];
-                    order.setState(stateDao.get(state));
-
-                    try {
-
-                        String taxRateString = stringParts[3];
-                        double taxRate = Double.parseDouble(taxRateString);
-                        order.setTaxRate(taxRate);
-
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-                    String productType = stringParts[4];
-
-                    order.setProduct(productDao.get(productType));
-
-                    try {
-                        String areaString = stringParts[5];
-                        double area = Double.parseDouble(areaString);
-                        order.setArea(area);
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-
-                    try {
-                        String costPerSquareFootString = stringParts[6];
-                        double costPerSquareFoot = Double.parseDouble(costPerSquareFootString);
-                        order.setCostPerSquareFoot(costPerSquareFoot);
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-
-                    try {
-                        String laborCostPerSquareFootString = stringParts[7];
-                        double laborCostPerSquareFoot = Double.parseDouble(laborCostPerSquareFootString);
-                        order.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-
-                    try {
-
-                        String materialCostString = stringParts[8];
-                        double materialCost = Double.parseDouble(materialCostString);
-                        order.setMaterialCost(materialCost);
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-
-                    try {
-
-                        String laborCostString = stringParts[9];
-                        double laborCost = Double.parseDouble(laborCostString);
-                        order.setLaborCost(laborCost);
-
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-                    try {
-
-                        String taxString = stringParts[10];
-                        double tax = Double.parseDouble(taxString);
-                        order.setTax(tax);
-
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-                    try {
-
-                        String totalString = stringParts[11];
-                        double total = Double.parseDouble(totalString);
-                        order.setTotal(total);
-                    } catch (NumberFormatException numFmtEx) {
-
-                    }
-
-                    order.setDate(orderDate);
-
-                    orderList.add(order);
-                }
-            }
-        }
-
-        return orderList;
-    }
+    
 
     private java.io.File[] lookForOrders(java.io.File file) {
         if (file.isDirectory()) {
@@ -669,7 +516,7 @@ public class OrderDaoImpl implements OrderDao {
         return new File(dateFilePath.replaceAll("//", "/"));
     }
 
-    private Date extractDate(String dateString) {
+    public Date extractDate(String dateString) {
         Date date = null;
         if (dateString.toLowerCase().contains("test")) {
             Calendar calendar = Calendar.getInstance();
