@@ -6,6 +6,7 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.dto.Order;
+import com.mycompany.flooringmastery.utilities.OrderDaoFileIOImplementation;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,6 +26,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import org.springframework.context.ApplicationContext;
 
 /**
  *
@@ -32,7 +34,13 @@ import java.util.regex.Pattern;
  */
 public class OrderDaoImpl implements OrderDao {
 
-    private List<Order> orders;
+     private ApplicationContext ctx;
+
+    //public AuditAspect() {
+        //ctx = ApplicationContextProvider.getApplicationContext.getBean("BeanId", MyBean.class);
+        //ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+   
+     private List<Order> orders;
     private int nextId;
     private StateDao stateDao;
     private ProductDao productDao;
@@ -47,6 +55,8 @@ public class OrderDaoImpl implements OrderDao {
 
     public OrderDaoImpl(ProductDao productDao, StateDao stateDao, ConfigDao configDao) {
 
+             ctx = com.mycompany.flooringmastery.aop.ApplicationContextProvider.getApplicationContext();
+   
         this.productDao = productDao;
         this.stateDao = stateDao;
 
@@ -57,8 +67,13 @@ public class OrderDaoImpl implements OrderDao {
             this.isATest = true;
         }
 
+        this.orderIo = new OrderDaoFileIOImplementation(this, stateDao, productDao);
+
         init(configDao);
-        this.orderIo = new com.mycompany.flooringmastery.utilities.OrderDaoFileIO(this, stateDao, productDao);
+        
+        //this.orderIo = ctx.getBean(type)
+        //this.orderIo = new com.mycompany.flooringmastery.utilities.OrderDaoFileIOImplementation(this, stateDao, productDao);
+        //this.orderIo = ctx.getBean(type)
     }
 
     private void init(ConfigDao configDao1) {
@@ -87,6 +102,7 @@ public class OrderDaoImpl implements OrderDao {
 
             for (java.io.File orderFile : orderFiles) {
                 if (orderFile.getName().endsWith("00000000.txt")) {
+                    System.out.println("orderFile");
                     for (Order order : orderIo.decode(orderFile)) {
                         if (!ids.contains(order.getId())) {
                             loadedOrders.add(order);

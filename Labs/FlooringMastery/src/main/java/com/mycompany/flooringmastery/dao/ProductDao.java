@@ -6,6 +6,7 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.dto.Product;
+import com.mycompany.flooringmastery.utilities.ProductFileIO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,12 +29,15 @@ public class ProductDao {
     java.util.Map<String, Product> productsMap;
     int nextId;
     File productDataFile;
+    private ProductFileIO fileIo;
 
     public ProductDao(ConfigDao configDao) {
+        
+        this.fileIo = new com.mycompany.flooringmastery.utilities.ProductFileIOImpl(this);
 
         productDataFile = configDao.get().getProductFile();
 
-        productsMap = decode();
+        productsMap = fileIo.decode(productDataFile);
 
         if (productsMap == null) {
             productsMap = new java.util.HashMap();
@@ -67,7 +71,7 @@ public class ProductDao {
             if (!productsMap.containsKey(titleCaseName)) {
                 productsMap.put(titleCaseName, product);
                 product.setType(titleCaseName);
-                encode();
+                fileIo.encode(productDataFile, getList());
 
                 return product;
             } else {
@@ -101,7 +105,8 @@ public class ProductDao {
                 productsMap.remove(foundProduct.getType());
                 productsMap.put(product.getType(), product);
 
-                encode();
+                fileIo.encode(productDataFile, getList());
+
             } else {
                 System.out.println("Throwing a Product Not Found exception!!!!");
                 // Look up exception throwing and consider putting one here, too!
@@ -116,7 +121,8 @@ public class ProductDao {
 
         if (productsMap.containsKey(product.getType())) {
             productsMap.remove(product.getType());
-            encode();
+            fileIo.encode(productDataFile, getList());
+
         } else {
             System.out.println("Throwing a Product Not Found exception!!!!");
             // Look up exception throwing and consider putting one here, too!
@@ -130,101 +136,6 @@ public class ProductDao {
 
     public int size() {
         return productsMap.size();
-    }
-
-    private void encode() {
-
-        final String TOKEN = ",";
-        final String DATAHEADER = "ProductType,CostPerSquareFoot,LaborCostPerSquareFoot";
-        try {
-
-            try (PrintWriter out = new PrintWriter(new FileWriter(productDataFile))) {
-                out.println(DATAHEADER);
-
-                for (String productType : getList()) {
-
-                    Product product = get(productType);
-
-                    out.print(product.getType());
-                    out.print(TOKEN);
-                    out.print(product.getCost());
-                    out.print(TOKEN);
-                    out.print(product.getLaborCost());
-                    out.println("");
-                }
-
-                out.flush();
-            }
-
-        } catch (IOException ex) {
-            Logger.getLogger(ProductDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    private java.util.Map<String, Product> decode() {
-
-        java.util.Map<String, Product> productMap = new java.util.HashMap();
-
-        final String TOKEN = ",";
-
-        final String DATAHEADER = "ProductType,CostPerSquareFoot,LaborCostPerSquareFoot";
-
-        try {
-
-            if (!productDataFile.exists()) {
-                productDataFile.createNewFile();
-            }
-
-            try (Scanner sc = new Scanner(new BufferedReader(new FileReader(productDataFile)))) {
-                while (sc.hasNextLine()) {
-                    String currentLine = sc.nextLine();
-                    if (currentLine.equalsIgnoreCase(DATAHEADER)) {
-
-                    } else if (!currentLine.trim().isEmpty()) {
-                        String[] stringParts = currentLine.split(TOKEN);
-
-                        Product product = new Product();
-
-                        String content = stringParts[0];
-
-                        product.setType(content);
-
-                        String costPerSquareFootString = stringParts[1];
-
-                        try {
-                            double costPerSquareFoot = Double.parseDouble(costPerSquareFootString);
-                            product.setCost(costPerSquareFoot);
-                        } catch (NumberFormatException numFmtEx) {
-
-                        }
-
-                        String laborCostPerSquareFootString = stringParts[2];
-
-                        try {
-
-                            double laborCostPerSquareFoot = Double.parseDouble(laborCostPerSquareFootString);
-
-                            product.setLaborCost(laborCostPerSquareFoot);
-
-                        } catch (NumberFormatException numFmtEx) {
-
-                        }
-
-                        productMap.put(product.getType(), product);
-                    }
-                }
-            }
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ProductDao.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ProductDao.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return productMap;
     }
 
 }

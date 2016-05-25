@@ -6,6 +6,8 @@
 package com.mycompany.flooringmastery.dao;
 
 import com.mycompany.flooringmastery.dto.State;
+import com.mycompany.flooringmastery.utilities.StateFileIO;
+import com.mycompany.flooringmastery.utilities.StateFileIOImplementation;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,12 +30,14 @@ public class StateDao {
 
     private java.util.Map<String, State> statesMap;
     private File stateDataFile = new File("StatesData.txt");
+    private StateFileIO fileIo;
 
     public StateDao(ConfigDao configDao) {
 
+        this.fileIo = new StateFileIOImplementation(this);
         stateDataFile = configDao.get().getTaxesFile();
 
-        statesMap = decode();
+        statesMap = fileIo.decode(stateDataFile);
 
         if (statesMap == null) {
             statesMap = new java.util.HashMap();
@@ -76,7 +80,7 @@ public class StateDao {
                 state.setState(postalCode);
                 statesMap.put(postalCode, state);
 
-                encode();
+                fileIo.encode(stateDataFile, getList());
 
                 returnedState = state;
             }
@@ -106,7 +110,7 @@ public class StateDao {
                 statesMap.remove(foundState.getState());
                 statesMap.put(state.getState(), state);
 
-                encode();
+                fileIo.encode(stateDataFile, getList());
             } else {
                 System.out.println("Throwing a State Not Found exception!!!!");
                 // Look up exception throwing and consider putting one here, too!
@@ -121,7 +125,7 @@ public class StateDao {
 
         if (statesMap.containsKey(state.getState())) {
             statesMap.remove(state.getState());
-            encode();
+            fileIo.encode(stateDataFile, getList());
         } else {
             System.out.println("Throwing a State Not Found exception!!!!");
             // Look up exception throwing and consider putting one here, too!
@@ -135,87 +139,6 @@ public class StateDao {
 
     public int size() {
         return statesMap.size();
-    }
-
-    private void encode() {
-
-        final String TOKEN = ",";
-        final String DATAHEADER = "State,TaxRate";
-        try {
-
-            try (PrintWriter out = new PrintWriter(new FileWriter(stateDataFile))) {
-                out.println(DATAHEADER);
-
-                for (String stateName : getList()) {
-
-                    State state = statesMap.get(stateName);
-
-                    out.print(state.getState());
-                    out.print(TOKEN);
-                    out.print(state.getStateTax());
-                    out.println("");
-                }
-
-                out.flush();
-            }
-
-        } catch (IOException ex) {
-            Logger.getLogger(StateDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    private Map<String, State> decode() {
-
-        Map<String, State> stateList = new java.util.HashMap<>();
-
-        final String TOKEN = ",";
-        final String DATAHEADER = "State,TaxRate";
-
-        try {
-
-            if (!stateDataFile.exists()) {
-                stateDataFile.createNewFile();
-            }
-
-            try (Scanner sc = new Scanner(new BufferedReader(new FileReader(stateDataFile)))) {
-                while (sc.hasNextLine()) {
-                    String currentLine = sc.nextLine();
-                    if (currentLine.equalsIgnoreCase(DATAHEADER)) {
-
-                    } else if (!currentLine.trim().isEmpty()) {
-
-                        String[] stringParts = currentLine.split(TOKEN);
-
-                        State state = new State();
-
-                        String content = stringParts[0];
-
-                        state.setState(content);
-
-                        String stateSalesTaxString = stringParts[1];
-
-                        try {
-                            double stateSalesTax = Double.parseDouble(stateSalesTaxString);
-                            state.setStateTax(stateSalesTax);
-                        } catch (NumberFormatException numFmtEx) {
-
-                        }
-
-                        stateList.put(state.getState(), state);
-                    }
-                }
-            }
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(StateDao.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(StateDao.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return stateList;
     }
 
 }

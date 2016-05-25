@@ -36,7 +36,7 @@ public class OrderDaoTest {
     ApplicationContext ctx;
     
     public OrderDaoTest() {
-        ctx = new org.springframework.context.support.ClassPathXmlApplicationContext("applicationContext.xml");
+        ctx = new org.springframework.context.support.ClassPathXmlApplicationContext("testApplicationContext.xml");
     }
 
     @Before

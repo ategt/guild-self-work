@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  *
  * @author apprentice
  */
-public class OrderDaoFileIOImplementation {
+public class OrderDaoFileIOImplementation implements OrderDaoFileIO {
  
     private OrderDao orderDao;
     private StateDao stateDao;
@@ -35,6 +35,7 @@ public class OrderDaoFileIOImplementation {
         this.stateDao = stateDao;
     }
     
+    @Override
     public void encode(PrintWriter printWriter, List<Order> groupOfOrders) {
 
         final String TOKEN = ",";
@@ -55,6 +56,7 @@ public class OrderDaoFileIOImplementation {
 
     }
     
+    @Override
     public List<Order> decode(java.io.File orderFile) throws FileNotFoundException, IOException {
 
         if (!orderFile.exists()) {
@@ -67,6 +69,7 @@ public class OrderDaoFileIOImplementation {
 
     }
 
+    @Override
     public List<Order> decode(BufferedReader bufferedReader, String dateString) {
 
         List<Order> orderList = new ArrayList<>();

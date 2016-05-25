@@ -26,7 +26,7 @@ public class ConfigDaoTest {
     ApplicationContext ctx;
 
     public ConfigDaoTest() {
-        ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        ctx = new ClassPathXmlApplicationContext("testApplicationContext.xml");
     }
 
     @Before
