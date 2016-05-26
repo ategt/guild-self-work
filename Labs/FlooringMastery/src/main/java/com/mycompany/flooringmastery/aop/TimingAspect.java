@@ -85,6 +85,18 @@ public class TimingAspect {
         //return result.toString() + " :Result is also modified";
     }
     
+    public void logStartAndStopTimeForDecode(ProceedingJoinPoint jp) throws Throwable {
+        long startTime = System.currentTimeMillis();
+        System.out.println("Start time is " + startTime + " milliseconds.");
+
+        Object result = jp.proceed(jp.getArgs());
+        long stopTime = System.currentTimeMillis();
+        System.out.println("Stop time is " + stopTime+ " milliseconds.");
+        long differenctTime = stopTime - startTime;
+        System.out.println("\tThe Difference was " + differenctTime + " milliseconds.");
+        
+    }
+    
 //    public Map<String, T> logStartAndStopTimeForDecode(ProceedingJoinPoint jp) throws Throwable {
 //        System.out.println("Spring AOP: Around advice");
 //        Object[] args = jp.getArgs();

@@ -27,7 +27,12 @@
                         pointcut="execution(* com.mycompany.flooringmastery.utilities.GenericMapFileIO.encode(..))"
                         /> 
                         
-<!--                        <aop:around method="logStartAndStopTimeForEncode"
+                        <aop:around method="logStartAndStopTimeForEncode"
+                        pointcut="execution(* com.mycompany.flooringmastery.utilities.GenericMapFileIO.decode(..))"
+                        /> 
+                        
+
+                        <!--                        <aop:around method="logStartAndStopTimeForEncode"
                         pointcut="execution(* com.mycompany.flooringmastery.utilities.DummyFileIOImplementation.encode(..))"-->
                         
             <!--            <aop:around method="logStartAndStopTime"

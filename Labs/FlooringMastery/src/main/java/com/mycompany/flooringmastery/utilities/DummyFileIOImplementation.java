@@ -24,7 +24,8 @@ public class DummyFileIOImplementation implements com.mycompany.flooringmastery.
     
     public Map<String, Product> decode(File dataFile) {
     //public List<Order> decode(File dataFile){
-        List<Order> emptyList = null;
+        //List<Order> emptyList = null;
+        Map<String, Product> emptyMap = new java.util.HashMap();
         try {
             Thread.sleep(231);
         } catch (InterruptedException ex) {

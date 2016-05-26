@@ -6,11 +6,13 @@ import com.mycompany.flooringmastery.utilities.GenericMapFileIO;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.util.Assert;
 
 /**
  *
@@ -53,6 +55,11 @@ public class TimingAspectTest {
             //fileIo.encode(new PrintWriter(dummyFile), new java.util.ArrayList());
             fileIo.doNothing();
             fileIo.encode(dummyFile, dummyList);
+            Map<String, Product> emptyMap = fileIo.decode(dummyFile);
+            
+            //assertEquals(emptyMap, null);
+            //assertEquals(emptyMap);
+            Assert.isNull(emptyMap);
             
             System.out.println("Stopping.");
             
