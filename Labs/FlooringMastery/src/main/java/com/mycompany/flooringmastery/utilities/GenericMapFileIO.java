@@ -18,5 +18,7 @@ public interface GenericMapFileIO<T> {
     Map<String, T> decode(File dataFile);
 
     void encode(File dataFile, List<T> encodingList);
+    
+    void doNothing();
 
 }

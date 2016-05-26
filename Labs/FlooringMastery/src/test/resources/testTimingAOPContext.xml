@@ -20,12 +20,21 @@
     <aop:config>
         <aop:aspect ref="timingAspect">
             
-            <aop:around method="logStartAndStopTimeForEncode"
-                        pointcut="execution(* com.mycompany.flooringmastery.utilities.GenericMapFileIO.encode(..))"
+            <aop:around method="logStartAndStopTimeForDoNothing"
+                        pointcut="execution(* com.mycompany.flooringmastery.utilities.GenericMapFileIO.doNothing(..))"
             />
-            
+                        <aop:around method="logStartAndStopTimeForEncode"
+                        pointcut="execution(* com.mycompany.flooringmastery.utilities.GenericMapFileIO.encode(..))"
+                        /> 
+                        
+<!--                        <aop:around method="logStartAndStopTimeForEncode"
+                        pointcut="execution(* com.mycompany.flooringmastery.utilities.DummyFileIOImplementation.encode(..))"-->
+                        
             <!--            <aop:around method="logStartAndStopTime"
                        pointcut="execution(* com.mycompany.flooringmastery.utilities.GenericMapFileIO.decode(..))"
+            />-->
+<!--            <aop:around method="logStartAndStopTimeForEncode"
+                        pointcut="execution(* com.mycompany.flooringmastery.utilities.GenericMapFileIO.encode(..))"
             />-->
             
         </aop:aspect>

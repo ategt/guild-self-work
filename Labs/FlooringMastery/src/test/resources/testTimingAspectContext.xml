@@ -19,6 +19,7 @@
     
     <bean id="dummyTimingTester" class="com.mycompany.flooringmastery.utilities.DummyFileIOImplementation" />
     
+    <import resource="testTimingAOPContext.xml" />
 <!--       
     <bean id="testConfigFile" class="java.io.File" >
         <constructor-arg type="java.lang.String" value="testConfigFile.txt" />
