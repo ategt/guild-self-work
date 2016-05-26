@@ -57,24 +57,12 @@ public class TimingAspect {
         System.out.println("Stop time is " + stopTime+ " milliseconds.");
         long differenctTime = stopTime - startTime;
         System.out.println("\tThe Difference was " + differenctTime + " milliseconds.");
-        //return result.toString() + " :Result is also modified";
     }
     
-    //void encode(File dataFile, List<T> encodingList);
-
     
     public void logStartAndStopTimeForEncode(ProceedingJoinPoint jp) throws Throwable {
         long startTime = System.currentTimeMillis();
         System.out.println("Start time is " + startTime + " milliseconds.");
-        //System.out.println("Spring AOP: Around advice");
-        //Object[] args = jp.getArgs();
-//        if (args.length > 0) {
-//            System.out.print("Arguments passed: ");
-//            for (int i = 0; i < args.length; i++) {
-//                System.out.print("Arg" + (i + 1) + ":" + args[i]);
-//                args[i] = ":Spring AOP removed the argument";
-//            }
-//        }
         
         Object result = jp.proceed(jp.getArgs());
         //Object result = jp.proceed(args);
@@ -110,4 +98,18 @@ public class TimingAspect {
 //        Object result = jp.proceed(args);
 //        return result.toString() + " :Result is also modified";
 //    }
+
+    public void logStartAndStopTimeForMethod(ProceedingJoinPoint jp) throws Throwable {
+        long startTime = System.currentTimeMillis();
+        System.out.println("Start time is " + startTime + " milliseconds.");
+        
+        Object result = jp.proceed(jp.getArgs());
+        long stopTime = System.currentTimeMillis();
+        System.out.println("Stop time is " + stopTime+ " milliseconds.");
+        long differenctTime = stopTime - startTime;
+        System.out.println("\tThe Difference was " + differenctTime + " milliseconds.");
+    }
+    
+
+
 }
