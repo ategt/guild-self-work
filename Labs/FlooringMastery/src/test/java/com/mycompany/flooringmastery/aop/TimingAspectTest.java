@@ -58,6 +58,7 @@ public class TimingAspectTest {
             System.out.println("Starting.");
 
             fileIo.encode(dummyFile, dummyList);
+            
             System.out.println("Stopping.");
     }
 
