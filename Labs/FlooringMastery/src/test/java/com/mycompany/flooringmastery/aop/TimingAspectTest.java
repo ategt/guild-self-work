@@ -31,45 +31,49 @@ public class TimingAspectTest {
     public void tearDown() {
     }
 
+//    @Test
+//    public void testSomeMethod() {
+//        
+//            File dummyFile = new File("fakeFile.file");
+//            List<Product> dummyList = new ArrayList();
+//            ApplicationContext ctx = new ClassPathXmlApplicationContext("testTimingAspectContext.xml");
+//            GenericMapFileIO<Product> fileIo = ctx.getBean("dummyTimingTester", GenericMapFileIO.class);
+//            
+//            System.out.println("Starting.");
+//
+//            fileIo.doNothing();
+//            
+//            System.out.println("Stopping.");
+//                    
+//    }
+
     @Test
-    public void testSomeMethod() {
+    public void testEncode() {
         
-       // try {
             File dummyFile = new File("fakeFile.file");
             List<Product> dummyList = new ArrayList();
-            
-            dummyList.add(new Product());
-            dummyList.add(new Product());
-            dummyList.add(new Product());
-            dummyList.add(new Product());
- 
             ApplicationContext ctx = new ClassPathXmlApplicationContext("testTimingAspectContext.xml");
-            //GenericMapFileIO<Product> fileIo = ctx.getBean("dummyTimingTester", DummyFileIOImplementation.class);
             GenericMapFileIO<Product> fileIo = ctx.getBean("dummyTimingTester", GenericMapFileIO.class);
-            //OrderDaoFileIO fileIo = ctx.getBean("dummyTimingTester", OrderDaoFileIO.class);
-            //OrderDaoFileIO fileIo = ctx.getBean("dummyTimingTester", GenericMapFileIO.class);
-            //OrderDaoFileIO<Object> fileIo = ctx.getBean("dummyTimingTester", GenericMapFileIO.class);
             
             System.out.println("Starting.");
-            //fileIo.decode(dummyFile);
-            //fileIo.encode(new PrintWriter(dummyFile), new java.util.ArrayList());
-            fileIo.doNothing();
+
             fileIo.encode(dummyFile, dummyList);
-            Map<String, Product> emptyMap = fileIo.decode(dummyFile);
+            System.out.println("Stopping.");
+    }
+
+    @Test
+    public void testDecode() {
+        
+            File dummyFile = new File("fakeFile.file");
+            ApplicationContext ctx = new ClassPathXmlApplicationContext("testTimingAspectContext.xml");
+            GenericMapFileIO<Product> fileIo = ctx.getBean("dummyTimingTester", GenericMapFileIO.class);
             
-            //assertEquals(emptyMap, null);
-            //assertEquals(emptyMap);
+            System.out.println("Starting.");
+
+            Map<String, Product> emptyMap = fileIo.decode(dummyFile);
             Assert.isNull(emptyMap);
             
             System.out.println("Stopping.");
-            
-            //fail("Just because.");
-            //assertTrue(true);
-//        } catch (FileNotFoundException ex) {
-//            fail("This was not supposed to happen.");
-//            Logger.getLogger(TimingAspectTest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        
     }
 
 }

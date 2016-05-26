@@ -19,6 +19,6 @@ public interface GenericMapFileIO<T> {
 
     void encode(File dataFile, List<T> encodingList);
     
-    void doNothing();
+    //void doNothing();
 
 }
