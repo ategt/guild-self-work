@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  *
  * @author apprentice
  */
-public class ProductFileIOImpl implements ProductFileIO {
+public class ProductFileIOImpl implements ProductFileIO, GenericMapFileIO<Product> {
     
     private ProductDao productDao;
     

@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  *
  * @author apprentice
  */
-public class StateFileIOImplementation implements StateFileIO {
+public class StateFileIOImplementation implements StateFileIO, GenericMapFileIO<State> {
     
     private StateDao stateDao;
     

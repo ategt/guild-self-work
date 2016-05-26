@@ -35,7 +35,7 @@ public class DummyFileIOImplementation implements com.mycompany.flooringmastery.
     }
 
     //@Override
-    public void encode(File dataFile, List<Product> encodingList) {
+    public void encode(File dataFile, List<String> encodingList) {
         try {
             Thread.sleep(251);
         } catch (InterruptedException ex) {

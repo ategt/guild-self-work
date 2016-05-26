@@ -51,7 +51,7 @@ public class TimingAspectTest {
     public void testEncode() {
         
             File dummyFile = new File("fakeFile.file");
-            List<Product> dummyList = new ArrayList();
+            List<String> dummyList = new ArrayList();
             ApplicationContext ctx = new ClassPathXmlApplicationContext("testTimingAspectContext.xml");
             GenericMapFileIO<Product> fileIo = ctx.getBean("dummyTimingTester", GenericMapFileIO.class);
             
