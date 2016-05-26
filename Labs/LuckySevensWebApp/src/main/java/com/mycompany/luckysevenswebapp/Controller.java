@@ -1,9 +1,10 @@
+package com.mycompany.luckysevenswebapp;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author apprentice
  */
-@WebServlet(urlPatterns = {"/RSVPServlet"})
-public class RSVPServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/Controller"})
+public class Controller extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -30,10 +31,12 @@ public class RSVPServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //response.setContentType("text/html;charset=UTF-8");
         response.setContentType("text/html;charset=UTF-8");
 
-        RequestDispatcher rd = request.getRequestDispatcher("entry.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
         rd.forward(request, response);
+
     }
 
     /**
@@ -46,21 +49,19 @@ public class RSVPServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String startingBetString = request.getParameter("startingBet");
 
-        String myAnswer = request.getParameter("myAnswer");
-        String myReason = request.getParameter("myReason");
-        
-        String messageToUser = "";
-        if ("no".equalsIgnoreCase(myAnswer)){
-            messageToUser = "You Smell";
-        }else{
-            messageToUser = "Are you sure? SM is coming.";
-        }
-        
-        request.setAttribute("message", messageToUser);
-        
-        RequestDispatcher rd = request.getRequestDispatcher("response.jsp");
-        rd.forward(request, response);
+        int maxAmountHeld = 0;
+        int rollNumberAtMaxAmountHeld = 0;
+
+        int startingBet = Integer.parseInt(startingBetString);
+
+        int rollCounter = 1;
+
+        rollCounter = luckySevensGameLoop(rollCounter, startingBet);
+
+        printEndingMessage(rollCounter, consoleIO);
+
     }
 
     /**
@@ -70,7 +71,11 @@ public class RSVPServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Lucky Sevens";
     }// </editor-fold>
 
+//    @Override
+//    public String getName() {
+//        return "Lucky Sevens";
+//    }
 }
