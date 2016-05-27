@@ -6,7 +6,6 @@
 package com.mycompany.interestcalculator;
 
 import java.io.IOException;
-import java.util.Scanner;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -146,7 +145,7 @@ public class InterestCalculator extends HttpServlet {
 //    }
     public String tasksForTheEndOfYear(float interestForCurrentYear, float currentBalance) {
         String output = "Total interest earned for this year: " + Math.round(interestForCurrentYear)
-                + "Balance at the end of the year: " + Math.round(currentBalance);
+                + "<Br />Balance at the end of the year: " + Math.round(currentBalance);
         return output;
     }
 
