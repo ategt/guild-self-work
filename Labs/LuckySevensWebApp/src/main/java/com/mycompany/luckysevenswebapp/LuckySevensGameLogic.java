@@ -14,26 +14,57 @@ public class LuckySevensGameLogic {
     int maxAmountHeld = 0;
     int rollNumberAtMaxAmountHeld = 0;
 
-    public void run() {
+//    public void run() {
+//
+//        //ConsoleIO consoleIO = new ConsoleIO();
+//        //int startingBet = 0;
+//        
+//    
+//        maxAmountHeld = 0;
+//        rollNumberAtMaxAmountHeld = 0;
+//
+//        int startingBet = consoleIO.getUserIntInputRange("How many Dollars would you like to bet?",
+//                4, 15000, "Betting that amount does not seem like a good idea.");
+//
+//        int rollCounter = 1;
+//
+//        rollCounter = luckySevensGameLoop(rollCounter, startingBet);
+//
+//        printEndingMessage(rollCounter, consoleIO);
+//    }
+//
+//    public void printEndingMessage(int rollCounter, ConsoleIO consoleIO) {
+//        //consoleIO.printStringToConsole("You are broke after " + --rollCounter + " rolls.\n");
+//        //consoleIO.printStringToConsole("You should have quit after " + rollNumberAtMaxAmountHeld + " rolls when you had $" + maxAmountHeld + ".");
+//        
+//        
+//    }
+    public LuckySevensGameDTO luckySevensGame(int rollCounter, int startingBet) {
 
-        //ConsoleIO consoleIO = new ConsoleIO();
-        //int startingBet = 0;
-        maxAmountHeld = 0;
-        rollNumberAtMaxAmountHeld = 0;
+        int maxAmountHeld = 0;
+        int rollNumberAtMaxAmountHeld = 0;
 
-        int startingBet = consoleIO.getUserIntInputRange("How many Dollars would you like to bet?",
-                4, 15000, "Betting that amount does not seem like a good idea.");
+        LuckySevensGameDTO gameObject = new LuckySevensGameDTO();
 
-        int rollCounter = 1;
+        int diceRoll;
+        
+        gameObject.setStartingBet(startingBet);
+        
+        for (int currentBalance = startingBet; currentBalance > 0; rollCounter++) {
 
-        rollCounter = luckySevensGameLoop(rollCounter, startingBet);
+            diceRoll = rollDice();
 
-        printEndingMessage(rollCounter, consoleIO);
-    }
+            currentBalance = adjustCurrentBalance(diceRoll, currentBalance);
 
-    public void printEndingMessage(int rollCounter, ConsoleIO consoleIO) {
-        consoleIO.printStringToConsole("You are broke after " + --rollCounter + " rolls.\n");
-        consoleIO.printStringToConsole("You should have quit after " + rollNumberAtMaxAmountHeld + " rolls when you had $" + maxAmountHeld + ".");
+            updateHighBalance(currentBalance, rollCounter);
+            
+        }
+
+        gameObject.setMaxAmountHeld(maxAmountHeld);
+        gameObject.setRollNumberAtMaxAmountHeld(rollNumberAtMaxAmountHeld);
+        gameObject.setRollCounter(rollCounter);
+        
+        return gameObject;
     }
 
     public int luckySevensGameLoop(int rollCounter, int startingBet) {
@@ -81,7 +112,6 @@ public class LuckySevensGameLogic {
 
     public int rollOneDie() {
         return (int) Math.ceil(Math.random() * 6);
-
     }
 
 }

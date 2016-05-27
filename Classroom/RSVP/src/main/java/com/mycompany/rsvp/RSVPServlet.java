@@ -1,12 +1,8 @@
 package com.mycompany.rsvp;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -51,16 +47,24 @@ public class RSVPServlet extends HttpServlet {
 
         String myAnswer = request.getParameter("myAnswer");
         String myReason = request.getParameter("myReason");
-        
+
         String messageToUser = "";
-        if ("no".equalsIgnoreCase(myAnswer)){
-            messageToUser = "You Smell";
-        }else{
+        if ("no".equalsIgnoreCase(myAnswer)) {
+            messageToUser = "That is too bad, sorry to hear about " + myReason;
+        } else {
             messageToUser = "Are you sure? SM is coming.";
         }
-        
+
+        List<Integer> numbers = new ArrayList();
+
+        for (int i = 0; i < 10; i++) {
+            numbers.add(i);
+        }
+
+        request.setAttribute("numbers", numbers);
         request.setAttribute("message", messageToUser);
-        
+        request.setAttribute("isGoing", true);
+
         RequestDispatcher rd = request.getRequestDispatcher("response.jsp");
         rd.forward(request, response);
     }
