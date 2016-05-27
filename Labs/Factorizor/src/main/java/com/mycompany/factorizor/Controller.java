@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "Controller", urlPatterns = {"/Controller"})
 public class Controller extends HttpServlet {
-
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -41,14 +41,14 @@ public class Controller extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String factorizeNumberString = request.getParameter("factorizeNumber");
+        int numberToFactorize = Integer.parseInt(factorizeNumberString);
 
         //int maxAmountHeld = 0;
         //int rollNumberAtMaxAmountHeld = 0;
         //LuckySevensGameLog
         // Old try
         //com.mycompany.luckysevenswebapp.LuckySevensGameLogic LuckySevensGameLogic = new com.mycompany.luckysevenswebapp.LuckySevensGameLogic();
-        int numberToFactorize = Integer.parseInt(factorizeNumberString);
-
+        
 //         rollCounter = 1;
 //
 //        //rollCounter = LuckySevensGameLogic.luckySevensGameLoop(rollCounter, startingBet);
@@ -64,13 +64,14 @@ public class Controller extends HttpServlet {
 //        
 //        //String endingMessage = " message " + startingBet;
         //printEndingMessage
+        
         String message = run(numberToFactorize);
         request.setAttribute("message", message);
 
         RequestDispatcher rd = request.getRequestDispatcher("response.jsp");
         rd.forward(request, response);
 
-//        
+        
 //        String myAnswer = request.getParameter("myAnswer");
 //        String myReason = request.getParameter("myReason");
 //
@@ -105,8 +106,8 @@ public class Controller extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    int numberOfFactors = 0;
-    int sumOfFactors = 0;
+    int numberOfFactors;// = 0;
+    int sumOfFactors; // = 0;
 
 //    public void run() {
 //        //if (consoleIO == null){
@@ -124,11 +125,11 @@ public class Controller extends HttpServlet {
         sumOfFactors = 0;
 
         //int factorizedNumber = consoleIO.getUserIntInputRange("Please Enter A Number To Be Factorized:", 1, Integer.MAX_VALUE);
-        output += factorizingCalculationsLoop(factorizedNumber) + "a<br />";
+        output += factorizingCalculationsLoop(factorizedNumber) + "<br />";
 
-        output += displayIsPerfectNumber(sumOfFactors, factorizedNumber) + "b<br />";
+        output += displayIsPerfectNumber(sumOfFactors, factorizedNumber) + "<br />";
 
-        output += displayIsPrimeNumber(numberOfFactors, factorizedNumber) + "c<br />";
+        output += displayIsPrimeNumber(numberOfFactors, factorizedNumber) + "<br />";
 
         return output;
 
@@ -142,7 +143,7 @@ public class Controller extends HttpServlet {
         for (int testNumber = 1; testNumber <= factorizedNumber; testNumber++) {
             String responseString = factorizingCalculations(factorizedNumber, testNumber);
            // if ("".equalsIgnoreCase(responseString.trim())) {
-                output += responseString + "d<br />";
+                output += responseString; // + "d<br />";
             //}
         }
 
@@ -158,7 +159,7 @@ public class Controller extends HttpServlet {
 
             if (testNumber != factorizedNumber) {
                 sumOfFactors += testNumber;
-                output += testNumber + "+e<br />";
+                output += testNumber + "<br />";
                 //consoleIO.printStringToConsole(testNumber + "");
             }
 

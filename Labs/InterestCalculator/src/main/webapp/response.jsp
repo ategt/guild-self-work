@@ -11,8 +11,7 @@
                 <caption>Results</caption>
                 <tr id="Title">
                     <td>Message</td>
-                </tr>
-                <tr id="messageRow">
+                </tr><tr id="messageRow">
                     <td>${message}</td>
                 </tr>
             </table>
