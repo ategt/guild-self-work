@@ -19,7 +19,15 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(urlPatterns = {"/Controller"})
 public class Controller extends HttpServlet {
-
+   
+int currentBalance;// = 0;
+int maxAmountHeld; //= 0;
+int rollNumberAtMaxAmountHeld; //= 0;
+int rollCounter; //= 0;
+    
+    //(currentBalance > maxAmountHeld) {
+//            maxAmountHeld = currentBalance;
+//            rollNumberAtMaxAmountHeld = rollCounter
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -49,6 +57,7 @@ public class Controller extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
         String startingBetString = request.getParameter("startingBet");
 
         //int maxAmountHeld = 0;
@@ -58,18 +67,21 @@ public class Controller extends HttpServlet {
         //com.mycompany.luckysevenswebapp.LuckySevensGameLogic LuckySevensGameLogic = new com.mycompany.luckysevenswebapp.LuckySevensGameLogic();
         int startingBet = Integer.parseInt(startingBetString);
 
-        int rollCounter = 1;
+         rollCounter = 1;
 
         //rollCounter = LuckySevensGameLogic.luckySevensGameLoop(rollCounter, startingBet);
         // old try
         //LuckySevensGameDTO gameObject =  LuckySevensGameLogic.
         //luckySevensGameLoop(rollCounter, startingBet);
-
         //luckySevensGame( rollCounter,  startingBet);
         //String endingMessage = printEndingMessage( gameObject );
         
-        //String endingMessage = printEndingMessage(  );
-        String endingMessage = " message ";
+         rollCounter =  luckySevensGameLoop( rollCounter,  startingBet);
+ 
+        String endingMessage = printEndingMessage( rollNumberAtMaxAmountHeld );
+        
+        //String endingMessage = " message " + startingBet;
+        //printEndingMessage
 
         request.setAttribute("message", endingMessage);
 
@@ -87,11 +99,14 @@ public class Controller extends HttpServlet {
     public String getServletInfo() {
         return "Lucky Sevens";
     }// </editor-fold>
-}
-//    @Override
-//    public String getName() {
-//        return "Lucky Sevens";
-//    }
+
+
+
+
+    //@Override
+    public String getName() {
+        return "Lucky Sevens";
+    }
 //    private String printEndingMessage(LuckySevensGameDTO gameObject) {
 //        
 //        return "You are broke after " + (gameObject.getRollCounter()-1) + " rolls.<br />" + 
@@ -99,6 +114,7 @@ public class Controller extends HttpServlet {
 //                " rolls when you had $" + gameObject.getMaxAmountHeld() + ".";
 //    
 //    }
+
 //    private String printEndingMessage(int rollCounter, int rollNumberAtMaxAmountHeld, int maxAmountHeld) {
 //
 //        return "You are broke after " + (rollCounter - 1) + " rolls.<br />"
@@ -106,37 +122,27 @@ public class Controller extends HttpServlet {
 //                + " rolls when you had $" + maxAmountHeld + ".";
 //
 //    }
-////
-////    public LuckySevensGameDTO luckySevensGame(int rollCounter, int startingBet) {
-////
-////        int maxAmountHeld = 0;
-////        int rollNumberAtMaxAmountHeld = 0;
-////
-////        LuckySevensGameDTO gameObject = new LuckySevensGameDTO();
-////
-////        int diceRoll;
-////
-////        gameObject.setStartingBet(startingBet);
-////
-////        for (int currentBalance = startingBet; currentBalance > 0; rollCounter++) {
-////
-////            diceRoll = rollDice();
-////
-////            currentBalance = adjustCurrentBalance(diceRoll, currentBalance);
-////
-////            updateHighBalance(currentBalance, rollCounter);
-////
-////        }
-////
-////        gameObject.setMaxAmountHeld(maxAmountHeld);
-////        gameObject.setRollNumberAtMaxAmountHeld(rollNumberAtMaxAmountHeld);
-////        gameObject.setRollCounter(rollCounter);
-////
-////        return gameObject;
-////    }
+    
+    //private String printEndingMessage(int rollCounter, int rollNumberAtMaxAmountHeld) {
+    private String printEndingMessage(int rollNumberAtMaxAmountHeld) {
+
+        return "You are broke after " + (rollCounter - 1) + " rolls.<br />"
+                + "You should have quit after " + rollNumberAtMaxAmountHeld
+                + " rolls when you had $" + maxAmountHeld + ".";
+
+    }
 //
-//    public int luckySevensGameLoop(int rollCounter, int startingBet) {
+//    public LuckySevensGameDTO luckySevensGame(int rollCounter, int startingBet) {
+//
+//        int maxAmountHeld = 0;
+//        int rollNumberAtMaxAmountHeld = 0;
+//
+//        LuckySevensGameDTO gameObject = new LuckySevensGameDTO();
+//
 //        int diceRoll;
+//
+//        gameObject.setStartingBet(startingBet);
+//
 //        for (int currentBalance = startingBet; currentBalance > 0; rollCounter++) {
 //
 //            diceRoll = rollDice();
@@ -144,43 +150,74 @@ public class Controller extends HttpServlet {
 //            currentBalance = adjustCurrentBalance(diceRoll, currentBalance);
 //
 //            updateHighBalance(currentBalance, rollCounter);
-//        }
-//        return rollCounter;
-//    }
 //
+//        }
+//
+//        gameObject.setMaxAmountHeld(maxAmountHeld);
+//        gameObject.setRollNumberAtMaxAmountHeld(rollNumberAtMaxAmountHeld);
+//        gameObject.setRollCounter(rollCounter);
+//
+//        return gameObject;
+//    }
+
+    public int luckySevensGameLoop(int rollCounter, int startingBet) {
+        
+        int diceRoll;
+        
+        for ( int currentBalance = startingBet ; currentBalance > 0 ; rollCounter++ ) {
+
+            diceRoll = rollDice();
+
+            currentBalance = adjustCurrentBalance(diceRoll, currentBalance);
+
+            //updateHighBalance(currentBalance, rollCounter);
+            updateHighBalance(currentBalance, rollCounter);
+        }
+        
+        return rollCounter;
+        
+    }
+
 //    public void updateHighBalance(int currentBalance, int rollCounter) {
-////        if (currentBalance > maxAmountHeld) {
-////            maxAmountHeld = currentBalance;
-////            rollNumberAtMaxAmountHeld = rollCounter;
-////        }
-//    }
-//
-//    public int adjustCurrentBalance(int diceRoll, int currentBalance) {
-//        if (isAWinner(diceRoll)) {
-//            currentBalance += 4;
-//        } else {
-//            currentBalance -= 1;
+//        if (currentBalance > maxAmountHeld) {
+//            maxAmountHeld = currentBalance;
+//            rollNumberAtMaxAmountHeld = rollCounter;
 //        }
-//        return currentBalance;
 //    }
-//
-//    public boolean isAWinner(int diceRoll) {
-//        return (diceRoll == 7);
-//    }
-//
-//    public int rollDice() {
-//
-//        // Roll the virtual dice here.
-//        int dieOne = rollOneDie();
-//        int dieTwo = rollOneDie();
-//
-//        return dieOne + dieTwo;
-//
-//    }
-//
-//    public int rollOneDie() {
-//        return (int) Math.ceil(Math.random() * 6);
-//    }
-//
-//    //rollNumberAtMaxAmountHeld 
-//}
+
+    public void updateHighBalance(int currentBalance, int rollCounter) { //, int maxAmountHeld, int rollNumberAtMaxAmountHeld) {
+        if (currentBalance > maxAmountHeld) {
+            maxAmountHeld = currentBalance;
+            rollNumberAtMaxAmountHeld = rollCounter;
+        }
+    }
+
+    public int adjustCurrentBalance(int diceRoll, int currentBalance) {
+        if (isAWinner(diceRoll)) {
+            currentBalance += 4;
+        } else {
+            currentBalance -= 1;
+        }
+        return currentBalance;
+    }
+
+    public boolean isAWinner(int diceRoll) {
+        return (diceRoll == 7);
+    }
+
+    public int rollDice() {
+
+        // Roll the virtual dice here.
+        int dieOne = rollOneDie();
+        int dieTwo = rollOneDie();
+
+        return dieOne + dieTwo;
+
+    }
+
+    public int rollOneDie() {
+        return (int) Math.ceil(Math.random() * 6);
+    }
+
+    //rollNumberAtMaxAmountHeld 
+}

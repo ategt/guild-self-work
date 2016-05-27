@@ -8,7 +8,7 @@
     <body>
         <div>
             <h1>Lucky Sevens</h1>
-            <form method="POST" action="/Controller"><label id="startingBetLabel" for="startingBet">Starting Bet:</label>
+            <form method="POST" action="Controller"><label id="startingBetLabel" for="startingBet">Starting Bet:</label>
                 <input type="text" id="startingBet" name="startingBet" value="$0.00" />
                 <br />
                 <input type="Submit" name="play" id="playButton" value="Play" />
