@@ -7,7 +7,6 @@ package com.mycompany.flooringcalculator;
 
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.Currency;
 import java.util.Locale;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -34,9 +33,10 @@ public class FlooringCalculator extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
 
-        RequestDispatcher rd = request.getRequestDispatcher("entry.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
         rd.forward(request, response);
     }
 
@@ -51,37 +51,45 @@ public class FlooringCalculator extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        //request.get
-        
         String floorLengthString = request.getParameter("floorLength");
         String floorWidthString = request.getParameter("floorWidth");
         String floorUnitCostString = request.getParameter("floorUnitCost");
-        
-        
-        int floorLength = Integer.parseInt(floorLengthString);
-        int floorWidth = Integer.parseInt(floorWidthString);
-        int floorUnitCost = Integer.parseInt(floorUnitCostString);
-               
-        
-        
-        float floorTotalCost = floorWidth * floorLength * floorUnitCost;
-        
-        
-        request.setAttribute("materialCost", displayCurrency( request.getLocale(), floorTotalCost));
+
+        request.setAttribute("oldLength", displayCurrency(request.getLocale(), floorTotalCost));
+        request.setAttribute("oldWidth", floorArea);
+        request.setAttribute("oldUnitCost", displayCurrency(request.getLocale(), totalLaborCost));
+        request.setAttribute("hadError", displayCurrency(request.getLocale(), grandTotalCost));
 
         
+        int floorLength = 0;
+        int floorWidth = 0;
+        int floorUnitCost = 0;
+
+        try {
+            
+            floorLength = Integer.parseInt(floorLengthString);
+            floorWidth = Integer.parseInt(floorWidthString);
+            floorUnitCost = Integer.parseInt(floorUnitCostString);
+
+        } catch (NumberFormatException ex) {
+            
+        }
+
+        float floorTotalCost = floorWidth * floorLength * floorUnitCost;
+
         int floorArea = floorWidth * floorLength;
         float incrementsOfLabor = (float) Math.ceil(floorArea / 20 * 4);
         float totalLaborCost = incrementsOfLabor * (86 / 4);
         float grandTotalCost = floorTotalCost + totalLaborCost;
-        
+
+        request.setAttribute("materialCost", displayCurrency(request.getLocale(), floorTotalCost));
         request.setAttribute("floorArea", floorArea);
-        request.setAttribute("laborCost", displayCurrency( request.getLocale(), totalLaborCost));
-        request.setAttribute("totalFloorCost", displayCurrency( request.getLocale(), grandTotalCost ) );
+        request.setAttribute("laborCost", displayCurrency(request.getLocale(), totalLaborCost));
+        request.setAttribute("totalFloorCost", displayCurrency(request.getLocale(), grandTotalCost));
 
         RequestDispatcher rd = request.getRequestDispatcher("response.jsp");
         rd.forward(request, response);
-        
+
     }
 
     /**
@@ -94,25 +102,9 @@ public class FlooringCalculator extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-//    public String displayCurrency(Double currencyAmount){
-//        
-//        Locale currentLocale = httpServletRequest.getLocale();
-//        
-//        Locale locale = 
-//        return displayCurrency( , currencyAmount);
-//    }
-    
-    public String displayCurrency( Locale currentLocale , Float currencyAmount ) {
+    public String displayCurrency(Locale currentLocale, Float currencyAmount) {
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(currentLocale);
+        return currencyFormatter.format(currencyAmount);
+    }
 
-    //Double currencyAmount = new Double(9876543.21);
-    Currency currentCurrency = Currency.getInstance(currentLocale);
-    NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(currentLocale);
-
-    return currencyFormatter.format(currencyAmount);
-//    System.out.println(
-//        currentLocale.getDisplayName() + ", " +
-//        currentCurrency.getDisplayName() + ": " +
-//        currencyFormatter.format(currencyAmount));
-}
-    
 }
