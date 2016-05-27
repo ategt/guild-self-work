@@ -14,6 +14,8 @@ import java.util.Scanner;
  */
 public class RockPaperScissorsStep4 implements Game {
 
+    
+    
     public void run(ConsoleIO consoleIo) {
 
         playRockPaperScissors(consoleIo);
@@ -35,7 +37,7 @@ public class RockPaperScissorsStep4 implements Game {
 
         while (keepPlaying) {
 
-            totalGameRounds = promptUserForAnInt("How many rounds would you like to play?", keyboard);
+            totalGameRounds = promptUserForAnInt("How many rounds would you like to play?");
 
             // reset wins and losses;
             wins = 0;
@@ -48,7 +50,7 @@ public class RockPaperScissorsStep4 implements Game {
                 for (int currentRound = 0; currentRound < totalGameRounds; currentRound++) {
 
                     userInput = promptUserForAnInt("What is your choice for this round?\n"
-                            + "\t1) Rock\t2) Paper\t3) Scissors\n", keyboard);
+                            + "\t1) Rock\t2) Paper\t3) Scissors\n");
 
                     computerInput = generateComputerInput();
                     //computerInput = 1;
@@ -128,9 +130,12 @@ public class RockPaperScissorsStep4 implements Game {
         return rockPaperOrScissors;
     }
 
-    public static int promptUserForAnInt(String promptString, Scanner keyboard) {
-        System.out.println(promptString);
-        return keyboard.nextInt();
+//    public static int promptUserForAnInt(String promptString, Scanner keyboard) {
+//        System.out.println(promptString);
+//        return keyboard.nextInt();
+//    }
+    public static int promptUserForAnInt(String promptString) {
+        return consoleIo.getUserInputInt(promptString);
     }
 
     public static boolean isPlayerTheWinner(int computerInput, int userInput) {
