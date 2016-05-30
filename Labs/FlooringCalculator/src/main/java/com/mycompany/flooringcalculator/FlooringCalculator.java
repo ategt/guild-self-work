@@ -35,8 +35,9 @@ public class FlooringCalculator extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("text/html;charset=UTF-8");
+        request.setAttribute("hadError", false);
 
-        RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("fail.jsp");
         rd.forward(request, response);
     }
 
@@ -55,41 +56,81 @@ public class FlooringCalculator extends HttpServlet {
         String floorWidthString = request.getParameter("floorWidth");
         String floorUnitCostString = request.getParameter("floorUnitCost");
 
-        request.setAttribute("oldLength", displayCurrency(request.getLocale(), floorTotalCost));
-        request.setAttribute("oldWidth", floorArea);
-        request.setAttribute("oldUnitCost", displayCurrency(request.getLocale(), totalLaborCost));
-        request.setAttribute("hadError", displayCurrency(request.getLocale(), grandTotalCost));
+        request.setAttribute("widthError", true);
+        request.setAttribute("lengthError", true);
+        request.setAttribute("unitCostError", true);
 
-        
         int floorLength = 0;
         int floorWidth = 0;
         int floorUnitCost = 0;
+        boolean hadError = false;
 
         try {
-            
-            floorLength = Integer.parseInt(floorLengthString);
-            floorWidth = Integer.parseInt(floorWidthString);
-            floorUnitCost = Integer.parseInt(floorUnitCostString);
 
+            request.setAttribute("oldLength", floorLengthString);
+            floorLength = Integer.parseInt(floorLengthString);
+            request.setAttribute("oldLength", floorLength);
+            if (floorLength >= 0 ){
+
+            request.setAttribute("lengthError", false);
+            } else {
+                hadError = true;
+            }
         } catch (NumberFormatException ex) {
-            
+            hadError = true;
         }
 
-        float floorTotalCost = floorWidth * floorLength * floorUnitCost;
+        try {
 
-        int floorArea = floorWidth * floorLength;
-        float incrementsOfLabor = (float) Math.ceil(floorArea / 20 * 4);
-        float totalLaborCost = incrementsOfLabor * (86 / 4);
-        float grandTotalCost = floorTotalCost + totalLaborCost;
+            request.setAttribute("oldWidth", floorWidthString);
+            floorWidth = Integer.parseInt(floorWidthString);
+            request.setAttribute("oldWidth", floorWidth);
+            if ( floorWidth >= 0 ) {
+            request.setAttribute("widthError", false);
+            } else {
+                hadError = true;
+            }
+        } catch (NumberFormatException ex) {
+            hadError = true;
+        }
+        try {
 
-        request.setAttribute("materialCost", displayCurrency(request.getLocale(), floorTotalCost));
-        request.setAttribute("floorArea", floorArea);
-        request.setAttribute("laborCost", displayCurrency(request.getLocale(), totalLaborCost));
-        request.setAttribute("totalFloorCost", displayCurrency(request.getLocale(), grandTotalCost));
+            request.setAttribute("oldUnitCost", floorUnitCostString);
+            floorUnitCost = Integer.parseInt(floorUnitCostString);
+            request.setAttribute("oldUnitCost", floorUnitCost);
+            if ( floorUnitCost >= 0 ) { 
+            request.setAttribute("unitCostError", false);
+            } else {
+                hadError = true;
+            }
+        } catch (NumberFormatException ex) {
+            hadError = true;
+        }
 
-        RequestDispatcher rd = request.getRequestDispatcher("response.jsp");
-        rd.forward(request, response);
+        if (hadError == true) {
 
+            request.setAttribute("hadError", hadError);
+
+            RequestDispatcher rd = request.getRequestDispatcher("fail.jsp");
+            rd.forward(request, response);
+        } else {
+
+            float floorTotalCost = floorWidth * floorLength * floorUnitCost;
+
+            int floorArea = floorWidth * floorLength;
+            float incrementsOfLabor = (float) Math.ceil(floorArea / 20 * 4);
+            float totalLaborCost = incrementsOfLabor * (86 / 4);
+            float grandTotalCost = floorTotalCost + totalLaborCost;
+
+            request.setAttribute("materialCost", displayCurrency(request.getLocale(), floorTotalCost));
+            request.setAttribute("floorArea", floorArea);
+            request.setAttribute("laborCost", displayCurrency(request.getLocale(), totalLaborCost));
+            request.setAttribute("totalFloorCost", displayCurrency(request.getLocale(), grandTotalCost));
+
+            RequestDispatcher rd = request.getRequestDispatcher("response.jsp");
+            rd.forward(request, response);
+
+        }
     }
 
     /**
