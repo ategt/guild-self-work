@@ -37,18 +37,4 @@
 
 
     </body>
-    <!--</html>
-            <h1>${message}</h1>
-            
-    <c:forEach items="${numbers}" var="number">
-        ${number} <br />
-    </c:forEach>
-    
-    <c:if test="${isGoing}">
-        This is true.
-    </c:if>
-    
-    <c:if test="${isGoing}">
-        This is true.
-    </c:if>      -->
 </html>

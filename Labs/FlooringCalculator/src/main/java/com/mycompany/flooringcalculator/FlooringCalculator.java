@@ -37,7 +37,7 @@ public class FlooringCalculator extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setAttribute("hadError", false);
 
-        RequestDispatcher rd = request.getRequestDispatcher("fail.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
         rd.forward(request, response);
     }
 
@@ -70,9 +70,9 @@ public class FlooringCalculator extends HttpServlet {
             request.setAttribute("oldLength", floorLengthString);
             floorLength = Integer.parseInt(floorLengthString);
             request.setAttribute("oldLength", floorLength);
-            if (floorLength >= 0 ){
+            if (floorLength >= 0) {
 
-            request.setAttribute("lengthError", false);
+                request.setAttribute("lengthError", false);
             } else {
                 hadError = true;
             }
@@ -85,8 +85,8 @@ public class FlooringCalculator extends HttpServlet {
             request.setAttribute("oldWidth", floorWidthString);
             floorWidth = Integer.parseInt(floorWidthString);
             request.setAttribute("oldWidth", floorWidth);
-            if ( floorWidth >= 0 ) {
-            request.setAttribute("widthError", false);
+            if (floorWidth >= 0) {
+                request.setAttribute("widthError", false);
             } else {
                 hadError = true;
             }
@@ -98,8 +98,8 @@ public class FlooringCalculator extends HttpServlet {
             request.setAttribute("oldUnitCost", floorUnitCostString);
             floorUnitCost = Integer.parseInt(floorUnitCostString);
             request.setAttribute("oldUnitCost", floorUnitCost);
-            if ( floorUnitCost >= 0 ) { 
-            request.setAttribute("unitCostError", false);
+            if (floorUnitCost >= 0) {
+                request.setAttribute("unitCostError", false);
             } else {
                 hadError = true;
             }
@@ -111,7 +111,7 @@ public class FlooringCalculator extends HttpServlet {
 
             request.setAttribute("hadError", hadError);
 
-            RequestDispatcher rd = request.getRequestDispatcher("fail.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
         } else {
 
