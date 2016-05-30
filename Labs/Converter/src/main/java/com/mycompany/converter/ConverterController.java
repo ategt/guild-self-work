@@ -57,6 +57,9 @@ public class ConverterController extends HttpServlet {
 
         switch (conversionType) {
             case "temperature":
+
+                TemperatureController tc = new TemperatureController();
+                tc.preloadAttributesToPage(request);
                 rd = request.getRequestDispatcher("temperature.jsp");
                 break;
             case "currency":
