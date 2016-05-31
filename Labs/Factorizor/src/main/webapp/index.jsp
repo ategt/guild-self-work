@@ -1,3 +1,4 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,6 +13,9 @@
                 <label id="factorizeNumberLabel" for="startingBet">
                     Please Enter A Number To Be Factorized:
                 </label>
+                <c:if test="inputInvalid">
+                    <h3>The Number Input Could Not Be Factored</h3>
+                </c:if>
                 <input type="text" id="factorizeNumber" name="factorizeNumber" value="0" />
                 <br />
                 <input type="Submit" name="factorizeButton" id="factorizeButton" value="Factorize!" />

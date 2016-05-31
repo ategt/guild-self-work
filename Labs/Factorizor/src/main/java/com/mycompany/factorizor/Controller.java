@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "Controller", urlPatterns = {"/Controller"})
 public class Controller extends HttpServlet {
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -41,59 +41,32 @@ public class Controller extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String factorizeNumberString = request.getParameter("factorizeNumber");
-        int numberToFactorize = Integer.parseInt(factorizeNumberString);
+        boolean validInput = true;
+        Integer numberToFactorize = null;
 
-        //int maxAmountHeld = 0;
-        //int rollNumberAtMaxAmountHeld = 0;
-        //LuckySevensGameLog
-        // Old try
-        //com.mycompany.luckysevenswebapp.LuckySevensGameLogic LuckySevensGameLogic = new com.mycompany.luckysevenswebapp.LuckySevensGameLogic();
-        
-//         rollCounter = 1;
-//
-//        //rollCounter = LuckySevensGameLogic.luckySevensGameLoop(rollCounter, startingBet);
-//        // old try
-//        //LuckySevensGameDTO gameObject =  LuckySevensGameLogic.
-//        //luckySevensGameLoop(rollCounter, startingBet);
-//        //luckySevensGame( rollCounter,  startingBet);
-//        //String endingMessage = printEndingMessage( gameObject );
-//        
-//         rollCounter =  luckySevensGameLoop( rollCounter,  startingBet);
-// 
-//        String endingMessage = printEndingMessage( rollNumberAtMaxAmountHeld );
-//        
-//        //String endingMessage = " message " + startingBet;
-        //printEndingMessage
-        
-        String message = run(numberToFactorize);
-        request.setAttribute("message", message);
+        try {
+            numberToFactorize = Integer.parseInt(factorizeNumberString);
+        } catch (NumberFormatException numberFormatException) {
+            validInput = false;
+        }
 
-        RequestDispatcher rd = request.getRequestDispatcher("response.jsp");
-        rd.forward(request, response);
+        if (numberToFactorize == null || numberToFactorize < 1) {
+            validInput = false;
+        }
 
-        
-//        String myAnswer = request.getParameter("myAnswer");
-//        String myReason = request.getParameter("myReason");
-//
-//        String messageToUser = "";
-//        if ("no".equalsIgnoreCase(myAnswer)) {
-//            messageToUser = "That is too bad, sorry to hear about " + myReason;
-//        } else {
-//            messageToUser = "Are you sure? SM is coming.";
-//        }
-//
-//        List<Integer> numbers = new ArrayList();
-//
-//        for (int i = 0; i < 10; i++) {
-//            numbers.add(i);
-//        }
-//
-//        request.setAttribute("numbers", numbers);
-//        request.setAttribute("message", messageToUser);
-//        request.setAttribute("isGoing", true);
-//
-//        RequestDispatcher rd = request.getRequestDispatcher("response.jsp");
-//        rd.forward(request, response);
+        if (validInput) {
+            String message = run(numberToFactorize);
+            request.setAttribute("message", message);
+
+            RequestDispatcher rd = request.getRequestDispatcher("response.jsp");
+            rd.forward(request, response);
+        } else {
+            request.setAttribute("inputInvalid", true);
+            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+            rd.forward(request, response);
+
+        }
+
     }
 
     /**
@@ -142,8 +115,8 @@ public class Controller extends HttpServlet {
 
         for (int testNumber = 1; testNumber <= factorizedNumber; testNumber++) {
             String responseString = factorizingCalculations(factorizedNumber, testNumber);
-           // if ("".equalsIgnoreCase(responseString.trim())) {
-                output += responseString; // + "d<br />";
+            // if ("".equalsIgnoreCase(responseString.trim())) {
+            output += responseString; // + "d<br />";
             //}
         }
 
