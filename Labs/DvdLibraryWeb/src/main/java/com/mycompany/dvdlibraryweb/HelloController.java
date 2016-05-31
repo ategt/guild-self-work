@@ -1,4 +1,4 @@
-package com.mycompany.contactlist;
+package com.mycompany.dvdlibraryweb;
 
 import java.util.Map;
 import org.springframework.stereotype.Controller;
@@ -17,15 +17,4 @@ public class HelloController {
         model.put("message", "Hello from the controller" );
         return "hello";
     }
-
-    @RequestMapping(value="/saybi", method=RequestMethod.GET)
-    public String sayBi(Map<String, Object> model) {
-        model.put("message", "Z, The Controller" );
-        return "hello";
-    }
-
-//    public String otherEndpoint(){
-//        
-//    }
-
 }
