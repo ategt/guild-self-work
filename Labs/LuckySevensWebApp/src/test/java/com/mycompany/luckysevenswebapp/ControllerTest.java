@@ -31,60 +31,60 @@ public class ControllerTest {
     }
 
     /**
-     * Test of displayCurrency method, of class Controller.
-     */
-    @Test
-    public void testDisplayCurrency() {
-        System.out.println("displayCurrency");
-        Locale currentLocale = Locale.US;
-        int currencyAmount = 50;
-        Controller instance = new Controller();
-        String expResult = "$50.00";
-        String result = instance.displayCurrency(currentLocale, currencyAmount);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of displayCurrency method, of class Controller.
-     */
-    @Test
-    public void testValidateInput() {
-        System.out.println("validateInput");
-        Locale currentLocale = null;
-
-        int currencyAmount = 50;
-        Controller instance = new Controller();
-        boolean expResult = true;
-        boolean result = instance.validateInput(currencyAmount);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of displayCurrency method, of class Controller.
-     */
-    @Test
-    public void testValidateInputB() {
-        System.out.println("validateInput");
-
-        int currencyAmount = -50;
-        Controller instance = new Controller();
-        boolean expResult = false;
-        boolean result = instance.validateInput(currencyAmount);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of displayCurrency method, of class Controller.
-     */
-    @Test
-    public void testValidateInputC() {
-        System.out.println("validateInput");
-
-        int currencyAmount = 0;
-        Controller instance = new Controller();
-        boolean expResult = false;
-        boolean result = instance.validateInput(currencyAmount);
-        assertEquals(expResult, result);
-    }
+//     * Test of displayCurrency method, of class Controller.
+//     */
+//    @Test
+//    public void testDisplayCurrency() {
+//        System.out.println("displayCurrency");
+//        Locale currentLocale = Locale.US;
+//        int currencyAmount = 50;
+//        Controller instance = new Controller();
+//        String expResult = "$50.00";
+//        String result = instance.displayCurrency(currentLocale, currencyAmount);
+//        assertEquals(expResult, result);
+//    }
+//
+//    /**
+//     * Test of displayCurrency method, of class Controller.
+//     */
+//    @Test
+//    public void testValidateInput() {
+//        System.out.println("validateInput");
+//        Locale currentLocale = null;
+//
+//        int currencyAmount = 50;
+//        Controller instance = new Controller();
+//        boolean expResult = true;
+//        boolean result = instance.validateInput(currencyAmount);
+//        assertEquals(expResult, result);
+//    }
+//
+//    /**
+//     * Test of displayCurrency method, of class Controller.
+//     */
+//    @Test
+//    public void testValidateInputB() {
+//        System.out.println("validateInput");
+//
+//        int currencyAmount = -50;
+//        Controller instance = new Controller();
+//        boolean expResult = false;
+//        boolean result = instance.validateInput(currencyAmount);
+//        assertEquals(expResult, result);
+//    }
+//
+//    /**
+//     * Test of displayCurrency method, of class Controller.
+//     */
+//    @Test
+//    public void testValidateInputC() {
+//        System.out.println("validateInput");
+//
+//        int currencyAmount = 0;
+//        Controller instance = new Controller();
+//        boolean expResult = false;
+//        boolean result = instance.validateInput(currencyAmount);
+//        assertEquals(expResult, result);
+//    }
 
 }
