@@ -55,10 +55,16 @@ public class Controller extends HttpServlet {
         }
 
         if (validInput) {
-            
+
             FactorizerLogic factorizerLogic = new FactorizerLogic();
             NumberCharacteristics factorizerDto = factorizerLogic.run(numberToFactorize);
-            //request.setAttribute("message", message);
+          
+            request.setAttribute("numberToBeFactorized", factorizerDto.getNumberToBeFactorized());
+            request.setAttribute("numberOfFactors", factorizerDto.getNumberOfFactors());
+            request.setAttribute("isPrime", factorizerDto.isIsPrime());
+            request.setAttribute("isPerfect", factorizerDto.isIsPerfect());
+
+            request.setAttribute("factors", factorizerDto.getFactors());
 
             RequestDispatcher rd = request.getRequestDispatcher("response.jsp");
             rd.forward(request, response);
@@ -66,9 +72,7 @@ public class Controller extends HttpServlet {
             request.setAttribute("inputInvalid", true);
             RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
-
         }
-
     }
 
     /**

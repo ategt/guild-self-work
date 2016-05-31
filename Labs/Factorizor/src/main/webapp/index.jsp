@@ -7,13 +7,14 @@
         <title>Factorizer</title>
     </head>
     <body>
-        <div>
+        <div align="center">
             <h1>Factorizer</h1>
             <form method="POST" action="Controller">
                 <label id="factorizeNumberLabel" for="startingBet">
                     Please Enter A Number To Be Factorized:
                 </label>
-                <c:if test="inputInvalid">
+                <br />
+                <c:if test="${inputInvalid}">
                     <h3>The Number Input Could Not Be Factored</h3>
                 </c:if>
                 <input type="text" id="factorizeNumber" name="factorizeNumber" value="0" />

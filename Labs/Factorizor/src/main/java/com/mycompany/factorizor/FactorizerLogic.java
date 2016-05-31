@@ -27,9 +27,10 @@ public class FactorizerLogic {
         factorizerDto.setSumOfFactors(0);
 
         factorizingCalculationsLoop(factorizerDto);
-        factorizerDto.setIsPrime(displayIsPrimeNumber(factorizerDto.getFactors().size(), factorizerDto.getNumberToBeFactorized()));
-        factorizerDto.setIsPerfect(displayIsPerfectNumber(factorizerDto.getSumOfFactors(), factorizerDto.getNumberToBeFactorized()));
-
+        //factorizerDto.setIsPrime(displayIsPrimeNumber(factorizerDto.getFactors().size(), factorizerDto.getNumberToBeFactorized()));
+        factorizerDto.setIsPrime(isPrimeNumber(factorizerDto.getFactors().size()));
+        factorizerDto.setIsPerfect(isPerfectNumber(factorizerDto.getSumOfFactors(), factorizerDto.getNumberToBeFactorized()));
+//isPerfectNumber
         return factorizerDto;
 
     }
@@ -47,6 +48,7 @@ public class FactorizerLogic {
         }
 
         calculateSumOfFactors(factorizerDto);        //return output;
+        factorizerDto.setNumberOfFactors(factorizerDto.getFactors().size());
     }
 
     //public void factorizingCalculations(int factorizedNumber, int testNumber) {
