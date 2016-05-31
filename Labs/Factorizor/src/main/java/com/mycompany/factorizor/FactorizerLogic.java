@@ -5,69 +5,67 @@
  */
 package com.mycompany.factorizor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author apprentice
  */
 public class FactorizerLogic {
-    
+
     NumberCharacteristics factorizerDto;
-    
-    public String run(int factorizedNumber) {
-        
+
+    public NumberCharacteristics run(int factorizedNumber) {
+
         factorizerDto = new NumberCharacteristics();
 
-        factorizerDto.s
-        String output = "";
-
-        //numberOfFactors = 0;
-        //sumOfFactors = 0;
+        factorizerDto.setNumberToBeFactorized(factorizedNumber);
+        //String output = "";
 
         factorizerDto.setNumberOfFactors(0);
         factorizerDto.setSumOfFactors(0);
-        
-        //int factorizedNumber = consoleIO.getUserIntInputRange("Please Enter A Number To Be Factorized:", 1, Integer.MAX_VALUE);
-        //output += factorizingCalculationsLoop(factorizedNumber) + "<br />";
 
-        //output += displayIsPerfectNumber(sumOfFactors, factorizedNumber) + "<br />";
+        factorizingCalculationsLoop(factorizerDto);
+        factorizerDto.setIsPrime(displayIsPrimeNumber(factorizerDto.getFactors().size(), factorizerDto.getNumberToBeFactorized()));
+        factorizerDto.setIsPerfect(displayIsPerfectNumber(factorizerDto.getSumOfFactors(), factorizerDto.getNumberToBeFactorized()));
 
-        //output += displayIsPrimeNumber(numberOfFactors, factorizedNumber) + "<br />";
-
-        return output;
+        return factorizerDto;
 
     }
 
-    public String factorizingCalculationsLoop(int factorizedNumber) {
+    //public String factorizingCalculationsLoop(NumberCharacteristics factorizerDto) {
+    public void factorizingCalculationsLoop(NumberCharacteristics factorizerDto) {
         //java.util.List<String> output = ArrayList();
 
-        String output = "";
-
-        for (int testNumber = 1; testNumber <= factorizedNumber; testNumber++) {
-            String responseString = factorizingCalculations(factorizedNumber, testNumber);
+        for (int testNumber = 1; testNumber <= factorizerDto.getNumberToBeFactorized(); testNumber++) {
+            //String responseString = factorizingCalculations(factorizedNumber, testNumber);
+            factorizingCalculations(factorizerDto, testNumber);
             // if ("".equalsIgnoreCase(responseString.trim())) {
-            output += responseString; // + "d<br />";
+            //output += responseString; // + "d<br />";
             //}
         }
 
-        return output;
-
+        calculateSumOfFactors(factorizerDto);        //return output;
     }
 
-    public String factorizingCalculations(int factorizedNumber, int testNumber) {
-        String output = "";
-        if (isNumberEvenlyDivisible(factorizedNumber, testNumber)) {
+    //public void factorizingCalculations(int factorizedNumber, int testNumber) {
+    public void factorizingCalculations(NumberCharacteristics factorizerDto, int testNumber) {
 
-            numberOfFactors++;
+        if (isNumberEvenlyDivisible(factorizerDto.getNumberToBeFactorized(), testNumber)) {
 
-            if (testNumber != factorizedNumber) {
-                sumOfFactors += testNumber;
-                output += testNumber + "<br />";
-                //consoleIO.printStringToConsole(testNumber + "");
+            if (factorizerDto.getFactors() == null) {
+                factorizerDto.setFactors(new ArrayList());
+            }
+
+            factorizerDto.setNumberOfFactors(factorizerDto.getNumberOfFactors() + 1);
+
+            if (testNumber != factorizerDto.getNumberToBeFactorized()) {
+                factorizerDto.getFactors().add(testNumber);
             }
 
         }
 
-        return output;
     }
 
     /**
@@ -84,26 +82,34 @@ public class FactorizerLogic {
     }
 
     //public void displayIsPrimeNumber(int numberOfFactors, ConsoleIO consoleIO, int factorizedNumber) {
-    public String displayIsPrimeNumber(int numberOfFactors, int factorizedNumber) {
-        String output = "";
-
+    //public String displayIsPrimeNumber(int numberOfFactors, int factorizedNumber) {
+    public boolean displayIsPrimeNumber(int numberOfFactors, int factorizedNumber) {
         if (isPrimeNumber(numberOfFactors)) {
-            output = factorizedNumber + " is a prime number.";
+            return true;
         } else {
-            output = factorizedNumber + " is not a prime number.";
+            return false;
         }
-
-        return output;
     }
 
-    public String displayIsPerfectNumber(int sumOfFactors, int factorizedNumber) {
-        String output = "";
-        if (isPerfectNumber(sumOfFactors, factorizedNumber)) {
-            output = factorizedNumber + " is a perfect number.";
-        } else {
-            output = factorizedNumber + " is not a perfect number.";
+    public void calculateSumOfFactors(NumberCharacteristics factorizerDto) {
+        List<Integer> factors = factorizerDto.getFactors();
+
+        int sumOfFactors = 0;
+        for (Integer factor : factors) {
+            sumOfFactors += factor;
         }
-        return output;
+
+        factorizerDto.setSumOfFactors(sumOfFactors);
+    }
+
+    public boolean displayIsPerfectNumber(int sumOfFactors, int factorizedNumber) {
+
+        if (isPerfectNumber(sumOfFactors, factorizedNumber)) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     public static boolean isPrimeNumber(int numberOfFactors) {

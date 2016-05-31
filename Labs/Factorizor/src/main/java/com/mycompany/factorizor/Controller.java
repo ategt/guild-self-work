@@ -56,8 +56,9 @@ public class Controller extends HttpServlet {
 
         if (validInput) {
             
-            String message = run(numberToFactorize);
-            request.setAttribute("message", message);
+            FactorizerLogic factorizerLogic = new FactorizerLogic();
+            NumberCharacteristics factorizerDto = factorizerLogic.run(numberToFactorize);
+            //request.setAttribute("message", message);
 
             RequestDispatcher rd = request.getRequestDispatcher("response.jsp");
             rd.forward(request, response);
