@@ -19,12 +19,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(urlPatterns = {"/Controller"})
 public class Controller extends HttpServlet {
-   
-int currentBalance;// = 0;
-int maxAmountHeld; //= 0;
-int rollNumberAtMaxAmountHeld; //= 0;
-int rollCounter; //= 0;
-    
+
+//int currentBalance;// = 0;
+//int maxAmountHeld; //= 0;
+//int rollNumberAtMaxAmountHeld; //= 0;
+//int rollCounter; //= 0;
     //(currentBalance > maxAmountHeld) {
 //            maxAmountHeld = currentBalance;
 //            rollNumberAtMaxAmountHeld = rollCounter
@@ -57,7 +56,7 @@ int rollCounter; //= 0;
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         String startingBetString = request.getParameter("startingBet");
 
         //int maxAmountHeld = 0;
@@ -67,25 +66,37 @@ int rollCounter; //= 0;
         //com.mycompany.luckysevenswebapp.LuckySevensGameLogic LuckySevensGameLogic = new com.mycompany.luckysevenswebapp.LuckySevensGameLogic();
         int startingBet = Integer.parseInt(startingBetString);
 
-         rollCounter = 1;
+        LuckySevensGame game = new LuckySevensGame();
+
+        game.setStartingBet(startingBet);
+        game.setRollCounter(1);
 
         //rollCounter = LuckySevensGameLogic.luckySevensGameLoop(rollCounter, startingBet);
-        // old try
+        // old tryar
         //LuckySevensGameDTO gameObject =  LuckySevensGameLogic.
         //luckySevensGameLoop(rollCounter, startingBet);
         //luckySevensGame( rollCounter,  startingBet);
         //String endingMessage = printEndingMessage( gameObject );
         
-         rollCounter =  luckySevensGameLoop( rollCounter,  startingBet);
- 
-        String endingMessage = printEndingMessage( rollNumberAtMaxAmountHeld );
-        
+        //rollCounter = luckySevensGameLoop(rollCounter, startingBet);
+        game = luckySevensGameLoop(game);
+
+        //String endingMessage = printEndingMessage(rollNumberAtMaxAmountHeld);
+
         //String endingMessage = " message " + startingBet;
         //printEndingMessage
+        //request.setAttribute("message", endingMessage);
+        request.setAttribute("startingBetValue", game.getStartingBet());
+        request.setAttribute("totalRolls", game.getRollCounter());
+        request.setAttribute("highestAmountWon", game.getMaxAmountHeld());
+        request.setAttribute("rollCountAtHighestAmount", game.getRollNumberAtMaxAmountHeld());
 
-        request.setAttribute("message", endingMessage);
-
-        RequestDispatcher rd = request.getRequestDispatcher("firstResponse.jsp");
+        // startingBetValue
+        // totalRolls
+        // highestAmountWon  
+        // rollCountAtHighestAmount
+        //RequestDispatcher rd = request.getRequestDispatcher("firstResponse.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("Result.jsp");
         rd.forward(request, response);
 
     }
@@ -99,9 +110,6 @@ int rollCounter; //= 0;
     public String getServletInfo() {
         return "Lucky Sevens";
     }// </editor-fold>
-
-
-
 
     //@Override
     public String getName() {
@@ -122,15 +130,14 @@ int rollCounter; //= 0;
 //                + " rolls when you had $" + maxAmountHeld + ".";
 //
 //    }
-    
     //private String printEndingMessage(int rollCounter, int rollNumberAtMaxAmountHeld) {
-    private String printEndingMessage(int rollNumberAtMaxAmountHeld) {
-
-        return "You are broke after " + (rollCounter - 1) + " rolls.<br />"
-                + "You should have quit after " + rollNumberAtMaxAmountHeld
-                + " rolls when you had $" + maxAmountHeld + ".";
-
-    }
+//    private String printEndingMessage(int rollNumberAtMaxAmountHeld) {
+//
+//        return "You are broke after " + (rollCounter - 1) + " rolls.<br />"
+//                + "You should have quit after " + rollNumberAtMaxAmountHeld
+//                + " rolls when you had $" + maxAmountHeld + ".";
+//
+//    }
 //
 //    public LuckySevensGameDTO luckySevensGame(int rollCounter, int startingBet) {
 //
@@ -160,22 +167,26 @@ int rollCounter; //= 0;
 //        return gameObject;
 //    }
 
-    public int luckySevensGameLoop(int rollCounter, int startingBet) {
-        
+    //public int luckySevensGameLoop(int rollCounter, int startingBet) {
+    public LuckySevensGame luckySevensGameLoop(LuckySevensGame game) {
+
+        int rollCounter = game.getRollCounter();
         int diceRoll;
-        
-        for ( int currentBalance = startingBet ; currentBalance > 0 ; rollCounter++ ) {
+
+        for (int currentBalance = game.getStartingBet(); currentBalance > 0; rollCounter++) {
 
             diceRoll = rollDice();
 
             currentBalance = adjustCurrentBalance(diceRoll, currentBalance);
 
+            game.setCurrentBalance(currentBalance);
             //updateHighBalance(currentBalance, rollCounter);
-            updateHighBalance(currentBalance, rollCounter);
+            updateHighBalance(game);
         }
-        
-        return rollCounter;
-        
+
+        game.setRollCounter(rollCounter);
+        //return rollCounter;
+        return game;
     }
 
 //    public void updateHighBalance(int currentBalance, int rollCounter) {
@@ -184,11 +195,13 @@ int rollCounter; //= 0;
 //            rollNumberAtMaxAmountHeld = rollCounter;
 //        }
 //    }
-
-    public void updateHighBalance(int currentBalance, int rollCounter) { //, int maxAmountHeld, int rollNumberAtMaxAmountHeld) {
-        if (currentBalance > maxAmountHeld) {
-            maxAmountHeld = currentBalance;
-            rollNumberAtMaxAmountHeld = rollCounter;
+    //public void updateHighBalance(int currentBalance, int rollCounter) { //, int maxAmountHeld, int rollNumberAtMaxAmountHeld) {
+    public void updateHighBalance(LuckySevensGame game) { //, int maxAmountHeld, int rollNumberAtMaxAmountHeld) {
+        if (game.getCurrentBalance() > game.getMaxAmountHeld()) {
+            //maxAmountHeld = currentBalance;
+            game.setMaxAmountHeld(game.getCurrentBalance());
+            //rollNumberAtMaxAmountHeld = rollCounter;
+            game.setRollNumberAtMaxAmountHeld(game.getRollCounter());
         }
     }
 

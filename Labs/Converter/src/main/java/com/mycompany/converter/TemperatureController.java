@@ -130,7 +130,7 @@ public class TemperatureController extends HttpServlet {
 
         //switch (temperatureFromUnit) {
         //  case "Celsius":
-        if (temperatureFromUnit.equalsIgnoreCase("Celsius")) {
+        if ("Celsius".equalsIgnoreCase(temperatureFromUnit)) {
 
             switch (temperatureToUnit) {
                 case "Celsius":

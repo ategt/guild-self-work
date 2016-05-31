@@ -6,7 +6,7 @@
         <title>The Greatest Game Ever</title>
     </head>
     <body>
-        <div>
+        <div align="center">
             <h1>Lucky Sevens</h1>
             <form method="POST" action="Controller"><label id="startingBetLabel" for="startingBet">Starting Bet:</label>
                 <input type="text" id="startingBet" name="startingBet" value="$0.00" />
