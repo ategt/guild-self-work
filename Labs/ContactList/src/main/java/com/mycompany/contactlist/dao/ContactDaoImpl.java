@@ -6,7 +6,9 @@
 package com.mycompany.contactlist.dao;
 
 import com.mycompany.contactlist.dto.Contact;
+import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 /**
@@ -29,7 +31,7 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public void update(Contact contact) {
 
-        data.remove(get(contact.getId()));
+        this.remove(contact);
         data.add(contact);
     }
 
@@ -40,22 +42,43 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public Contact get(Integer id) {
-        if (data.size() > 0){
-        
-        Contact contact = data.stream()
-                .filter(a -> a.getId() == id)
+        if (data.isEmpty()) {
+            return null;
+        } else {
+            try {
+
+                Contact contact = data.stream()
+                        .filter(a -> a.getId() == id)
+                        .findFirst()
+                        .get();
+
                 //.filter(Contact::getId == id)
-                .collect(Collectors.toList())
-                .get(0);
-        
-        return contact;
+                //.collect(Collectors.toList())
+                //.get(0);
+                //.
+                return contact;
+            } catch (NoSuchElementException noSuchElementException) {
+
+                return null;
+            }
         }
-        return null;
     }
 
     @Override
     public List<Contact> list() {
         return new java.util.ArrayList(data);
+    }
+
+    public List<Contact> sortByLastName(List<Contact> contacts) {
+
+        contacts.sort(
+                new Comparator<Contact>() {
+            public int compare(Contact c1, Contact c2) {
+                return c1.getLastName().compareTo(c2.getLastName());
+            }
+        });
+
+        return contacts;
     }
 
 }

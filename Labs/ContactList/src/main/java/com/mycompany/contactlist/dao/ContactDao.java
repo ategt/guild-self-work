@@ -18,6 +18,7 @@ public interface ContactDao {
     public void remove(Contact contact);
     public Contact get(Integer id);
     public List<Contact> list();
+    public List<Contact> sortByLastName(List<Contact> contacts);
     
     
 

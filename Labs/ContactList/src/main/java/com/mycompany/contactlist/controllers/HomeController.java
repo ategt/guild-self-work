@@ -31,10 +31,11 @@ public class HomeController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Map model) {
 
-        List<Contact>  contacts = contactDao.list();
-        
-        model.put("contacts",contacts);
-        
+        List<Contact> contacts = contactDao.list();
+        contactDao.sortByLastName(contacts);
+
+        model.put("contacts", contacts);
+
         return "home";
     }
 
