@@ -1,3 +1,5 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -10,6 +12,7 @@
             <h1>Lucky Sevens</h1>
             <form method="POST" action="Controller"><label id="startingBetLabel" for="startingBet">Starting Bet:</label>
                 <input type="text" id="startingBet" name="startingBet" value="$0.00" />
+                <c:if test="inputInvalid">The Value Entered In This Field Is Not Valid</c:if>
                 <br />
                 <input type="Submit" name="play" id="playButton" value="Play" />
             </form>

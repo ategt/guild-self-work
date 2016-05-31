@@ -6,6 +6,8 @@ package com.mycompany.luckysevenswebapp;
  * and open the template in the editor.
  */
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Locale;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -59,46 +61,39 @@ public class Controller extends HttpServlet {
 
         String startingBetString = request.getParameter("startingBet");
 
-        //int maxAmountHeld = 0;
-        //int rollNumberAtMaxAmountHeld = 0;
-        //LuckySevensGameLog
-        // Old try
-        //com.mycompany.luckysevenswebapp.LuckySevensGameLogic LuckySevensGameLogic = new com.mycompany.luckysevenswebapp.LuckySevensGameLogic();
-        int startingBet = Integer.parseInt(startingBetString);
+        Integer startingBet = null;
+        boolean validInput = true;
+        final String dollarSign = "\u0024";
 
-        LuckySevensGame game = new LuckySevensGame();
+        try {
+            startingBetString = startingBetString.replace(dollarSign, "").trim();
+            //startingBet = Integer.parseInt(startingBetString);
+            startingBet = Math.round(Float.parseFloat(startingBetString));
+            validInput = validateInput(startingBet);
+        } catch (NumberFormatException numberFormatException) {
+            validInput = false;
+        }
 
-        game.setStartingBet(startingBet);
-        game.setRollCounter(1);
+        if (validInput) {
+            LuckySevensGame game = new LuckySevensGame();
 
-        //rollCounter = LuckySevensGameLogic.luckySevensGameLoop(rollCounter, startingBet);
-        // old tryar
-        //LuckySevensGameDTO gameObject =  LuckySevensGameLogic.
-        //luckySevensGameLoop(rollCounter, startingBet);
-        //luckySevensGame( rollCounter,  startingBet);
-        //String endingMessage = printEndingMessage( gameObject );
-        
-        //rollCounter = luckySevensGameLoop(rollCounter, startingBet);
-        game = luckySevensGameLoop(game);
+            game.setStartingBet(startingBet);
+            game.setRollCounter(1);
 
-        //String endingMessage = printEndingMessage(rollNumberAtMaxAmountHeld);
+            game = luckySevensGameLoop(game);
 
-        //String endingMessage = " message " + startingBet;
-        //printEndingMessage
-        //request.setAttribute("message", endingMessage);
-        request.setAttribute("startingBetValue", game.getStartingBet());
-        request.setAttribute("totalRolls", game.getRollCounter());
-        request.setAttribute("highestAmountWon", game.getMaxAmountHeld());
-        request.setAttribute("rollCountAtHighestAmount", game.getRollNumberAtMaxAmountHeld());
+            request.setAttribute("startingBetValue", displayCurrency(request.getLocale(), game.getStartingBet()));
+            request.setAttribute("totalRolls", game.getRollCounter());
+            request.setAttribute("highestAmountWon", displayCurrency(request.getLocale(), game.getMaxAmountHeld()));
+            request.setAttribute("rollCountAtHighestAmount", game.getRollNumberAtMaxAmountHeld());
 
-        // startingBetValue
-        // totalRolls
-        // highestAmountWon  
-        // rollCountAtHighestAmount
-        //RequestDispatcher rd = request.getRequestDispatcher("firstResponse.jsp");
-        RequestDispatcher rd = request.getRequestDispatcher("Result.jsp");
-        rd.forward(request, response);
-
+            RequestDispatcher rd = request.getRequestDispatcher("results.jsp");
+            rd.forward(request, response);
+        } else {
+            request.setAttribute("inputInvalid", true);
+            RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+            rd.forward(request, response);
+        }
     }
 
     /**
@@ -115,6 +110,12 @@ public class Controller extends HttpServlet {
     public String getName() {
         return "Lucky Sevens";
     }
+    
+        public String displayCurrency(Locale currentLocale, int currencyAmount) {
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(currentLocale);
+        return currencyFormatter.format(currencyAmount);
+    }
+
 //    private String printEndingMessage(LuckySevensGameDTO gameObject) {
 //        
 //        return "You are broke after " + (gameObject.getRollCounter()-1) + " rolls.<br />" + 
@@ -166,7 +167,6 @@ public class Controller extends HttpServlet {
 //
 //        return gameObject;
 //    }
-
     //public int luckySevensGameLoop(int rollCounter, int startingBet) {
     public LuckySevensGame luckySevensGameLoop(LuckySevensGame game) {
 
@@ -179,6 +179,7 @@ public class Controller extends HttpServlet {
 
             currentBalance = adjustCurrentBalance(diceRoll, currentBalance);
 
+            game.setRollCounter(rollCounter);
             game.setCurrentBalance(currentBalance);
             //updateHighBalance(currentBalance, rollCounter);
             updateHighBalance(game);
@@ -233,4 +234,13 @@ public class Controller extends HttpServlet {
     }
 
     //rollNumberAtMaxAmountHeld 
+    private boolean validateInput(Integer startingBet) {
+        boolean validInput = true;
+
+        if (startingBet == null || startingBet < 1) {
+            validInput = false;
+        }
+
+        return validInput;
+    }
 }

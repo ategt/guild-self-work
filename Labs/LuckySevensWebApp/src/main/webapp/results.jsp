@@ -6,9 +6,9 @@
         <title>Results Page</title>
     </head>
     <body>
-        <div id="resultsDiv">
-            <table id="resultsTable">
-                <caption>Results</caption>
+        <div id="resultsDiv" align="center">
+            <table id="resultsTable" cellpadding="5">
+                <caption><h2>Results</h2></caption>
                 <tr id="startingBetRow">
                     <td class="description">Starting Bet</td>
                     <td class="value" id="startingBetValue">${startingBetValue}</td>
