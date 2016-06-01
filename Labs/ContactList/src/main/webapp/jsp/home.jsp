@@ -32,12 +32,16 @@
                 <div class="col-md-6">
 
                     <table class="table table-hover">
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th><i class="glyphicon glyphicon-edit"></i> Edit</th>
+                        <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
                         <c:forEach items="${contacts}" var="contact">
                             <tr>
                                 <td>${contact.firstName}</td>
                                 <td>${contact.lastName}</td>
-                                <td><a href="contact/edit?id=${contact.id}">Edit</a></td>
-                                <td><a href="contact/delete?id=${contact.id}">Delete</a></td>
+                                <td><a href="contact/edit/${contact.id}">Edit</a></td>
+                                <td><a href="contact/delete/${contact.id}">Delete</a></td>
 
                             </tr>
                         </c:forEach>
@@ -69,6 +73,12 @@
                             <label for="company" class="col-sm-2 control-label" >Company:</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="text" name="company" id="company" placeholder="Company" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Email" class="col-sm-2 control-label" >Email:</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" name="email" id="email" placeholder="Email" />
                             </div>
                         </div>
                         <div class="form-group">
