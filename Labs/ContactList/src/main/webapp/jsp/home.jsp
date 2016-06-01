@@ -80,7 +80,9 @@
                         <div class="form-group">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
-                                <input type="submit" class="btn" />
+                                <input type="submit" class="btn btn-default" />
+                                <input type="submit" class="btn btn-danger" />
+                                <input type="submit" class="btn btn-warning" />
                             </div>
                         </div>
 

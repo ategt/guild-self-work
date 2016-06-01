@@ -6,7 +6,6 @@
 package com.mycompany.contactlist.dao;
 
 import com.mycompany.contactlist.dto.Contact;
-import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
