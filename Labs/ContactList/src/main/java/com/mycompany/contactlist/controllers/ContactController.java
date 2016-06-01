@@ -39,15 +39,15 @@ public class ContactController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String edit(@RequestParam int id, Map model) {
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public String edit(@PathVariable("id") Integer contactId, Map model) {
 
-        List<Contact> contacts = contactDao.list();
-        Contact contact = contactDao.get(id);
+        //List<Contact> contacts = contactDao.list();
+        Contact contact = contactDao.get(contactId);
 
-        contactDao.sortByLastName(contacts);
+        //contactDao.sortByLastName(contacts);
 
-        model.put("contacts", contacts);
+        //model.put("contacts", contacts);
         model.put("contact", contact);
 
         return "edit";
