@@ -7,7 +7,6 @@ package com.mycompany.contactlist.controllers;
 
 import com.mycompany.contactlist.dao.ContactDao;
 import com.mycompany.contactlist.dto.Contact;
-import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -67,5 +65,24 @@ public class ContactController {
 
         return "redirect:/";
     }
+
+    @RequestMapping(value= "/edit", method=RequestMethod.POST)
+    public String editSubmit( @ModelAttribute Contact contact ) {
+        
+        contactDao.update(contact);
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
+    public String show(@PathVariable("id") Integer contactId, Map model) {
+
+        Contact contact = contactDao.get(contactId);
+        
+        model.put("contact", contact);
+        
+        return "show";
+    }
+
+    
 
 }

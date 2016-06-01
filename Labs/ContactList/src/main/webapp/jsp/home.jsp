@@ -38,8 +38,8 @@
                         <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
                         <c:forEach items="${contacts}" var="contact">
                             <tr>
-                                <td>${contact.firstName}</td>
-                                <td>${contact.lastName}</td>
+                                <td><a href="contact/show/${contact.id}">${contact.firstName}</a></td>
+                                <td><a href="contact/show/${contact.id}">${contact.lastName}</a></td>
                                 <td><a href="contact/edit/${contact.id}">Edit</a></td>
                                 <td><a href="contact/delete/${contact.id}">Delete</a></td>
 

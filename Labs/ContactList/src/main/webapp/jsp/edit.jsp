@@ -29,65 +29,58 @@
             </div>
 
             <div class="row">
+
                 <div class="col-md-6">
-
-                    <table class="table table-hover">
-                        <c:forEach items="${contacts}" var="contact">
-                            <tr>
-                                <td>${contact.firstName}</td>
-                                <td>${contact.lastName}</td>
-                                <td><a href="edit?id=${contact.id}">Edit</a></td>
-                                <td><a href="delete?id=${contact.id}">Delete</a></td>
-
-                            </tr>
-                        </c:forEach>
-
-
-
-                    </table>
-
-
-
-
-                </div>
-                <div class="col-md-6">
-                    <form method="POST" action="update" class="form-horizontal">
-                        <input type="hidden" value="${contact.id}" name="id" name="id" />
+                    <form method="POST" action="./" class="form-horizontal">
+                        <input type="hidden" name="id" id="id" value="${contact.id}" />
                         <div class="form-group">
                             <label for="firstName" class="col-sm-2 control-label" >First:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="firstName" value="${contact.firstName}" id="firstName" placeholder="First Name" />
+                                <input class="form-control" type="text" value="${contact.firstName}" name="firstName" id="firstName" placeholder="First Name" />
                             </div>
                         </div>
                         <div class="form-group">
 
                             <label for="lastName" class="col-sm-2 control-label" >Last:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="lastName" value="${contact.lastName}" id="lastName" placeholder="Last Name" />
+                                <input class="form-control" type="text" value="${contact.lastName}" name="lastName" id="lastName" placeholder="Last Name" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="company" class="col-sm-2 control-label" >Company:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="company" value="${contact.company}" id="company" placeholder="Company" />
+                                <input class="form-control" type="text" value="${contact.company}" name="company" id="company" placeholder="Company" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Email" class="col-sm-2 control-label" >Email:</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" value="${contact.email}" name="email" id="email" placeholder="Email" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="phone" class="col-sm-2 control-label" >Phone:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="phone" value="${contact.phone}" id="phone" placeholder="Phone" />
+                                <input class="form-control" type="text" value="${contact.phone}" name="phone" id="phone" placeholder="Phone" />
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
-                                <input type="submit" class="btn" />
+                                <input type="submit" value="Update" class="btn btn-default" />
+                                <input type="submit" value="Update" class="btn btn-danger" />
+                                <input type="submit" value="Update" class="btn btn-warning" />
                             </div>
                         </div>
 
                 </div>
                 </form>
             </div>
+
+
+
+
+
 
         </div>
     </div>
