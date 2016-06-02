@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author apprentice
  */
-public class DummyFileIOImplementation implements com.mycompany.flooringmastery.utilities.GenericMapFileIO<Product> /*, com.mycompany.flooringmastery.utilities.OrderDaoFileIO */{
+public class DummyFileIOImplementation implements com.mycompany.flooringmasteryweb.utilities.GenericMapFileIO<Product> /*, com.mycompany.flooringmasteryweb.utilities.OrderDaoFileIO */{
     
     
     public Map<String, Product> decode(File dataFile) {

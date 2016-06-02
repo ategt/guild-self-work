@@ -5,10 +5,10 @@
  */
 package com.mycompany.flooringmasteryweb.utilities;
 
-import com.mycompany.flooringmastery.dao.OrderDao;
-import com.mycompany.flooringmastery.dao.ProductDao;
-import com.mycompany.flooringmastery.dao.StateDao;
-import com.mycompany.flooringmastery.dto.Order;
+import com.mycompany.flooringmasteryweb.dao.OrderDao;
+import com.mycompany.flooringmasteryweb.dao.ProductDao;
+import com.mycompany.flooringmasteryweb.dao.StateDao;
+import com.mycompany.flooringmasteryweb.dto.Order;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

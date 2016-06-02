@@ -5,8 +5,8 @@
  */
 package com.mycompany.flooringmasteryweb.dto;
 
-import com.mycompany.flooringmastery.dto.Product;
-import com.mycompany.flooringmastery.dto.State;
+import com.mycompany.flooringmasteryweb.dto.Product;
+import com.mycompany.flooringmasteryweb.dto.State;
 import java.util.Date;
 
 /**

@@ -13,7 +13,7 @@ public class NewClass {
     
     public static void main(String[] args) {
         String productName = "doug the dog person!!";
-        String titleCaseName = com.mycompany.flooringmastery.utilities.TextUtilities.toTitleCase(productName);
+        String titleCaseName = com.mycompany.flooringmasteryweb.utilities.TextUtilities.toTitleCase(productName);
         System.out.println(titleCaseName);
     }
             

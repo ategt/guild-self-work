@@ -5,8 +5,8 @@
  */
 package com.mycompany.flooringmasteryweb.dao;
 
-import com.mycompany.flooringmastery.dto.Order;
-import com.mycompany.flooringmastery.utilities.OrderDaoFileIOImplementation;
+import com.mycompany.flooringmasteryweb.dto.Order;
+import com.mycompany.flooringmasteryweb.utilities.OrderDaoFileIOImplementation;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class TimingDao {
 
 //    public TimingDao(ProductDao productDao, StateDao stateDao, ConfigDao configDao) {
 //
-//             ctx = com.mycompany.flooringmastery.aop.ApplicationContextProvider.getApplicationContext();
+//             ctx = com.mycompany.flooringmasteryweb.aop.ApplicationContextProvider.getApplicationContext();
 //   
 //        this.productDao = productDao;
 //        this.stateDao = stateDao;
@@ -64,7 +64,7 @@ public class TimingDao {
 //        init(configDao);
 //        
 //        //this.orderIo = ctx.getBean(type)
-//        //this.orderIo = new com.mycompany.flooringmastery.utilities.OrderDaoFileIOImplementation(this, stateDao, productDao);
+//        //this.orderIo = new com.mycompany.flooringmasteryweb.utilities.OrderDaoFileIOImplementation(this, stateDao, productDao);
 //        //this.orderIo = ctx.getBean(type)
 //    }
 //

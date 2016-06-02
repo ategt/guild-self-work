@@ -33,7 +33,7 @@ public class ProductDao {
 
     public ProductDao(ConfigDao configDao) {
         
-        this.fileIo = new com.mycompany.flooringmastery.utilities.ProductFileIOImpl(this);
+        this.fileIo = new com.mycompany.flooringmasteryweb.utilities.ProductFileIOImpl(this);
 
         productDataFile = configDao.get().getProductFile();
 
@@ -66,7 +66,7 @@ public class ProductDao {
             return null;
         } else if (productName.equals(product.getType())) {
 
-            String titleCaseName = com.mycompany.flooringmastery.utilities.TextUtilities.toTitleCase(productName);
+            String titleCaseName = com.mycompany.flooringmasteryweb.utilities.TextUtilities.toTitleCase(productName);
 
             if (!productsMap.containsKey(titleCaseName)) {
                 productsMap.put(titleCaseName, product);
