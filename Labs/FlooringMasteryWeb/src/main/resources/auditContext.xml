@@ -21,32 +21,32 @@
         <constructor-arg type="java.lang.String" value="auditLog.txt" />
     </bean>
     
-    <bean id="auditDao" class="com.mycompany.flooringmastery.dao.AuditDao" >
+    <bean id="auditDao" class="com.mycompany.flooringmasteryweb.dao.AuditDao" >
         <constructor-arg ref="auditLogFile" />
         <!--<constructor-arg type="java.lang.String" value="z" />--> 
     </bean>
     
     
     
-    <bean id="auditAspect" class="com.mycompany.flooringmastery.aop.AuditAspect" />
+    <bean id="auditAspect" class="com.mycompany.flooringmasteryweb.aop.AuditAspect" />
         
     <aop:config>
         <aop:aspect ref="auditAspect">
             
             <aop:after method="createAuditEntry"
-                               pointcut="execution(* com.mycompany.flooringmastery.dao.OrderDao.create(..))"
+                               pointcut="execution(* com.mycompany.flooringmasteryweb.dao.OrderDao.create(..))"
             />
     
             <aop:after method="createAuditEntry"
-                               pointcut="execution(* com.mycompany.flooringmastery.dao.OrderDao.update(..))"
+                               pointcut="execution(* com.mycompany.flooringmasteryweb.dao.OrderDao.update(..))"
             />
     
             <aop:after method="createAuditEntry"
-                               pointcut="execution(* com.mycompany.flooringmastery.dao.OrderDao.delete(..))"
+                               pointcut="execution(* com.mycompany.flooringmasteryweb.dao.OrderDao.delete(..))"
             />
     
                         <aop:after method="createAuditEntry"
-                       pointcut="execution(* com.mycompany.flooringmastery.dao.OrderDao.create(..))"
+                       pointcut="execution(* com.mycompany.flooringmasteryweb.dao.OrderDao.create(..))"
             />
             
         </aop:aspect>

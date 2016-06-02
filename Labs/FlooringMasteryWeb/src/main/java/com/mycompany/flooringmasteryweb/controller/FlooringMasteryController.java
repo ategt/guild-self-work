@@ -3,22 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.flooringmastery.controller;
-
-import com.mycompany.consoleio.ConsoleIO;
-import com.mycompany.consoleio.exceptions.UserWantsOutException;
-import com.mycompany.consoleio.exceptions.UserWantsToDeleteDateException;
-import com.mycompany.consoleio.exceptions.UserWantsToDeleteValueException;
-import com.mycompany.flooringmastery.dao.ConfigDao;
-import com.mycompany.flooringmastery.dao.OrderDao;
-import com.mycompany.flooringmastery.dao.OrderDaoImpl;
-import com.mycompany.flooringmastery.dao.ProductDao;
-import com.mycompany.flooringmastery.dao.StateDao;
-import com.mycompany.flooringmastery.dto.Order;
-import com.mycompany.flooringmastery.dto.Product;
-import com.mycompany.flooringmastery.dto.State;
-import com.mycompany.flooringmastery.exceptions.ConfigurationFileCorruptException;
-import com.mycompany.flooringmastery.exceptions.FileCreationException;
+package com.mycompany.flooringmasteryweb.controller;
+//
+//import com.mycompany.consoleio.ConsoleIO;
+//import com.mycompany.consoleio.exceptions.UserWantsOutException;
+//import com.mycompany.consoleio.exceptions.UserWantsToDeleteDateException;
+//import com.mycompany.consoleio.exceptions.UserWantsToDeleteValueException;
+import com.mycompany.flooringmasteryweb.dao.ConfigDao;
+import com.mycompany.flooringmasteryweb.dao.OrderDao;
+import com.mycompany.flooringmasteryweb.dao.OrderDaoImpl;
+import com.mycompany.flooringmasteryweb.dao.ProductDao;
+import com.mycompany.flooringmasteryweb.dao.StateDao;
+import com.mycompany.flooringmasteryweb.dto.Order;
+import com.mycompany.flooringmasteryweb.dto.Product;
+import com.mycompany.flooringmasteryweb.dto.State;
+import com.mycompany.flooringmasteryweb.exceptions.ConfigurationFileCorruptException;
+import com.mycompany.flooringmasteryweb.exceptions.FileCreationException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
@@ -31,23 +31,23 @@ import java.util.logging.Logger;
  */
 public class FlooringMasteryController {
 
-    ConsoleIO consoleIo;
+    //ConsoleIO consoleIo;
 
     ProductDao productDao;
     StateDao stateDao;
     OrderDao orderDao;
     ConfigDao configDao;
-    com.mycompany.flooringmastery.utilities.ViewUtilities viewUtilities;
+    com.mycompany.flooringmasteryweb.utilities.ViewUtilities viewUtilities;
 
-    public FlooringMasteryController(ConsoleIO consoleIo,
+    public FlooringMasteryController(//ConsoleIO consoleIo,
             ProductDao productDao,
             StateDao stateDao,
             OrderDao orderDao,
             ConfigDao configDao,
-            com.mycompany.flooringmastery.utilities.ViewUtilities viewUtilities
+            com.mycompany.flooringmasteryweb.utilities.ViewUtilities viewUtilities
     ) {
 
-        this.consoleIo = consoleIo;
+        //this.consoleIo = consoleIo;
             this.productDao = productDao;
             this.stateDao = stateDao;
             this.orderDao = orderDao;
@@ -55,51 +55,50 @@ public class FlooringMasteryController {
             this.viewUtilities = viewUtilities;
         
     }
-
+    /*
     private void init() {
-        try {
-            configDao = new ConfigDao();
-        } catch (ConfigurationFileCorruptException ex) {
-            Logger.getLogger(FlooringMasteryController.class.getName()).log(Level.SEVERE, null, ex);
-            consoleIo.printStringToConsole("There is something wrong with the program!");
-            consoleIo.printStringToConsole(ex.getMessage());
-            try {
-                consoleIo.getUserConfirmation("Please Read The Above Message Before Continuing", "\n Enter \"Y\" To Continue");
-            } catch (UserWantsOutException | UserWantsToDeleteValueException ex1) {
-                consoleIo.printStringToConsole(ex1.getMessage());
-            }
-        } catch (FileCreationException ex) {
-            Logger.getLogger(FlooringMasteryController.class.getName()).log(Level.SEVERE, null, ex);
-
-            try {
-                consoleIo.getUserConfirmation("Please Read The Above Message Before Continuing", "\n Enter \"Y\" To Continue");
-            } catch (UserWantsOutException | UserWantsToDeleteValueException ex1) {
-            }
-        }
-
-        consoleIo = new ConsoleIO();
-
-        int response = 0;
-
-        try {
-            response = consoleIo.getUserIntInputRange("This program supports two Modes:\n 1 - Test Mode\n 2 - Production Mode\n Please Choose a Mode to Continue", 1, 2, "You must choose a Mode Before Proceeding.");
-        } catch (UserWantsOutException | UserWantsToDeleteValueException ex) {
-        }
-
-        if (response == 2) {
-            setProductionMode();
-
-        } else {
-            setTestMode();
-        }
-
-        viewUtilities = new com.mycompany.flooringmastery.utilities.ViewUtilities();
-        productDao = new ProductDao(configDao);
-        stateDao = new StateDao(configDao);
-        orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
-
+    try {
+    configDao = new ConfigDao();
+    } catch (ConfigurationFileCorruptException ex) {
+    Logger.getLogger(FlooringMasteryController.class.getName()).log(Level.SEVERE, null, ex);
+    consoleIo.printStringToConsole("There is something wrong with the program!");
+    consoleIo.printStringToConsole(ex.getMessage());
+    try {
+    consoleIo.getUserConfirmation("Please Read The Above Message Before Continuing", "\n Enter \"Y\" To Continue");
+    } catch (UserWantsOutException | UserWantsToDeleteValueException ex1) {
+    consoleIo.printStringToConsole(ex1.getMessage());
     }
-
+    } catch (FileCreationException ex) {
+    Logger.getLogger(FlooringMasteryController.class.getName()).log(Level.SEVERE, null, ex);
+    
+    try {
+    consoleIo.getUserConfirmation("Please Read The Above Message Before Continuing", "\n Enter \"Y\" To Continue");
+    } catch (UserWantsOutException | UserWantsToDeleteValueException ex1) {
+    }
+    }
+    
+    consoleIo = new ConsoleIO();
+    
+    int response = 0;
+    
+    try {
+    response = consoleIo.getUserIntInputRange("This program supports two Modes:\n 1 - Test Mode\n 2 - Production Mode\n Please Choose a Mode to Continue", 1, 2, "You must choose a Mode Before Proceeding.");
+    } catch (UserWantsOutException | UserWantsToDeleteValueException ex) {
+    }
+    
+    if (response == 2) {
+    setProductionMode();
+    
+    } else {
+    setTestMode();
+    }
+    
+    viewUtilities = new com.mycompany.flooringmasteryweb.utilities.ViewUtilities();
+    productDao = new ProductDao(configDao);
+    stateDao = new StateDao(configDao);
+    orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
+    
+    }*/
     private void setProductionMode() {
         // Production Mode
         configDao.get().setInTestMode(false);
@@ -158,9 +157,9 @@ public class FlooringMasteryController {
 
         while (!done) {
             try {
-                int option;
+                int option = 0;
 
-                option = consoleIo.getUserIntInputRange(menuString, 0, 7);
+                //option = consoleIo.getUserIntInputRange(menuString, 0, 7);
 
                 switch (option) {
                     case 1:
@@ -582,7 +581,7 @@ public class FlooringMasteryController {
         while (!valid) {
             String customerState = consoleIo.getUserStringInputSimple(existingInfo + "Please Enter State: \n ( Valid Choices Are: " + getValidStates() + ")");
 
-            com.mycompany.flooringmastery.dto.State state = stateDao.get(customerState);
+            com.mycompany.flooringmasteryweb.dto.State state = stateDao.get(customerState);
 
             if (customerState.equalsIgnoreCase("")) {
                 valid = true;
@@ -624,7 +623,7 @@ public class FlooringMasteryController {
         while (!validProduct) {
 
             String customerProduct = consoleIo.getUserStringInputSimple(currentValue + prompt);
-            com.mycompany.flooringmastery.dto.Product product = productDao.get(customerProduct);
+            com.mycompany.flooringmasteryweb.dto.Product product = productDao.get(customerProduct);
 
             if (customerProduct.equalsIgnoreCase("")) {
                 customerProduct = null;

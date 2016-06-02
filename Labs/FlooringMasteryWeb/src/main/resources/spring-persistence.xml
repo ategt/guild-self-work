@@ -16,4 +16,31 @@
 
     <!-- Bean definitions go here -->
     
+    <bean id="applicationContextProvder" class="com.mycompany.flooringmasteryweb.aop.ApplicationContextProvider"/>
+<!--    <bean id="viewUtilities" class="com.mycompany.flooringmasteryweb.utilities.ViewUtilities" />-->
+    <bean id="configDao" class="com.mycompany.flooringmasteryweb.dao.ConfigDao" />
+<!--    <bean id="consoleIo" class="com.mycompany.consoleio.ConsoleIO" />-->
+    <bean id="productDao" class="com.mycompany.flooringmasteryweb.dao.ProductDao">
+        <constructor-arg ref="configDao" />
+    </bean>
+    <bean id="stateDao" class="com.mycompany.flooringmasteryweb.dao.StateDao">
+        <constructor-arg ref="configDao" />
+    </bean>
+    <bean id="orderDao" class="com.mycompany.flooringmasteryweb.dao.OrderDaoImpl">
+        <constructor-arg ref="productDao" />
+        <constructor-arg ref="stateDao" />
+        <constructor-arg ref="configDao" />
+    </bean>
+        
+    <bean id="flooringMasteryController" class="com.mycompany.flooringmasteryweb.controller.FlooringMasteryController">
+<!--        <constructor-arg ref="consoleIo" />-->
+        <constructor-arg ref="productDao" />
+        <constructor-arg ref="stateDao" />
+        <constructor-arg ref="orderDao" />
+        <constructor-arg ref="configDao" />
+<!--        <constructor-arg ref="viewUtilities" />-->
+    </bean>
+    
+    <import resource="auditContext.xml" />
+    
 </beans>
