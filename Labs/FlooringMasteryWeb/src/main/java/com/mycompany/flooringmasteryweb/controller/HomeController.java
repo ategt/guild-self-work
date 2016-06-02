@@ -12,6 +12,8 @@ import com.mycompany.flooringmasteryweb.dao.ConfigDao;
 import com.mycompany.flooringmasteryweb.dao.OrderDao;
 import com.mycompany.flooringmasteryweb.dao.ProductDao;
 import com.mycompany.flooringmasteryweb.dao.StateDao;
+import com.mycompany.flooringmasteryweb.dto.BasicOrder;
+import com.mycompany.flooringmasteryweb.dto.BasicOrderImpl;
 import com.mycompany.flooringmasteryweb.dto.Order;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +61,7 @@ public class HomeController {
         
         orders = orderDao.sortByOrderNumber(orders);
         
-        model.put("newOrder", new Order());
+        model.put("newOrder", new BasicOrderImpl());
         model.put("orders", orders);
 
         return "home";

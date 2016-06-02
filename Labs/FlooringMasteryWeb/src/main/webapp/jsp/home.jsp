@@ -40,10 +40,10 @@
                         <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
                             <c:forEach items="${orders}" var="order">
                             <tr>
-                                <td><a href="addressbook/show/${order.id}">${order.id}</a></td>
-                                <td><a href="addressbook/show/${order.id}">${order.name}</a></td>
-                                <td><a href="addressbook/edit/${order.id}">Edit</a></td>
-                                <td><a href="addressbook/delete/${order.id}">Delete</a></td>
+                                <td><a href="FlooringMaster/show/${order.id}">${order.id}</a></td>
+                                <td><a href="FlooringMaster/show/${order.id}">${order.name}</a></td>
+                                <td><a href="FlooringMaster/edit/${order.id}">Edit</a></td>
+                                <td><a href="FlooringMaster/delete/${order.id}">Delete</a></td>
 
                             </tr>
                         </c:forEach>
@@ -57,50 +57,39 @@
 
                 </div>
                 <div class="col-md-6">
-                    <form:form method="POST" commandName="order" action="${pageContext.request.contextPath}/addressbook/create" class="form-horizontal">
+                    <form:form method="POST" commandName="newOrder" action="${pageContext.request.contextPath}/FlooringMaster/create" class="form-horizontal">
                         <div class="form-group">
-                            <form:label path="" for="name" class="col-sm-2 control-label" >First:</label>
+                            <form:label path="name" for="name" class="col-sm-2 control-label" >Order Name:</label>
                             <div class="col-sm-10">
-                                <form:input path="" class="form-control" type="text" name="firstName" id="firstName" placeholder="First Name" />
+                                <form:input path="name" class="form-control" type="text" name="name" id="name" placeholder="Order Name" />
                             </div>
                         </div>
                         <div class="form-group">
 
-                            <form:label path="" for="state" class="col-sm-2 control-label" >Last:</label>
+                            <form:label path="state" for="state" class="col-sm-2 control-label" >State:</label>
                             <div class="col-sm-10">
-                                <form:input path="" class="form-control" type="text" name="lastName" id="lastName" placeholder="Last Name" />
+                                <form:input path="state" class="form-control" type="text" name="state" id="state" placeholder="State" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <form:label path="" for="product" class="col-sm-2 control-label" >Street Number:</label>
+                            <form:label path="product" for="product" class="col-sm-2 control-label" >Product:</label>
                             <div class="col-sm-10">
-                                <form:input path="" class="form-control" type="text" name="streetNumber" id="streetNumber" placeholder="Street Number" />
+                                <form:input path="product" class="form-control" type="text" name="product" id="product" placeholder="Product" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <form:label path="" for="materialCost" class="col-sm-2 control-label" >Street Name:</label>
+                            <form:label path="date" for="date" class="col-sm-2 control-label" >Date:</label>
                             <div class="col-sm-10">
-                                <form:input path="" class="form-control" type="text" name="streetName" id="streetName" placeholder="Street Name" />
+                                <form:input path="date" class="form-control" type="text" name="date" id="date" placeholder="Order Date" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <form:label path="" for="taxRate" class="col-sm-2 control-label" >City:</label>
+                            <form:label path="area" for="area" class="col-sm-2 control-label" >Area:</label>
                             <div class="col-sm-10">
-                                <form:input path="" class="form-control" type="text" name="city" id="city" placeholder="City" />
+                                <form:input path="area" class="form-control" type="text" name="area" id="area" placeholder="Area" />
                             </div>
                         </div>
-                        <div class="form-group">
-                            <form:label path="" for="state" class="col-sm-2 control-label" >State:</label>
-                            <div class="col-sm-10">
-                                <form:input path="" class="form-control" type="text" name="state" id="state" placeholder="State" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <form:label path="" for="zip" class="col-sm-2 control-label" >Zip:</label>
-                            <div class="col-sm-10">
-                                <form:input path="" class="form-control" type="text" name="zip" id="zip" placeholder="Zip" />
-                            </div>
-                        </div>
+                            
                         <div class="form-group">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
