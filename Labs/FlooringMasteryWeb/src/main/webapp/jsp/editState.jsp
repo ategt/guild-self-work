@@ -57,7 +57,7 @@
 
                 </div>
                 <div class="col-md-6">
-                    <form:form method="POST" commandName="newOrder" action="${pageContext.request.contextPath}/FlooringMaster/create" class="form-horizontal">
+                    <form:form method="POST" commandName="state" action="${pageContext.request.contextPath}/adminPanel/create" class="form-horizontal">
                         <div class="form-group">
                             <form:label path="name" for="name" class="col-sm-2 control-label" >Order Name:</form:label>
                             <div class="col-sm-10">

@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author apprentice
  */
 @Controller
-@RequestMapping(value = "/FlooringMaster")
-public class FlooringMasteryWebController {
+@RequestMapping(value = "/adminPanel")
+public class AdminPanelWebController {
 
     ProductDao productDao;
     StateDao stateDao;
@@ -34,7 +34,7 @@ public class FlooringMasteryWebController {
     ConfigDao configDao;
 
     @Inject
-    public FlooringMasteryWebController(
+    public AdminPanelWebController(
             ProductDao productDao,
             StateDao stateDao,
             OrderDao orderDao,
@@ -88,7 +88,7 @@ public class FlooringMasteryWebController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editSubmit(@ModelAttribute BasicOrderImpl basicOrder) {
- Order order = orderDao.orderBuilder(basicOrder);
+        Order order = orderDao.orderBuilder(basicOrder);
         orderDao.update(order);
         return "redirect:/";
     }

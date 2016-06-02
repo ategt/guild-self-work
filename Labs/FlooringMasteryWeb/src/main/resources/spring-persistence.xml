@@ -16,7 +16,7 @@
 
     <!-- Bean definitions go here -->
     
-    <bean id="applicationContextProvder" class="com.mycompany.flooringmasteryweb.aop.ApplicationContextProvider"/>
+    <!--<bean id="applicationContextProvder" class="com.mycompany.flooringmasteryweb.aop.ApplicationContextProvider"/>-->
 <!--    <bean id="viewUtilities" class="com.mycompany.flooringmasteryweb.utilities.ViewUtilities" />-->
     <bean id="configDao" class="com.mycompany.flooringmasteryweb.dao.ConfigDao" />
 <!--    <bean id="consoleIo" class="com.mycompany.consoleio.ConsoleIO" />-->
@@ -32,7 +32,8 @@
         <constructor-arg ref="configDao" />
     </bean>
         
-    <bean id="flooringMasteryController" class="com.mycompany.flooringmasteryweb.controller.FlooringMasteryController">
+    <!--<bean id="flooringMasteryController" class="com.mycompany.flooringmasteryweb.controller.FlooringMasteryController">-->
+    <bean id="flooringMasteryWebController" class="com.mycompany.flooringmasteryweb.controller.FlooringMasteryWebController">
 <!--        <constructor-arg ref="consoleIo" />-->
         <constructor-arg ref="productDao" />
         <constructor-arg ref="stateDao" />
@@ -41,6 +42,6 @@
 <!--        <constructor-arg ref="viewUtilities" />-->
     </bean>
     
-    <import resource="auditContext.xml" />
+    <!--<import resource="auditContext.xml" />-->
     
 </beans>
