@@ -5,7 +5,10 @@
  */
 package com.mycompany.flooringmasteryweb.dao;
 
+import com.mycompany.flooringmasteryweb.dto.BasicOrder;
 import com.mycompany.flooringmasteryweb.dto.Order;
+import com.mycompany.flooringmasteryweb.dto.Product;
+import com.mycompany.flooringmasteryweb.dto.State;
 import com.mycompany.flooringmasteryweb.utilities.OrderDaoFileIOImplementation;
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,6 +21,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -34,20 +38,18 @@ import org.springframework.context.ApplicationContext;
  */
 public class OrderDaoImpl implements OrderDao {
 
-     private ApplicationContext ctx;
+    private ApplicationContext ctx;
 
     //public AuditAspect() {
-        //ctx = ApplicationContextProvider.getApplicationContext.getBean("BeanId", MyBean.class);
-        //ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-   
-     private List<Order> orders;
+    //ctx = ApplicationContextProvider.getApplicationContext.getBean("BeanId", MyBean.class);
+    //ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+    private List<Order> orders;
     private int nextId;
     private StateDao stateDao;
     private ProductDao productDao;
     private ConfigDao configDao;
     private boolean isATest;
     private com.mycompany.flooringmasteryweb.utilities.OrderDaoFileIO orderIo;
-    
 
     public OrderDaoImpl(ProductDao productDao, StateDao stateDao) {
         this(productDao, stateDao, null);
@@ -55,8 +57,8 @@ public class OrderDaoImpl implements OrderDao {
 
     public OrderDaoImpl(ProductDao productDao, StateDao stateDao, ConfigDao configDao) {
 
-             ctx = com.mycompany.flooringmasteryweb.aop.ApplicationContextProvider.getApplicationContext();
-   
+        ctx = com.mycompany.flooringmasteryweb.aop.ApplicationContextProvider.getApplicationContext();
+
         this.productDao = productDao;
         this.stateDao = stateDao;
 
@@ -70,7 +72,7 @@ public class OrderDaoImpl implements OrderDao {
         this.orderIo = new OrderDaoFileIOImplementation(this, stateDao, productDao);
 
         init(configDao);
-        
+
         //this.orderIo = ctx.getBean(type)
         //this.orderIo = new com.mycompany.flooringmasteryweb.utilities.OrderDaoFileIOImplementation(this, stateDao, productDao);
         //this.orderIo = ctx.getBean(type)
@@ -88,7 +90,7 @@ public class OrderDaoImpl implements OrderDao {
 
             List<Order> loadedOrders = new ArrayList();
             java.io.File[] orderFiles = lookForOrders(directoryToSearch);
-            
+
             for (java.io.File orderFile : orderFiles) {
                 if (!orderFile.getName().endsWith("00000000.txt")) {
                     loadedOrders.addAll(orderIo.decode(orderFile));
@@ -228,16 +230,14 @@ public class OrderDaoImpl implements OrderDao {
         java.util.List<Order> specificOrders = new ArrayList();
 
         orders.stream()
-              .filter(o -> isSameDay(o.getDate(), date))
-                      .forEach(o -> specificOrders.add(o));
-                
-        
+                .filter(o -> isSameDay(o.getDate(), date))
+                .forEach(o -> specificOrders.add(o));
+
 //        for (Order order : orders) {
 //            if (isSameDay(order.getDate(), date)) {
 //                specificOrders.add(order);
 //            }
 //        }
-
         return specificOrders;
     }
 
@@ -247,13 +247,12 @@ public class OrderDaoImpl implements OrderDao {
 
         orders.stream()
                 .forEach(o -> orderNumbers.add(o.getId()));
-        
+
         Collections.sort(orderNumbers);
-        
+
 //        for (Order order : orders) {
 //            orderNumbers.add(order.getId());
 //        }
-
         return orderNumbers;
     }
 
@@ -280,9 +279,10 @@ public class OrderDaoImpl implements OrderDao {
         java.util.List<Order> specificOrders = new ArrayList();
         java.util.List<Order> closeOrders = new ArrayList();
 
-        if (orderName == null)
+        if (orderName == null) {
             orderName = "";
-        
+        }
+
         for (Order order : orders) {
             if (orderName.equalsIgnoreCase(order.getName())) {
                 specificOrders.add(order);
@@ -484,8 +484,6 @@ public class OrderDaoImpl implements OrderDao {
 
     }
 
-    
-
     private java.io.File[] lookForOrders(java.io.File file) {
         if (file.isDirectory()) {
             java.io.File[] orderFiles = file.listFiles(new com.mycompany.flooringmasteryweb.utilities.OrderFilter());
@@ -566,6 +564,71 @@ public class OrderDaoImpl implements OrderDao {
             testFile.deleteOnExit();
 
         }
+    }
+
+    public Order orderBuilder(BasicOrder basicOrder) {
+        Order newOrder = new Order();
+
+        if (basicOrder == null) {
+            return null;
+        }
+
+        newOrder.setId(basicOrder.getId());
+        newOrder.setDate(basicOrder.getDate());
+
+        State state = stateDao.get(basicOrder.getState());
+        newOrder.setState(state);
+
+        if (newOrder.getState() != null) {
+            newOrder.setTaxRate(stateDao.get(newOrder.getState().getState()).getStateTax());
+            double taxRate = newOrder.getState().getStateTax();
+            newOrder.setTaxRate(taxRate);
+        }
+
+        Product product = productDao.get(basicOrder.getProduct());
+        newOrder.setProduct(product);
+        newOrder.setArea(basicOrder.getArea());
+
+        double laborCostPerFoot = 0.0;
+        double materialCost = 0.0;
+        double taxRate = 0.0;
+
+        if (newOrder.getProduct() != null) {
+            newOrder.setCostPerSquareFoot(newOrder.getProduct().getCost());
+
+            materialCost = newOrder.getProduct().getCost() * newOrder.getArea();
+            newOrder.setMaterialCost(materialCost);
+
+            laborCostPerFoot = newOrder.getProduct().getLaborCost();
+            newOrder.setLaborCostPerSquareFoot(laborCostPerFoot);
+        }
+
+        double totalLaborCost = laborCostPerFoot * newOrder.getArea();
+        newOrder.setLaborCost(totalLaborCost);
+
+        double subTotal = totalLaborCost + materialCost;
+
+        double totalTax = (subTotal * (taxRate / 100));
+
+        newOrder.setTax(totalTax);
+
+        double totalCost = subTotal + totalTax;
+
+        newOrder.setTotal(totalCost);
+
+        return newOrder;
+    }
+
+    public List<Order> sortByOrderNumber(List<Order> orders) {
+
+        orders.sort(
+                new Comparator<Order>() {
+            public int compare(Order c1, Order c2) {
+                return Integer.compare(c1.getId(), c2.getId());
+            }
+        });
+
+        return orders;
     }
 
 }

@@ -126,81 +126,81 @@ public class TimingDao {
 //        }
 //        nextId = determineNextId();
 //    }
-
+    /*
     @Override
     public Order create(Order order) {
-        order.setId(nextId);
-        nextId++;
-
-        orders.add(order);
-
-        encode(order);
-
-        return order;
+    order.setId(nextId);
+    nextId++;
+    
+    orders.add(order);
+    
+    encode(order);
+    
+    return order;
     }
-
+    
     @Override
     public Order get(Integer id) {
-
-        for (Order order : orders) {
-            if (order != null) {
-                if (order.getId() == id) {
-                    return order;
-                }
-            }
-        }
-
-        return null;
+    
+    for (Order order : orders) {
+    if (order != null) {
+    if (order.getId() == id) {
+    return order;
     }
-
+    }
+    }
+    
+    return null;
+    }
+    
     @Override
     public void update(Order order) {
-        List<Order> foundOrders = new ArrayList();
-
-        orders.stream()
-                .filter(currentOrder -> currentOrder.getId() == order.getId())
-                .forEach(currentOrder -> {
-                    foundOrders.add(currentOrder);
-                });
-
-        foundOrders.stream()
-                .forEach(f -> {
-                    orders.remove(f);
-                    encode(f.getDate());
-                });
-//        for (Order foundOrder : foundOrders) {
-//            orders.remove(foundOrder);
-//            encode(foundOrder.getDate());
-//        }
-
-        orders.add(order);
-        encode(extractDate("Orders_00000000.txt"));
-        encode(order);
-
+    List<Order> foundOrders = new ArrayList();
+    
+    orders.stream()
+    .filter(currentOrder -> currentOrder.getId() == order.getId())
+    .forEach(currentOrder -> {
+    foundOrders.add(currentOrder);
+    });
+    
+    foundOrders.stream()
+    .forEach(f -> {
+    orders.remove(f);
+    encode(f.getDate());
+    });
+    //        for (Order foundOrder : foundOrders) {
+    //            orders.remove(foundOrder);
+    //            encode(foundOrder.getDate());
+    //        }
+    
+    orders.add(order);
+    encode(extractDate("Orders_00000000.txt"));
+    encode(order);
+    
     }
-
+    
     @Override
     public void delete(Order order) {
-        Order found = null;
-
-        for (Order currentOrder : orders) {
-            if (currentOrder.getId() == order.getId()) {
-                found = currentOrder;
-                break;
-            }
-        }
-
-        Date oldDate = null;
-        if (found != null) {
-            oldDate = found.getDate();
-            orders.remove(found);
-        }
-
-        encode(extractDate("Orders_00000000.txt"));
-
-        encode(oldDate);
-
-    }
-
+    Order found = null;
     
+    for (Order currentOrder : orders) {
+    if (currentOrder.getId() == order.getId()) {
+    found = currentOrder;
+    break;
+    }
+    }
+    
+    Date oldDate = null;
+    if (found != null) {
+    oldDate = found.getDate();
+    orders.remove(found);
+    }
+    
+    encode(extractDate("Orders_00000000.txt"));
+    
+    encode(oldDate);
+    
+    }
+    
+    */
 }

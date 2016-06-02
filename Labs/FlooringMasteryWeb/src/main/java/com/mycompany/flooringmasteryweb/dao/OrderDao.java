@@ -5,6 +5,7 @@
  */
 package com.mycompany.flooringmasteryweb.dao;
 
+import com.mycompany.flooringmasteryweb.dto.BasicOrder;
 import com.mycompany.flooringmasteryweb.dto.Order;
 import java.util.Date;
 import java.util.List;
@@ -63,4 +64,8 @@ public interface OrderDao {
     void update(Order order);
 
     Date extractDate(String dateString);
+
+    Order orderBuilder(BasicOrder basicOrder);
+
+    List<Order> sortByOrderNumber(List<Order> orders);
 }

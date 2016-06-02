@@ -5,18 +5,17 @@
  */
 package com.mycompany.flooringmasteryweb.controller;
 
-//import com.mycompany.dvdlibraryweb.interfaces.Dvd;
-//import com.mycompany.dvdlibraryweb.interfaces.DvdLibrary;
-//import com.thesoftwareguild.interfaces.dto.Address;
 import com.mycompany.flooringmasteryweb.dao.ConfigDao;
 import com.mycompany.flooringmasteryweb.dao.OrderDao;
 import com.mycompany.flooringmasteryweb.dao.ProductDao;
 import com.mycompany.flooringmasteryweb.dao.StateDao;
+import com.mycompany.flooringmasteryweb.dto.BasicOrder;
 import com.mycompany.flooringmasteryweb.dto.Order;
-import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,22 +24,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author apprentice
  */
 @Controller
-public class HomeController {
+@RequestMapping(value = "/FlooringMaster")
+public class FlooringMasteryWebController {
 
-    //private DvdLibrary dvdLibrary;
-    // private com.thesoftwareguild.interfaces.dao.AddressBookDao addressDao;
     ProductDao productDao;
     StateDao stateDao;
     OrderDao orderDao;
     ConfigDao configDao;
 
     @Inject
-    public HomeController(
+    public FlooringMasteryWebController(
             ProductDao productDao,
             StateDao stateDao,
             OrderDao orderDao,
             ConfigDao configDao
-    //com.thesoftwareguild.interfaces.dao.AddressBookDao addressDao
     ) {
 
         this.productDao = productDao;
@@ -50,25 +47,33 @@ public class HomeController {
 
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String home(Map model) {
-
-        //List<Address> addresses = addressDao.list();
-        //dvdLibrary.sortByLastName(contacts);
-        List<Order> orders = orderDao.getList();
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public String create(@ModelAttribute BasicOrder basicOrder) {
         
-        orders = orderDao.sortByOrderNumber(orders);
-        
-        model.put("newOrder", new Order());
-        model.put("orders", orders);
+        Order order = orderDao.orderBuilder(basicOrder);
+        orderDao.create(order);
 
-        return "home";
+        return "redirect:/";
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String search() {
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public String edit(@PathVariable("id") Integer orderId, Map model) {
 
-        return "redirect:/addressbook/search";
+        //List<Contact> contacts = contactDao.list();
+        Order order = orderDao.get(orderId);
+
+        //contactDao.sortByLastName(contacts);
+        //model.put("contacts", contacts);
+        model.put("order", order);
+
+        return "edit";
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String update(@ModelAttribute Order order) {
+        orderDao.update(order);
+
+        return "redirect:/";
     }
 
 }
