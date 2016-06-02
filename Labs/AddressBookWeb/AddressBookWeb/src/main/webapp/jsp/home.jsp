@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Contact List</title>
+        <title>Address Book</title>
         <!-- Bootstrap core CSS -->
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
 
@@ -18,7 +18,7 @@
     </head>
     <body>
         <div class="container">
-            <h1>Contact List</h1>
+            <h1>Address Book</h1>
             <hr/>
             <div class="navbar">
                 <ul class="nav nav-tabs">
@@ -55,7 +55,7 @@
 
                 </div>
                 <div class="col-md-6">
-                    <form method="POST" action="contact/create" class="form-horizontal">
+                    <form method="POST" action="addressbook/create" class="form-horizontal">
                         <div class="form-group">
                             <label for="firstName" class="col-sm-2 control-label" >First:</label>
                             <div class="col-sm-10">
@@ -70,29 +70,39 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="company" class="col-sm-2 control-label" >Company:</label>
+                            <label for="streetNumber" class="col-sm-2 control-label" >Street Number:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="company" id="company" placeholder="Company" />
+                                <input class="form-control" type="text" name="streetNumber" id="streetNumber" placeholder="Street Number" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="Email" class="col-sm-2 control-label" >Email:</label>
+                            <label for="streetName" class="col-sm-2 control-label" >Street Name:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="email" id="email" placeholder="Email" />
+                                <input class="form-control" type="text" name="streetName" id="streetName" placeholder="Street Name" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="phone" class="col-sm-2 control-label" >Phone:</label>
+                            <label for="city" class="col-sm-2 control-label" >City:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="phone" id="phone" placeholder="Phone" />
+                                <input class="form-control" type="text" name="city" id="city" placeholder="City" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="state" class="col-sm-2 control-label" >State:</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" name="state" id="state" placeholder="State" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="zip" class="col-sm-2 control-label" >Zip:</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" name="zip" id="zip" placeholder="Zip" />
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
                                 <input type="submit" class="btn btn-default" />
-                                <input type="submit" class="btn btn-danger" />
-                                <input type="submit" class="btn btn-warning" />
                             </div>
                         </div>
 
