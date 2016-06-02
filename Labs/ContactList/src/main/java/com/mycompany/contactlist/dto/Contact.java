@@ -31,7 +31,9 @@ public class Contact {
     @NotEmpty(message = "You Must Supply A Phone Number")
     private String phone;
 
-    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    //@DateTimeFormat(pattern = "MM/dd/yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    
     private Date lastContacted;
 
     /**

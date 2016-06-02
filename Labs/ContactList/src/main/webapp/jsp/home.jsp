@@ -56,7 +56,7 @@
 
                 </div>
                 <div class="col-md-6">
-                    <form:form method="POST" commandName="contact" action="./create" class="form-horizontal">
+                    <form:form method="POST" commandName="contact" action="${pageContext.request.contextPath}/contact/create" class="form-horizontal">
                         <div class="form-group">
                             <label for="firstName" class="col-sm-2 control-label" >First:</label>
                             <div class="col-sm-10">
@@ -68,25 +68,36 @@
                         <div class="form-group">
                             <label for="lastName" class="col-sm-2 control-label" >Last:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Last Name" />
+                                <form:input path="lastName" class="form-control" type="text" name="lastName" id="lastName" placeholder="Last Name" />
+                            <form:errors path="lastName" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="company" class="col-sm-2 control-label" >Company:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="company" id="company" placeholder="Company" />
+                                <form:input path="company" class="form-control" type="text" name="company" id="company" placeholder="Company" />
+                           <form:errors path="company" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="Email" class="col-sm-2 control-label" >Email:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="email" id="email" placeholder="Email" />
+                                <form:input path="email" class="form-control" type="text" name="email" id="email" placeholder="Email" />
+                            <form:errors path="email" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="phone" class="col-sm-2 control-label" >Phone:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="phone" id="phone" placeholder="Phone" />
+                                <form:input path="phone" class="form-control" type="text" name="phone" id="phone" placeholder="Phone" />
+                            <form:errors path="phone" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastContacted" class="col-sm-2 control-label" >Last Contacted:</label>
+                            <div class="col-sm-10">
+                                <form:input path="lastContacted" class="form-control" type="text" name="lastContacted" id="lastContacted" placeholder="Last Contacted" />
+                            <form:errors path="lastContacted" />
                             </div>
                         </div>
                         <div class="form-group">
