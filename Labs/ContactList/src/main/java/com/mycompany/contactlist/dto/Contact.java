@@ -5,18 +5,34 @@
  */
 package com.mycompany.contactlist.dto;
 
+import java.util.Date;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  *
  * @author apprentice
  */
 public class Contact {
-    
+
     private int id;
+
+    @NotEmpty(message = "You Must Supply A First Name")
     private String firstName;
+
+    @NotEmpty(message = "You Must Supply A Last Name")
     private String lastName;
+
     private String company;
+
+    @NotEmpty(message = "You Must Supply An Email")
     private String email;
+
+    @NotEmpty(message = "You Must Supply A Phone Number")
     private String phone;
+
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    private Date lastContacted;
 
     /**
      * @return the id
@@ -101,5 +117,19 @@ public class Contact {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
+
+    /**
+     * @return the lastContacted
+     */
+    public Date getLastContacted() {
+        return lastContacted;
+    }
+
+    /**
+     * @param lastContacted the lastContacted to set
+     */
+    public void setLastContacted(Date lastContacted) {
+        this.lastContacted = lastContacted;
+    }
+
 }

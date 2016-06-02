@@ -35,6 +35,7 @@ public class HomeController {
         contactDao.sortByLastName(contacts);
 
         model.put("contacts", contacts);
+        model.put("contact", new Contact());
 
         return "home";
     }

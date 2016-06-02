@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -36,7 +37,7 @@
                         <th>Last Name</th>
                         <th><i class="glyphicon glyphicon-edit"></i> Edit</th>
                         <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
-                        <c:forEach items="${contacts}" var="contact">
+                            <c:forEach items="${contacts}" var="contact">
                             <tr>
                                 <td><a href="contact/show/${contact.id}">${contact.firstName}</a></td>
                                 <td><a href="contact/show/${contact.id}">${contact.lastName}</a></td>
@@ -55,15 +56,16 @@
 
                 </div>
                 <div class="col-md-6">
-                    <form method="POST" action="contact/create" class="form-horizontal">
+                    <form:form method="POST" commandName="contact" action="./create" class="form-horizontal">
                         <div class="form-group">
                             <label for="firstName" class="col-sm-2 control-label" >First:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="firstName" id="firstName" placeholder="First Name" />
+                                <form:input path="firstName" class="form-control" type="text" name="firstName" id="firstName" placeholder="First Name" ></form:input>
+                                <form:errors path="firstName" />
+<!--                                <input class="form-control" type="text" name="firstName" id="firstName" placeholder="First Name" />-->
                             </div>
                         </div>
                         <div class="form-group">
-
                             <label for="lastName" class="col-sm-2 control-label" >Last:</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Last Name" />
@@ -96,8 +98,9 @@
                             </div>
                         </div>
 
+
+                    </form:form>
                 </div>
-                </form>
             </div>
 
 

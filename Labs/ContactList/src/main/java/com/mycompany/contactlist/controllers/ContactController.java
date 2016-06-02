@@ -9,7 +9,9 @@ import com.mycompany.contactlist.dao.ContactDao;
 import com.mycompany.contactlist.dto.Contact;
 import java.util.Map;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +33,15 @@ public class ContactController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@ModelAttribute Contact contact) {
-        contactDao.add(contact);
+    public String create(@Valid @ModelAttribute Contact contact, BindingResult bindingResult, Map model) {
+
+        //bindingResult.
+        if (bindingResult.hasErrors()) {
+            model.put("contact", contact);
+            return "home";
+        } else {
+            contactDao.add(contact);
+        }
 
         return "redirect:/";
     }
@@ -44,7 +53,6 @@ public class ContactController {
         Contact contact = contactDao.get(contactId);
 
         //contactDao.sortByLastName(contacts);
-
         //model.put("contacts", contacts);
         model.put("contact", contact);
 
@@ -66,9 +74,9 @@ public class ContactController {
         return "redirect:/";
     }
 
-    @RequestMapping(value= "/edit", method=RequestMethod.POST)
-    public String editSubmit( @ModelAttribute Contact contact ) {
-        
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public String editSubmit(@ModelAttribute Contact contact) {
+
         contactDao.update(contact);
         return "redirect:/";
     }
@@ -77,12 +85,10 @@ public class ContactController {
     public String show(@PathVariable("id") Integer contactId, Map model) {
 
         Contact contact = contactDao.get(contactId);
-        
+
         model.put("contact", contact);
-        
+
         return "show";
     }
-
-    
 
 }
