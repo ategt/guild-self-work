@@ -14,10 +14,10 @@ public interface AddressBookDao {
     public void delete(Integer id);
 
     public List<Address> list();
+    public List<Address> searchByFirstName(String firstName);
     public List<Address> searchByLastName(String lastName);
     public List<Address> searchByCity(String city);
     public List<Address> searchByState(String state);
     public List<Address> searchByZip(String zip);
-
 
 }

@@ -60,7 +60,7 @@ public class AddressBookController {
         return "edit";
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String update(@ModelAttribute Address address) {
         addressDao.update(address);
 
@@ -74,41 +74,44 @@ public class AddressBookController {
 
         return "redirect:/";
     }
-
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String editSubmit(@ModelAttribute Address address) {
-
-        addressDao.update(address);
-        return "redirect:/";
-    }
+//
+//    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+//    public String editSubmit(@ModelAttribute Address address) {
+//
+//        addressDao.update(address);
+//        return "redirect:/";
+//    }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String search(
-            @RequestParam("searchBy") String sortBy,
+            @RequestParam("searchBy") String searchBy,
             @RequestParam("searchText") String searchText,
             Map model) {
 
         // List<Dvd> dvds = addressDao.getAllDvds();
         List<Address> addresses = null;
-        addresses = addressDao.list();
-//        if ("searchByTitle".equalsIgnoreCase(sortBy)) {
-//            addresses = addressDao.searchByTitle(searchText);
-//
-//        } else if ("searchByRating".equalsIgnoreCase(sortBy)) {
-//            addresses = addressDao.searchByRating(searchText);
-//       
-//        } else if ("searchByStudio".equalsIgnoreCase(sortBy)) {
-//            addresses = addressDao.searchByStudio(searchText);
-//        
-////        } else if ("searchByDirector".equalsIgnoreCase(sortBy)) {
-////            //List<Dvd> dvds1 = addressDao.searchByDirector(searchText).values().stream().collect(Collectors.t).;
-////            dvds = addressDao.searchByStudio(searchText);
-//
-//        } else {
-//
-//            addresses = addressDao.list();
-//
-//        }
+     //   addresses = addressDao.list();
+        if ("searchByLastName".equalsIgnoreCase(searchBy)) {
+            addresses = addressDao.searchByLastName(searchText);
+            
+        } else if ("searchByFirstName".equalsIgnoreCase(searchBy)) {
+            addresses = addressDao.searchByFirstName(searchText);
+
+        } else if ("searchByCity".equalsIgnoreCase(searchBy)) {
+            addresses = addressDao.searchByCity(searchText);
+       
+        } else if ("searchByState".equalsIgnoreCase(searchBy)) {
+            addresses = addressDao.searchByState(searchText);
+        
+        } else if ("searchByZip".equalsIgnoreCase(searchBy)) {
+            //List<Dvd> dvds1 = addressDao.searchByDirector(searchText).values().stream().collect(Collectors.t).;
+            addresses = addressDao.searchByZip(searchText);
+
+        } else {
+
+            addresses = addressDao.list();
+
+        }
         //.getAllDvds();
 
        // addressDao.sortByTitle(addresses);
@@ -135,6 +138,22 @@ public class AddressBookController {
         Address address = addressDao.get(dvdId);
         List<Address> addresses = addressDao.list();
 
+        
+        
+        model.put("address", address);
+        model.put("addresses", addresses);
+
+        return "show";
+    }
+    
+    @RequestMapping(value = "/show/{id}/{lastFirst}", method = RequestMethod.GET)
+    public String show(@PathVariable("id") Integer dvdId, @PathVariable("lastFirst") Boolean lastNameFirst, Map model) {
+
+        Address address = addressDao.get(dvdId);
+        List<Address> addresses = addressDao.list();
+
+        
+        model.put("lastNameFirst", lastNameFirst);
         model.put("address", address);
         model.put("addresses", addresses);
 

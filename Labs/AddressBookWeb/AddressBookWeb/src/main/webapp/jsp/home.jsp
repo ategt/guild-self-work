@@ -23,7 +23,7 @@
             <div class="navbar">
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
-
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/search">Search</a></li>
 
                 </ul>    
             </div>
@@ -36,12 +36,12 @@
                         <th>Last Name</th>
                         <th><i class="glyphicon glyphicon-edit"></i> Edit</th>
                         <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
-                        <c:forEach items="${contacts}" var="contact">
+                            <c:forEach items="${addresses}" var="address">
                             <tr>
-                                <td><a href="contact/show/${contact.id}">${contact.firstName}</a></td>
-                                <td><a href="contact/show/${contact.id}">${contact.lastName}</a></td>
-                                <td><a href="contact/edit/${contact.id}">Edit</a></td>
-                                <td><a href="contact/delete/${contact.id}">Delete</a></td>
+                                <td><a href="addressbook/show/${address.id}">${address.firstName}</a></td>
+                                <td><a href="addressbook/show/${address.id}">${address.lastName}</a></td>
+                                <td><a href="addressbook/edit/${address.id}">Edit</a></td>
+                                <td><a href="addressbook/delete/${address.id}">Delete</a></td>
 
                             </tr>
                         </c:forEach>

@@ -102,7 +102,7 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
         Address found = null;
 
         for (Address currentAddress : addresses) {
-            if (currentAddress.getId() == id ) {
+            if (currentAddress.getId() == id) {
                 found = currentAddress;
                 break;
             }
@@ -187,8 +187,8 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
         final String TOKEN = "::";
 
         try {
-            
-            if ( !addressFile.exists() ) {
+
+            if (!addressFile.exists()) {
                 addressFile.createNewFile();
             }
             Scanner sc = new Scanner(new BufferedReader(new FileReader(addressFile)));
@@ -246,20 +246,55 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
     @Override
     public List<Address> searchByLastName(String lastName) {
 
-        return addresses
+        List<Address> result = addresses
                 .stream()
-                .filter((Address a) -> lastName.equalsIgnoreCase(a.getLastName()))
+                .filter((Address a) -> a.getLastName().equalsIgnoreCase(lastName))
                 .collect(java.util.stream.Collectors.toList());
 
+        if (result.isEmpty()) {
+            result = addresses
+                    .stream()
+                    .filter((Address a) -> a.getLastName().toLowerCase().contains(lastName.toLowerCase()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Address> searchByFirstName(String firstName) {
+
+        List<Address> result = addresses
+                .stream()
+                .filter((Address a) -> a.getFirstName().equalsIgnoreCase(firstName))
+                .collect(java.util.stream.Collectors.toList());
+
+        if (result.isEmpty()) {
+            result = addresses
+                    .stream()
+                    .filter((Address a) -> a.getFirstName().toLowerCase().contains(firstName.toLowerCase()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        return result;
     }
 
     @Override
     public List<Address> searchByCity(String city) {
 
-        return addresses
+        List<Address> result = addresses
                 .stream()
                 .filter(a -> a.getCity().equalsIgnoreCase(city))
                 .collect(java.util.stream.Collectors.toList());
+
+        if (result.isEmpty()) {
+            result = addresses
+                    .stream()
+                    .filter(a -> a.getCity().toLowerCase().contains(city.toLowerCase()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        return result;
     }
 
     @Override
@@ -279,6 +314,21 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
                 //                        )
                 );
 
+        if (secondAddressLambdaMess.isEmpty()) {
+            secondAddressLambdaMess
+                    = addresses
+                    .stream()
+                    .filter((Address a) -> a.getState().toLowerCase().contains(state.toLowerCase()))
+                    .collect(
+                            java.util.stream.Collectors.toList()
+                    //                        groupingBy(
+                    //                                //(Address a) -> a.getCity(),  // This does the same as the line below it.
+                    //                                Address::getCity,
+                    //                                java.util.stream.Collectors.toList()
+                    //                        )
+                    );
+        }
+
         return secondAddressLambdaMess;
 
     }
@@ -286,15 +336,22 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
     @Override
     public List<Address> searchByZip(String zipcode) {
 
-        return addresses
+        List<Address> result = addresses
                 .stream()
                 .filter(a -> a.getZip() != null)
                 .filter(a -> a.getZip().equalsIgnoreCase(zipcode))
                 .collect(java.util.stream.Collectors.toList());
 
+        if (result.isEmpty()) {
+            result = addresses
+                    .stream()
+                    .filter(a -> a.getZip() != null)
+                    .filter(a -> a.getZip().toLowerCase().contains(zipcode.toLowerCase()))
+                    .collect(java.util.stream.Collectors.toList());
+        }
+        return result;
     }
 
-    
     public String fixNull(String input) {
         String returnValue = null;
         if (input.trim().equalsIgnoreCase("null")) {
