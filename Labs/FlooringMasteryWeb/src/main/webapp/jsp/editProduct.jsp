@@ -61,15 +61,15 @@
                             <div class="form-group">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-7 text-center">
-                                    <strong><form:errors path="stateName" /></strong>
+                                    <strong><form:errors path="productName" /></strong>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <form:label path="stateName" for="stateName" class="col-sm-3 control-label" >State:</form:label>
+                                <form:label path="productName" for="productName" class="col-sm-3 control-label" >Product:</form:label>
 
                                     <div class="col-sm-7">
-                                    <form:input path="stateName" style="text-align: center" class="form-control" type="text" name="stateName" id="stateName" placeholder="State Name" />
+                                    <form:input path="productName" style="text-align: center" class="form-control" type="text" name="productName" id="productName" placeholder="State Name" />
                                 </div>
                             </div>
                             <c:if test="false" >
