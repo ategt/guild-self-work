@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 @RequestMapping(value = "/adminProductPanel")
-public class AdminProoductPanelWebController {
+public class AdminProductPanelWebController {
 
     ProductDao productDao;
     StateDao stateDao;
@@ -37,7 +37,7 @@ public class AdminProoductPanelWebController {
     ConfigDao configDao;
 
     @Inject
-    public AdminProoductPanelWebController(
+    public AdminProductPanelWebController(
             ProductDao productDao,
             StateDao stateDao,
             OrderDao orderDao,
@@ -148,7 +148,7 @@ public class AdminProoductPanelWebController {
 
             productDao.update(product);
 
-            return "redirect:/adminPanel/";
+            return "redirect:/adminProductPanel/";
         }
 
     }
@@ -182,7 +182,7 @@ public class AdminProoductPanelWebController {
         //orderDao.delete(orderDao.get(orderId));
         productDao.delete(productDao.get(productName));
 
-        return "redirect:/adminPanel/";
+        return "redirect:/adminProductPanel/";
     }
 //
 //    @RequestMapping(value = "/edit", method = RequestMethod.POST)

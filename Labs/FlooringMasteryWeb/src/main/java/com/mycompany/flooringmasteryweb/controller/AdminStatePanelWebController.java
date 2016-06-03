@@ -151,7 +151,7 @@ public class AdminStatePanelWebController {
           
             stateDao.update(state);
 
-            return "redirect:/adminPanel/";
+            return "redirect:/adminStatePanel/";
         }
 
     }
@@ -185,7 +185,7 @@ public class AdminStatePanelWebController {
         //orderDao.delete(orderDao.get(orderId));
         stateDao.delete(stateDao.get(stateName));
 
-        return "redirect:/adminPanel/";
+        return "redirect:/adminStatePanel/";
     }
 //
 //    @RequestMapping(value = "/edit", method = RequestMethod.POST)

@@ -26,6 +26,9 @@
                 <ul class="nav nav-tabs">
                     <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
                     <li role="presentation"><a href="${pageContext.request.contextPath}/search">Search</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/adminPanel">Admin Panel</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/adminStatePanel">Sales Tax Panel</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/adminProductPanel">Product Panel</a></li>
 
                 </ul>    
             </div>
@@ -69,7 +72,7 @@
                                 <form:label path="productName" for="productName" class="col-sm-3 control-label" >Product:</form:label>
 
                                     <div class="col-sm-7">
-                                    <form:input path="productName" style="text-align: center" class="form-control" type="text" name="productName" id="productName" placeholder="State Name" />
+                                    <form:input path="productName" style="text-align: center" class="form-control" type="text" id="productName" placeholder="State Name" />
                                 </div>
                             </div>
                             <c:if test="false" >
@@ -83,14 +86,35 @@
                          <div class="form-group">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-7 text-center">
-                                    <strong><form:errors path="stateTax" /></strong>
+                                    <strong><form:errors path="productCost" /></strong>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <form:label path="stateTax" for="stateTax" class="col-sm-3 control-label" >State Sales Tax:</form:label>
+                                <form:label path="productCost" for="productCost" class="col-sm-3 control-label" >Material Cost:</form:label>
                                     <div class="col-sm-7">
-                                    <form:input path="stateTax" style="text-align: center" class="form-control" type="text" name="stateTax" id="stateTax" placeholder="State Sales Tax" />
+                                    <form:input path="productCost" style="text-align: center" class="form-control" type="text" id="productCost" placeholder="State Sales Tax" />
 
+                                </div>
+                            </div>
+
+                            <c:if test="$false" >
+                            </div>
+                        </c:if>
+
+                        <c:if test="false" >
+                            <div class="has-error">
+                            </c:if>
+
+                         <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-7 text-center">
+                                    <strong><form:errors path="laborCost" /></strong>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <form:label path="laborCost" for="laborCost" class="col-sm-3 control-label" >Installation Cost:</form:label>
+                                    <div class="col-sm-7">
+                                    <form:input path="laborCost" style="text-align: center" class="form-control" type="text" id="laborCost" placeholder="Installation Cost" />
                                 </div>
                             </div>
 
