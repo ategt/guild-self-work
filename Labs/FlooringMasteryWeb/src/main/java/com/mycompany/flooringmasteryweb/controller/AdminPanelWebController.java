@@ -69,7 +69,7 @@ public class AdminPanelWebController {
         List<StateCommand> stateCommands = stateList();
 
         model.put("states", stateCommands);
-        model.put("state", new State());
+        model.put("stateCommand", new StateCommand());
 
         return "editState";
     }
@@ -89,7 +89,8 @@ public class AdminPanelWebController {
         states = stateDao.sortByStateName(states);
 
         model.put("states", stateList());
-        model.put("state", stateDao.get(stateName));
+        //model.put("state", stateDao.get(stateName));
+        model.put("stateCommand", stateDao.buildCommandState(stateDao.get(stateName)));
 
         return "editState";
     }
@@ -126,11 +127,16 @@ public class AdminPanelWebController {
 
         if (bindingResult.hasErrors()) {
 
-            model.put("state", stateCommand);
+             //State state = new State();
+//            state.setStateTax(stateCommand.getStateTax());
+//            state.setStateName(stateCommand.getStateName());
+            //StateCommand state = stateCommand;
+            
+            model.put("stateCommand", stateCommand);
             model.put("states", stateList());
             
-            model.put("stateError", !stateValid);
-            model.put("taxError", !taxValid);
+            //model.put("stateError", !stateValid);
+            //model.put("taxError", !taxValid);
             
             return "editState";
             

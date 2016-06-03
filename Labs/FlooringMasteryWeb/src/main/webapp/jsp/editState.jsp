@@ -52,10 +52,8 @@
                 </div>
 
                 <div class="col-md-6 text-center">
-                    <form:form method="POST" commandName="state" action="${pageContext.request.contextPath}/adminPanel/update" class="form-horizontal">
-                        <c:if test="${stateError}" >
-                            <div class="has-error">
-                            </c:if>
+                    <form:form method="POST" commandName="stateCommand" action="${pageContext.request.contextPath}/adminPanel/update" class="form-horizontal">
+                        <form:hidden path="stateAbbreviation" />
                             <div class="form-group">
                                 <div class="col-sm-3">
 
@@ -72,9 +70,7 @@
                                     <form:input path="stateName" name="stateName" style="text-align: center" class="form-control" type="text" id="stateName" placeholder="State Name" />
                                 </div>
                             </div>
-                            <c:if test="${stateError}" >
-                            </div>
-                        </c:if>
+                           
 
                                  <div class="form-group">
                                 <div class="col-sm-3">
