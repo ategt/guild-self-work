@@ -73,4 +73,10 @@ public class HomeController {
         return "redirect:/addressbook/search";
     }
 
+    @RequestMapping(value = "/adminPanel", method = RequestMethod.GET)
+    public String redirectToAdminPanel() {
+
+        return "redirect:/adminPanel/";
+    }
+
 }

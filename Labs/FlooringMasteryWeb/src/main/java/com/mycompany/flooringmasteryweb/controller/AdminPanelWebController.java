@@ -12,9 +12,15 @@ import com.mycompany.flooringmasteryweb.dao.StateDao;
 import com.mycompany.flooringmasteryweb.dto.BasicOrder;
 import com.mycompany.flooringmasteryweb.dto.BasicOrderImpl;
 import com.mycompany.flooringmasteryweb.dto.Order;
+import com.mycompany.flooringmasteryweb.dto.State;
+import com.mycompany.flooringmasteryweb.dto.StateCommand;
+import com.mycompany.flooringmasteryweb.utilities.StateUtilities;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,60 +53,145 @@ public class AdminPanelWebController {
         this.configDao = configDao;
 
     }
+//
+//    @RequestMapping(value = "/create", method = RequestMethod.POST)
+//    public String create(@ModelAttribute BasicOrderImpl basicOrder) {
+//
+//        Order order = orderDao.orderBuilder(basicOrder);
+//        orderDao.create(order);
+//
+//        return "redirect:/";
+//    }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@ModelAttribute BasicOrderImpl basicOrder) {
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String blank(Map model) {
 
-        Order order = orderDao.orderBuilder(basicOrder);
-        orderDao.create(order);
+        List<StateCommand> stateCommands = stateList();
 
-        return "redirect:/";
+        model.put("states", stateCommands);
+        model.put("state", new State());
+
+        return "editState";
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable("id") Integer orderId, Map model) {
+    private List<StateCommand> stateList() {
+        List<State> states = stateDao.getListOfStates();
+        states = stateDao.sortByStateName(states);
+        List<StateCommand> stateCommands = stateDao.buildCommandStateList(states);
+        return stateCommands;
+    }
 
-        //List<Contact> contacts = contactDao.list();
-        Order order = orderDao.get(orderId);
+    @RequestMapping(value = "/edit/{stateName}", method = RequestMethod.GET)
+    public String edit(@PathVariable("stateName") String stateName, Map model) {
 
-        //contactDao.sortByLastName(contacts);
-        //model.put("contacts", contacts);
-        model.put("order", order);
+        List<State> states = stateDao.getListOfStates();
 
-        return "edit";
+        states = stateDao.sortByStateName(states);
+
+        model.put("states", stateList());
+        model.put("state", stateDao.get(stateName));
+
+        return "editState";
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(@ModelAttribute BasicOrderImpl basicOrder) {
-        Order order = orderDao.orderBuilder(basicOrder);
-        orderDao.update(order);
+    public String update(@ModelAttribute State state, BindingResult bindingResult, Map model) {
 
-        return "redirect:/";
+        boolean stateValid  = StateUtilities.validStateInput(state.getStateName());
+        boolean taxValid = true;
+        
+        if (!stateValid) {
+            bindingResult.rejectValue("stateName", "error.user", "That State Does Not Exist.");
+        }
+
+        //return "redirect:/adminPanel/";
+        //}
+//
+//    else {
+//
+//           
+//
+//        }
+        //&& state.getStateTax() >= 0 && state.getStateTax() <= 100 ) {
+        //bindingResult.rejectValue("stateName", "error.user", "That State Does Not Exist.");
+        if (state.getStateTax() < 0) {
+            bindingResult.rejectValue("stateTax", "error.user", "The Tax Can Not Be Less Than Zero.");
+            taxValid = false;
+        }
+
+        if (state.getStateTax() > 100) {
+            bindingResult.rejectValue("stateTax", "error.user", "The Tax Can Not Be That High.");
+            taxValid = false;
+        }
+
+        if (bindingResult.hasErrors()) {
+
+            model.put("state", state);
+            model.put("states", stateList());
+            
+            model.put("stateError", !stateValid);
+            model.put("taxError", !taxValid);
+            
+            return "editState";
+        } else {
+            String enteredName = state.getStateName();
+            String guessedName = StateUtilities.bestGuessStateName(enteredName);
+            String stateName = StateUtilities.abbrFromState(guessedName);
+            state.setStateName(stateName);
+            stateDao.update(state);
+
+            return "redirect:/adminPanel/";
+        }
+
     }
+//        String enteredName = state.getStateName();
+//        String guessedName = StateUtilities.bestGuessStateName(enteredName);
+//        String stateName = StateUtilities.abbrFromState(guessedName);
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String delete(@PathVariable("id") Integer orderId) {
+//        state.setStateName(stateName);
+//
+//        stateDao.update(state);
+//        
+//    }
+//
+//    
+//        else {
+//
+//            bindingResult.rejectValue("stateName", "error.user", "That State Does Not Exist.");
+//
+//    }
+//
+//    model.put (
+//            
+//
+//    "states", stateList());
+//    model.put (
+//            
+//    "state", state);
+    @RequestMapping(value = "/delete/{stateName}", method = RequestMethod.GET)
+    public String delete(@PathVariable("stateName") String stateName) {
 
-        orderDao.delete(orderDao.get(orderId));
+        //orderDao.delete(orderDao.get(orderId));
+        stateDao.delete(stateDao.get(stateName));
 
-        return "redirect:/";
+        return "redirect:/adminPanel/";
     }
-
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String editSubmit(@ModelAttribute BasicOrderImpl basicOrder) {
-        Order order = orderDao.orderBuilder(basicOrder);
-        orderDao.update(order);
-        return "redirect:/";
-    }
-
-    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
-    public String show(@PathVariable("id") Integer orderId, Map model) {
-
-        Order order = orderDao.get(orderId);
-
-        model.put("order", order);
-
-        return "show";
-    }
+//
+//    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+//    public String editSubmit(@ModelAttribute BasicOrderImpl basicOrder) {
+//        Order order = orderDao.orderBuilder(basicOrder);
+//        orderDao.update(order);
+//        return "redirect:/";
+//    }
+//
+//    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
+//    public String show(@PathVariable("id") Integer orderId, Map model) {
+//
+//        Order order = orderDao.get(orderId);
+//
+//        model.put("order", order);
+//
+//        return "show";
+//    }
 
 }

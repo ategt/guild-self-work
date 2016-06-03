@@ -9,37 +9,37 @@ package com.mycompany.flooringmasteryweb.dto;
  *
  * @author apprentice
  */
-public class State {
-    private String state;
+public class StateCommand {
+    private String stateName;
+    private String stateAbbreviation;
     private double stateTax;
-    private int id;
 
     /**
-     * @return the state
-     */
-    public String getState() {
-        return state;
-    }
-
-    /**
-     * @param state the state to set
-     */
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    /**
-     * @return the state
+     * @return the stateName
      */
     public String getStateName() {
-        return state;
+        return stateName;
     }
 
     /**
-     * @param state the state to set
+     * @param stateName the stateName to set
      */
-    public void setStateName(String state) {
-        this.state = state;
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    /**
+     * @return the stateAbbreviation
+     */
+    public String getStateAbbreviation() {
+        return stateAbbreviation;
+    }
+
+    /**
+     * @param stateAbbreviation the stateAbbreviation to set
+     */
+    public void setStateAbbreviation(String stateAbbreviation) {
+        this.stateAbbreviation = stateAbbreviation;
     }
 
     /**
@@ -54,20 +54,6 @@ public class State {
      */
     public void setStateTax(double stateTax) {
         this.stateTax = stateTax;
-    }
-
-    /**
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(int id) {
-        this.id = id;
     }
     
 }

@@ -6,8 +6,10 @@
 package com.mycompany.flooringmasteryweb.dao;
 
 import com.mycompany.flooringmasteryweb.dto.State;
+import com.mycompany.flooringmasteryweb.dto.StateCommand;
 import com.mycompany.flooringmasteryweb.utilities.StateFileIO;
 import com.mycompany.flooringmasteryweb.utilities.StateFileIOImplementation;
+import com.mycompany.flooringmasteryweb.utilities.StateUtilities;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,11 +18,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -102,22 +107,26 @@ public class StateDao {
     }
 
     public void update(State state) {
-        State foundState = statesMap.get(state.getState());
 
-        if (foundState != null) {
+        if (state != null) {
+            State foundState = statesMap.get(state.getState());
 
-            if (foundState.getState().equals(state.getState())) {
-                statesMap.remove(foundState.getState());
-                statesMap.put(state.getState(), state);
+            if (foundState != null) {
 
-                fileIo.encode(stateDataFile, getList());
+                if (foundState.getState().equals(state.getState())) {
+                    statesMap.remove(foundState.getState());
+                    statesMap.put(state.getState(), state);
+
+                    fileIo.encode(stateDataFile, getList());
+                } else {
+                    System.out.println("Throwing a State Not Found exception!!!!");
+                    // Look up exception throwing and consider putting one here, too!
+                }
             } else {
-                System.out.println("Throwing a State Not Found exception!!!!");
+                create(state);
+                //System.out.println("Throwing a State is null exception!!!!");
                 // Look up exception throwing and consider putting one here, too!
             }
-        } else {
-            System.out.println("Throwing a State is null exception!!!!");
-            // Look up exception throwing and consider putting one here, too!
         }
     }
 
@@ -141,4 +150,112 @@ public class StateDao {
         return statesMap.size();
     }
 
+    public List<State> getListOfStates() {
+
+        List<State> states = getList().stream()
+                .map(name -> get(name))
+                .collect(Collectors.toList());
+
+        return states;
+    }
+
+    public List<State> sortByStateName(List<State> states) {
+
+        states.sort(
+                new Comparator<State>() {
+            public int compare(State c1, State c2) {
+                return c1.getStateName().compareTo(c2.getStateName());
+            }
+        });
+
+        return states;
+    }
+
+    public List<State> sortByStateNameRev(List<State> states) {
+        List<State> shallowCopy = sortByStateName(states).subList(0, states.size());
+        Collections.reverse(shallowCopy);
+        return shallowCopy;
+    }
+
+    public List<State> sortByStateTax(List<State> states) {
+
+        states.sort(
+                new Comparator<State>() {
+            public int compare(State c1, State c2) {
+                return Double.compare(c1.getStateTax(), c2.getStateTax());
+            }
+        });
+
+        return states;
+    }
+
+    public List<State> sortByStateTaxRev(List<State> states) {
+        List<State> shallowCopy = sortByStateName(states).subList(0, states.size());
+        Collections.reverse(shallowCopy);
+        return shallowCopy;
+    }
+
+    public StateCommand buildCommandState(State state) {
+
+        StateCommand stateCommand = new StateCommand();
+
+        if (StateUtilities.validStateAbbr(state.getStateName())) {
+            String stateAbbreviation = state.getStateName();
+            String stateName = StateUtilities.stateFromAbbr(stateAbbreviation);
+
+            stateCommand.setStateAbbreviation(stateAbbreviation);
+            stateCommand.setStateName(stateName);
+
+            stateCommand.setStateTax(state.getStateTax());
+            
+        } else if (StateUtilities.validStateInput(state.getStateName())) {
+            String guessedName = StateUtilities.bestGuessStateName(state.getStateName());
+            String stateAbbreviation = StateUtilities.abbrFromState(guessedName);
+
+            stateCommand.setStateAbbreviation(stateAbbreviation);
+            stateCommand.setStateName(guessedName);
+
+            stateCommand.setStateTax(state.getStateTax());
+            
+        }
+        
+        return stateCommand;
+    }
+
+    public List<StateCommand> buildCommandStateList(List<State> states){
+        List<StateCommand> resultsList = new ArrayList();
+        
+        for (State state : states) {
+            
+            resultsList.add(buildCommandState(state));
+            
+        }
+        
+        return resultsList;
+    }
+    
+    
+
+    public List<StateCommand> sortByStateFullName(List<StateCommand> states) {
+
+        states.sort(
+                new Comparator<StateCommand>() {
+            public int compare(StateCommand c1, StateCommand c2) {
+                return c1.getStateName().compareTo(c2.getStateName());
+//return Double.compare(c1.getStateTax(), c2.getStateTax());
+            }
+        });
+
+        return states;
+    }
+
+    public List<StateCommand> sortByStateFullNameRev(List<StateCommand> states) {
+        List<StateCommand> shallowCopy = sortByStateFullName(states).subList(0, states.size());
+        Collections.reverse(shallowCopy);
+        return shallowCopy;
+    }
+
+    
 }
+
+

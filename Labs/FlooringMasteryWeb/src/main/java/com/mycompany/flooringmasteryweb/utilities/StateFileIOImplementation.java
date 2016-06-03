@@ -24,13 +24,13 @@ import java.util.logging.Logger;
  * @author apprentice
  */
 public class StateFileIOImplementation implements StateFileIO, GenericMapFileIO<State> {
-    
+
     private StateDao stateDao;
-    
-    public StateFileIOImplementation(StateDao stateDao){
+
+    public StateFileIOImplementation(StateDao stateDao) {
         this.stateDao = stateDao;
     }
-    
+
     @Override
     public void encode(java.io.File stateDataFile, List<String> listToEncode) {
 
@@ -98,7 +98,9 @@ public class StateFileIOImplementation implements StateFileIO, GenericMapFileIO<
 
                         }
 
-                        stateList.put(state.getState(), state);
+                        if (state.getState() != null && !state.getState().equalsIgnoreCase("")) {
+                            stateList.put(state.getState(), state);
+                        }
                     }
                 }
             }
@@ -113,5 +115,5 @@ public class StateFileIOImplementation implements StateFileIO, GenericMapFileIO<
 
         return stateList;
     }
-    
+
 }

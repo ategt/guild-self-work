@@ -34,70 +34,75 @@
                 <div class="col-md-6">
 
                     <table class="table table-hover">
-                        <th>Order Number</th>
-                        <th>Order Name</th>
+                        <th>State Name</th>
+                        <th>Sales Tax</th>
                         <th><i class="glyphicon glyphicon-edit"></i> Edit</th>
                         <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
-                            <c:forEach items="${orders}" var="order">
+                            <c:forEach items="${states}" var="state">
                             <tr>
-                                <td><a href="FlooringMaster/show/${order.id}">${order.id}</a></td>
-                                <td><a href="FlooringMaster/show/${order.id}">${order.name}</a></td>
-                                <td><a href="FlooringMaster/edit/${order.id}">Edit</a></td>
-                                <td><a href="FlooringMaster/delete/${order.id}">Delete</a></td>
-
+                                <td><a href="${pageContext.request.contextPath}/adminPanel/edit/${state.stateAbbreviation}">${state.stateName}</a></td>
+                                <td><a href="${pageContext.request.contextPath}/adminPanel/edit/${state.stateAbbreviation}">${state.stateTax}</a></td>
+                                <td><a href="${pageContext.request.contextPath}/adminPanel/edit/${state.stateAbbreviation}">Edit</a></td>
+                                <td><a href="${pageContext.request.contextPath}/adminPanel/delete/${state.stateAbbreviation}">Delete</a></td>
                             </tr>
                         </c:forEach>
 
-
-
                     </table>
 
-
-
-
                 </div>
-                <div class="col-md-6">
-                    <form:form method="POST" commandName="state" action="${pageContext.request.contextPath}/adminPanel/create" class="form-horizontal">
-                        <div class="form-group">
-                            <form:label path="name" for="name" class="col-sm-2 control-label" >Order Name:</form:label>
-                            <div class="col-sm-10">
-                                <form:input path="name" class="form-control" type="text" name="name" id="name" placeholder="Order Name" />
-                            </div>
-                        </div>
-                        <div class="form-group">
 
-                            <form:label path="state" for="state" class="col-sm-2 control-label" >State:</form:label>
-                            <div class="col-sm-10">
-                                <form:input path="state" class="form-control" type="text" name="state" id="state" placeholder="State" />
+                <div class="col-md-6 text-center">
+                    <form:form method="POST" commandName="state" action="${pageContext.request.contextPath}/adminPanel/update" class="form-horizontal">
+                        <c:if test="${stateError}" >
+                            <div class="has-error">
+                            </c:if>
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-7 text-center">
+                                    <strong><form:errors path="stateName" /></strong>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <form:label path="product" for="product" class="col-sm-2 control-label" >Product:</form:label>
-                            <div class="col-sm-10">
-                                <form:input path="product" class="form-control" type="text" name="product" id="product" placeholder="Product" />
+
+                            <div class="form-group">
+                                <form:label path="stateName" for="stateName" class="col-sm-3 control-label" >State:</form:label>
+
+                                    <div class="col-sm-7">
+                                    <form:input path="stateName" style="text-align: center" class="form-control" type="text" name="stateName" id="stateName" placeholder="State Name" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <form:label path="date" for="date" class="col-sm-2 control-label" >Date:</form:label>
-                            <div class="col-sm-10">
-                                <form:input path="date" class="form-control" type="text" name="date" id="date" placeholder="Order Date" />
+                            <c:if test="${stateError}" >
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <form:label path="area" for="area" class="col-sm-2 control-label" >Area:</form:label>
-                            <div class="col-sm-10">
-                                <form:input path="area" class="form-control" type="text" name="area" id="area" placeholder="Area" />
+                        </c:if>
+
+                        <c:if test="${taxError}" >
+                            <div class="has-error">
+                            </c:if>
+
+                         <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-7 text-center">
+                                    <strong><form:errors path="stateTax" /></strong>
+                                </div>
                             </div>
-                        </div>
-                            
+                            <div class="form-group">
+                                <form:label path="stateTax" for="stateTax" class="col-sm-3 control-label" >State Sales Tax:</form:label>
+                                    <div class="col-sm-7">
+                                    <form:input path="stateTax" style="text-align: center" class="form-control" type="text" name="stateTax" id="stateTax" placeholder="State Sales Tax" />
+
+                                </div>
+                            </div>
+
+                            <c:if test="${taxError}" >
+                            </div>
+                        </c:if>
                         <div class="form-group">
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-10">
-                                <input value="Create" type="submit" class="btn btn-default" />
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-7">
+                                <input value="Update" type="submit" class="btn btn-default" />
                             </div>
                         </div>
 
-                </div>
+                    </div>
                 </form:form>
             </div>
 
