@@ -7,6 +7,7 @@ package com.mycompany.flooringmasteryweb.dao;
 
 import com.mycompany.flooringmasteryweb.dto.BasicOrder;
 import com.mycompany.flooringmasteryweb.dto.Order;
+import com.mycompany.flooringmasteryweb.dto.OrderCommand;
 import java.util.Date;
 import java.util.List;
 
@@ -67,5 +68,7 @@ public interface OrderDao {
 
     Order orderBuilder(BasicOrder basicOrder);
 
+    OrderCommand resolveOrderCommand(Order order);
+    
     List<Order> sortByOrderNumber(List<Order> orders);
 }

@@ -96,6 +96,11 @@ public class StateDao {
     }
 
     public State get(String name) {
+
+        if (name == null) {
+            return null;
+        }
+
         String input = null;
         for (String stateTest : statesMap.keySet()) {
             if (name.equalsIgnoreCase(stateTest)) {
@@ -207,7 +212,7 @@ public class StateDao {
             stateCommand.setStateName(stateName);
 
             stateCommand.setStateTax(state.getStateTax());
-            
+
         } else if (StateUtilities.validStateInput(state.getStateName())) {
             String guessedName = StateUtilities.bestGuessStateName(state.getStateName());
             String stateAbbreviation = StateUtilities.abbrFromState(guessedName);
@@ -216,25 +221,23 @@ public class StateDao {
             stateCommand.setStateName(guessedName);
 
             stateCommand.setStateTax(state.getStateTax());
-            
+
         }
-        
+
         return stateCommand;
     }
 
-    public List<StateCommand> buildCommandStateList(List<State> states){
+    public List<StateCommand> buildCommandStateList(List<State> states) {
         List<StateCommand> resultsList = new ArrayList();
-        
+
         for (State state : states) {
-            
+
             resultsList.add(buildCommandState(state));
-            
+
         }
-        
+
         return resultsList;
     }
-    
-    
 
     public List<StateCommand> sortByStateFullName(List<StateCommand> states) {
 
@@ -255,7 +258,4 @@ public class StateDao {
         return shallowCopy;
     }
 
-    
 }
-
-

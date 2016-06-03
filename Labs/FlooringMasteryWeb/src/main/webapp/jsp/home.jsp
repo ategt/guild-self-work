@@ -45,10 +45,10 @@
                         <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
                             <c:forEach items="${orders}" var="order">
                             <tr>
-                                <td><a href="FlooringMaster/show/${order.id}">${order.id}</a></td>
-                                <td><a href="FlooringMaster/show/${order.id}">${order.name}</a></td>
-                                <td><a href="FlooringMaster/edit/${order.id}">Edit</a></td>
-                                <td><a href="FlooringMaster/delete/${order.id}">Delete</a></td>
+                                <td><a href="${pageContext.request.contextPath}/FlooringMaster/show/${order.id}">${order.id}</a></td>
+                                <td><a href="${pageContext.request.contextPath}/FlooringMaster/show/${order.id}">${order.name}</a></td>
+                                <td><a href="${pageContext.request.contextPath}/FlooringMaster/edit/${order.id}">Edit</a></td>
+                                <td><a href="${pageContext.request.contextPath}/FlooringMaster/delete/${order.id}">Delete</a></td>
 
                             </tr>
                         </c:forEach>
@@ -62,42 +62,122 @@
 
                 </div>
                 <div class="col-md-6">
-                    <form:form method="POST" commandName="newOrder" action="${pageContext.request.contextPath}/FlooringMaster/create" class="form-horizontal">
-                        <div class="form-group">
-                            <form:label path="name" for="name" class="col-sm-2 control-label" >Order Name:</form:label>
-                                <div class="col-sm-10">
-                                <form:input path="name" class="form-control" type="text" name="name" id="name" placeholder="Order Name" />
-                            </div>
-                        </div>
-                        <div class="form-group">
+                    <form:form method="POST" commandName="orderCommand" action="${pageContext.request.contextPath}/FlooringMaster/createOrder" class="form-horizontal">
+                        <form:hidden path="id" />
 
-                            <form:label path="state" for="state" class="col-sm-2 control-label" >State:</form:label>
-                                <div class="col-sm-10">
-                                <form:input path="state" class="form-control" type="text" name="state" id="state" placeholder="State" />
+                        <c:if test="${nameError}" >
+                            <div class="has-error">
+                            </c:if>
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-9 text-center">
+                                    <strong><form:errors path="name" /></strong>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <form:label path="product" for="product" class="col-sm-2 control-label" >Product:</form:label>
-                                <div class="col-sm-10">
-                                <form:input path="product" class="form-control" type="text" name="product" id="product" placeholder="Product" />
+                            <div class="form-group">
+                                <form:label path="name" for="name" class="col-sm-3 control-label" >Order Name:</form:label>
+                                    <div class="col-sm-9">
+                                    <form:input path="name" class="form-control" style="text-align: center" type="text" id="name" placeholder="Order Name" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <form:label path="date" for="date" class="col-sm-2 control-label" >Date:</form:label>
-                                <div class="col-sm-10">
-                                <form:input path="date" class="form-control" type="text" name="date" id="date" placeholder="Order Date" />
+
+                            <c:if test="${nameError}" >
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <form:label path="area" for="area" class="col-sm-2 control-label" >Area:</form:label>
-                                <div class="col-sm-10">
-                                <form:input path="area" class="form-control" type="text" name="area" id="area" placeholder="Area" />
+                        </c:if>
+
+                        <c:if test="${stateError}" >
+                            <div class="has-error">
+                            </c:if>
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-9 text-center">
+                                    <strong><form:errors path="state" /></strong>
+                                </div>
                             </div>
-                        </div>
+                            <div class="form-group">
+
+                                <form:label path="state" for="state" class="col-sm-3 control-label" >State:</form:label>
+                                    <div class="col-sm-9">
+                                    <form:input path="state" class="form-control" style="text-align: center" type="text" id="state" placeholder="State" />
+                                </div>
+                            </div>
+
+
+
+                            <c:if test="${stateError}" >
+                            </div>
+                        </c:if>
+
+                        <c:if test="${productError}" >
+                            <div class="has-error">
+                            </c:if>
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-9 text-center">
+                                    <strong><form:errors path="product" /></strong>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <form:label path="product" for="product" class="col-sm-3 control-label" >Product:</form:label>
+                                    <div class="col-sm-9">
+                                    <form:input path="product" class="form-control" style="text-align: center" type="text" id="product" placeholder="Product" />
+                                </div>
+                            </div>
+
+
+
+                            <c:if test="${productError}" >
+                            </div>
+                        </c:if>
+
+                        <c:if test="${dateError}" >
+                            <div class="has-error">
+                            </c:if>
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-9 text-center">
+                                    <strong><form:errors path="date" /></strong>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <form:label path="date" for="date" class="col-sm-3 control-label" >Date:</form:label>
+                                    <div class="col-sm-9">
+                                    <form:input path="date" class="form-control" style="text-align: center" type="text" id="date" placeholder="Order Date" />
+                                </div>
+                            </div>
+
+
+
+                            <c:if test="${dateError}" >
+                            </div>
+                        </c:if>
+
+                        <c:if test="${areaError}" >
+                            <div class="has-error">
+                            </c:if>
+                            <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-9 text-center">
+                                    <strong><form:errors path="area" /></strong>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <form:label path="area" for="area" class="col-sm-3 control-label" >Area:</form:label>
+                                    <div class="col-sm-9">
+                                    <form:input path="area" class="form-control" style="text-align: center" type="text" id="area" placeholder="Area" />
+                                </div>
+                            </div>
+
+
+
+                            <c:if test="${areaError}" >
+                            </div>
+                        </c:if>
+
 
                         <div class="form-group">
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-10">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9 text-center">
                                 <input value="Create" type="submit" class="btn btn-default" />
                             </div>
                         </div>

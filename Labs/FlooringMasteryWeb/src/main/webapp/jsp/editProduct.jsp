@@ -88,7 +88,7 @@
                                 </div>
                             </div>
 
-                            <c:if test="$false" >
+                            <c:if test="false" >
                             </div>
                         </c:if>
 

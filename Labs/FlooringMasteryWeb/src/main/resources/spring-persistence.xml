@@ -44,4 +44,13 @@
     
     <!--<import resource="auditContext.xml" />-->
     
+    
+    
+       <!-- Register the messages.properties -->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+ 
+        <property name="basename" value="/WEB-INF/messages" />
+ 
+    </bean>
 </beans>

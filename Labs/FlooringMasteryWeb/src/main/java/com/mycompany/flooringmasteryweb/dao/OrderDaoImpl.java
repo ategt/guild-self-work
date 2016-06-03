@@ -7,6 +7,7 @@ package com.mycompany.flooringmasteryweb.dao;
 
 import com.mycompany.flooringmasteryweb.dto.BasicOrder;
 import com.mycompany.flooringmasteryweb.dto.Order;
+import com.mycompany.flooringmasteryweb.dto.OrderCommand;
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.State;
 import com.mycompany.flooringmasteryweb.utilities.OrderDaoFileIOImplementation;
@@ -573,6 +574,7 @@ public class OrderDaoImpl implements OrderDao {
             return null;
         }
 
+        newOrder.setName(basicOrder.getName());
         newOrder.setId(basicOrder.getId());
         newOrder.setDate(basicOrder.getDate());
 
@@ -619,7 +621,50 @@ public class OrderDaoImpl implements OrderDao {
         return newOrder;
     }
 
+    public OrderCommand resolveOrderCommand(Order order) {
+
+        if (order == null) {
+            return null;
+        }
+
+        OrderCommand orderCommand = new OrderCommand();
+
+        Double area = order.getArea();
+        State state = order.getState();
+        Date date = order.getDate();
+        int id = order.getId();
+        String name = order.getName();
+        Product product = order.getProduct();
+
+//        if (name == null)
+//            return null;
+ 
+
+        String productName = "";
+        if (product != null) {
+            productName = product.getProductName();
+        }
+
+        String stateName = "";
+        if (state != null) {
+            stateName = state.getStateName();
+        }
+
+        orderCommand.setState(stateName);
+        orderCommand.setArea(area);
+        orderCommand.setDate(date);
+        orderCommand.setId(id);
+        orderCommand.setName(name);
+        orderCommand.setProduct(productName);
+
+        return orderCommand;
+    }
+
     public List<Order> sortByOrderNumber(List<Order> orders) {
+
+        if (orders == null) {
+            return null;
+        }
 
         orders.sort(
                 new Comparator<Order>() {
