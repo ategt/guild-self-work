@@ -40,10 +40,10 @@
                         <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
                             <c:forEach items="${states}" var="state">
                             <tr>
-                                <td><a href="${pageContext.request.contextPath}/adminPanel/edit/${state.stateAbbreviation}">${state.stateName}</a></td>
-                                <td><a href="${pageContext.request.contextPath}/adminPanel/edit/${state.stateAbbreviation}">${state.stateTax}</a></td>
-                                <td><a href="${pageContext.request.contextPath}/adminPanel/edit/${state.stateAbbreviation}">Edit</a></td>
-                                <td><a href="${pageContext.request.contextPath}/adminPanel/delete/${state.stateAbbreviation}">Delete</a></td>
+                                <td><a href="${pageContext.request.contextPath}/adminStatePanel/edit/${state.stateAbbreviation}">${state.stateName}</a></td>
+                                <td><a href="${pageContext.request.contextPath}/adminStatePanel/edit/${state.stateAbbreviation}">${state.stateTax}</a></td>
+                                <td><a href="${pageContext.request.contextPath}/adminStatePanel/edit/${state.stateAbbreviation}">Edit</a></td>
+                                <td><a href="${pageContext.request.contextPath}/adminStatePanel/delete/${state.stateAbbreviation}">Delete</a></td>
                             </tr>
                         </c:forEach>
 
@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="col-md-6 text-center">
-                    <form:form method="POST" commandName="stateCommand" action="${pageContext.request.contextPath}/adminPanel/update" class="form-horizontal">
+                    <form:form method="POST" commandName="stateCommand" action="${pageContext.request.contextPath}/adminStatePanel/update" class="form-horizontal">
                         <c:if test="${stateError}" >
                             <div class="has-error">
                             </c:if>

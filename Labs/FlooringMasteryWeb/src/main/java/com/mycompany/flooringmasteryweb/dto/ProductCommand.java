@@ -5,14 +5,22 @@
  */
 package com.mycompany.flooringmasteryweb.dto;
 
+import javax.validation.constraints.Min;
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  *
  * @author apprentice
  */
-public class Product {
+public class ProductCommand {
     
+    @NotEmpty(message="You must enter a product name.")
     private String type;
+    
+    @Min(0)
     private double cost;
+    
+    @Min(0)
     private double laborCost;
     private int id;
 
@@ -59,6 +67,20 @@ public class Product {
     }
 
     /**
+     * @return the cost
+     */
+    public double getProductCost() {
+        return cost;
+    }
+
+    /**
+     * @param cost the cost to set
+     */
+    public void setProductCost(double cost) {
+        this.cost = cost;
+    }
+
+    /**
      * @return the laborCost
      */
     public double getLaborCost() {
@@ -85,8 +107,6 @@ public class Product {
     public void setId(int id) {
         this.id = id;
     }
-    
-    
     
     
 }

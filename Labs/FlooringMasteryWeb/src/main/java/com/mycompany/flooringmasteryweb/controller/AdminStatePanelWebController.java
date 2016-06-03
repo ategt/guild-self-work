@@ -31,8 +31,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author apprentice
  */
 @Controller
-@RequestMapping(value = "/adminPanel")
-public class AdminPanelWebController {
+@RequestMapping(value = "/adminStatePanel")
+public class AdminStatePanelWebController {
 
     ProductDao productDao;
     StateDao stateDao;
@@ -40,7 +40,7 @@ public class AdminPanelWebController {
     ConfigDao configDao;
 
     @Inject
-    public AdminPanelWebController(
+    public AdminStatePanelWebController(
             ProductDao productDao,
             StateDao stateDao,
             OrderDao orderDao,
