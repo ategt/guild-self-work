@@ -53,11 +53,11 @@
 
                 <div class="col-md-6 text-center">
                     <form:form method="POST" commandName="stateCommand" action="${pageContext.request.contextPath}/adminPanel/update" class="form-horizontal">
-                        <form:hidden path="stateAbbreviation" />
+                        <c:if test="${stateError}" >
+                            <div class="has-error">
+                            </c:if>
                             <div class="form-group">
-                                <div class="col-sm-3">
-
-                                </div>
+                                <div class="col-sm-3"></div>
                                 <div class="col-sm-7 text-center">
                                     <strong><form:errors path="stateName" /></strong>
                                 </div>
@@ -67,28 +67,27 @@
                                 <form:label path="stateName" for="stateName" class="col-sm-3 control-label" >State:</form:label>
 
                                     <div class="col-sm-7">
-                                    <form:input path="stateName" name="stateName" style="text-align: center" class="form-control" type="text" id="stateName" placeholder="State Name" />
+                                    <form:input path="stateName" style="text-align: center" class="form-control" type="text" name="stateName" id="stateName" placeholder="State Name" />
                                 </div>
                             </div>
-                           
-
-                                 <div class="form-group">
-                                <div class="col-sm-3">
-
-                                </div>
-                                <div class="col-sm-7 text-center">
-                                    <strong><form:errors path="stateTax" /></strong>
-                                </div>
+                            <c:if test="${stateError}" >
                             </div>
+                        </c:if>
+
                         <c:if test="${taxError}" >
                             <div class="has-error">
                             </c:if>
 
-                           
+                         <div class="form-group">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-7 text-center">
+                                    <strong><form:errors path="stateTax" /></strong>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <form:label path="stateTax" for="stateTax" class="col-sm-3 control-label" >State Sales Tax:</form:label>
                                     <div class="col-sm-7">
-                                    <form:input path="stateTax" style="text-align: center" class="form-control" type="text" id="stateTax" placeholder="State Sales Tax" />
+                                    <form:input path="stateTax" style="text-align: center" class="form-control" type="text" name="stateTax" id="stateTax" placeholder="State Sales Tax" />
 
                                 </div>
                             </div>
@@ -120,4 +119,3 @@
 
 </body>
 </html>
-
