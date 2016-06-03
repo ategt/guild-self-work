@@ -97,12 +97,12 @@ public class AdminProoductPanelWebController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(@Valid @ModelAttribute ProductCommand productCommand, BindingResult bindingResult, Map model) {
 
-        boolean productValid = productDao.validProductName(productCommand.getProductName());
-        boolean taxValid = true;
+        //boolean productValid = productDao.validProductName(productCommand.getProductName());
+       // boolean taxValid = true;
 
-        if (!productValid) {
-            bindingResult.rejectValue("productName", "error.user", "That Product Does Not Exist.");
-        }
+//        if (!productValid) {
+//            bindingResult.rejectValue("productName", "error.user", "That Product Does Not Exist.");
+//        }
 
         //return "redirect:/adminPanel/";
         //}
@@ -132,17 +132,17 @@ public class AdminProoductPanelWebController {
             model.put("productCommand", productCommand);
             model.put("productCommands", productCommandList());
 
-            model.put("productError", !productValid);
-            model.put("taxError", !taxValid);
+            //model.put("productError", !productValid);
+            //model.put("taxError", !taxValid);
 
             return "editProduct";
 
         } else {
-            String enteredName = productCommand.getProductName();
-            String guessedName = productDao.bestGuessProductName(enteredName);
+            //String enteredName = productCommand.getProductName();
+            //String guessedName = productDao.bestGuessProductName(enteredName);
             //String productName = ProductUtilities.abbrFromProduct(guessedName);
             //ProductCommmand tempProductCommand = 
-            productCommand.setProductName(guessedName);
+            //productCommand.setProductName(guessedName);
             
             Product product = productDao.resolveCommandProduct(productCommand);
 
