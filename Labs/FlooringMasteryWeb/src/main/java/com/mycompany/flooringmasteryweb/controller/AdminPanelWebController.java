@@ -95,9 +95,9 @@ public class AdminPanelWebController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(@ModelAttribute State state, BindingResult bindingResult, Map model) {
+    public String update(@ModelAttribute StateCommand stateCommand, BindingResult bindingResult, Map model) {
 
-        boolean stateValid  = StateUtilities.validStateInput(state.getStateName());
+        boolean stateValid  = StateUtilities.validStateInput(stateCommand.getStateName());
         boolean taxValid = true;
         
         if (!stateValid) {
@@ -114,30 +114,35 @@ public class AdminPanelWebController {
 //        }
         //&& state.getStateTax() >= 0 && state.getStateTax() <= 100 ) {
         //bindingResult.rejectValue("stateName", "error.user", "That State Does Not Exist.");
-        if (state.getStateTax() < 0) {
+        if (stateCommand.getStateTax() < 0) {
             bindingResult.rejectValue("stateTax", "error.user", "The Tax Can Not Be Less Than Zero.");
             taxValid = false;
         }
 
-        if (state.getStateTax() > 100) {
+        if (stateCommand.getStateTax() > 100) {
             bindingResult.rejectValue("stateTax", "error.user", "The Tax Can Not Be That High.");
             taxValid = false;
         }
 
         if (bindingResult.hasErrors()) {
 
-            model.put("state", state);
+            model.put("state", stateCommand);
             model.put("states", stateList());
             
             model.put("stateError", !stateValid);
             model.put("taxError", !taxValid);
             
             return "editState";
+            
         } else {
-            String enteredName = state.getStateName();
+            String enteredName = stateCommand.getStateName();
             String guessedName = StateUtilities.bestGuessStateName(enteredName);
             String stateName = StateUtilities.abbrFromState(guessedName);
+            
+            State state = new State();
+            state.setStateTax(stateCommand.getStateTax());
             state.setStateName(stateName);
+          
             stateDao.update(state);
 
             return "redirect:/adminPanel/";
