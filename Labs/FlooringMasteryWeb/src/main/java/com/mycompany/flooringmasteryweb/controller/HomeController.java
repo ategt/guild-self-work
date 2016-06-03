@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package com.mycompany.flooringmasteryweb.controller;
 
 //import com.mycompany.dvdlibraryweb.interfaces.Dvd;
@@ -58,9 +59,9 @@ public class HomeController {
         //List<Address> addresses = addressDao.list();
         //dvdLibrary.sortByLastName(contacts);
         List<Order> orders = orderDao.getList();
-        
+
         orders = orderDao.sortByOrderNumber(orders);
-        
+
         model.put("newOrder", new BasicOrderImpl());
         model.put("orders", orders);
 
@@ -77,6 +78,16 @@ public class HomeController {
     public String redirectToAdminPanel() {
 
         return "redirect:/adminPanel/";
+    }
+
+    @RequestMapping(value = "/adminStatePanel", method = RequestMethod.GET)
+    public String stateBlank() {
+        return "redirect:/adminStatePanel/";
+    }
+
+    @RequestMapping(value = "/adminProductPanel", method = RequestMethod.GET)
+    public String productBlank() {
+        return "redirect:/adminProductPanel/";
     }
 
 }

@@ -22,13 +22,18 @@
         <div class="container">
             <h1>Flooring Master</h1>
             <hr/>
-            <div class="navbar">
-                <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/search">Search</a></li>
+            <!--            <div class="navbar">
+                            <ul class="nav nav-tabs">
+                                <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
+                                <li role="presentation"><a href="${pageContext.request.contextPath}/search">Search</a></li>
+            
+                            </ul>    
+                        </div>-->
 
-                </ul>    
-            </div>
+
+
+            <%@ include file="banner.jspf" %>
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -60,36 +65,36 @@
                     <form:form method="POST" commandName="newOrder" action="${pageContext.request.contextPath}/FlooringMaster/create" class="form-horizontal">
                         <div class="form-group">
                             <form:label path="name" for="name" class="col-sm-2 control-label" >Order Name:</form:label>
-                            <div class="col-sm-10">
+                                <div class="col-sm-10">
                                 <form:input path="name" class="form-control" type="text" name="name" id="name" placeholder="Order Name" />
                             </div>
                         </div>
                         <div class="form-group">
 
                             <form:label path="state" for="state" class="col-sm-2 control-label" >State:</form:label>
-                            <div class="col-sm-10">
+                                <div class="col-sm-10">
                                 <form:input path="state" class="form-control" type="text" name="state" id="state" placeholder="State" />
                             </div>
                         </div>
                         <div class="form-group">
                             <form:label path="product" for="product" class="col-sm-2 control-label" >Product:</form:label>
-                            <div class="col-sm-10">
+                                <div class="col-sm-10">
                                 <form:input path="product" class="form-control" type="text" name="product" id="product" placeholder="Product" />
                             </div>
                         </div>
                         <div class="form-group">
                             <form:label path="date" for="date" class="col-sm-2 control-label" >Date:</form:label>
-                            <div class="col-sm-10">
+                                <div class="col-sm-10">
                                 <form:input path="date" class="form-control" type="text" name="date" id="date" placeholder="Order Date" />
                             </div>
                         </div>
                         <div class="form-group">
                             <form:label path="area" for="area" class="col-sm-2 control-label" >Area:</form:label>
-                            <div class="col-sm-10">
+                                <div class="col-sm-10">
                                 <form:input path="area" class="form-control" type="text" name="area" id="area" placeholder="Area" />
                             </div>
                         </div>
-                            
+
                         <div class="form-group">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
@@ -97,7 +102,7 @@
                             </div>
                         </div>
 
-                </div>
+                    </div>
                 </form:form>
             </div>
 

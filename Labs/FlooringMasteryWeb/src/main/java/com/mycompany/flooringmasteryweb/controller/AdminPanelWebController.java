@@ -75,6 +75,7 @@ public class AdminPanelWebController {
         return "adminHome";
     }
 
+  
     private List<StateCommand> stateList() {
         List<State> states = stateDao.getListOfStates();
         states = stateDao.sortByStateName(states);

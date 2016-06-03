@@ -22,16 +22,7 @@
         <div class="container">
             <h1>Flooring Master</h1>
             <hr/>
-            <div class="navbar">
-                <ul class="nav nav-tabs">
-                    <li role="presentation"><a href="${pageContext.request.contextPath}">Home</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/search">Search</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/adminPanel">Admin Panel</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/adminStatePanel">Sales Tax Panel</a></li>
-                    <li role="presentation"><a href="${pageContext.request.contextPath}/adminProductPanel">Product Panel</a></li>
-
-                </ul>    
-            </div>
+             <%@ include file="adminBanner.jspf" %>
 
             <div class="row">
                 <div class="col-md-6">
