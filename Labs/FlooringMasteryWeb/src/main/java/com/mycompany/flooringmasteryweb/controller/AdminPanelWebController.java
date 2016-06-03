@@ -135,8 +135,8 @@ public class AdminPanelWebController {
             model.put("stateCommand", stateCommand);
             model.put("states", stateList());
             
-            //model.put("stateError", !stateValid);
-            //model.put("taxError", !taxValid);
+            model.put("stateError", !stateValid);
+            model.put("taxError", !taxValid);
             
             return "editState";
             

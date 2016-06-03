@@ -192,6 +192,10 @@ public class StateUtilities {
             return null;
         }
 
+        if (validStateAbbr(stateName)) {
+            return stateFromAbbr(stateName);
+        }
+        
         List<String> resultList = guessStateName(stateName);
 
         if (resultList.isEmpty()) {

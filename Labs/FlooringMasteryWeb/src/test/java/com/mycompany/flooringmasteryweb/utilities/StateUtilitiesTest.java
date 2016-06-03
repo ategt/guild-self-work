@@ -145,6 +145,20 @@ public class StateUtilitiesTest {
      * Test of bestGuessStateName method, of class StateUtilities.
      */
     @Test
+    public void testBestGuessStateNameD() {
+        System.out.println("bestGuessStateName");
+        String stateName = "AK";
+        String expResult = "Alaska";
+        String result = StateUtilities.bestGuessStateName(stateName);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of bestGuessStateName method, of class StateUtilities.
+     */
+    @Test
     public void testBestGuessStateNameA() {
         System.out.println("bestGuessStateName");
         String stateName = "";
