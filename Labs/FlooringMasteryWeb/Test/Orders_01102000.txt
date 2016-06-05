@@ -12,5 +12,18 @@ OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborC
 14,null,null,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
 16,Bob and sons\, perfection.,null,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
 17,Bob and sons\, perfection.,IN,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
-18,null,IN,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
-20,Bob and sons\, perfection.,null,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+18,null,IN,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+20,Bob and sons\, perfection.,null,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+21,Bob and sons\, perfection.,IN,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+22,Bob and sons\, perfection.,IN,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+23,null,IN,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+25,Bob and sons\, perfection.,null,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+26,Bob and sons\, perfection.,null,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+27,Bob and sons\, perfection.,IN,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+28,Bob and sons\, perfection.,IN,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+29,null,IN,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+31,Bob and sons\, perfection.,null,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+32,Bob and sons\, perfection.,null,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+33,Bob and sons\, perfection.,IN,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+35,Bob and sons\, perfection.,IN,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+36,Bob and sons\, perfection.,IN,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
