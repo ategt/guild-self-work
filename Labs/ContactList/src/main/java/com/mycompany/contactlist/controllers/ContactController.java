@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -81,14 +82,13 @@ public class ContactController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
-    public String show(@PathVariable("id") Integer contactId, Map model) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Contact show(@PathVariable("id") Integer contactId) {
 
         Contact contact = contactDao.get(contactId);
 
-        model.put("contact", contact);
-
-        return "show";
+        return contact;
     }
 
 }
