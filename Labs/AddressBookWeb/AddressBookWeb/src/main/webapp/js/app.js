@@ -7,7 +7,7 @@
 
 $(document).ready(function () {
 
-    $('#submit-button').on('click', function (e) {
+    $('#create-submit').on('click', function (e) {
 
         e.preventDefault();
 

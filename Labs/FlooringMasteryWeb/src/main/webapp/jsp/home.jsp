@@ -18,7 +18,8 @@
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
 
 
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+        <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />-->
+        <!--<script src="http://code.jquery.com/jquery-1.10.2.js"></script>-->
 
 
     </head>
@@ -124,7 +125,7 @@
                         <div class="form-group">
                             <label for="date" class="col-sm-3 control-label" >Date:</label>
                             <div class="col-sm-9">
-                                <input name="date" class="form-control" style="text-align: center" type="text" id="datepicker" placeholder="Order Date" />
+                                <input name="date" class="form-control" style="text-align: center" type="date" id="datepicker" placeholder="Order Date" />
                             </div>
                         </div>
 
@@ -167,19 +168,20 @@
     </div>
 
 
-    <script>
+<!--    <script>
         $(function () {
             $("#datepicker").datepicker();
         });
-    </script>
+    </script>-->
     <script>
         var contextRoot = "${pageContext.request.contextPath}";
+    
     </script>
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/app.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <!--<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
 
 </body>
 </html>

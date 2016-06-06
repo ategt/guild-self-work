@@ -439,17 +439,31 @@ OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborC
 535,SWC Guild\, Test.,null,6.25,null,100.0,5.0,3.0,500.0,300.0,50.0,850.0
 536,SWC Guild\, Test.,null,6.25,null,100.0,5.0,3.0,500.0,300.0,50.0,850.0
 539,SWC Guild\, Test.,null,6.25,null,100.0,0.0,0.0,0.0,0.0,0.0,0.0
-540,SWC Guild\, Test.,null,0.0,Teststeel,100.0,5.0,3.0,500.0,300.0,0.0,800.0
-541,SWC Guild\, Test.,CA,6.25,Teststeel,100.0,5.0,3.0,500.0,300.0,50.0,850.0
-542,Bob and sons\, perfection.,IN,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
-543,null,IN,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
-545,Bob and sons\, perfection.,null,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
-546,Bob and sons\, perfection.,null,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
-547,SWC Guild\, Test.,null,0.0,Test Steel,100.0,5.0,3.0,500.0,300.0,0.0,800.0
-548,SWC Guild\, Test.,CA,6.25,null,100.0,0.0,0.0,0.0,0.0,0.0,0.0
-549,SWC Guild\, Test.,CA,6.25,Test Steel,0.0,5.0,3.0,0.0,0.0,0.0,0.0
-550,null,CA,6.25,Test Steel,100.0,5.0,3.0,500.0,300.0,50.0,850.0
-551,SWC Guild\, Test.,CA,6.25,Test Steel,100.0,5.0,3.0,500.0,300.0,50.0,850.0
-552,SWC Guild\, Test.,CA,6.25,Test Steel,100.0,5.0,3.0,500.0,300.0,50.0,850.0
-553,SWC Guild\, Test.,CA,6.25,Test Steel,100.0,5.0,3.0,500.0,300.0,50.0,850.0
-556,SWC Guild\, Test.,CA,6.25,null,100.0,0.0,0.0,0.0,0.0,0.0,0.0
+540,SWC Guild\, Test.,null,0.0,null,100.0,5.0,3.0,500.0,300.0,0.0,800.0
+541,SWC Guild\, Test.,null,6.25,null,100.0,5.0,3.0,500.0,300.0,50.0,850.0
+542,Bob and sons\, perfection.,null,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+543,null,null,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+545,Bob and sons\, perfection.,null,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+546,Bob and sons\, perfection.,null,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+547,SWC Guild\, Test.,null,0.0,null,100.0,5.0,3.0,500.0,300.0,0.0,800.0
+548,SWC Guild\, Test.,null,6.25,null,100.0,0.0,0.0,0.0,0.0,0.0,0.0
+549,SWC Guild\, Test.,null,6.25,null,0.0,5.0,3.0,0.0,0.0,0.0,0.0
+550,null,null,6.25,null,100.0,5.0,3.0,500.0,300.0,50.0,850.0
+551,SWC Guild\, Test.,null,6.25,null,100.0,5.0,3.0,500.0,300.0,50.0,850.0
+552,SWC Guild\, Test.,null,6.25,null,100.0,5.0,3.0,500.0,300.0,50.0,850.0
+553,SWC Guild\, Test.,null,6.25,null,100.0,5.0,3.0,500.0,300.0,50.0,850.0
+556,SWC Guild\, Test.,null,6.25,null,100.0,0.0,0.0,0.0,0.0,0.0,0.0
+557,SWC Guild\, Test.,null,0.0,Teststeel,100.0,5.0,3.0,500.0,300.0,0.0,800.0
+558,SWC Guild\, Test.,CA,6.25,Teststeel,100.0,5.0,3.0,500.0,300.0,50.0,850.0
+559,Bob and sons\, perfection.,IN,3.25,null,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+560,null,IN,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+562,Bob and sons\, perfection.,null,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+563,Bob and sons\, perfection.,null,3.25,Steel,100.0,5.15,4.75,515.0,475.0,3061.88,4051.88
+564,SWC Guild\, Test.,null,0.0,Test Steel,100.0,5.0,3.0,500.0,300.0,0.0,800.0
+565,SWC Guild\, Test.,CA,6.25,null,100.0,0.0,0.0,0.0,0.0,0.0,0.0
+566,SWC Guild\, Test.,CA,6.25,Test Steel,0.0,5.0,3.0,0.0,0.0,0.0,0.0
+567,null,CA,6.25,Test Steel,100.0,5.0,3.0,500.0,300.0,50.0,850.0
+568,SWC Guild\, Test.,CA,6.25,Test Steel,100.0,5.0,3.0,500.0,300.0,50.0,850.0
+569,SWC Guild\, Test.,CA,6.25,Test Steel,100.0,5.0,3.0,500.0,300.0,50.0,850.0
+570,SWC Guild\, Test.,CA,6.25,Test Steel,100.0,5.0,3.0,500.0,300.0,50.0,850.0
+573,SWC Guild\, Test.,CA,6.25,null,100.0,0.0,0.0,0.0,0.0,0.0,0.0

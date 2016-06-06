@@ -7,11 +7,14 @@
 
 $(document).ready(function () {
 
-    $('#submit-button').on('click', function (e) {
+    $('#create-submit').on('click', function (e) {
 
         e.preventDefault();
+        console.log(contextRoot);
+        var postableUrl = contextRoot + "/FlooringMaster/";
+        console.log(postableUrl);
 
-        var addressData = JSON.stringify({
+        var orderData = JSON.stringify({
             name: $("#name").val(),
             state: $("#state").val(),
             product: $("#product").val(),
@@ -20,15 +23,14 @@ $(document).ready(function () {
         });
 
         $.ajax({
-            url: contextRoot + "/FlooringMaster/",
+            url: postableUrl,
             type: "POST",
-            data: addressData,
+            data: orderData,
             dataType: 'json',
-            beforeSend: function(xhr){
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("Accept", "application/json");
                 xhr.setRequestHeader("Content-type", "application/json");
             },
-            
             success: function (data, status) {
 
                 var tableRow = buildContactRow(data);
@@ -50,11 +52,11 @@ $(document).ready(function () {
 
 
         var strTableRow = "  <tr>\n\
-                                <td><a href="${pageContext.request.contextPath}/FlooringMaster/show/${order.id}">${order.id}</a></td>\n\
-                                <td><a href="${pageContext.request.contextPath}/FlooringMaster/show/${order.id}">${order.name}</a></td>
-                                <td><a href="${pageContext.request.contextPath}/FlooringMaster/edit/${order.id}">Edit</a></td>
-                                <td><a href="${pageContext.request.contextPath}/FlooringMaster/delete/${order.id}">Delete</a></td>
-
+                                <td><a href=\"/FlooringMaster/show/" + data.id + "\">" + data.id + "</a></td>\n\
+                                <td><a href=\"/FlooringMaster/show/" + data.id + "\">" + data.name + "</a></td>\n\
+                                <td><a href=\"/FlooringMaster/edit/" + data.id + "\">Edit</a></td>\n\
+                                <td><a href=\"/FlooringMaster/delete/" + data.id + "\">Delete</a></td>\n\
+\n\
                             </tr>";
 
 
