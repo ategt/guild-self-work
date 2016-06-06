@@ -40,6 +40,17 @@ public class ContactController {
 
         return contactDao.add(contact);
     }
+    
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Contact show(@PathVariable("id") Integer contactId) {
+
+        Contact contact = contactDao.get(contactId);
+        
+        return contact;
+    }
+
+
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable("id") Integer contactId, Map model) {
@@ -74,17 +85,6 @@ public class ContactController {
 
         contactDao.update(contact);
         return "redirect:/";
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public Contact show(@PathVariable("id") Integer contactId) {
-
-        Contact contact = contactDao.get(contactId);
-
-        //contact.getClass().
-        
-        return contact;
     }
 
 }
