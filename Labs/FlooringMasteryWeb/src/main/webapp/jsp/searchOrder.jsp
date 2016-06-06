@@ -85,7 +85,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-md-10 pull-right">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-6 text-center">
                                     <input type="submit" class="btn btn-default" />
                                 </div>
                             </div>

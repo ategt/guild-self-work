@@ -15,69 +15,69 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class ProductCommand {
     
     @NotEmpty(message="You must enter a product name.")
-    private String type;
+    private String productName;
     
     @Min(0)
-    private double cost;
+    private double productCost;
     
     @Min(0)
     private double laborCost;
     private int id;
 
     /**
-     * @return the type
+     * @return the productName
      */
     public String getType() {
-        return type;
+        return productName;
     }
 
     /**
-     * @param type the type to set
+     * @param productName the productName to set
      */
-    public void setType(String type) {
-        this.type = type;
+    public void setType(String productName) {
+        this.productName = productName;
     }
 
     /**
-     * @return the type
+     * @return the productName
      */
     public String getProductName() {
-        return type;
+        return productName;
     }
 
     /**
-     * @param type the type to set
+     * @param productName the productName to set
      */
-    public void setProductName(String type) {
-        this.type = type;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     /**
-     * @return the cost
+     * @return the productCost
      */
     public double getCost() {
-        return cost;
+        return productCost;
     }
 
     /**
-     * @param cost the cost to set
+     * @param productCost the productCost to set
      */
-    public void setCost(double cost) {
-        this.cost = cost;
+    public void setCost(double productCost) {
+        this.productCost = productCost;
     }
 
     /**
-     * @return the cost
+     * @return the productCost
      */
     public double getProductCost() {
-        return cost;
+        return productCost;
     }
 
     /**
-     * @param cost the cost to set
+     * @param productCost the productCost to set
      */
-    public void setProductCost(double cost) {
-        this.cost = cost;
+    public void setProductCost(double productCost) {
+        this.productCost = productCost;
     }
 
     /**
