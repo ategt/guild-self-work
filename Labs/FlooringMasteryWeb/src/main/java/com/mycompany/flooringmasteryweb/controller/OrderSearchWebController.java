@@ -14,7 +14,6 @@ import com.mycompany.flooringmasteryweb.dto.BasicOrderImpl;
 import com.mycompany.flooringmasteryweb.dto.Order;
 import com.mycompany.flooringmasteryweb.dto.OrderCommand;
 import com.mycompany.flooringmasteryweb.dto.Product;
-import com.mycompany.flooringmasteryweb.dto.State;
 import com.mycompany.flooringmasteryweb.utilities.DateUtilities;
 import com.mycompany.flooringmasteryweb.utilities.StateUtilities;
 import java.text.ParseException;
@@ -35,15 +34,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
  * @author apprentice
  */
 @Controller
-@RequestMapping(value = "/FlooringMaster")
-public class FlooringMasteryWebController {
+@RequestMapping(value = "/search")
+public class OrderSearchWebController {
 
     ProductDao productDao;
     StateDao stateDao;
@@ -51,7 +49,7 @@ public class FlooringMasteryWebController {
     ConfigDao configDao;
 
     @Inject
-    public FlooringMasteryWebController(
+    public OrderSearchWebController(
             ProductDao productDao,
             StateDao stateDao,
             OrderDao orderDao,
@@ -316,83 +314,6 @@ public class FlooringMasteryWebController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String search(Map model) {
-
-        loadTheOrdersList(model);
-
-        
-        return "searchOrder";
-    }
-
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String searchSubmit(@RequestParam("searchBy") String searchBy, @RequestParam("searchText") String searchText, Map model) {
-        List<Order> orders = orderDao.getList();
-        Boolean error = false;
-        Boolean dateError = false;
-
-        if ("searchByOrderNumber".equalsIgnoreCase(searchBy)) {
-            try {
-                Integer inputInt = Integer.parseInt(searchText);
-                orders = orderDao.searchByOrderNumber(inputInt);
-            } catch (NumberFormatException numberFormatException) {
-                error = true;
-            }
-
-        } else if ("searchByDate".equalsIgnoreCase(searchBy)) {
-            try {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-                Date orderDate = simpleDateFormat.parse(searchText);
-                orders = orderDao.searchByDate(orderDate);
-            } catch (ParseException ex) {
-                error = true;
-                dateError = true;
-            }
-
-        } else if ("searchByName".equalsIgnoreCase(searchBy)) {
-            orders = orderDao.searchByName(searchText);
-        } else if ("searchByProduct".equalsIgnoreCase(searchBy)) {
-            String productGuess = productDao.bestGuessProductName(searchText);
-
-            if (productGuess == null) {
-                error = true;
-            } else {
-                Product product = productDao.get(productGuess);
-                orders = orderDao.searchByProduct(product);
-            }
-
-        } else if ("searchByState".equalsIgnoreCase(searchBy)) {
-
-            String stateGuess = StateUtilities.bestGuessStateName(searchText);
-
-            if (stateGuess == null) {
-                error = true;
-            } else {
-                State state = stateDao.get(stateGuess);
-                orders = orderDao.searchByState(state);
-            }
-
-        }
-
-        model.put("orders", orders);
-        model.put("error", error);
-        model.put("dateError", dateError);
-
-        return "searchOrder";
-
-        //    Order order = orderDao.orderBuilder(basicOrder);
-        //    orderDao.update(order);
-        //    return "redirect:/";
-    }
-
-//                                    <select name="searchBy">
-//                                    <option value="searchByOrderNumber" >Search By Order Number</option>
-//                                    <option value="searchByName" >Search By Order Name</option>
-//                                    <option value="searchByProduct" >Search By Product</option>
-//                                    <option value="searchByState" >Search By State</option>
-//                                    <option value="searchByDate" >Search By Date</option>
-//                                </select>
 //
 //    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
 //    public String show(@PathVariable("id") Integer orderId, Map model) {

@@ -93,6 +93,9 @@ public class ProductDao {
 
         String input = null;
 
+        if ( name == null)
+            return null;
+            
         for (String productTest : productsMap.keySet()) {
             if (name.equalsIgnoreCase(productTest)) {
                 input = productTest;

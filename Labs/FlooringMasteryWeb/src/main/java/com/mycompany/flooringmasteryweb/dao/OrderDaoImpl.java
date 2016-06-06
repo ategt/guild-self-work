@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -243,6 +244,54 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    public java.util.List<Order> searchByProduct(Product product) {
+        java.util.List<Order> specificOrders = orders.stream()
+                .filter(o -> o.getProduct() != null)
+                .filter(o -> o.getProduct() == product) //.getProductName() != null)
+                //.filter(o -> o.getProduct().getProductName() == .)
+                .collect(Collectors.toList());
+
+//        for (Order order : orders) {
+//            if (isSameDay(order.getDate(), date)) {
+//                specificOrders.add(order);
+//            }
+//        }
+        return specificOrders;
+    }
+
+    @Override
+    public java.util.List<Order> searchByOrderNumber(Integer orderNumber) {
+        java.util.List<Order> specificOrders = orders.stream()
+                //.filter(o -> o.getId() != null)
+                .filter(o -> Integer.toString(o.getId()).contains(orderNumber.toString())) //.getProductName() != null)
+                //.filter(o -> o.getProduct().getProductName() == .)
+                .collect(Collectors.toList());
+
+//        for (Order order : orders) {
+//            if (isSameDay(order.getDate(), date)) {
+//                specificOrders.add(order);
+//            }
+//        }
+        return specificOrders;
+    }
+
+    @Override
+    public java.util.List<Order> searchByState(State state) {
+        java.util.List<Order> specificOrders = orders.stream()
+                .filter(o -> o.getState() != null)
+                .filter(o -> o.getState() == state) //.getProductName() != null)
+                //.filter(o -> o.getProduct().getProductName() == .)
+                .collect(Collectors.toList());
+
+//        for (Order order : orders) {
+//            if (isSameDay(order.getDate(), date)) {
+//                specificOrders.add(order);
+//            }
+//        }
+        return specificOrders;
+    }
+
+    @Override
     public java.util.List<Integer> listOrderNumbers() {
         java.util.List<Integer> orderNumbers = new ArrayList();
 
@@ -281,7 +330,8 @@ public class OrderDaoImpl implements OrderDao {
         java.util.List<Order> closeOrders = new ArrayList();
 
         if (orderName == null) {
-            orderName = "";
+            specificOrders.addAll(orders);
+            return specificOrders;
         }
 
         for (Order order : orders) {
@@ -294,6 +344,15 @@ public class OrderDaoImpl implements OrderDao {
                     closeOrders.add(order);
                 }
             }
+        }
+
+        if (closeOrders.isEmpty()) {
+            
+            closeOrders = orders.stream()
+                                .filter(o -> o.getName() != null)
+                                .filter(o -> o.getName().toLowerCase().contains(orderName.toLowerCase()))
+                                .collect(Collectors.toList());
+            
         }
 
         if (specificOrders.isEmpty()) {
@@ -605,6 +664,10 @@ public class OrderDaoImpl implements OrderDao {
             newOrder.setLaborCostPerSquareFoot(laborCostPerFoot);
         }
 
+        if (newOrder.getState() != null) {
+            taxRate = newOrder.getState().getStateTax();
+        }
+
         double totalLaborCost = laborCostPerFoot * newOrder.getArea();
         newOrder.setLaborCost(totalLaborCost);
 
@@ -638,8 +701,6 @@ public class OrderDaoImpl implements OrderDao {
 
 //        if (name == null)
 //            return null;
- 
-
         String productName = "";
         if (product != null) {
             productName = product.getProductName();

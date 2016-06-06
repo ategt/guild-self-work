@@ -21,15 +21,15 @@ public class OrderCommand implements BasicOrder {
     private int id;
     // OrderNumber
     @NotNull(message = "You Must Include A Name For This Order")
-    @Size(min = 2, max = 45, message = "You Must Include A Name For This Order")
+    @Size(min = 2, max = 45, message = "The Name For This Order Must Be Between 2 and 45 Characters")
     private String name;        // CustomerName
 
     @NotNull(message = "You Must Include A State For This Order")
-    @Size(min = 2, max = 45, message = "You Must Include A Name For This Order")
+    @Size(min = 2, max = 45, message = "The State For This Order Must Be Between 2 and 45 Characters")
     private String state;        // State
 
     @NotNull(message = "You Must Include A Product For This Order")
-    @Size(min = 2, max = 45, message = "You Must Include A Name For This Order")
+    @Size(min = 2, max = 45, message = "The Product For This Order Must Be Between 2 and 45 Characters")
     private String product;    // ProductType
 
     @NotNull(message="You Must Include A Date For This Order")

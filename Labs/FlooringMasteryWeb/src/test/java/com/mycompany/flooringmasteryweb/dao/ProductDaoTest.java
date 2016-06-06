@@ -137,6 +137,22 @@ public class ProductDaoTest {
         assertEquals("Best Product Ever", result.getType());
     }
 
+
+    @Test
+    public void testGetA() {
+        // This test tests the overloaded method.
+        System.out.println("get");
+        Product product = new Product();
+        String productName = null;
+        product.setType("BEST Product ever");
+        ProductDao instance = new ProductDao(configDao);
+        //Product expResult = product;
+        Product ignored = instance.create(product, product.getType());
+        Product result = instance.get(productName);
+        
+        assertNull(result);
+    }
+
     @Test
     public void testCreateByUpdate() {
         // This test tests the overloaded method.

@@ -35,7 +35,7 @@
                         <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
                             <c:forEach items="${productCommands}" var="product">
                             <tr>
-                                <td><a href="${pageContext.request.contextPath}/adminProductPanel/edit/${state.productName}">${product.productName}</a></td>
+                                <td><a href="${pageContext.request.contextPath}/adminProductPanel/edit/${product.productName}">${product.productName}</a></td>
                                 <td><a href="${pageContext.request.contextPath}/adminProductPanel/edit/${product.productName}">${product.productCost}</a></td>
                                 <td><a href="${pageContext.request.contextPath}/adminProductPanel/edit/${product.productName}">${product.laborCost}</a></td>
                                 <td><a href="${pageContext.request.contextPath}/adminProductPanel/edit/${product.productName}">Edit</a></td>
@@ -63,7 +63,7 @@
                                 <form:label path="productName" for="productName" class="col-sm-3 control-label" >Product:</form:label>
 
                                     <div class="col-sm-7">
-                                    <form:input path="productName" style="text-align: center" class="form-control" type="text" id="productName" placeholder="State Name" />
+                                    <form:input path="productName" style="text-align: center" class="form-control" type="text" id="productName" placeholder="Product Name" />
                                 </div>
                             </div>
                             <c:if test="false" >

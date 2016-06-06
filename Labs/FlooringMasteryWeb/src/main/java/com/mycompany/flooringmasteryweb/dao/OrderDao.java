@@ -8,6 +8,8 @@ package com.mycompany.flooringmasteryweb.dao;
 import com.mycompany.flooringmasteryweb.dto.BasicOrder;
 import com.mycompany.flooringmasteryweb.dto.Order;
 import com.mycompany.flooringmasteryweb.dto.OrderCommand;
+import com.mycompany.flooringmasteryweb.dto.Product;
+import com.mycompany.flooringmasteryweb.dto.State;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +41,8 @@ public interface OrderDao {
 
     void delete(Order order);
 
+    Date extractDate(String dateString);
+
     Order get(Integer id);
 
     @Deprecated
@@ -48,13 +52,23 @@ public interface OrderDao {
 
     List<Integer> listOrderNumbers();
 
+    Order orderBuilder(BasicOrder basicOrder);
+
     void purgeTestFiles();
+
+    OrderCommand resolveOrderCommand(Order order);
 
     List<Order> searchByDate(Date date);
 
     List<Order> searchByName(String orderName);
 
+    List<Order> searchByProduct(Product product);
+
+    List<Order> searchByState(State state);
+
     int size();
+
+    List<Order> sortByOrderNumber(List<Order> orders);
 
     String toString(Order order);
 
@@ -63,12 +77,6 @@ public interface OrderDao {
     String toString(Order order, final String TOKEN, final String CSV_ESCAPE);
 
     void update(Order order);
-
-    Date extractDate(String dateString);
-
-    Order orderBuilder(BasicOrder basicOrder);
-
-    OrderCommand resolveOrderCommand(Order order);
     
-    List<Order> sortByOrderNumber(List<Order> orders);
+     java.util.List<Order> searchByOrderNumber(Integer orderNumber);
 }

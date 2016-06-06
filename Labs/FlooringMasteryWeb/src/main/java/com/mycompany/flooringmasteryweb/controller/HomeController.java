@@ -83,7 +83,7 @@ public class HomeController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String search() {
 
-        return "redirect:/addressbook/search";
+        return "redirect:/FlooringMaster/search";
     }
 
     @RequestMapping(value = "/adminPanel", method = RequestMethod.GET)

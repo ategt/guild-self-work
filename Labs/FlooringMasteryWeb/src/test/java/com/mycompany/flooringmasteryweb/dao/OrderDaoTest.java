@@ -1406,37 +1406,28 @@ public class OrderDaoTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        Order order = new Order();
+        //Order order = new Order();
 
-        // Create the file in the Dao.
-        Order returnedOrder = orderDao.create(order);
-
-        // Record the notes id number.
-        int id = order.getId();
 
         // Verify that the note object that the create method passed back
         // was the same one it was given.
-        assertEquals(order, returnedOrder);
+        //assertEquals(order, returnedOrder);
 
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
-        ohio.setState("IN");
+        ohio.setState("CA");
+        ohio.setStateTax(6.25);
         stateDao.create(ohio);
 
         com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
-        product.setType("Steel");
+        product.setType("TestSteel");
+        product.setCost(5);
+        product.setLaborCost(3);
         productDao.create(product);
 
         // Make some data for the dto.
         // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
-        String name = "Bob and sons, perfection.";
-        double taxRate = 3.25;
+        String name = "SWC Guild, Test.";
         double area = 100.00;
-        double costPerSquareFoot = 5.15;
-        double laborCostPerSquareFoot = 4.75;
-        double materialCost = 515.00;
-        double laborCost = 475.00;
-        double tax = 3061.88;
-        double total = 4051.88;
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(2000, Calendar.JANUARY, 10);
@@ -1444,27 +1435,54 @@ public class OrderDaoTest {
         Date orderDate = calendar.getTime();
         //Date orderDate = new Date();
         
-        product = productDao.get(product.getProductName());
-        ohio = stateDao.get(ohio.getStateName());
+        OrderCommand orderCommand = new OrderCommand();
+        
+        
+        orderCommand.setName(name);
+        orderCommand.setArea(area);
+        orderCommand.setProduct(product.getProductName());
+        orderCommand.setState(ohio.getStateName());
+        orderCommand.setDate(orderDate);
+
+        Order builtOrder = orderDao.orderBuilder(orderCommand);
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(builtOrder);
+
+        // Record the notes id number.
+        int id = builtOrder.getId();
+
+
+//        double taxRate = 3.25;
+//        double costPerSquareFoot = 5.15;
+//        double laborCostPerSquareFoot = 4.75;
+//        double materialCost = 515.00;
+//        double laborCost = 475.00;
+//        double tax = 3061.88;
+//        double total = 4051.88;
+
+        
+        //product = productDao.get(product.getProductName());
+        //ohio = stateDao.get(ohio.getStateName());
 
         // Set the above values to the appropriate attributes.
         //order.setId(1);
-        order.setName(name);
-        order.setState(ohio);
-        order.setTaxRate(taxRate);
-        order.setProduct(product);
-        order.setArea(area);
-        order.setCostPerSquareFoot(costPerSquareFoot);
-        order.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
-        order.setMaterialCost(materialCost);
-        order.setLaborCost(laborCost);
-        order.setTax(tax);
-        order.setTotal(total);
-        order.setDate(orderDate);
+//        order.setName(name);
+//        order.setState(ohio);
+//        order.setTaxRate(taxRate);
+//        order.setProduct(product);
+//        order.setArea(area);
+//        order.setCostPerSquareFoot(costPerSquareFoot);
+//        order.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
+//        order.setMaterialCost(materialCost);
+//        order.setLaborCost(laborCost);
+//        order.setTax(tax);
+//        order.setTotal(total);
+//        order.setDate(orderDate);
         // Use the update method to save this new text to file.
-        orderDao.update(order);
+        //orderDao.update(order);
 
-        BasicOrder basicOrder = orderDao.resolveOrderCommand(order);
+        BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
 
         assertNotNull(basicOrder);
 
@@ -1472,10 +1490,1083 @@ public class OrderDaoTest {
 
         assertNotNull(unresolvedOrder);
 
-        //assertEquals(order, unresolvedOrder);
-        Assert.assertSame(order, unresolvedOrder);
+        //assertEquals(builtOrder, unresolvedOrder);
+        //Assert.assertSame(builtOrder, unresolvedOrder);
         //Assert.
 
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
+        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+        
+        
+    }
+
+    @Test
+    public void testResolverFBackandForth() {
+
+        boolean isATest = true;
+        configDao.get().setInTestMode(isATest);
+
+        ProductDao productDao = new ProductDao(configDao);
+        StateDao stateDao = new StateDao(configDao);
+        OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        //Order order = new Order();
+
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        //assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
+        ohio.setState("CA");
+        ohio.setStateTax(6.25);
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
+        product.setType("TestSteel");
+        product.setCost(5);
+        product.setLaborCost(3);
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = "SWC Guild, Test.";
+        double area = 100.00;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 10);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+        
+        OrderCommand orderCommand = new OrderCommand();
+        
+        
+        orderCommand.setName(name);
+        orderCommand.setArea(area);
+        orderCommand.setProduct(product.getProductName());
+        orderCommand.setState(null);
+        orderCommand.setDate(orderDate);
+
+        Order builtOrder = orderDao.orderBuilder(orderCommand);
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(builtOrder);
+
+        // Record the notes id number.
+        int id = builtOrder.getId();
+
+
+//        double taxRate = 3.25;
+//        double costPerSquareFoot = 5.15;
+//        double laborCostPerSquareFoot = 4.75;
+//        double materialCost = 515.00;
+//        double laborCost = 475.00;
+//        double tax = 3061.88;
+//        double total = 4051.88;
+
+        
+        //product = productDao.get(product.getProductName());
+        //ohio = stateDao.get(ohio.getStateName());
+
+        // Set the above values to the appropriate attributes.
+        //order.setId(1);
+//        order.setName(name);
+//        order.setState(ohio);
+//        order.setTaxRate(taxRate);
+//        order.setProduct(product);
+//        order.setArea(area);
+//        order.setCostPerSquareFoot(costPerSquareFoot);
+//        order.setLaborCostPerSquareFoot(laborCostPerSquareFoot);
+//        order.setMaterialCost(materialCost);
+//        order.setLaborCost(laborCost);
+//        order.setTax(tax);
+//        order.setTotal(total);
+//        order.setDate(orderDate);
+        // Use the update method to save this new text to file.
+        //orderDao.update(order);
+
+        BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
+
+        assertNotNull(basicOrder);
+
+        Order unresolvedOrder = orderDao.orderBuilder(basicOrder);
+
+        assertNotNull(unresolvedOrder);
+
+        //assertEquals(builtOrder, unresolvedOrder);
+        //Assert.assertSame(builtOrder, unresolvedOrder);
+        //Assert.
+
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
+        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+        
+        
+    }
+
+    @Test
+    public void testResolverGBackandForth() {
+
+        boolean isATest = true;
+        configDao.get().setInTestMode(isATest);
+
+        ProductDao productDao = new ProductDao(configDao);
+        StateDao stateDao = new StateDao(configDao);
+        OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        //Order order = new Order();
+
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        //assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
+        ohio.setState("CA");
+        ohio.setStateTax(6.25);
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
+        product.setType("TestSteel");
+        product.setCost(5);
+        product.setLaborCost(3);
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = "SWC Guild, Test.";
+        double area = 100.00;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 10);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+        
+        OrderCommand orderCommand = new OrderCommand();
+        
+        
+        orderCommand.setName(name);
+        orderCommand.setArea(area);
+        orderCommand.setProduct(null);
+        orderCommand.setState(ohio.getStateName());
+        orderCommand.setDate(orderDate);
+
+        Order builtOrder = orderDao.orderBuilder(orderCommand);
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(builtOrder);
+
+        // Record the notes id number.
+        int id = builtOrder.getId();
+
+
+        BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
+
+        assertNotNull(basicOrder);
+
+        Order unresolvedOrder = orderDao.orderBuilder(basicOrder);
+
+        assertNotNull(unresolvedOrder);
+
+
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
+        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+        
+        
+    }
+
+    @Test
+    public void testResolverHBackandForth() {
+
+        boolean isATest = true;
+        configDao.get().setInTestMode(isATest);
+
+        ProductDao productDao = new ProductDao(configDao);
+        StateDao stateDao = new StateDao(configDao);
+        OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        //Order order = new Order();
+
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        //assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
+        ohio.setState("CA");
+        ohio.setStateTax(6.25);
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
+        product.setType("TestSteel");
+        product.setCost(5);
+        product.setLaborCost(3);
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = "SWC Guild, Test.";
+        double area = 100.00;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 10);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+        
+        OrderCommand orderCommand = new OrderCommand();
+        
+        
+        orderCommand.setName(name);
+        orderCommand.setArea(area);
+        orderCommand.setProduct(product.getProductName());
+        orderCommand.setState(ohio.getStateName());
+        orderCommand.setDate(null);
+
+        Order builtOrder = orderDao.orderBuilder(orderCommand);
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(builtOrder);
+
+        // Record the notes id number.
+        int id = builtOrder.getId();
+
+        BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
+
+        assertNotNull(basicOrder);
+
+        Order unresolvedOrder = orderDao.orderBuilder(basicOrder);
+
+        assertNotNull(unresolvedOrder);
+
+
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
+        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+        
+        
+    }
+
+
+    @Test
+    public void testResolverIBackandForth() {
+
+        boolean isATest = true;
+        configDao.get().setInTestMode(isATest);
+
+        ProductDao productDao = new ProductDao(configDao);
+        StateDao stateDao = new StateDao(configDao);
+        OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        //Order order = new Order();
+
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        //assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
+        ohio.setState("CA");
+        ohio.setStateTax(6.25);
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
+        product.setType("Test Steel");
+        product.setCost(5);
+        product.setLaborCost(3);
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = "SWC Guild, Test.";
+        double area = 100.00;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 10);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+        
+        OrderCommand orderCommand = new OrderCommand();
+        
+        
+        orderCommand.setName(name);
+        orderCommand.setArea(area);
+        orderCommand.setProduct(product.getProductName());
+        orderCommand.setState(ohio.getStateName());
+        orderCommand.setDate(null);
+
+        Order builtOrder = orderDao.orderBuilder(orderCommand);
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(builtOrder);
+
+        // Record the notes id number.
+        int id = builtOrder.getId();
+
+        BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
+
+        
+         
+        assertNotNull(basicOrder);
+        
+        assertEquals(orderCommand.getName(), basicOrder.getName());
+        assertEquals(orderCommand.getArea(), basicOrder.getArea(), 0.0005);
+        assertEquals(orderCommand.getDate(), basicOrder.getDate());
+        assertEquals(orderCommand.getProduct(), basicOrder.getProduct());
+        assertEquals(orderCommand.getState(), basicOrder.getState());
+        
+        
+        
+        Order unresolvedOrder = orderDao.orderBuilder(basicOrder);
+
+        assertNotNull(unresolvedOrder);
+
+
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
+        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+        
+        
+    }
+
+
+    @Test
+    public void testResolverLBackandForth() {
+
+        boolean isATest = true;
+        configDao.get().setInTestMode(isATest);
+
+        ProductDao productDao = new ProductDao(configDao);
+        StateDao stateDao = new StateDao(configDao);
+        OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        //Order order = new Order();
+
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        //assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
+        ohio.setState("CA");
+        ohio.setStateTax(6.25);
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
+        product.setType("Test Steel");
+        product.setCost(5);
+        product.setLaborCost(3);
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = "SWC Guild, Test.";
+        double area = 100.00;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 10);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+        
+        OrderCommand orderCommand = new OrderCommand();
+        
+        
+        orderCommand.setName(name);
+        orderCommand.setArea(area);
+        orderCommand.setProduct(product.getProductName());
+        orderCommand.setState(ohio.getStateName());
+        orderCommand.setDate(orderDate);
+
+        Order builtOrder = orderDao.orderBuilder(orderCommand);
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(builtOrder);
+
+        // Record the notes id number.
+        int id = builtOrder.getId();
+
+        BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
+
+        
+         
+        assertNotNull(basicOrder);
+        
+        assertEquals(orderCommand.getName(), basicOrder.getName());
+        assertEquals(orderCommand.getArea(), basicOrder.getArea(), 0.0005);
+        assertEquals(orderCommand.getDate(), basicOrder.getDate());
+        assertEquals(orderCommand.getProduct(), basicOrder.getProduct());
+        assertEquals(orderCommand.getState(), basicOrder.getState());
+        
+        
+        
+        Order unresolvedOrder = orderDao.orderBuilder(basicOrder);
+
+        assertNotNull(unresolvedOrder);
+
+
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
+        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+        
+        
+    }
+
+
+    @Test
+    public void testResolverJBackandForth() {
+
+        boolean isATest = true;
+        configDao.get().setInTestMode(isATest);
+
+        ProductDao productDao = new ProductDao(configDao);
+        StateDao stateDao = new StateDao(configDao);
+        OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        //Order order = new Order();
+
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        //assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
+        ohio.setState("CA");
+        ohio.setStateTax(6.25);
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
+        product.setType("Test Steel");
+        product.setCost(5);
+        product.setLaborCost(3);
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = "SWC Guild, Test.";
+        double area = 100.00;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 10);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+        
+        OrderCommand orderCommand = new OrderCommand();
+        
+        
+        orderCommand.setName(name);
+        orderCommand.setArea(area);
+        orderCommand.setProduct(product.getProductName());
+        orderCommand.setState(ohio.getStateName());
+        orderCommand.setDate(orderDate);
+
+        Order builtOrder = orderDao.orderBuilder(orderCommand);
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(builtOrder);
+
+        // Record the notes id number.
+        int id = builtOrder.getId();
+
+        BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
+
+        
+         
+        assertNotNull(basicOrder);
+        
+        assertEquals(orderCommand.getName(), basicOrder.getName());
+        assertEquals(orderCommand.getArea(), basicOrder.getArea(), 0.0005);
+        assertEquals(orderCommand.getDate(), basicOrder.getDate());
+        assertEquals(orderCommand.getProduct(), basicOrder.getProduct());
+        assertEquals(orderCommand.getState(), basicOrder.getState());
+        
+        
+        
+        Order unresolvedOrder = orderDao.orderBuilder(basicOrder);
+
+        assertNotNull(unresolvedOrder);
+
+
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
+        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+        
+        
+    }
+
+
+    @Test
+    public void testResolverKBackandForth() {
+
+        boolean isATest = true;
+        configDao.get().setInTestMode(isATest);
+
+        ProductDao productDao = new ProductDao(configDao);
+        StateDao stateDao = new StateDao(configDao);
+        OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        //Order order = new Order();
+
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        //assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
+        ohio.setState("CA");
+        ohio.setStateTax(6.25);
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
+        product.setType("Test Steel");
+        product.setCost(5);
+        product.setLaborCost(3);
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = "SWC Guild, Test.";
+        double area = 100.00;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 10);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+        
+        OrderCommand orderCommand = new OrderCommand();
+        
+        
+        orderCommand.setName(name);
+        orderCommand.setArea(area);
+        orderCommand.setProduct(product.getProductName());
+        orderCommand.setState(ohio.getStateName());
+        orderCommand.setDate(orderDate);
+
+        Order builtOrder = orderDao.orderBuilder(orderCommand);
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(builtOrder);
+
+        // Record the notes id number.
+        int id = builtOrder.getId();
+
+        BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
+
+        
+         
+        assertNotNull(basicOrder);
+        
+        assertEquals(orderCommand.getName(), basicOrder.getName());
+        assertEquals(orderCommand.getArea(), basicOrder.getArea(), 0.0005);
+        assertEquals(orderCommand.getDate(), basicOrder.getDate());
+        assertEquals(orderCommand.getProduct(), basicOrder.getProduct());
+        assertEquals(orderCommand.getState(), basicOrder.getState());
+        
+        
+        
+        Order unresolvedOrder = orderDao.orderBuilder(basicOrder);
+
+        assertNotNull(unresolvedOrder);
+
+
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
+        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+        
+        
+    }
+
+
+    @Test
+    public void testResolverNBackandForth() {
+
+        boolean isATest = true;
+        configDao.get().setInTestMode(isATest);
+
+        ProductDao productDao = new ProductDao(configDao);
+        StateDao stateDao = new StateDao(configDao);
+        OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        //Order order = new Order();
+
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        //assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
+        ohio.setState("CA");
+        ohio.setStateTax(6.25);
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
+        product.setType("Test Steel");
+        product.setCost(5);
+        product.setLaborCost(3);
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = "SWC Guild, Test.";
+        double area = 00.00;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 10);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+        
+        OrderCommand orderCommand = new OrderCommand();
+        
+        
+        orderCommand.setName(name);
+        orderCommand.setArea(area);
+        orderCommand.setProduct(product.getProductName());
+        orderCommand.setState(ohio.getStateName());
+        orderCommand.setDate(orderDate);
+
+        Order builtOrder = orderDao.orderBuilder(orderCommand);
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(builtOrder);
+
+        // Record the notes id number.
+        int id = builtOrder.getId();
+
+        BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
+
+        
+         
+        assertNotNull(basicOrder);
+        
+        assertEquals(orderCommand.getName(), basicOrder.getName());
+        assertEquals(orderCommand.getArea(), basicOrder.getArea(), 0.0005);
+        assertEquals(orderCommand.getDate(), basicOrder.getDate());
+        assertEquals(orderCommand.getProduct(), basicOrder.getProduct());
+        assertEquals(orderCommand.getState(), basicOrder.getState());
+        
+        
+        
+        Order unresolvedOrder = orderDao.orderBuilder(basicOrder);
+
+        assertNotNull(unresolvedOrder);
+
+
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
+        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+        
+        
+    }
+
+
+    @Test
+    public void testResolverMBackandForth() {
+
+        boolean isATest = true;
+        configDao.get().setInTestMode(isATest);
+
+        ProductDao productDao = new ProductDao(configDao);
+        StateDao stateDao = new StateDao(configDao);
+        OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        //Order order = new Order();
+
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        //assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
+        ohio.setState("CA");
+        ohio.setStateTax(6.25);
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
+        product.setType("Test Steel");
+        product.setCost(5);
+        product.setLaborCost(3);
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = null;
+        double area = 100.00;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 10);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+        
+        OrderCommand orderCommand = new OrderCommand();
+        
+        
+        orderCommand.setName(name);
+        orderCommand.setArea(area);
+        orderCommand.setProduct(product.getProductName());
+        orderCommand.setState(ohio.getStateName());
+        orderCommand.setDate(orderDate);
+
+        Order builtOrder = orderDao.orderBuilder(orderCommand);
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(builtOrder);
+
+        // Record the notes id number.
+        int id = builtOrder.getId();
+
+        BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
+
+        
+         
+        assertNotNull(basicOrder);
+        
+        assertEquals(orderCommand.getName(), basicOrder.getName());
+        assertEquals(orderCommand.getArea(), basicOrder.getArea(), 0.0005);
+        assertEquals(orderCommand.getDate(), basicOrder.getDate());
+        assertEquals(orderCommand.getProduct(), basicOrder.getProduct());
+        assertEquals(orderCommand.getState(), basicOrder.getState());
+        
+        
+        
+        Order unresolvedOrder = orderDao.orderBuilder(basicOrder);
+
+        assertNotNull(unresolvedOrder);
+
+
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
+        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+        
+        
+    }
+
+
+    @Test
+    public void testResolverOBackandForth() {
+
+        boolean isATest = true;
+        configDao.get().setInTestMode(isATest);
+
+        ProductDao productDao = new ProductDao(configDao);
+        StateDao stateDao = new StateDao(configDao);
+        OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        //Order order = new Order();
+
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        //assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
+        ohio.setState("CA");
+        ohio.setStateTax(6.25);
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
+        product.setType("Test Steel");
+        product.setCost(5);
+        product.setLaborCost(3);
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = "SWC Guild, Test.";
+        double area = 100.00;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 10);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+        
+        OrderCommand orderCommand = new OrderCommand();
+        
+        
+        orderCommand.setName(name);
+        orderCommand.setArea(area);
+        orderCommand.setProduct(null);
+        orderCommand.setState(ohio.getStateName());
+        orderCommand.setDate(orderDate);
+
+        Order builtOrder = orderDao.orderBuilder(orderCommand);
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(builtOrder);
+
+        // Record the notes id number.
+        int id = builtOrder.getId();
+
+        BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
+
+        
+         
+        assertNotNull(basicOrder);
+        
+        assertEquals(orderCommand.getName(), basicOrder.getName());
+        assertEquals(orderCommand.getArea(), basicOrder.getArea(), 0.0005);
+        assertEquals(orderCommand.getDate(), basicOrder.getDate());
+        assertEquals("", basicOrder.getProduct());
+        assertEquals(orderCommand.getState(), basicOrder.getState());
+        
+        
+        
+        Order unresolvedOrder = orderDao.orderBuilder(basicOrder);
+
+        assertNotNull(unresolvedOrder);
+
+
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
+        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+        
+        
+    }
+
+
+    @Test
+    public void testResolverPBackandForth() {
+
+        boolean isATest = true;
+        configDao.get().setInTestMode(isATest);
+
+        ProductDao productDao = new ProductDao(configDao);
+        StateDao stateDao = new StateDao(configDao);
+        OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
+
+        // The true parameter in the Order Dao constructor signifies a test.
+        //OrderDao orderDao = new OrderDao(true);
+        //Order order = new Order();
+
+
+        // Verify that the note object that the create method passed back
+        // was the same one it was given.
+        //assertEquals(order, returnedOrder);
+
+        com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
+        ohio.setState("CA");
+        ohio.setStateTax(6.25);
+        stateDao.create(ohio);
+
+        com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
+        product.setType("Test Steel");
+        product.setCost(5);
+        product.setLaborCost(3);
+        productDao.create(product);
+
+        // Make some data for the dto.
+        // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
+        String name = "SWC Guild, Test.";
+        double area = 100.00;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 10);
+
+        Date orderDate = calendar.getTime();
+        //Date orderDate = new Date();
+        
+        OrderCommand orderCommand = new OrderCommand();
+        
+        
+        orderCommand.setName(name);
+        orderCommand.setArea(area);
+        orderCommand.setProduct(product.getProductName());
+        orderCommand.setState(null);
+        orderCommand.setDate(orderDate);
+
+        Order builtOrder = orderDao.orderBuilder(orderCommand);
+
+        // Create the file in the Dao.
+        Order returnedOrder = orderDao.create(builtOrder);
+
+        // Record the notes id number.
+        int id = builtOrder.getId();
+
+        BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
+
+        
+         
+        assertNotNull(basicOrder);
+        
+        assertEquals(orderCommand.getName(), basicOrder.getName());
+        assertEquals(orderCommand.getArea(), basicOrder.getArea(), 0.0005);
+        assertEquals(orderCommand.getDate(), basicOrder.getDate());
+        assertEquals(orderCommand.getProduct(), basicOrder.getProduct());
+        //assertEquals(orderCommand.getState(), basicOrder.getState());
+        assertEquals("", basicOrder.getState());
+        
+        
+        
+        Order unresolvedOrder = orderDao.orderBuilder(basicOrder);
+
+        assertNotNull(unresolvedOrder);
+
+
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
+        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+        
         
     }
 
