@@ -5,7 +5,6 @@
  */
 package com.mycompany.flooringmasteryweb.dao;
 
-import com.mycompany.flooringmasteryweb.controller.FlooringMasteryController;
 import com.mycompany.flooringmasteryweb.exceptions.ConfigurationFileCorruptException;
 import com.mycompany.flooringmasteryweb.exceptions.FileCreationException;
 import java.util.logging.Level;

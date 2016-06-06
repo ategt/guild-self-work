@@ -34,20 +34,16 @@ public class AuditDao {
 
     public AuditDao(ConfigDao configDao) {
         this.auditLogFile = configDao.get().getAuditLogFile();
-        //this.auditLogFile = new File("auditLog.txt");
         auditsList = decode();
     }
 
     public AuditDao(java.io.File auditLogFile) {
         this.auditLogFile = auditLogFile;
-        //this.auditLogFile = new File("auditLog.txt");
         auditsList = decode();
     }
 
     public AuditDao(String auditString) {
-        //this.auditLogFile = auditLogFile;
         this.auditLogFile = new File("auditLog.txt");
-        //auditsList = decode();
     }
 
     public Audit create(Audit audit) {
@@ -108,20 +104,17 @@ public class AuditDao {
             audit.setDate(getDateFromString(auditStringArray[3]));
             }
         } catch (ParseException ex) {
-           // Logger.getLogger(AuditDao.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Audit Builder was unable to parse the date.");
         }
 
         try {
             audit.setOrderid(Integer.parseInt(auditStringArray[1]));
         } catch (NumberFormatException ex) {
-            //Logger.getLogger(AuditDao.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Audit Builder was unable to parse the Order Id.");
         }
 
         audit.setActionPerformed(auditStringArray[2]);
 
-        //String auditString = audit.getDate() + TOKEN + audit.getOrderid() + TOKEN + audit.getActionPerformed();
         return audit;
     }
 
@@ -154,12 +147,8 @@ public class AuditDao {
 
                     } else if (!currentLine.trim().isEmpty()) {
 
-                        //String[] stringParts = currentLine.split(TOKEN);
-
-                        //for (String auditString : stringParts) {
                             Audit audit = buildAuditFromString(currentLine, TOKEN);
                             tempAuditList.add(audit);
-                        //}
                     }
                 }
             } catch (FileNotFoundException ex) {

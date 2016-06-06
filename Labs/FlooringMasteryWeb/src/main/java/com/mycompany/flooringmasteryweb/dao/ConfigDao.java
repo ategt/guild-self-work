@@ -103,26 +103,6 @@ validateFolder(config.getOrdersDirectory());
             }
      
             
-       //     The orders directory is its own directory, this step is completely unneed.
-//        
-//            // Get the Orders File
-//            java.io.File ordersFile = config.getOrdersDirectory();
-//            java.io.File ordersParentFile = null;
-//
-//            // If the Tax file has a parent define it, otherwise it stays null.
-//            if (ordersFile.getParent() != null) {
-//                ordersParentFile = new java.io.File(ordersFile.getParent());
-//            }
-//
-//            // Get the data directory.
-//            java.io.File ordersDir = config.getOrdersDirectory();
-//
-//            // If the tax file is an orphan give it a parent.
-//            if (ordersParentFile == null) {
-//                config.setOrdersDirectory(new java.io.File((dataDir.getPath() + "/" + config.getTaxesFile().getName()).replaceAll("//", "/")));
-//            }
-//
-//        
         }
     }
 
@@ -135,10 +115,7 @@ validateFolder(config.getOrdersDirectory());
         }
     }
 
-//    private boolean verifyLoading(){
-//        return verifyLoading(config);
-//    }
-    private boolean verifyLoading() { //com.mycompany.flooringmastery.dto.Config tempConfig) {
+    private boolean verifyLoading() { 
         boolean goodLoad = true;
 
         // This loads the defaults and will transfer the default values to any null fields.

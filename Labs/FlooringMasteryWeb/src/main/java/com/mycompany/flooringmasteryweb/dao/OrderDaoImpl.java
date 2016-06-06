@@ -42,9 +42,6 @@ public class OrderDaoImpl implements OrderDao {
 
     private ApplicationContext ctx;
 
-    //public AuditAspect() {
-    //ctx = ApplicationContextProvider.getApplicationContext.getBean("BeanId", MyBean.class);
-    //ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
     private List<Order> orders;
     private int nextId;
     private StateDao stateDao;
@@ -75,9 +72,6 @@ public class OrderDaoImpl implements OrderDao {
 
         init(configDao);
 
-        //this.orderIo = ctx.getBean(type)
-        //this.orderIo = new com.mycompany.flooringmasteryweb.utilities.OrderDaoFileIOImplementation(this, stateDao, productDao);
-        //this.orderIo = ctx.getBean(type)
     }
 
     private void init(ConfigDao configDao1) {
@@ -180,10 +174,6 @@ public class OrderDaoImpl implements OrderDao {
                     orders.remove(f);
                     encode(f.getDate());
                 });
-//        for (Order foundOrder : foundOrders) {
-//            orders.remove(foundOrder);
-//            encode(foundOrder.getDate());
-//        }
 
         orders.add(order);
         encode(extractDate("Orders_00000000.txt"));
@@ -235,11 +225,6 @@ public class OrderDaoImpl implements OrderDao {
                 .filter(o -> isSameDay(o.getDate(), date))
                 .forEach(o -> specificOrders.add(o));
 
-//        for (Order order : orders) {
-//            if (isSameDay(order.getDate(), date)) {
-//                specificOrders.add(order);
-//            }
-//        }
         return specificOrders;
     }
 
@@ -247,31 +232,18 @@ public class OrderDaoImpl implements OrderDao {
     public java.util.List<Order> searchByProduct(Product product) {
         java.util.List<Order> specificOrders = orders.stream()
                 .filter(o -> o.getProduct() != null)
-                .filter(o -> o.getProduct() == product) //.getProductName() != null)
-                //.filter(o -> o.getProduct().getProductName() == .)
+                .filter(o -> o.getProduct() == product) 
                 .collect(Collectors.toList());
 
-//        for (Order order : orders) {
-//            if (isSameDay(order.getDate(), date)) {
-//                specificOrders.add(order);
-//            }
-//        }
         return specificOrders;
     }
 
     @Override
     public java.util.List<Order> searchByOrderNumber(Integer orderNumber) {
         java.util.List<Order> specificOrders = orders.stream()
-                //.filter(o -> o.getId() != null)
-                .filter(o -> Integer.toString(o.getId()).contains(orderNumber.toString())) //.getProductName() != null)
-                //.filter(o -> o.getProduct().getProductName() == .)
+                .filter(o -> Integer.toString(o.getId()).contains(orderNumber.toString())) 
                 .collect(Collectors.toList());
 
-//        for (Order order : orders) {
-//            if (isSameDay(order.getDate(), date)) {
-//                specificOrders.add(order);
-//            }
-//        }
         return specificOrders;
     }
 
@@ -279,15 +251,9 @@ public class OrderDaoImpl implements OrderDao {
     public java.util.List<Order> searchByState(State state) {
         java.util.List<Order> specificOrders = orders.stream()
                 .filter(o -> o.getState() != null)
-                .filter(o -> o.getState() == state) //.getProductName() != null)
-                //.filter(o -> o.getProduct().getProductName() == .)
+                .filter(o -> o.getState() == state) 
                 .collect(Collectors.toList());
 
-//        for (Order order : orders) {
-//            if (isSameDay(order.getDate(), date)) {
-//                specificOrders.add(order);
-//            }
-//        }
         return specificOrders;
     }
 
@@ -300,9 +266,6 @@ public class OrderDaoImpl implements OrderDao {
 
         Collections.sort(orderNumbers);
 
-//        for (Order order : orders) {
-//            orderNumbers.add(order.getId());
-//        }
         return orderNumbers;
     }
 
@@ -699,8 +662,6 @@ public class OrderDaoImpl implements OrderDao {
         String name = order.getName();
         Product product = order.getProduct();
 
-//        if (name == null)
-//            return null;
         String productName = "";
         if (product != null) {
             productName = product.getProductName();
