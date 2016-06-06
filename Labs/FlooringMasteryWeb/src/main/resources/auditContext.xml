@@ -28,6 +28,8 @@
     
     
     
+    <bean id="applicationContext" class="com.mycompany.flooringmasteryweb.aop.ApplicationContextProvider" />
+    
     <bean id="auditAspect" class="com.mycompany.flooringmasteryweb.aop.AuditAspect" />
         
     <aop:config>

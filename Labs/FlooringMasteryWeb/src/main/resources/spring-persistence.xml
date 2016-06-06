@@ -42,7 +42,7 @@
 <!--        <constructor-arg ref="viewUtilities" />-->
     </bean>
     
-    <!--<import resource="auditContext.xml" />-->
+    <import resource="auditContext.xml" />
     
     
     
