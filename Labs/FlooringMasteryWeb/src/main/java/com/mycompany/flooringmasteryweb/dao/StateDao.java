@@ -10,21 +10,11 @@ import com.mycompany.flooringmasteryweb.dto.StateCommand;
 import com.mycompany.flooringmasteryweb.utilities.StateFileIO;
 import com.mycompany.flooringmasteryweb.utilities.StateFileIOImplementation;
 import com.mycompany.flooringmasteryweb.utilities.StateUtilities;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -245,7 +235,6 @@ public class StateDao {
                 new Comparator<StateCommand>() {
             public int compare(StateCommand c1, StateCommand c2) {
                 return c1.getStateName().compareTo(c2.getStateName());
-//return Double.compare(c1.getStateTax(), c2.getStateTax());
             }
         });
 

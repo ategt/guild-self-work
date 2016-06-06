@@ -259,25 +259,6 @@ public class ProductDao {
         Double laborCost = product.getLaborCost();
         productCommand.setLaborCost(laborCost);
 
-//        if (ProductUtilities.validProductAbbr(product.getProductName())) {
-//            String productAbbreviation = product.getProductName();
-//            String productName = ProductUtilities.productFromAbbr(productAbbreviation);
-//
-//            productCommand.setProductAbbreviation(productAbbreviation);
-//            productCommand.setProductName(productName);
-//
-//            productCommand.setProductTax(product.getProductTax());
-//            
-//        } else if (ProductUtilities.validProductInput(product.getProductName())) {
-//            String guessedName = ProductUtilities.bestGuessProductName(product.getProductName());
-//            String productAbbreviation = ProductUtilities.abbrFromProduct(guessedName);
-//
-//            productCommand.setProductAbbreviation(productAbbreviation);
-//            productCommand.setProductName(guessedName);
-//
-//            productCommand.setProductTax(product.getProductTax());
-//            
-//        }
         return productCommand;
     }
 
@@ -315,7 +296,6 @@ public class ProductDao {
                 new Comparator<ProductCommand>() {
             public int compare(ProductCommand c1, ProductCommand c2) {
                 return c1.getProductName().compareTo(c2.getProductName());
-//return Double.compare(c1.getProductTax(), c2.getProductTax());
             }
         });
 
