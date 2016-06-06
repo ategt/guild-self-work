@@ -11,18 +11,20 @@ $(document).ready(function () {
 
         e.preventDefault();
 
-        var dvdData = JSON.stringify({
-            title: $("#title").val(),
-            releaseDate: $("#releaseDate").val(),
-            rating: $("#rating").val(),
-            directorsName: $("#directorsName").val(),
-            studio: $("#studio").val()
+        var addressData = JSON.stringify({
+            firstName: $("#firstName").val(),
+            lastName: $("#lastName").val(),
+            streetNumber: $("#streetNumber").val(),
+            streetName: $("#streetName").val(),
+            city: $("#city").val(),
+            state: $("#state").val(),
+            zip: $("#zip").val()
         });
 
         $.ajax({
-            url: contextRoot + "/dvdlibrary/",
+            url: contextRoot + "/addressbook/",
             type: "POST",
-            data: dvdData,
+            data: addressData,
             dataType: 'json',
             beforeSend: function(xhr){
                 xhr.setRequestHeader("Accept", "application/json");
@@ -33,7 +35,7 @@ $(document).ready(function () {
 
                 var tableRow = buildContactRow(data);
 
-                $('#dvd-table').append($(tableRow));
+                $('#address-table').append($(tableRow));
 
             },
             error: function (data, status) {
@@ -49,13 +51,13 @@ $(document).ready(function () {
     function buildContactRow(data) {
 
 
-        var strTableRow = "<tr>\n\
-        <td><a href=\"dvdlibrary/show/" + data.id + "\">" + data.title + "</a></td>\n\
-        <td><a href=\"dvdlibrary/show/" + data.id + "\">" + data.studio + "</a></td>\n\
-        <td><a href=\"dvdlibrary/edit/" + data.id + "\">Edit</a></td>\n\
-        <td><a href=\"dvdlibrary/delete/" + data.id + "\">Delete</a></td>\n\
-                                                                \n\
-            </tr>";
+        var strTableRow = "  <tr>\n\
+                                <td><a href=\"addressbook/show/" + data.id + "\">" + data.firstName + "</a></td>\n\
+                                <td><a href=\"addressbook/show/" + data.id + "\">" + data.lastName + "</a></td>\n\
+                                <td><a href=\"addressbook/edit/" + data.id + "\">Edit</a></td>\n\
+                                <td><a href=\"addressbook/delete/" + data.id + "\">Delete</a></td>\n\
+                                                                                            \n\
+                            </tr>";
 
 
         return strTableRow;

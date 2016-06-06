@@ -20,9 +20,11 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -39,12 +41,13 @@ public class AddressBookController {
         this.addressDao = addressDao;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @ResponseBody
     //public String create(@ModelAttribute("dvdImpl") Dvd dvd) {
-    public String create(@ModelAttribute Address address) {
-        addressDao.create(address);
+    public Address create(@RequestBody Address address) {
+        return addressDao.create(address);
 
-        return "redirect:/";
+        //return "redirect:/";
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)

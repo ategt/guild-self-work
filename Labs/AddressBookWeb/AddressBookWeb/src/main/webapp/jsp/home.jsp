@@ -31,7 +31,7 @@
             <div class="row">
                 <div class="col-md-6">
 
-                    <table class="table table-hover">
+                    <table id="address-table" class="table table-hover">
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th><i class="glyphicon glyphicon-edit"></i> Edit</th>
@@ -55,7 +55,7 @@
 
                 </div>
                 <div class="col-md-6">
-                    <form method="POST" action="addressbook/create" class="form-horizontal">
+                    <form method="POST" class="form-horizontal">
                         <div class="form-group">
                             <label for="firstName" class="col-sm-2 control-label" >First:</label>
                             <div class="col-sm-10">
@@ -102,7 +102,7 @@
                         <div class="form-group">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
-                                <input type="submit" class="btn btn-default" />
+                                <input type="submit" id="create-submit"  class="btn btn-default" />
                             </div>
                         </div>
 
@@ -111,15 +111,17 @@
             </div>
 
 
-
-
-
-
         </div>
     </div>
+
+    <script>
+        var contextRoot = "${pageContext.request.contextPath}";
+    </script>
+
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
 </body>
 </html>
