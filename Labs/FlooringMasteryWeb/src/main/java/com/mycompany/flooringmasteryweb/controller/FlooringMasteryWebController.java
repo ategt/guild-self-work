@@ -29,9 +29,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -59,6 +61,23 @@ public class FlooringMasteryWebController {
         this.orderDao = orderDao;
         this.configDao = configDao;
 
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @ResponseBody
+    public OrderCommand update(@RequestBody OrderCommand orderCommand) {
+
+        Order order = orderDao.orderBuilder(orderCommand);
+
+        Order orderTemp = order;
+
+        if (order.getId() == 0) {
+            orderTemp = orderDao.create(order);
+        } else {
+            orderDao.update(order);
+        }
+
+        return orderDao.resolveOrderCommand(orderTemp);
     }
 
     @RequestMapping(value = "/createOrder", method = RequestMethod.POST)
@@ -234,7 +253,6 @@ public class FlooringMasteryWebController {
 
         loadTheOrdersList(model);
 
-        
         return "searchOrder";
     }
 

@@ -43,11 +43,9 @@ public class AddressBookController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    //public String create(@ModelAttribute("dvdImpl") Dvd dvd) {
     public Address create(@RequestBody Address address) {
+        
         return addressDao.create(address);
-
-        //return "redirect:/";
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)

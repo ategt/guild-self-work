@@ -17,6 +17,10 @@
         <!-- SWC Icon -->
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/icon.png">
 
+
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+
+
     </head>
     <body>
         <div class="container">
@@ -38,7 +42,7 @@
             <div class="row">
                 <div class="col-md-6">
 
-                    <table class="table table-hover">
+                    <table id="order-table" class="table table-hover">
                         <th>Order Number</th>
                         <th>Order Name</th>
                         <th><i class="glyphicon glyphicon-edit"></i> Edit</th>
@@ -62,128 +66,96 @@
 
                 </div>
                 <div class="col-md-6">
-                    <form:form method="POST" commandName="orderCommand" action="${pageContext.request.contextPath}/FlooringMaster/createOrder" class="form-horizontal">
-                        <form:hidden path="id" />
-
-                        <c:if test="${nameError}" >
-                            <div class="has-error">
-                            </c:if>
-                            <div class="form-group">
-                                <div class="col-sm-3"></div>
-                                <div class="col-sm-9 text-center">
-                                    <strong><form:errors path="name" /></strong>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <form:label path="name" for="name" class="col-sm-3 control-label" >Order Name:</form:label>
-                                    <div class="col-sm-9">
-                                    <form:input path="name" class="form-control" style="text-align: center" type="text" id="name" placeholder="Order Name" />
-                                </div>
-                            </div>
-
-                            <c:if test="${nameError}" >
-                            </div>
-                        </c:if>
-
-                        <c:if test="${stateError}" >
-                            <div class="has-error">
-                            </c:if>
-                            <div class="form-group">
-                                <div class="col-sm-3"></div>
-                                <div class="col-sm-9 text-center">
-                                    <strong><form:errors path="state" /></strong>
-                                </div>
-                            </div>
-                            <div class="form-group">
-
-                                <form:label path="state" for="state" class="col-sm-3 control-label" >State:</form:label>
-                                    <div class="col-sm-9">
-                                    <form:input path="state" class="form-control" style="text-align: center" type="text" id="state" placeholder="State" />
-                                </div>
-                            </div>
-
-
-
-                            <c:if test="${stateError}" >
-                            </div>
-                        </c:if>
-
-                        <c:if test="${productError}" >
-                            <div class="has-error">
-                            </c:if>
-                            <div class="form-group">
-                                <div class="col-sm-3"></div>
-                                <div class="col-sm-9 text-center">
-                                    <strong><form:errors path="product" /></strong>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <form:label path="product" for="product" class="col-sm-3 control-label" >Product:</form:label>
-                                    <div class="col-sm-9">
-                                    <form:input path="product" class="form-control" style="text-align: center" type="text" id="product" placeholder="Product" />
-                                </div>
-                            </div>
-
-
-
-                            <c:if test="${productError}" >
-                            </div>
-                        </c:if>
-
-                        <c:if test="${dateError}" >
-                            <div class="has-error">
-                            </c:if>
-                            <div class="form-group">
-                                <div class="col-sm-3"></div>
-                                <div class="col-sm-9 text-center">
-                                    <strong><form:errors path="date" /></strong>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <form:label path="date" for="date" class="col-sm-3 control-label" >Date:</form:label>
-                                    <div class="col-sm-9">
-                                    <form:input path="date" class="form-control" style="text-align: center" type="text" id="date" placeholder="Order Date" />
-                                </div>
-                            </div>
-
-
-
-                            <c:if test="${dateError}" >
-                            </div>
-                        </c:if>
-
-                        <c:if test="${areaError}" >
-                            <div class="has-error">
-                            </c:if>
-                            <div class="form-group">
-                                <div class="col-sm-3"></div>
-                                <div class="col-sm-9 text-center">
-                                    <strong><form:errors path="area" /></strong>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <form:label path="area" for="area" class="col-sm-3 control-label" >Area:</form:label>
-                                    <div class="col-sm-9">
-                                    <form:input path="area" class="form-control" style="text-align: center" type="text" id="area" placeholder="Area" />
-                                </div>
-                            </div>
-
-
-
-                            <c:if test="${areaError}" >
-                            </div>
-                        </c:if>
+                    <form method="POST" class="form-horizontal">
+                        <!--<input type=hidden path="id" />-->
 
 
                         <div class="form-group">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9 text-center">
-                                <input value="Create" type="submit" class="btn btn-default" />
+                                <strong><span class="name" /></strong>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-3 control-label" >Order Name:</label>
+                            <div class="col-sm-9">
+                                <input name="name" class="form-control" style="text-align: center" type="text" id="name" placeholder="Order Name" />
                             </div>
                         </div>
 
-                    </div>
-                </form:form>
+                        <div class="form-group">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9 text-center">
+                                <strong><span class="state" /></strong>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <label path="state" for="state" class="col-sm-3 control-label" >State:</label>
+                            <div class="col-sm-9">
+                                <input name="state" class="form-control" style="text-align: center" type="text" id="state" placeholder="State" />
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9 text-center">
+                                <strong><span class="product" /></strong>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="product" class="col-sm-3 control-label" >Product:</label>
+                            <div class="col-sm-9">
+                                <input name="product" class="form-control" style="text-align: center" type="text" id="product" placeholder="Product" />
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9 text-center">
+                                <strong><span class="date" /></strong>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="date" class="col-sm-3 control-label" >Date:</label>
+                            <div class="col-sm-9">
+                                <input name="date" class="form-control" style="text-align: center" type="text" id="datepicker" placeholder="Order Date" />
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9 text-center">
+                                <strong><span class="area" /></strong>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="area" class="col-sm-3 control-label" >Area:</label>
+                            <div class="col-sm-9">
+                                <input name="area" class="form-control" style="text-align: center" type="text" id="area" placeholder="Area" />
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9 text-center">
+                                <input value="Create" id="create-submit" type="submit" class="btn btn-default" />
+                            </div>
+                        </div>
+
+                </div>
+                </form>
             </div>
 
 
@@ -193,9 +165,21 @@
 
         </div>
     </div>
+
+
+    <script>
+        $(function () {
+            $("#datepicker").datepicker();
+        });
+    </script>
+    <script>
+        var contextRoot = "${pageContext.request.contextPath}";
+    </script>
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/app.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 </body>
 </html>
