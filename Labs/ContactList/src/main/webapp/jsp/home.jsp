@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-md-6">
 
-                    <table class="table table-hover">
+                    <table id="contact-table" class="table table-hover">
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th><i class="glyphicon glyphicon-edit"></i> Edit</th>
@@ -56,61 +56,58 @@
 
                 </div>
                 <div class="col-md-6">
-                    <form:form method="POST" commandName="contact" action="${pageContext.request.contextPath}/contact/create" class="form-horizontal">
+                    <form method="POST" class="form-horizontal">
                         <div class="form-group">
                             <label for="firstName" class="col-sm-2 control-label" >First:</label>
                             <div class="col-sm-10">
-                                <form:input path="firstName" class="form-control" type="text" name="firstName" id="firstName" placeholder="First Name" ></form:input>
-                                <form:errors path="firstName" />
-<!--                                <input class="form-control" type="text" name="firstName" id="firstName" placeholder="First Name" />-->
+                                <input name="firstName" class="form-control" type="text" id="first-name-input" placeholder="First Name"  />
+                                <span name="firstName" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="lastName" class="col-sm-2 control-label" >Last:</label>
                             <div class="col-sm-10">
-                                <form:input path="lastName" class="form-control" type="text" name="lastName" id="lastName" placeholder="Last Name" />
-                            <form:errors path="lastName" />
+                                <input name="lastName" class="form-control" type="text" id="last-name-input" placeholder="Last Name" />
+                            <span name="lastName" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="company" class="col-sm-2 control-label" >Company:</label>
                             <div class="col-sm-10">
-                                <form:input path="company" class="form-control" type="text" name="company" id="company" placeholder="Company" />
-                           <form:errors path="company" />
+                                <input name="company" class="form-control" type="text" id="company-input" placeholder="Company" />
+                           <span name="company" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="Email" class="col-sm-2 control-label" >Email:</label>
                             <div class="col-sm-10">
-                                <form:input path="email" class="form-control" type="text" name="email" id="email" placeholder="Email" />
-                            <form:errors path="email" />
+                                <input name="email" class="form-control" type="text" id="email-input" placeholder="Email" />
+                            <span name="email" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="phone" class="col-sm-2 control-label" >Phone:</label>
                             <div class="col-sm-10">
-                                <form:input path="phone" class="form-control" type="text" name="phone" id="phone" placeholder="Phone" />
-                            <form:errors path="phone" />
+                                <input name="phone" class="form-control" type="text" id="phone-input" placeholder="Phone" />
+                            <span name="phone" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="lastContacted" class="col-sm-2 control-label" >Last Contacted:</label>
                             <div class="col-sm-10">
-                                <form:input path="lastContacted" class="form-control" type="text" name="lastContacted" id="lastContacted" placeholder="Last Contacted" />
-                            <form:errors path="lastContacted" />
+                                <input class="form-control" type="text" name="lastContacted" id="last-contacted-input" placeholder="Last Contacted" />
+                            <span name="lastContacted" />
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
-                                <input type="submit" class="btn btn-default" />
-                                <input type="submit" class="btn btn-danger" />
-                                <input type="submit" class="btn btn-warning" />
+                                <input id="create-sumbit" type="submit" class="btn btn-default" />
                             </div>
                         </div>
 
 
-                    </form:form>
+                    </form>
                 </div>
             </div>
 
@@ -121,9 +118,15 @@
 
         </div>
     </div>
+    
+    <script>
+        var contextRoot = "${pageContext.request.contextPath}";
+    </script>
+    
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/app.js"></script>
 
 </body>
 </html>

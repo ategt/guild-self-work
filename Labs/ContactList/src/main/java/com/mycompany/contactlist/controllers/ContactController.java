@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,18 +34,11 @@ public class ContactController {
         this.contactDao = dao;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute Contact contact, BindingResult bindingResult, Map model) {
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @ResponseBody
+    public Contact create(@RequestBody Contact contact) {
 
-        //bindingResult.
-        if (bindingResult.hasErrors()) {
-            model.put("contact", contact);
-            return "home";
-        } else {
-            contactDao.add(contact);
-        }
-
-        return "redirect:/";
+        return contactDao.add(contact);
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
@@ -88,6 +82,8 @@ public class ContactController {
 
         Contact contact = contactDao.get(contactId);
 
+        //contact.getClass().
+        
         return contact;
     }
 
