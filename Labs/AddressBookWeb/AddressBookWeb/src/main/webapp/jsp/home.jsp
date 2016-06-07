@@ -47,7 +47,7 @@
                             </tr>-->
                             
                             
-                             <tr id="contact-row-${address.id}" >
+                             <tr id="address-row-${address.id}" >
                                 
                                 <td>${address.id}</td>
                                 <td><a data-address-id="${address.id}" data-toggle="modal" data-target="#showDetailModal">${address.firstName}</a></td>

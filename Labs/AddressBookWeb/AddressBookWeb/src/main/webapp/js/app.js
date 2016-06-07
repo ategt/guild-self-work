@@ -67,21 +67,19 @@ $(document).ready(function () {
                             </tr>";
 
 
-        var strFooter = "<tr id=\"contact-row-" + data.id + "\" >\n\
+        var strFooter = "<tr id=\"address-row-" + data.id + "\" >\n\
                                 \n\
         <td>" + data.id + "</td>\n\
-        <td><a data-contact-id=\"" + data.id + "\" data-toggle=\"modal\" data-target=\"#showContactModal\">" + data.firstName + "</a></td>\n\
+        <td><a data-address-id=\"" + data.id + "\" data-toggle=\"modal\" data-target=\"#showDetailModal\">" + data.firstName + "</a></td>\n\
         <td><a href=\"contact/show/" + data.id + "\">" + data.lastName + "</a></td>\n\
-        <td><a data-contact-id=\"" + data.id + "\" data-toggle=\"modal\" data-target=\"#editContactModal\">Edit</a></td>\n\
-        <td><a data-contact-id=\"" + data.id + "\" class=\"delete-link\">Delete</a></td>\n\
+        <td><a data-address-id=\"" + data.id + "\" data-toggle=\"modal\" data-target=\"#editDetailModal\">Edit</a></td>\n\
+        <td><a data-address-id=\"" + data.id + "\" class=\"delete-link\">Delete</a></td>\n\
                                                                                         \n\
         </tr>";
 
         return strFooter;
 
     }
-
-
 
     $('#showDetailModal').on('show.bs.modal', function (e) {
 
@@ -125,11 +123,54 @@ $(document).ready(function () {
 
     $('#editDetailModal').on('show.bs.modal', function (e) {
 
+//            firstName: $("#firstName").val(),
+//            lastName: $("#lastName").val(),
+//            streetNumber: $("#streetNumber").val(),
+//            streetName: $("#streetName").val(),
+//            city: $("#city").val(),
+//            state: $("#state").val(),
+//            zip: $("#zip").val()
+
+
+
+
+
+
+
         var link = $(e.relatedTarget);
 
         var addressId = link.data('address-id');
 
-        pullUpEditMenu(addressId);
+          $.ajax({
+            url: contextRoot + "/addressbook/" + addressId,
+            type: "GET",
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json")
+            },
+            success: function (data, status) {
+                $('#edit-address-first-name').val(data.firstName);
+                $('#edit-address-last-name').val(data.lastName);
+                $('#edit-address-street-name').val(data.streetName);
+                $('#edit-address-street-number').val(data.streetNumber);
+                $('#edit-address-city').val(data.city);
+                $('#edit-address-state').val(data.state);
+                $('#edit-address-zipcode').val(data.zip);
+                $('#edit-id').val(data.id);
+                
+//                var lastContacted = data.lastContacted;
+//                if (data.lastContacted == null) {
+//                    lastContacted = new Date();
+//                }
+//
+//                $('#edit-contact-last-contacted').val(lastContacted.toLocaleDateString());
+
+            },
+            error: function (data, status) {
+
+            }
+
+        });
 
     });
 
@@ -139,16 +180,18 @@ $(document).ready(function () {
 
         var addressData = JSON.stringify({
             id: $("#edit-id").val(),
-            title: $("#edit-address-title").val(),
-            releaseDate: $("#edit-address-release-date").val(),
-            rating: $("#edit-address-rating").val(),
-            directorsName: $("#edit-address-director").val(),
-            studio: $("#edit-address-studio").val()
+            firstName: $("#edit-address-first-name").val(),
+            lastName: $("#edit-address-last-name").val(),
+            streetNumber: $("#edit-address-street-number").val(),
+            streetName: $("#edit-address-street-name").val(),
+            city: $("#edit-address-city").val(),
+            state: $("#edit-address-state").val(),
+            zip: $("#edit-address-zipcode").val()
         });
 
 
         $.ajax({
-            url: contextRoot + "/addresslibrary/",
+            url: contextRoot + "/addressbook/",
             type: "PUT",
             data: addressData,
             dataType: 'json',
@@ -182,7 +225,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "DELETE",
-            url: contextRoot + "/addresslibrary/" + addressId,
+            url: contextRoot + "/addressbook/" + addressId,
             success: function (data, status) {
                 $('#address-row-' + addressId).remove();
             },
