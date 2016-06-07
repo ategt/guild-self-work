@@ -5,6 +5,7 @@
  */
 package com.mycompany.contactlist.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  * @author apprentice
  */
-public class Contact {
+public class Contact implements Serializable {
 
     private int id;
 

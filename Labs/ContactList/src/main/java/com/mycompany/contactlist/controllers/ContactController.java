@@ -65,6 +65,23 @@ public class ContactController {
         return "edit";
     }
 
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @ResponseBody
+    public Contact editSubmit(@RequestBody Contact contact) {
+
+        //List<Contact> contacts = contactDao.list();
+        //Contact contact = contactDao.get(contactId);
+
+        //contactDao.sortByLastName(contacts);
+        //model.put("contacts", contacts);
+        //model.put("contact", contact);
+
+        contactDao.update(contact);
+        
+        return contact;
+        //return "edit";
+    }
+
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(@ModelAttribute Contact contact) {
         contactDao.update(contact);
@@ -80,11 +97,20 @@ public class ContactController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String editSubmit(@ModelAttribute Contact contact) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void deleteWithAjax(@PathVariable("id") Integer contactId) {
 
-        contactDao.update(contact);
-        return "redirect:/";
+        contactDao.remove(contactDao.get(contactId));
+
+        //return "redirect:/";
     }
+//
+//    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+//    public String editSubmit(@ModelAttribute Contact contact) {
+//
+//        contactDao.update(contact);
+//        return "redirect:/";
+//    }
 
 }

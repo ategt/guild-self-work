@@ -28,21 +28,170 @@ public class ContactDaoImplTest {
     public void tearDown() {
     }
 
-//    /**
-//     * Test of add method, of class ContactDaoImpl.
-//     */
-//    @Test
-//    public void testAdd() {
-//        System.out.println("add");
-//        Contact contact = null;
-//        ContactDaoImpl instance = new ContactDaoImpl();
-//        Contact expResult = null;
-//        Contact result = instance.add(contact);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
+    /**
+     * Test of add method, of class ContactDaoImpl.
+     */
+    @Test
+    public void testAdd() {
+        System.out.println("add");
+        Contact contact = new Contact();
+        ContactDaoImpl instance = new ContactDaoImpl();
+        Contact expResult = contact;
+        Contact result = instance.add(contact);
+        assertEquals(expResult, result);
+        
+        int capturedId = result.getId();
+        
+        assertTrue(capturedId > 0);
+        
+        Contact gottenContact = instance.get(capturedId);
+        
+        assertEquals(gottenContact.getId(), capturedId);
+        assertEquals(gottenContact, contact);
+        
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+
+    /**
+     * Test of add method, of class ContactDaoImpl.
+     */
+    @Test
+    public void testAddB() {
+        System.out.println("add");
+        Contact contact = new Contact();
+        ContactDaoImpl instance = new ContactDaoImpl();
+        Contact expResult = contact;
+
+        Contact contact2 = new Contact();
+        instance.add(contact2);
+        Contact contact3 = new Contact();
+        instance.add(contact3);
+        Contact contact4 = new Contact();
+        instance.add(contact4);
+        Contact contact5 = new Contact();
+        instance.add(contact5);
+        
+        int fiveId = contact5.getId();
+        
+        Contact result = instance.add(contact);
+        assertEquals(expResult, result);
+        
+        int capturedId = result.getId();
+        
+        assertTrue(capturedId > 0);
+        
+        Contact gottenContact = instance.get(capturedId);
+        
+        assertEquals(gottenContact.getId(), capturedId);
+        assertEquals(gottenContact, contact);
+        
+        Contact gottenContact2 = instance.get(fiveId);
+        assertEquals(gottenContact2, contact5);
+        
+
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+
+    /**
+     * Test of add method, of class ContactDaoImpl.
+     */
+    @Test
+    public void testAddC() {
+        System.out.println("add");
+        Contact contact = new Contact();
+        ContactDaoImpl instance = new ContactDaoImpl();
+        Contact expResult = contact;
+
+        Contact contact2 = new Contact();
+        instance.add(contact2);
+        Contact contact3 = new Contact();
+        instance.add(contact3);
+        Contact contact4 = new Contact();
+        instance.add(contact4);
+        Contact contact5 = new Contact();
+        instance.add(contact5);
+        
+        int fiveId = contact5.getId();
+        
+        Contact result = instance.add(contact);
+        assertEquals(expResult, result);
+        
+        int capturedId = result.getId();
+        
+        assertTrue(capturedId > 0);
+        
+        Contact gottenContact = instance.get(capturedId);
+        
+        assertEquals(gottenContact.getId(), capturedId);
+        assertEquals(gottenContact, contact);
+        
+        Contact gottenContact2 = instance.get(fiveId);
+        assertEquals(gottenContact2, contact5);
+        
+        
+        int fourId = contact4.getId();
+        Contact gottenContact4 = instance.get(fourId);
+        
+        assertEquals(gottenContact4, contact4);
+        
+        instance.remove(contact4);
+
+        Contact gottenContact4B = instance.get(fourId);
+        
+        assertEquals(gottenContact4B, null);
+        
+
+
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+
+    /**
+     * Test of add method, of class ContactDaoImpl.
+     */
+    @Test
+    public void testAddD() {
+        System.out.println("add");
+        Contact contact = new Contact();
+        ContactDaoImpl instance = new ContactDaoImpl();
+        Contact expResult = contact;
+
+        Contact contact2 = new Contact();
+        instance.add(contact2);
+        Contact contact3 = new Contact();
+        instance.add(contact3);
+        Contact contact4 = new Contact();
+        instance.add(contact4);
+        Contact contact5 = new Contact();
+        instance.add(contact5);
+        
+        int fiveId = contact5.getId();
+        
+        Contact result = instance.add(contact);
+        assertEquals(expResult, result);
+        
+        int capturedId = result.getId();
+        
+        assertTrue(capturedId > 0);
+        
+        Contact gottenContact = instance.get(capturedId);
+        
+        assertEquals(gottenContact.getId(), capturedId);
+        assertEquals(gottenContact, contact);
+        
+        Contact gottenContact2 = instance.get(fiveId);
+        assertEquals(gottenContact2, contact5);
+        
+
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
 //    /**
 //     * Test of update method, of class ContactDaoImpl.
 //     */
