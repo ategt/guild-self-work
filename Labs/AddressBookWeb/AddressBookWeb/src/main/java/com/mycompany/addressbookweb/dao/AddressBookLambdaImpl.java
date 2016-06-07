@@ -198,20 +198,22 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
 
                 String[] stringParts = currentLine.split(TOKEN);
 
-                Address address = new Address();
+                if (stringParts.length == 8) {
 
-                int id = Integer.parseInt(stringParts[0]);
-                address.setId(id);
+                    Address address = new Address();
 
-                address.setFirstName(fixNull(stringParts[1]));
-                address.setLastName(fixNull(stringParts[2]));
-                address.setStreetNumber(fixNull(stringParts[3]));
-                address.setStreetName(fixNull(stringParts[4]));
-                address.setState(fixNull(stringParts[5]));
-                address.setCity(fixNull(stringParts[6]));
-                address.setZip(fixNull(stringParts[7]));
+                    int id = Integer.parseInt(stringParts[0]);
+                    address.setId(id);
 
-                /*
+                    address.setFirstName(fixNull(stringParts[1]));
+                    address.setLastName(fixNull(stringParts[2]));
+                    address.setStreetNumber(fixNull(stringParts[3]));
+                    address.setStreetName(fixNull(stringParts[4]));
+                    address.setState(fixNull(stringParts[5]));
+                    address.setCity(fixNull(stringParts[6]));
+                    address.setZip(fixNull(stringParts[7]));
+
+                    /*
                 address.setPoBox(fixNull(stringParts[8]));
                 address.setZipcode(fixNull(stringParts[9]));
 
@@ -227,8 +229,9 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
                 out.print(TOKEN);
                 out.print(address.getZip());
                 
-                 */
-                addressList.add(address);
+                     */
+                    addressList.add(address);
+                }
             }
 
             sc.close();

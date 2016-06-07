@@ -32,16 +32,28 @@
                 <div class="col-md-6">
 
                     <table id="address-table" class="table table-hover">
+                        <th>ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th><i class="glyphicon glyphicon-edit"></i> Edit</th>
                         <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
                             <c:forEach items="${addresses}" var="address">
-                            <tr>
+<!--                            <tr>
                                 <td><a href="addressbook/show/${address.id}">${address.firstName}</a></td>
                                 <td><a href="addressbook/show/${address.id}">${address.lastName}</a></td>
                                 <td><a href="addressbook/edit/${address.id}">Edit</a></td>
                                 <td><a href="addressbook/delete/${address.id}">Delete</a></td>
+
+                            </tr>-->
+                            
+                            
+                             <tr id="contact-row-${address.id}" >
+                                
+                                <td>${address.id}</td>
+                                <td><a data-address-id="${address.id}" data-toggle="modal" data-target="#showDetailModal">${address.firstName}</a></td>
+                                <td><a href="contact/show/${address.id}">${address.lastName}</a></td>
+                                <td><a data-address-id="${address.id}" data-toggle="modal" data-target="#editDetailModal">Edit</a></td>
+                                <td><a data-address-id="${address.id}" class="delete-link">Delete</a></td>
 
                             </tr>
                         </c:forEach>
@@ -114,6 +126,166 @@
         </div>
     </div>
 
+    
+    
+    <div id="showDetailModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Address Details</h4>
+              </div>
+              <div class="modal-body">
+
+                  <table class="table table-bordered" id="show-address-table">
+                      <tr>
+                          <th>First Name:</th>
+                          <td id="address-first-name"></td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Last Name:</th>
+                          <td id="address-last-name"></td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Street Name:</th>
+                          <td id="address-street-name"></td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Street Number:</th>
+                          <td id="address-street-number"></td>
+                      </tr>
+                      
+                      <tr>
+                          <th>City:</th>
+                          <td id="address-city"></td>
+                      </tr>
+
+                      <tr>
+                          <th>State:</th>
+                          <td id="address-state"></td>
+                      </tr>
+                      <tr>
+                          <th>Zip:</th>
+                          <td id="address-zipcode"></td>
+                      </tr>
+                      
+<!--                      <tr>
+                          <th>Last Contacted:</th>
+                          <td id="address-notes"></td>
+                      </tr>-->
+                      
+                      
+                      
+                      
+                  </table>
+
+              </div>
+              <div class="modal-footer">
+                  <!--<button type=\"button\" data-address-id=\"" + data.id + "\" class=\"edit-from-detail-button btn btn-default\" data-dismiss=\"modal\">Edit</button>-->
+                  
+                <!--<button type="button" class="edit-from-detail-button btn btn-default" data-dismiss="modal">Edit</button>-->
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+    <div id="editDetailModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Address Details</h4>
+              </div>
+              <div class="modal-body">
+
+                  <table class="table table-bordered">
+                      
+                      <tr>
+                          <th>ID:</th>
+                          <td>
+                              <input type="text" id="edit-id" />
+                          </td>
+                      </tr>
+                      
+                      <tr>
+                          <th>First Name:</th>
+                          <td>
+                              <input type="text" id="edit-address-first-name" />
+                          </td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Last Name:</th>
+                          <td>
+                              <input type="text" id="edit-address-last-name" />
+                          </td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Street Name:</th>
+                          <td>
+                              <input type="text" id="edit-address-street-name" />
+                          </td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Street Number:</th>
+                          <td>
+                              <input type="text" id="edit-address-street-number" />
+                          </td>
+                      </tr>
+                      
+                      <tr>
+                          <th>City:</th>
+                          <td><input type="text" id="edit-address-city" /></td>
+                      </tr>
+                      
+                      <tr>
+                          <th>State:</th>
+                          <td><input type="text" id="edit-address-state" /></td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Zipcode:</th>
+                          <td><input type="text" id="edit-address-zipcode" /></td>
+                      </tr>
+                      
+<!--                      <tr>
+                          <th>Last Contacted:</th>
+                          <td> <input type="text" id="edit-address-last-contacted" /></td>
+                      </tr>-->
+                      
+                      
+                      
+                      
+                  </table>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="edit-address-button">Save</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+    
+    
+    
+    
     <script>
         var contextRoot = "${pageContext.request.contextPath}";
     </script>

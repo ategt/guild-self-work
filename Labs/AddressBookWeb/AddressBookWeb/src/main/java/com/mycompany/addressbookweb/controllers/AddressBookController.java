@@ -5,17 +5,9 @@
  */
 package com.mycompany.addressbookweb.controllers;
 
-//import com.mycompany.dvdlibraryweb.dao.NoteDaoImplementation;
-//import com.mycompany.dvdlibraryweb.dao.DvdLibraryLambdaImplementation;
-//import com.mycompany.dvdlibraryweb.dao.DvdLibraryImplementation;
-//import com.mycompany.dvdlibraryweb.dto.DvdImplementation;
-//import com.mycompany.dvdlibraryweb.dto.NoteImplementation;
-//import com.mycompany.dvdlibraryweb.interfaces.Dvd;
-//import com.mycompany.dvdlibraryweb.interfaces.DvdLibrary;
 import com.thesoftwareguild.interfaces.dto.Address;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -40,22 +32,66 @@ public class AddressBookController {
     public AddressBookController( com.thesoftwareguild.interfaces.dao.AddressBookDao addressDao) {
         this.addressDao = addressDao;
     }
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public Address create(@RequestBody Address address) {
-        
+    public Address createWithAjax(@RequestBody Address address) {
+
         return addressDao.create(address);
     }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Address showWithAjax(@PathVariable("id") Integer addressId) {
+
+        Address contact = addressDao.get(addressId);
+
+        return contact;
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @ResponseBody
+    public Address editSubmitWithAjax(@RequestBody Address address) {
+
+        addressDao.update(address);
+
+        return address;
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void deleteWithAjax(@PathVariable("id") Integer addressId) {
+
+        addressDao.delete(addressId);
+    }
+
+    
+    
+    
+    
+    
+//    
+//
+//    @RequestMapping(value = "/", method = RequestMethod.POST)
+//    @ResponseBody
+//    public Address create(@RequestBody Address address) {
+//        
+//        return addressDao.create(address);
+//    }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable("id") Integer contactId, Map model) {
 
-        //List<Contact> contacts = contactDao.list();
         Address address = addressDao.get(contactId);
 
-        //contactDao.sortByLastName(contacts);
-        //model.put("contacts", contacts);
         model.put("address", address);
 
         return "edit";
@@ -69,9 +105,9 @@ public class AddressBookController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String delete(@PathVariable("id") Integer dvdId) {
+    public String delete(@PathVariable("id") Integer addressId) {
 
-        addressDao.delete(dvdId);
+        addressDao.delete(addressId);
 
         return "redirect:/";
     }
@@ -89,7 +125,7 @@ public class AddressBookController {
             @RequestParam("searchText") String searchText,
             Map model) {
 
-        // List<Dvd> dvds = addressDao.getAllDvds();
+        // List<Address> addresss = addressDao.getAllAddresss();
         List<Address> addresses = null;
      //   addresses = addressDao.list();
         if ("searchByLastName".equalsIgnoreCase(searchBy)) {
@@ -105,7 +141,7 @@ public class AddressBookController {
             addresses = addressDao.searchByState(searchText);
         
         } else if ("searchByZip".equalsIgnoreCase(searchBy)) {
-            //List<Dvd> dvds1 = addressDao.searchByDirector(searchText).values().stream().collect(Collectors.t).;
+            //List<Address> addresss1 = addressDao.searchByDirector(searchText).values().stream().collect(Collectors.t).;
             addresses = addressDao.searchByZip(searchText);
 
         } else {
@@ -113,7 +149,7 @@ public class AddressBookController {
             addresses = addressDao.list();
 
         }
-        //.getAllDvds();
+        //.getAllAddresss();
 
        // addressDao.sortByTitle(addresses);
 
@@ -126,7 +162,7 @@ public class AddressBookController {
     public String blankSearch(Map model) {
 
         List<Address> addresses = addressDao.list();
-        //addressDao.sortByTitle(dvds);
+        //addressDao.sortByTitle(addresss);
 
         model.put("addresses", addresses);
 
@@ -134,9 +170,9 @@ public class AddressBookController {
     }
 
     @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
-    public String show(@PathVariable("id") Integer dvdId, Map model) {
+    public String show(@PathVariable("id") Integer addressId, Map model) {
 
-        Address address = addressDao.get(dvdId);
+        Address address = addressDao.get(addressId);
         List<Address> addresses = addressDao.list();
 
         
@@ -148,9 +184,9 @@ public class AddressBookController {
     }
     
     @RequestMapping(value = "/show/{id}/{lastFirst}", method = RequestMethod.GET)
-    public String show(@PathVariable("id") Integer dvdId, @PathVariable("lastFirst") Boolean lastNameFirst, Map model) {
+    public String show(@PathVariable("id") Integer addressId, @PathVariable("lastFirst") Boolean lastNameFirst, Map model) {
 
-        Address address = addressDao.get(dvdId);
+        Address address = addressDao.get(addressId);
         List<Address> addresses = addressDao.list();
 
         
