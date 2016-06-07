@@ -21,29 +21,36 @@ $(document).ready(function () {
             zip: $("#zip").val()
         });
 
-        $.ajax({
-            url: contextRoot + "/addressbook/",
-            type: "POST",
-            data: addressData,
-            dataType: 'json',
-            beforeSend: function(xhr){
-                xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Content-type", "application/json");
-            },
-            
-            success: function (data, status) {
 
-                var tableRow = buildContactRow(data);
+        firstName: $("#firstName").val('');
+        lastName: $("#lastName").val('');
+        streetNumber: $("#streetNumber").val('');
+        streetName: $("#streetName").val('');
+        city: $("#city").val('');
+        state: $("#state").val('');
+        zip: $("#zip").val('');
+                $.ajax({
+                    url: contextRoot + "/addressbook/",
+                    type: "POST",
+                    data: addressData,
+                    dataType: 'json',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Accept", "application/json");
+                        xhr.setRequestHeader("Content-type", "application/json");
+                    },
+                    success: function (data, status) {
 
-                $('#address-table').append($(tableRow));
+                        var tableRow = buildContactRow(data);
 
-            },
-            error: function (data, status) {
-                alert("error");
-            }
+                        $('#address-table').append($(tableRow));
+
+                    },
+                    error: function (data, status) {
+                        alert("error");
+                    }
 
 
-        });
+                });
 
 
     });
