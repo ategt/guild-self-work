@@ -97,13 +97,13 @@ $(document).ready(function () {
                 $('#order-date').text(data.date);
                 $('#order-area').text(data.area);
                 $('#order-id').text(data.id);
-                $('#order-labor-total-cost').text(data.laborCost);
-                $('#order-labor-unit-cost').text(data.laborCostPerSquareFoot);
-                $('#order-material-cost').text(data.materialCost);
-                $('#order-material-unit-cost').text(data.costPerSquareFoot);
-                $('#order-total-invoice').text(data.total);
-                $('#order-total-tax').text(data.tax);
-                $('#order-tax-rate').text(data.taxRate);
+                $('#order-labor-total-cost').text(formatDollar(data.laborCost));
+                $('#order-labor-unit-cost').text(formatDollar(data.laborCostPerSquareFoot));
+                $('#order-material-cost').text(formatDollar(data.materialCost));
+                $('#order-material-unit-cost').text(formatDollar(data.costPerSquareFoot));
+                $('#order-total-invoice').text(formatDollar(data.total));
+                $('#order-total-tax').text(formatDollar(data.tax));
+                $('#order-tax-rate').text(data.taxRate + " %");
 
                 var totalStr = data.total;
                 var taxStr = data.tax;
