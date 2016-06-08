@@ -135,6 +135,10 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order create(Order order) {
+        
+        if ( order == null)
+            return null;
+        
         order.setId(nextId);
         nextId++;
 
@@ -148,6 +152,9 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order get(Integer id) {
 
+        if (id == null)
+            return null;
+        
         for (Order order : orders) {
             if (order != null) {
                 if (order.getId() == id) {
@@ -161,6 +168,10 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void update(Order order) {
+        
+        if (order == null)
+            return;
+        
         List<Order> foundOrders = new ArrayList();
 
         orders.stream()
@@ -183,12 +194,19 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void delete(Order order) {
+
+        if (order == null) {
+            return;
+        }
+
         Order found = null;
 
         for (Order currentOrder : orders) {
             if (currentOrder.getId() == order.getId()) {
-                found = currentOrder;
-                break;
+                if (currentOrder != null) {
+                    found = currentOrder;
+                    break;
+                }
             }
         }
 
@@ -232,7 +250,7 @@ public class OrderDaoImpl implements OrderDao {
     public java.util.List<Order> searchByProduct(Product product) {
         java.util.List<Order> specificOrders = orders.stream()
                 .filter(o -> o.getProduct() != null)
-                .filter(o -> o.getProduct() == product) 
+                .filter(o -> o.getProduct() == product)
                 .collect(Collectors.toList());
 
         return specificOrders;
@@ -241,7 +259,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public java.util.List<Order> searchByOrderNumber(Integer orderNumber) {
         java.util.List<Order> specificOrders = orders.stream()
-                .filter(o -> Integer.toString(o.getId()).contains(orderNumber.toString())) 
+                .filter(o -> Integer.toString(o.getId()).contains(orderNumber.toString()))
                 .collect(Collectors.toList());
 
         return specificOrders;
@@ -251,7 +269,7 @@ public class OrderDaoImpl implements OrderDao {
     public java.util.List<Order> searchByState(State state) {
         java.util.List<Order> specificOrders = orders.stream()
                 .filter(o -> o.getState() != null)
-                .filter(o -> o.getState() == state) 
+                .filter(o -> o.getState() == state)
                 .collect(Collectors.toList());
 
         return specificOrders;
@@ -310,12 +328,12 @@ public class OrderDaoImpl implements OrderDao {
         }
 
         if (closeOrders.isEmpty()) {
-            
+
             closeOrders = orders.stream()
-                                .filter(o -> o.getName() != null)
-                                .filter(o -> o.getName().toLowerCase().contains(orderName.toLowerCase()))
-                                .collect(Collectors.toList());
-            
+                    .filter(o -> o.getName() != null)
+                    .filter(o -> o.getName().toLowerCase().contains(orderName.toLowerCase()))
+                    .collect(Collectors.toList());
+
         }
 
         if (specificOrders.isEmpty()) {

@@ -49,13 +49,27 @@
                         <th><i class="glyphicon glyphicon-edit"></i> Edit</th>
                         <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
                             <c:forEach items="${orders}" var="order">
-                            <tr>
+<!--                            <tr>
                                 <td><a href="${pageContext.request.contextPath}/FlooringMaster/show/${order.id}">${order.id}</a></td>
                                 <td><a href="${pageContext.request.contextPath}/FlooringMaster/show/${order.id}">${order.name}</a></td>
                                 <td><a href="${pageContext.request.contextPath}/FlooringMaster/edit/${order.id}">Edit</a></td>
                                 <td><a href="${pageContext.request.contextPath}/FlooringMaster/delete/${order.id}">Delete</a></td>
 
+                            </tr>-->
+                            
+                            
+                            
+                             <tr id="order-row-${order.id}" >
+                                
+                                <td>${order.id}</td>
+                                <td><a data-order-id="${order.id}" data-toggle="modal" data-target="#showDetailModal">${order.id}</a></td>
+                                <td><a href="contact/show/${order.id}">${order.name}</a></td>
+                                <td><a data-order-id="${order.id}" data-toggle="modal" data-target="#editDetailModal">Edit</a></td>
+                                <td><a data-order-id="${order.id}" class="delete-link">Delete</a></td>
+
                             </tr>
+                            
+                            
                         </c:forEach>
 
 
@@ -168,6 +182,167 @@
     </div>
 
 
+    
+    
+    
+    <div id="showDetailModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Order Details</h4>
+              </div>
+              <div class="modal-body">
+
+                  <table class="table table-bordered" id="show-order-table">
+                      <tr>
+                          <th>Order Name:</th>
+                          <td id="order-name"></td>
+                      </tr>
+                      
+                      <tr>
+                          <th>State:</th>
+                          <td id="order-state"></td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Product:</th>
+                          <td id="order-product"></td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Date:</th>
+                          <td id="order-date"></td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Area:</th>
+                          <td id="order-area"></td>
+                      </tr>
+
+<!--                      <tr>
+                          <th>State:</th>
+                          <td id="order-state"></td>
+                      </tr>-->
+<!--                      <tr>
+                          <th>Zip:</th>
+                          <td id="order-zipcode"></td>
+                      </tr>-->
+                      
+<!--                      <tr>
+                          <th>Last Contacted:</th>
+                          <td id="order-notes"></td>
+                      </tr>-->
+                      
+                      
+                      
+                      
+                  </table>
+
+              </div>
+              <div class="modal-footer">
+                  <!--<button type=\"button\" data-order-id=\"" + data.id + "\" class=\"edit-from-detail-button btn btn-default\" data-dismiss=\"modal\">Edit</button>-->
+                  
+                <!--<button type="button" class="edit-from-detail-button btn btn-default" data-dismiss="modal">Edit</button>-->
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+    <div id="editDetailModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit Order Details</h4>
+              </div>
+              <div class="modal-body">
+
+                  <table class="table table-bordered">
+                      
+                      <tr>
+                          <th>ID:</th>
+                          <td>
+                              <input type="text" id="edit-id" />
+                          </td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Order Name:</th>
+                          <td>
+                              <input type="text" id="edit-order-name" />
+                          </td>
+                      </tr>
+                      
+                      <tr>
+                          <th>State:</th>
+                          <td>
+                              <input type="text" id="edit-order-state" />
+                          </td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Product:</th>
+                          <td>
+                              <input type="text" id="edit-order-product" />
+                          </td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Date:</th>
+                          <td>
+                              <input type="text" id="edit-order-date" />
+                          </td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Area:</th>
+                          <td><input type="text" id="edit-order-area" /></td>
+                      </tr>
+<!--                      
+                      <tr>
+                          <th>State:</th>
+                          <td><input type="text" id="edit-order-state" /></td>
+                      </tr>
+                      
+                      <tr>
+                          <th>Zipcode:</th>
+                          <td><input type="text" id="edit-order-zipcode" /></td>
+                      </tr>-->
+                      
+<!--                      <tr>
+                          <th>Last Contacted:</th>
+                          <td> <input type="text" id="edit-order-last-contacted" /></td>
+                      </tr>-->
+                      
+                      
+                      
+                      
+                  </table>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="edit-order-button">Save</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+    
+    
+    
+    
 <!--    <script>
         $(function () {
             $("#datepicker").datepicker();
