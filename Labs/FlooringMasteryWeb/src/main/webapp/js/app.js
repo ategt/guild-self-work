@@ -50,7 +50,7 @@ $(document).ready(function () {
 
     function buildOrderRow(data) {
 
-    var strRowTable = "<tr id=\"order-row-" + data.id + "\" >\n\
+        var strRowTable = "<tr id=\"order-row-" + data.id + "\" >\n\
                                 \n\
         <td>" + data.id + "</td>\n\
         <td><a data-order-id=\"" + data.id + "\" data-toggle=\"modal\" data-target=\"#showDetailModal\">" + data.id + "</a></td>\n\
@@ -75,8 +75,6 @@ $(document).ready(function () {
 
     }
 
-
-
     $('#showDetailModal').on('show.bs.modal', function (e) {
 
         var link = $(e.relatedTarget);
@@ -99,9 +97,42 @@ $(document).ready(function () {
                 $('#order-date').text(data.date);
                 $('#order-area').text(data.area);
                 $('#order-id').text(data.id);
+                $('#order-labor-total-cost').text(data.laborCost);
+                $('#order-labor-unit-cost').text(data.laborCostPerSquareFoot);
+                $('#order-material-cost').text(data.materialCost);
+                $('#order-material-unit-cost').text(data.costPerSquareFoot);
+                $('#order-total-invoice').text(data.total);
+                $('#order-total-tax').text(data.tax);
+                $('#order-tax-rate').text(data.taxRate);
+
+                var totalStr = data.total;
+                var taxStr = data.tax;
+
+                var total = parseInt(totalStr);
+                var tax = parseInt(taxStr);
+
+                var subTotal = eval(total - tax);
+                
+                subTotal = formatDollar(subTotal);
+
+
+                $('#order-subtotal').text(subTotal);
+
+                var orderDate = data.date;
+                orderDate = new Date(orderDate);
+
+                if (orderDate === null) {
+                    orderDate = new Date();
+                }
+
+                $('#order-date-f').text(orderDate.toDateString());
                 //$('#order-zipcode').text(data.zip);
 
-               // $('.edit-from-detail-button').data("order-id", data.id);
+                // $('.edit-from-detail-button').data("order-id", data.id);
+
+
+
+
 
             },
             error: function (data, status) {
@@ -132,7 +163,7 @@ $(document).ready(function () {
 
         var orderId = link.data('order-id');
 
-          $.ajax({
+        $.ajax({
             url: contextRoot + "/FlooringMaster/" + orderId,
             type: "GET",
             dataType: 'json',
@@ -148,7 +179,7 @@ $(document).ready(function () {
                 //$('#edit-order-id').val(data.id);
                 //$('#edit-order-zipcode').val(data.zip);
                 $('#edit-id').val(data.id);
-                
+
 //                var lastContacted = data.lastContacted;
 //                if (data.lastContacted == null) {
 //                    lastContacted = new Date();
@@ -232,10 +263,36 @@ $(document).ready(function () {
 
 
 
+//    function formatMoney(n, c, d, t) {
+//        //var n = this,
+//               var c = isNaN(c = Math.abs(c)) ? 2 : c,
+//                d = d === undefined ? "." : d,
+//                t = t === undefined ? "," : t,
+//                s = n < 0 ? "-" : "",
+//                i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+//                j = (j = i.length) > 3 ? j % 3 : 0;
+//        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+//    };
 
-
-
-
+// function formatMoney(n, c, d, t) {
+//        //var n = this,
+//               var valu = isNaN(c = Math.abs(c)) ? 2 : c;
+//                var d = ".";
+//                var comma = ",";
+//                var s = n < 0 ? "-" : "",
+//                i = parseInt(n = Math.abs(+n || 0).toFixed(valu)) + "",
+//                j = (j = i.length) > 3 ? j % 3 : 0;
+//        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+//    };
+    
+    
+    
+function formatDollar(num) {
+    var p = num.toFixed(2).split(".");
+    return "$" + p[0].split("").reverse().reduce(function(acc, num, i, orig) {
+        return  num + (i && !(i % 3) ? "," : "") + acc;
+    }, "") + "." + p[1];
+}
 
 
 

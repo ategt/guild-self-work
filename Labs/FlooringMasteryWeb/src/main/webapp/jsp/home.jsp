@@ -222,6 +222,125 @@
                           <td id="order-area"></td>
                       </tr>
 
+                      
+                      
+
+              
+                    <tr>
+
+                        <th>
+                            Order Date:
+                        </th>
+                        <td id="order-date-f">
+                           
+                        </td>
+                    </tr>
+                   
+                  
+                    <tr>
+
+                        <th>
+                            Material Unit Cost:
+                        </th>
+                        <td id="order-material-unit-cost">
+
+                            
+                        </td>
+                    </tr>
+                    <tr>
+
+
+                        <th>
+                            Material Total Cost:
+                        </th>
+                        <td id="order-material-cost">
+
+                          
+                        </td>
+                    </tr>
+                    <tr>
+
+
+                        <th>
+                            Installation Unit Cost:
+                        </th>
+                        <td id="order-labor-unit-cost">
+
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <th>
+                            Installation Total Cost:
+                        </th>
+                        <td id="order-labor-total-cost">
+
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <th>
+                            Total Before Tax:
+                        </th>
+                        <td id="order-subtotal">
+
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <th>
+                            Sales Tax Rate:
+                        </th>
+                        <td id="order-tax-rate">
+                            
+                        </td>
+                    </tr>
+                    <tr>
+
+
+                        <th>
+                            Total Sales Tax:
+                        </th>
+                        <td id="order-total-tax">
+
+                        </td>
+                    </tr>
+                    <tr>
+
+
+                        <th>
+                            Total Invoice:
+                        </th>
+                        <td id="order-total-invoice">
+                           
+                        </td>
+                    </tr>
+                    
+
+
+                </div>
+
+
+
+
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
 <!--                      <tr>
                           <th>State:</th>
                           <td id="order-state"></td>
