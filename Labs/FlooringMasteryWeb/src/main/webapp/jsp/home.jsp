@@ -145,8 +145,8 @@
                         </div>
 
 
-
-
+                        
+                        
                         <div class="form-group">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9 text-center">
@@ -408,32 +408,68 @@
               <div class="modal-body">
 
                 <table class="table table-bordered">
+                            <input type="hidden" id="edit-id" class="form-control" />
 
                     <tr>
                         <th>ID:</th>
-                        <td>
-                            <input type="text" id="edit-id" />
+                        <td id="edit-display-id">
+                            
                         </td>
                     </tr>
 
                     <tr>
                         <th>Order Name:</th>
                         <td>
-                            <input type="text" id="edit-order-name" />
+                            <input type="text" id="edit-order-name" class="form-control" />
                         </td>
                     </tr>
 
                     <tr>
                         <th>State:</th>
                         <td>
-                            <input type="text" id="edit-order-state" />
+                            <!--<input type="text" id="edit-order-state" />-->
+                            
+                            
+                                <select id="edit-order-state" class="form-control" name="state" >
+                                    <c:forEach items="${stateCommands}" var="stateCommand">
+                                        <option value="${stateCommand.stateAbbreviation}"  >${stateCommand.stateName} - ${stateCommand.stateTax}%</option>
+                                    </c:forEach>
+                                </select>
+                            
                         </td>
                     </tr>
-
+                    
                     <tr>
                         <th>Product:</th>
                         <td>
-                            <input type="text" id="edit-order-product" />
+                            
+                            
+                            
+                            
+                            
+                            <!--<input type="text" id="edit-order-product" />-->
+                            
+                            
+                            
+                            
+                            
+                            
+                    
+                                <select name="product" id="edit-order-product" class="form-control" >
+                                    <c:forEach items="${productCommands}" var="productCommand">
+                                        <option value="${productCommand.productName}" >${productCommand.productName}</option>
+                                    </c:forEach>
+                                </select>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                         </td>
                     </tr>
 
@@ -442,13 +478,13 @@
                         <td>
                             <!--<input type="date" pattern="MM/dd/yyyy" id="edit-order-date" class="order-date-class" />-->
                             <!--pattern="yyyy-MM-dd"-->
-                            <input pattern="MM/dd/yyyy" type="text" id="edit-order-date"  />
+                            <input pattern="MM/dd/yyyy" type="text" class="form-control" id="edit-order-date"  />
                         </td>
                     </tr>
 
                     <tr>
                         <th>Area:</th>
-                        <td><input type="text" id="edit-order-area" /></td>
+                        <td><input type="text" id="edit-order-area" class="form-control" /></td>
                     </tr>
                     <!--                      
                                           <tr>

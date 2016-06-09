@@ -90,6 +90,14 @@ $(document).ready(function () {
         return strRowTable;
 
     }
+    
+    function buildSelectorOption() {
+
+        var invalidOption = "<option value=\"Error - Data Invalid\" >Error - Data Invalid</option>";
+
+        return invalidOption;
+
+    }
 
     $('#showDetailModal').on('show.bs.modal', function (e) {
 
@@ -107,7 +115,7 @@ $(document).ready(function () {
             success: function (data, status) {
 
                 $('#order-name').text(data.name);
-                
+
                 $('#order-date').text(data.date);
                 $('#order-area').text(data.area);
                 $('#order-id').text(data.id);
@@ -126,7 +134,7 @@ $(document).ready(function () {
                 var tax = parseInt(taxStr);
 
                 var subTotal = eval(total - tax);
-                
+
                 subTotal = formatDollar(subTotal);
 
 
@@ -146,14 +154,14 @@ $(document).ready(function () {
                 var displayState = "Error - Data Invalid";
                 if (stateObj !== null)
                     displayState = stateObj.stateName;
-                
+
                 $('#order-state').text(displayState);
-                
+
                 var productObj = data.product;
                 var displayProduct = "Error - Data Invalid";
                 if (productObj !== null)
                     displayProduct = productObj.productName;
-                
+
 
                 $('#order-product').text(displayProduct);
 
@@ -215,11 +223,10 @@ $(document).ready(function () {
                 //$('#edit-order-id').val(data.id);
                 //$('#edit-order-zipcode').val(data.zip);
                 $('#edit-id').val(data.id);
+                $('#edit-display-id').text(data.id);
 
-                
-                
                 //var orderDate= new Date(data.date);        
-                
+
 
                 //$('#edit-order-date').val(data.date);
 
@@ -230,38 +237,46 @@ $(document).ready(function () {
 //                
 //                var testx = $(".order-date-class");
 //                var $test = $(".order-date-class");
-                
+
 //                var $datepickerb = $('jQueryDatePicker');
-                
+
 //                $datepicker.val(improvedDateStr);
 
-                
+
                 var $datepicker = $('#edit-order-date');
                 $datepicker.datepicker();
 
                 var orderDate = data.date;
-                if (orderDate===null)
+                if (orderDate === null)
                     orderDate = new Date();
-                
+
                 $datepicker.datepicker('setDate', orderDate);
-                
+
                 //$("#edit-order-date").datepicker("setDate" , new Date());
 
                 var stateObj = data.state;
                 var displayState = "Error - Data Invalid";
-                if (stateObj !== null)
+                if (stateObj !== null) {
                     displayState = stateObj.stateName;
-                
+                } else {
+                    $('#edit-order-state').append($(buildSelectorOption()));
+                    //$('#edit-order-state').val();
+                    
+                }
+
+                console.log(displayState);
                 $('#edit-order-state').val(displayState);
-                
+
                 var productObj = data.product;
                 var displayProduct = "Error - Data Invalid";
-                if (productObj !== null)
+                if (productObj !== null){
                     displayProduct = productObj.productName;
-                
+                } else {
+                    $('#edit-order-product').append($(buildSelectorOption()));
+                }
 
                 $('#edit-order-product').val(displayProduct);
-
+                console.log(displayProduct);
 
 //                var lastContacted = data.lastContacted;
 //                if (data.lastContacted == null) {
@@ -344,10 +359,10 @@ $(document).ready(function () {
     });
 
     function formatDollar(num) {
-            var p = num.toFixed(2).split(".");
-            return "$" + p[0].split("").reverse().reduce(function(acc, num, i, orig) {
-                return  num + (i && !(i % 3) ? "," : "") + acc;
-            }, "") + "." + p[1];
-        }
+        var p = num.toFixed(2).split(".");
+        return "$" + p[0].split("").reverse().reduce(function (acc, num, i, orig) {
+            return  num + (i && !(i % 3) ? "," : "") + acc;
+        }, "") + "." + p[1];
+    }
 
 });
