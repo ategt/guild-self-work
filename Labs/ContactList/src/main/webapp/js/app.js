@@ -38,33 +38,33 @@ $(document).ready(function (d) {
 
                 $('#contact-table').append($(tableRow));
 
+                $("#add-contact-validation-errors").html();
+
+
+                $('#first-name-input').val('');
+                $('#last-name-input').val('');
+                $('#company-input').val('');
+                $('#email-input').val('');
+                $('#phone-input').val('');
+                $('#last-contacted-input').val('');
+
+
             },
             error: function (data, status) {
-                
-                
-                
                 var errors = data.responseJSON.errors;
+                var validationErrorMessage = "";
 
 
-                $.each(errors, function(index, error){
-                    
-                    $("#add-contact-validation-errors").append(error.fieldname + ":" + error.message + "<br />");
-                    
+                $.each(errors, function (index, error) {
+                    validationErrorMessage += error.fieldName + ":" + error.message + "<br />";
                 });
-                
-                alert("error");
+
+                $("#add-contact-validation-errors").html(validationErrorMessage);
             }
 
 
         });
 
-
-        $('#first-name-input').val('');
-        $('#last-name-input').val('');
-        $('#company-input').val('');
-        $('#email-input').val('');
-        $('#phone-input').val('');
-        $('#last-contacted-input').val('');
 
 
     });
@@ -168,7 +168,7 @@ $(document).ready(function (d) {
 
                 var tableRow = buildContactRow(data);
 
-                $('#contact-row-' + data.id).replaceWith( $(tableRow) );
+                $('#contact-row-' + data.id).replaceWith($(tableRow));
 
             },
             error: function (data, status) {
@@ -182,27 +182,27 @@ $(document).ready(function (d) {
     });
 
 
-    $(document).on('click', '.delete-link', function(e){
-        
+    $(document).on('click', '.delete-link', function (e) {
+
         e.preventDefault();
-        
+
         var contactId = $(e.target).data('contact-id');
-        
+
         $.ajax({
             type: "DELETE",
             url: contextRoot + "/contact/" + contactId,
-            success: function(data, status){
+            success: function (data, status) {
                 $('#contact-row-' + contactId).remove();
             },
-            error: function(data, status){
-                
+            error: function (data, status) {
+
             }
-            
-            
-            
+
+
+
         });
-        
-        
+
+
     });
 
 
@@ -218,8 +218,8 @@ $(document).ready(function (d) {
         <td><a href=\"contact/delete/" + data.id + "\">Delete</a></td>\n\
                 \n\
     </tr>";
-        
-        alert(strVar);
+
+        //alert(strVar);
 
 //        <td><a href=\"contact/show/" + data.id + "\">" + data.firstName + "</a></td>\n\
         return strVar;
