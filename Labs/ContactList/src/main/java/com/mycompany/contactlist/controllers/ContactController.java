@@ -36,7 +36,7 @@ public class ContactController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public Contact create(@RequestBody Contact contact) {
+    public Contact create(@Valid @RequestBody Contact contact) {
 
         return contactDao.add(contact);
     }
@@ -67,7 +67,7 @@ public class ContactController {
 
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     @ResponseBody
-    public Contact editSubmit(@RequestBody Contact contact) {
+    public Contact editSubmit(@Valid @RequestBody Contact contact) {
 
         //List<Contact> contacts = contactDao.list();
         //Contact contact = contactDao.get(contactId);

@@ -55,7 +55,14 @@ $(document).ready(function () {
 
             },
             error: function (data, status) {
-                alert("error");
+                
+                
+                var errors = data.responseJSON.errors;
+
+                //errors.
+                        
+                console.log();
+                
             }
 
 
