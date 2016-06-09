@@ -90,10 +90,8 @@ $(document).ready(function () {
             },
             success: function (data, status) {
 
-
                 $('#order-name').text(data.name);
-                $('#order-state').text(data.state.stateName);
-                $('#order-product').text(data.product.productName);
+                
                 $('#order-date').text(data.date);
                 $('#order-area').text(data.area);
                 $('#order-id').text(data.id);
@@ -126,9 +124,32 @@ $(document).ready(function () {
                 }
 
                 $('#order-date-f').text(orderDate.toDateString());
+
+
+                var stateObj = data.state;
+                var displayState = "Error - Data Invalid";
+                if (stateObj != null)
+                    displayState = stateObj.stateName;
+                
+                $('#order-state').text(displayState);
+                
+                                var productObj = data.state;
+                var displayProduct = "Error - Data Invalid";
+                if (productObj != null)
+                    displayProduct = productObj.productName;
+                
+
+                $('#order-product').text(displayProduct);
+
+
+
                 //$('#order-zipcode').text(data.zip);
 
+
+
                 // $('.edit-from-detail-button').data("order-id", data.id);
+
+
 
 
 
