@@ -38,28 +38,88 @@ $(document).ready(function (d) {
 
                 $('#contact-table').append($(tableRow));
 
-                $("#add-contact-validation-errors").html();
-
-
-                $('#first-name-input').val('');
-                $('#last-name-input').val('');
-                $('#company-input').val('');
-                $('#email-input').val('');
-                $('#phone-input').val('');
-                $('#last-contacted-input').val('');
-
+                resetCreateForm();
 
             },
             error: function (data, status) {
                 var errors = data.responseJSON.errors;
                 var validationErrorMessage = "";
+                
+                resetCreateFormColors();
+                
+//                        $('#last-name-input-group').addClass("has-error");
+//                        $('#first-name-input-group').addClass("has-error");
 
-
+//
+//                $('#first-name-input').val('');
+//                $('#last-name-input').val('');
+//                $('#company-input').val('');
+//                $('#email-input').val('');
+//                $('#phone-input').val('');
+//                $('#last-contacted-input').val('');
+//has-success
                 $.each(errors, function (index, error) {
-                    validationErrorMessage += error.fieldName + ":" + error.message + "<br />";
+
+                    var errorFieldName = error.fieldName;
+                    validationErrorMessage += errorFieldName + ":" + error.message + "<br />";
+                    //$(error.fieldName).addClass("has-error");
+
+
+                    if (errorFieldName === "firstName") {
+                        $('#first-name-input-group').addClass("has-error");
+                    } else {
+                        $('#first-name-input-group').addClass("has-success");
+                    }
+
+                    if (errorFieldName === "lastName") {
+                        $('#last-name-input-group').addClass("has-error");
+                    } else {
+                        $('#last-name-input-group').addClass("has-success");
+                    }
+
+                    if (errorFieldName === "company") {
+                        $('#company-input-group').addClass("has-error");
+                    } else {
+                        $('#company-input-group').addClass("has-success");
+                    }
+
+                    if (errorFieldName === "email") {
+                        $('#email-input-group').addClass("has-error");
+                    } else {
+                        $('#email-input-group').addClass("has-success");
+                    }
+
+                    if (errorFieldName === "phone") {
+                        $('#phone-input-group').addClass("has-error");
+                    } else {
+                        $('#phone-input-group').addClass("has-success");
+                    }
+
+                    if (errorFieldName === "lastContacted") {
+                        $('#lastContacted-input-group').addClass("has-error");
+                    } else {
+                        $('#lastContacted-input-group').addClass("has-success");
+                    }
+
+
+
+
                 });
 
                 $("#add-contact-validation-errors").html(validationErrorMessage);
+
+
+
+
+
+
+//                
+//                $('#contact-first-name').text(data.firstName);
+//                $('#contact-last-name').text(data.lastName);
+//                $('#contact-company').text(data.company);
+//                $('#contact-email').text(data.email);
+//                $('#contact-phone').text(data.phone);
+//                $('#contact-last-contacted').text(data.lastContacted);
             }
 
 
@@ -225,4 +285,41 @@ $(document).ready(function (d) {
         return strVar;
 
     }
+
+    function resetCreateForm() {
+
+        $("#add-contact-validation-errors").html();
+
+        $('#first-name-input').val('');
+        $('#last-name-input').val('');
+        $('#company-input').val('');
+        $('#email-input').val('');
+        $('#phone-input').val('');
+        $('#last-contacted-input').val('');
+
+        resetCreateFormColors();
+    }
+
+    function resetCreateFormColors() {
+
+
+        $('#first-name-input-group').removeClass("has-error");
+        $('#first-name-input-group').removeClass("has-success");
+
+        $('#last-name-input-group').removeClass("has-error");
+        $('#last-name-input-group').removeClass("has-success");
+
+        $('#company-input-group').removeClass("has-error");
+        $('#company-input-group').removeClass("has-success");
+
+        $('#email-input-group').removeClass("has-error");
+        $('#email-input-group').removeClass("has-success");
+
+        $('#phone-input-group').removeClass("has-error");
+        $('#phone-input-group').removeClass("has-success");
+
+        $('#last-contacted-input-group').removeClass("has-error");
+        $('#last-contacted-input-group').removeClass("has-success");
+    }
+
 });

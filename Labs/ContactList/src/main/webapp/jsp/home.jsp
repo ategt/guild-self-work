@@ -60,42 +60,42 @@
                 </div>
                 <div class="col-md-6">
                     <form method="POST" class="form-horizontal">
-                        <div class="form-group">
+                        <div id="first-name-input-group" class="form-group">
                             <label for="firstName" class="col-sm-2 control-label" >First:</label>
                             <div class="col-sm-10">
                                 <input name="firstName" class="form-control" type="text" id="first-name-input" placeholder="First Name"  />
                                 <span name="firstName" />
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div id="last-name-input-group" class="form-group">
                             <label for="lastName" class="col-sm-2 control-label" >Last:</label>
                             <div class="col-sm-10">
                                 <input name="lastName" class="form-control" type="text" id="last-name-input" placeholder="Last Name" />
                                 <span name="lastName" />
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div id="company-input-group" class="form-group">
                             <label for="company" class="col-sm-2 control-label" >Company:</label>
                             <div class="col-sm-10">
                                 <input name="company" class="form-control" type="text" id="company-input" placeholder="Company" />
                                 <span name="company" />
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div id="email-input-group" class="form-group">
                             <label for="Email" class="col-sm-2 control-label" >Email:</label>
                             <div class="col-sm-10">
                                 <input name="email" class="form-control" type="text" id="email-input" placeholder="Email" />
                                 <span name="email" />
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div id="phone-input-group" class="form-group">
                             <label for="phone" class="col-sm-2 control-label" >Phone:</label>
                             <div class="col-sm-10">
                                 <input name="phone" class="form-control" type="text" id="phone-input" placeholder="Phone" />
                                 <span name="phone" />
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div id="last-contacted-input-group" class="form-group">
                             <label for="lastContacted" class="col-sm-2 control-label" >Last Contacted:</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="text" name="lastContacted" id="last-contacted-input" placeholder="Last Contacted" />
