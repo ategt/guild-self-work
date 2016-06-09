@@ -14,11 +14,27 @@ $(document).ready(function () {
         var postableUrl = contextRoot + "/FlooringMaster/";
         //console.log(postableUrl);
 
+//                var $datepicker = $('#edit-order-date');
+//                var $datepickerb = $('jQueryDatePicker');
+//                //$datepicker.datepicker();
+//                
+//                $datepicker.val(improvedDateStr);
+//                
+//                var orderDate = data.date;
+//                if (orderDate===null)
+//                    orderDate = new Date();
+//                
+//                $datepickerb.datepicker('setDate', orderDate);
+
+
+
         var orderData = JSON.stringify({
             name: $("#name").val(),
-            state: $("#state").val(),
-            product: $("#product").val(),
-            date: $("#datepicker").val(),
+            //state: $("#state").val(),
+            state: $("#state-selector").val(),
+            product: $("#product-selector").val(),
+            //product: $("#product").val(),
+            date: $("#jQueryDatePicker").val(),
             area: $("#area").val()
         });
 
@@ -52,7 +68,6 @@ $(document).ready(function () {
 
         var strRowTable = "<tr id=\"order-row-" + data.id + "\" >\n\
                                 \n\
-        <td>" + data.id + "</td>\n\
         <td><a data-order-id=\"" + data.id + "\" data-toggle=\"modal\" data-target=\"#showDetailModal\">" + data.id + "</a></td>\n\
         <td><a href=\"contact/show/" + data.id + "\">" + data.name + "</a></td>\n\
         <td><a data-order-id=\"" + data.id + "\" data-toggle=\"modal\" data-target=\"#editDetailModal\">Edit</a></td>\n\
@@ -61,6 +76,7 @@ $(document).ready(function () {
         </tr>";
 
 
+//        <td>" + data.id + "</td>\n\
 
         var strTableRow = "  <tr>\n\
                                 <td><a href=\"/FlooringMaster/show/" + data.id + "\">" + data.id + "</a></td>\n\
@@ -207,21 +223,28 @@ $(document).ready(function () {
 
                 //$('#edit-order-date').val(data.date);
 
-
-                var dateStr = data.date;
-                var dateArray = dateStr.split("/");
-                var improvedDateStr = dateArray[2] + "-" + dateArray[0] + "-" + dateArray[1];
+//
+//                var dateStr = data.date;
+//                var dateArray = dateStr.split("/");
+//                var improvedDateStr = dateArray[2] + "-" + dateArray[0] + "-" + dateArray[1];
+//                
+//                var testx = $(".order-date-class");
+//                var $test = $(".order-date-class");
                 
-                var testx = $(".order-date-class");
-                var $test = $(".order-date-class");
+//                var $datepickerb = $('jQueryDatePicker');
+                
+//                $datepicker.val(improvedDateStr);
+
                 
                 var $datepicker = $('#edit-order-date');
-                //$datepicker.datepicker();
+                $datepicker.datepicker();
+
+                var orderDate = data.date;
+                if (orderDate===null)
+                    orderDate = new Date();
                 
-                $datepicker.val(improvedDateStr);
+                $datepicker.datepicker('setDate', orderDate);
                 
-                //
-                //$datepicker.datepicker('setDate', new Date());
                 //$("#edit-order-date").datepicker("setDate" , new Date());
 
                 var stateObj = data.state;

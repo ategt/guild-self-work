@@ -37,7 +37,7 @@ public class OrderCommand implements BasicOrder {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy",timezone="EST")
     @NotNull(message="You Must Include A Date For This Order")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    //@DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;          // file name
     
     @Min(0)

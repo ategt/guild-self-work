@@ -69,8 +69,6 @@ public class FlooringMasteryWebController {
 //
 //        return orderDao.create(order);
 //    }
-    
-    
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Order showWithAjax(@PathVariable("id") Integer orderId) {
@@ -79,8 +77,7 @@ public class FlooringMasteryWebController {
 
         return contact;
     }
-    
-    
+
 //
 //    @RequestMapping(value = "/", method = RequestMethod.PUT)
 //    @ResponseBody
@@ -90,26 +87,32 @@ public class FlooringMasteryWebController {
 //
 //        return order;
 //    }
-
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     @ResponseBody
     public OrderCommand update(@Valid @RequestBody OrderCommand orderCommand, BindingResult bindingResult) {
 
-        if ( bindingResult.hasErrors() ) {
+        validateInputs(orderCommand, bindingResult);
+
+        if (bindingResult.hasErrors()) {
             return null;
         } else {
-        Order order = orderDao.orderBuilder(orderCommand);
+            Order order = orderDao.orderBuilder(orderCommand);
 
-        Order orderTemp = order;
+            Order orderTemp = order;
 
-        if (order.getId() == 0) {
-            orderTemp = orderDao.create(order);
-        } else {
-            orderDao.update(order);
+            if (order.getId() == 0) {
+                orderTemp = orderDao.create(order);
+            } else {
+                orderDao.update(order);
+            }
+
+            return orderDao.resolveOrderCommand(orderTemp);
         }
+    }
 
-        return orderDao.resolveOrderCommand(orderTemp);
-        }
+    private void validateInputs(OrderCommand orderCommand, BindingResult bindingResult) {
+        validateState(orderCommand, bindingResult);
+        validateProduct(orderCommand, bindingResult);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -123,62 +126,29 @@ public class FlooringMasteryWebController {
     @ResponseBody
     public OrderCommand createWithAjax(@Valid @RequestBody OrderCommand orderCommand, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()){
+        //validateInputs(orderCommand, bindingResult);
+
+        if (bindingResult.hasErrors()) {
             return null;
         } else {
-        Order order = orderDao.orderBuilder(orderCommand);
+            Order order = orderDao.orderBuilder(orderCommand);
 
-        Order orderTemp = order;
+            Order orderTemp = order;
 
-        if (order.getId() == 0) {
-            orderTemp = orderDao.create(order);
-        } else {
-            orderDao.update(order);
-        }
+            if (order.getId() == 0) {
+                orderTemp = orderDao.create(order);
+            } else {
+                orderDao.update(order);
+            }
 
-        return orderDao.resolveOrderCommand(orderTemp);
+            return orderDao.resolveOrderCommand(orderTemp);
         }
     }
 
     @RequestMapping(value = "/createOrder", method = RequestMethod.POST)
     public String update(@Valid @ModelAttribute("orderCommand") OrderCommand orderCommand, BindingResult bindingResult, Map model, HttpSession session) {
 
-        String stateInput = orderCommand.getState();
-
-        boolean stateValid = StateUtilities.validStateInput(stateInput);
-
-        if (!stateValid) {
-            bindingResult.rejectValue("state", "error.user", "That State Does Not Exist.");
-        } else {
-
-            String stateGuess = StateUtilities.bestGuessStateName(stateInput);
-            String stateAbbreviation = StateUtilities.abbrFromState(stateGuess);
-
-            if (stateDao.get(stateAbbreviation) == null) {
-                bindingResult.rejectValue("state", "error.user", "The System Can Not Currently Handle Orders In That State. Please Call The Office To Place This Order.");
-            } else {
-                orderCommand.setState(stateAbbreviation);
-            }
-
-        }
-
-        String productInput = orderCommand.getProduct();
-
-        boolean productValid = productDao.validProductName(productInput);
-
-        if (!productValid) {
-            bindingResult.rejectValue("product", "error.user", "We Do not Carry That Product.");
-        } else {
-
-            String productGuess = productDao.bestGuessProductName(productInput);
-
-            if (productDao.get(productGuess) == null) {
-                bindingResult.rejectValue("product", "error.user", "We Do not Carry That Product.");
-            } else {
-                orderCommand.setProduct(productGuess);
-            }
-
-        }
+        validateInputs(orderCommand, bindingResult);
 
         if (bindingResult.hasFieldErrors("date")) {
 
@@ -249,6 +219,47 @@ public class FlooringMasteryWebController {
 
         }
 
+    }
+
+    private void validateProduct(OrderCommand orderCommand, BindingResult bindingResult) {
+        String productInput = orderCommand.getProduct();
+
+        boolean productValid = productDao.validProductName(productInput);
+
+        if (!productValid) {
+            bindingResult.rejectValue("product", "error.user", "We Do not Carry That Product.");
+        } else {
+
+            String productGuess = productDao.bestGuessProductName(productInput);
+
+            if (productDao.get(productGuess) == null) {
+                bindingResult.rejectValue("product", "error.user", "We Do not Carry That Product.");
+            } else {
+                orderCommand.setProduct(productGuess);
+            }
+
+        }
+    }
+
+    private void validateState(OrderCommand orderCommand, BindingResult bindingResult) {
+        String stateInput = orderCommand.getState();
+
+        boolean stateValid = StateUtilities.validStateInput(stateInput);
+
+        if (!stateValid) {
+            bindingResult.rejectValue("state", "error.user", "That State Does Not Exist.");
+        } else {
+
+            String stateGuess = StateUtilities.bestGuessStateName(stateInput);
+            String stateAbbreviation = StateUtilities.abbrFromState(stateGuess);
+
+            if (stateDao.get(stateAbbreviation) == null) {
+                bindingResult.rejectValue("state", "error.user", "The System Can Not Currently Handle Orders In That State. Please Call The Office To Place This Order.");
+            } else {
+                orderCommand.setState(stateAbbreviation);
+            }
+
+        }
     }
 
     private void loadTheOrdersList(Map model) {

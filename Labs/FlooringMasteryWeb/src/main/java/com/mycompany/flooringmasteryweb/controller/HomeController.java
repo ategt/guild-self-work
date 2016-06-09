@@ -11,6 +11,10 @@ import com.mycompany.flooringmasteryweb.dao.ProductDao;
 import com.mycompany.flooringmasteryweb.dao.StateDao;
 import com.mycompany.flooringmasteryweb.dto.Order;
 import com.mycompany.flooringmasteryweb.dto.OrderCommand;
+import com.mycompany.flooringmasteryweb.dto.Product;
+import com.mycompany.flooringmasteryweb.dto.ProductCommand;
+import com.mycompany.flooringmasteryweb.dto.State;
+import com.mycompany.flooringmasteryweb.dto.StateCommand;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -48,14 +52,31 @@ public class HomeController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Map model) {
 
-        List<Order> orders = orderDao.getList();
-
-        orders = orderDao.sortByOrderNumber(orders);
+        loadOrdersToMap(model);
+        loadStateCommandsToMap(model);
+        loadProductCommandsToMap(model);
 
         putBlankOrder(model);
-        model.put("orders", orders);
 
         return "home";
+    }
+
+    private void loadOrdersToMap(Map model) {
+        List<Order> orders = orderDao.getList();
+        orders = orderDao.sortByOrderNumber(orders);
+        model.put("orders", orders);
+    }
+
+    private void loadProductCommandsToMap(Map model) {
+        List<Product> products = productDao.getListOfProducts();
+        List<ProductCommand> productCommands = productDao.buildCommandProductList(products);
+        model.put("productCommands", productCommands);
+    }
+
+    private void loadStateCommandsToMap(Map model) {
+        List<State> states = stateDao.getListOfStates();
+        List<StateCommand> stateCommands = stateDao.buildCommandStateList(states);
+        model.put("stateCommands", stateCommands);
     }
 
     public void putBlankOrder(Map model) {

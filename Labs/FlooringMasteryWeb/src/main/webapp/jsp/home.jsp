@@ -21,6 +21,9 @@
         <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />-->
         <!--<script src="http://code.jquery.com/jquery-1.10.2.js"></script>-->
 
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
     </head>
     <body>
@@ -49,27 +52,27 @@
                         <th><i class="glyphicon glyphicon-edit"></i> Edit</th>
                         <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
                             <c:forEach items="${orders}" var="order">
-<!--                            <tr>
-                                <td><a href="${pageContext.request.contextPath}/FlooringMaster/show/${order.id}">${order.id}</a></td>
-                                <td><a href="${pageContext.request.contextPath}/FlooringMaster/show/${order.id}">${order.name}</a></td>
-                                <td><a href="${pageContext.request.contextPath}/FlooringMaster/edit/${order.id}">Edit</a></td>
-                                <td><a href="${pageContext.request.contextPath}/FlooringMaster/delete/${order.id}">Delete</a></td>
+                            <!--                            <tr>
+                                                            <td><a href="${pageContext.request.contextPath}/FlooringMaster/show/${order.id}">${order.id}</a></td>
+                                                            <td><a href="${pageContext.request.contextPath}/FlooringMaster/show/${order.id}">${order.name}</a></td>
+                                                            <td><a href="${pageContext.request.contextPath}/FlooringMaster/edit/${order.id}">Edit</a></td>
+                                                            <td><a href="${pageContext.request.contextPath}/FlooringMaster/delete/${order.id}">Delete</a></td>
+                            
+                                                        </tr>-->
 
-                            </tr>-->
-                            
-                            
-                            
-                             <tr id="order-row-${order.id}" >
-                                
-                                <td>${order.id}</td>
+
+
+                            <tr id="order-row-${order.id}" >
+
+<!--                                <td>${order.id}</td>-->
                                 <td><a data-order-id="${order.id}" data-toggle="modal" data-target="#showDetailModal">${order.id}</a></td>
                                 <td><a href="contact/show/${order.id}">${order.name}</a></td>
                                 <td><a data-order-id="${order.id}" data-toggle="modal" data-target="#editDetailModal">Edit</a></td>
                                 <td><a data-order-id="${order.id}" class="delete-link">Delete</a></td>
 
                             </tr>
-                            
-                            
+
+
                         </c:forEach>
 
 
@@ -106,9 +109,15 @@
                         </div>
                         <div class="form-group">
 
-                            <label path="state" for="state" class="col-sm-3 control-label" >State:</label>
+                            <label for="state" class="col-sm-3 control-label" >State:</label>
                             <div class="col-sm-9">
-                                <input name="state" class="form-control" style="text-align: center" type="text" id="state" placeholder="State" />
+                                <!--<input name="state" class="form-control" style="text-align: center" type="text" id="state" placeholder="State" />-->
+
+                                <select id="state-selector" style="text-align: center" class="form-control" name="state" >
+                                    <c:forEach items="${stateCommands}" var="stateCommand">
+                                        <option value="${stateCommand.stateAbbreviation}"  >${stateCommand.stateName} - ${stateCommand.stateTax}%</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                         </div>
 
@@ -123,7 +132,15 @@
                         <div class="form-group">
                             <label for="product" class="col-sm-3 control-label" >Product:</label>
                             <div class="col-sm-9">
-                                <input name="product" class="form-control" style="text-align: center" type="text" id="product" placeholder="Product" />
+                                <!--<input name="product" class="form-control" style="text-align: center" type="text" id="product" placeholder="Product" />-->
+
+                                <select name="product" id="product-selector" class="form-control" name="state-drop-down" >
+                                    <c:forEach items="${productCommands}" var="productCommand">
+                                        <option value="${productCommand.productName}" style="text-align: center">${productCommand.productName}</option>
+                                    </c:forEach>
+                                </select>
+
+
                             </div>
                         </div>
 
@@ -136,10 +153,17 @@
                                 <strong><span class="date" /></strong>
                             </div>
                         </div>
+                        <!--                        <div class="form-group">
+                                                    <label for="date" class="col-sm-3 control-label" >Date:</label>
+                                                    <div class="col-sm-9">
+                                                        <input name="date" class="form-control" style="text-align: center" pattern="MM/dd/yyyy" type="date" id="datepicker" />
+                                                    </div>
+                                                </div>-->
+
                         <div class="form-group">
-                            <label for="date" class="col-sm-3 control-label" >Date:</label>
+                            <label for="dateb" class="col-sm-3 control-label" >Date:</label>
                             <div class="col-sm-9">
-                                <input name="date" class="form-control" style="text-align: center" type="date" id="datepicker" placeholder="Order Date" />
+                                <input name="dateb" class="form-control" style="text-align: center" pattern="MM/dd/yyyy" type="text" id="jQueryDatePicker"  />
                             </div>
                         </div>
 
@@ -152,15 +176,13 @@
                                 <strong><span class="area" /></strong>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label for="area" class="col-sm-3 control-label" >Area:</label>
                             <div class="col-sm-9">
                                 <input name="area" class="form-control" style="text-align: center" type="text" id="area" placeholder="Area" />
                             </div>
                         </div>
-
-
-
 
                         <div class="form-group">
                             <div class="col-sm-3"></div>
@@ -182,9 +204,9 @@
     </div>
 
 
-    
-    
-    
+
+
+
     <div id="showDetailModal" class="modal fade" role="dialog">
           <div class="modal-dialog">
 
@@ -196,126 +218,126 @@
               </div>
               <div class="modal-body">
 
-                  <table class="table table-bordered" id="show-order-table">
-                      <tr>
-                          <th>Order Name:</th>
-                          <td id="order-name"></td>
-                      </tr>
-                      
-                      <tr>
-                          <th>State:</th>
-                          <td id="order-state"></td>
-                      </tr>
-                      
-                      <tr>
-                          <th>Product:</th>
-                          <td id="order-product"></td>
-                      </tr>
-                      
-                      <tr>
-                          <th>Date:</th>
-                          <td id="order-date"></td>
-                      </tr>
-                      
-                      <tr>
-                          <th>Area:</th>
-                          <td id="order-area"></td>
-                      </tr>
+                    <table class="table table-bordered table-striped" id="show-order-table">
+                        <tr>
+                            <th>Order Name:</th>
+                            <td id="order-name"></td>
+                        </tr>
 
-                      
-                      
+                        <tr>
+                            <th>State:</th>
+                            <td id="order-state"></td>
+                        </tr>
 
-              
-                    <tr>
+                        <tr>
+                            <th>Product:</th>
+                            <td id="order-product"></td>
+                        </tr>
 
-                        <th>
-                            Order Date:
-                        </th>
-                        <td id="order-date-f">
-                           
-                        </td>
-                    </tr>
-                   
-                  
-                    <tr>
+                        <tr>
+                            <th>Date:</th>
+                            <td id="order-date"></td>
+                        </tr>
 
-                        <th>
-                            Material Unit Cost:
-                        </th>
-                        <td id="order-material-unit-cost">
-
-                            
-                        </td>
-                    </tr>
-                    <tr>
+                        <tr>
+                            <th>Area:</th>
+                            <td id="order-area"></td>
+                        </tr>
 
 
-                        <th>
-                            Material Total Cost:
-                        </th>
-                        <td id="order-material-cost">
-
-                          
-                        </td>
-                    </tr>
-                    <tr>
 
 
-                        <th>
-                            Installation Unit Cost:
-                        </th>
-                        <td id="order-labor-unit-cost">
 
-                        </td>
-                    </tr>
-                    <tr>
+                        <tr>
 
-                        <th>
-                            Installation Total Cost:
-                        </th>
-                        <td id="order-labor-total-cost">
+                            <th>
+                                Order Date:
+                            </th>
+                            <td id="order-date-f">
 
-                        </td>
-                    </tr>
-                    <tr>
-
-                        <th>
-                            Total Before Tax:
-                        </th>
-                        <td id="order-subtotal">
-
-                        </td>
-                    </tr>
-                    <tr>
-
-                        <th>
-                            Sales Tax Rate:
-                        </th>
-                        <td id="order-tax-rate">
-                            
-                        </td>
-                    </tr>
-                    <tr>
+                            </td>
+                        </tr>
 
 
-                        <th>
-                            Total Sales Tax:
-                        </th>
-                        <td id="order-total-tax">
+                        <tr>
 
-                        </td>
-                    </tr>
-                    <tr>
+                            <th>
+                                Material Unit Cost:
+                            </th>
+                            <td id="order-material-unit-cost">
 
 
-                        <th>
-                            Total Invoice:
-                        </th>
-                        <td id="order-total-invoice">
-                           
-                        </td>
-                    </tr>
-                    
+                            </td>
+                        </tr>
+                        <tr>
+
+
+                            <th>
+                                Material Total Cost:
+                            </th>
+                            <td id="order-material-cost">
+
+
+                            </td>
+                        </tr>
+                        <tr>
+
+
+                            <th>
+                                Installation Unit Cost:
+                            </th>
+                            <td id="order-labor-unit-cost">
+
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <th>
+                                Installation Total Cost:
+                            </th>
+                            <td id="order-labor-total-cost">
+
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <th>
+                                Total Before Tax:
+                            </th>
+                            <td id="order-subtotal">
+
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <th>
+                                Sales Tax Rate:
+                            </th>
+                            <td id="order-tax-rate">
+
+                            </td>
+                        </tr>
+                        <tr>
+
+
+                            <th>
+                                Total Sales Tax:
+                            </th>
+                            <td id="order-total-tax">
+
+                            </td>
+                        </tr>
+                        <tr>
+
+
+                            <th>
+                                Total Invoice:
+                            </th>
+                            <td id="order-total-invoice">
+
+                            </td>
+                        </tr>
+
 
 
                 </div>
@@ -323,50 +345,50 @@
 
 
 
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-                      
-<!--                      <tr>
-                          <th>State:</th>
-                          <td id="order-state"></td>
-                      </tr>-->
-<!--                      <tr>
-                          <th>Zip:</th>
-                          <td id="order-zipcode"></td>
-                      </tr>-->
-                      
-<!--                      <tr>
-                          <th>Last Contacted:</th>
-                          <td id="order-notes"></td>
-                      </tr>-->
-                      
-                      
-                      
-                      
-                  </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <!--                      <tr>
+                                          <th>State:</th>
+                                          <td id="order-state"></td>
+                                      </tr>-->
+                <!--                      <tr>
+                                          <th>Zip:</th>
+                                          <td id="order-zipcode"></td>
+                                      </tr>-->
+
+                <!--                      <tr>
+                                          <th>Last Contacted:</th>
+                                          <td id="order-notes"></td>
+                                      </tr>-->
+
+
+
+
+                </table>
 
               </div>
               <div class="modal-footer">
-                  <!--<button type=\"button\" data-order-id=\"" + data.id + "\" class=\"edit-from-detail-button btn btn-default\" data-dismiss=\"modal\">Edit</button>-->
-                  
+                <!--<button type=\"button\" data-order-id=\"" + data.id + "\" class=\"edit-from-detail-button btn btn-default\" data-dismiss=\"modal\">Edit</button>-->
+
                 <!--<button type="button" class="edit-from-detail-button btn btn-default" data-dismiss="modal">Edit</button>-->
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                
+
               </div>
             </div>
 
@@ -374,7 +396,7 @@
         </div>
 
 
-    <div id="editDetailModal" class="modal fade" role="dialog">
+<div id="editDetailModal" class="modal fade" role="dialog">
           <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -385,68 +407,69 @@
               </div>
               <div class="modal-body">
 
-                  <table class="table table-bordered">
-                      
-                      <tr>
-                          <th>ID:</th>
-                          <td>
-                              <input type="text" id="edit-id" />
-                          </td>
-                      </tr>
-                      
-                      <tr>
-                          <th>Order Name:</th>
-                          <td>
-                              <input type="text" id="edit-order-name" />
-                          </td>
-                      </tr>
-                      
-                      <tr>
-                          <th>State:</th>
-                          <td>
-                              <input type="text" id="edit-order-state" />
-                          </td>
-                      </tr>
-                      
-                      <tr>
-                          <th>Product:</th>
-                          <td>
-                              <input type="text" id="edit-order-product" />
-                          </td>
-                      </tr>
-                      
-                      <tr>
-                          <th>Date:</th>
-                          <td>
-                              <input type="date" pattern="MM/dd/yyyy" id="edit-order-date" class="order-date-class" />
-                              <!--pattern="yyyy-MM-dd"-->
-                          </td>
-                      </tr>
-                      
-                      <tr>
-                          <th>Area:</th>
-                          <td><input type="text" id="edit-order-area" /></td>
-                      </tr>
-<!--                      
-                      <tr>
-                          <th>State:</th>
-                          <td><input type="text" id="edit-order-state" /></td>
-                      </tr>
-                      
-                      <tr>
-                          <th>Zipcode:</th>
-                          <td><input type="text" id="edit-order-zipcode" /></td>
-                      </tr>-->
-                      
-<!--                      <tr>
-                          <th>Last Contacted:</th>
-                          <td> <input type="text" id="edit-order-last-contacted" /></td>
-                      </tr>-->
-                      
-                      
-                      
-                      
-                  </table>
+                <table class="table table-bordered">
+
+                    <tr>
+                        <th>ID:</th>
+                        <td>
+                            <input type="text" id="edit-id" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Order Name:</th>
+                        <td>
+                            <input type="text" id="edit-order-name" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>State:</th>
+                        <td>
+                            <input type="text" id="edit-order-state" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Product:</th>
+                        <td>
+                            <input type="text" id="edit-order-product" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Date:</th>
+                        <td>
+                            <!--<input type="date" pattern="MM/dd/yyyy" id="edit-order-date" class="order-date-class" />-->
+                            <!--pattern="yyyy-MM-dd"-->
+                            <input pattern="MM/dd/yyyy" type="text" id="edit-order-date"  />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Area:</th>
+                        <td><input type="text" id="edit-order-area" /></td>
+                    </tr>
+                    <!--                      
+                                          <tr>
+                                              <th>State:</th>
+                                              <td><input type="text" id="edit-order-state" /></td>
+                                          </tr>
+                                          
+                                          <tr>
+                                              <th>Zipcode:</th>
+                                              <td><input type="text" id="edit-order-zipcode" /></td>
+                                          </tr>-->
+
+                    <!--                      <tr>
+                                              <th>Last Contacted:</th>
+                                              <td> <input type="text" id="edit-order-last-contacted" /></td>
+                                          </tr>-->
+
+
+
+
+                </table>
 
               </div>
               <div class="modal-footer">
@@ -459,24 +482,25 @@
         </div>
 
 
-    
-    
-    
-    
-<!--    <script>
-        $(function () {
-            $("#datepicker").datepicker();
-        });
-    </script>-->
-    <script>
+
+
+
+
+<script>
+    $(function () {
+        $("#jQueryDatePicker").datepicker();
+        $("#jQueryDatePicker").datepicker('setDate', new Date());
+    });
+</script>
+<script>
         var contextRoot = "${pageContext.request.contextPath}";
-    
-    </script>
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/app.js"></script>
-    <!--<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
+
+</script>
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="${pageContext.request.contextPath}/js/jquery-1.11.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/app.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 </body>
 </html>
