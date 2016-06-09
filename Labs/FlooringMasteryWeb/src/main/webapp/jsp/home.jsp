@@ -187,6 +187,10 @@
                         <div class="form-group">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9 text-center">
+                              
+                                <div id="add-contact-validation-errors"></div>
+                                
+                                
                                 <input value="Create" id="create-submit" type="submit" class="btn btn-default" />
                             </div>
                         </div>

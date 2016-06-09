@@ -59,9 +59,12 @@ $(document).ready(function () {
                 
                 var errors = data.responseJSON.errors;
 
-                //errors.
-                        
-                console.log();
+
+                $.each(errors, function(index, error){
+                    
+                    $("#add-contact-validation-errors").append(error.fieldname + ":" + error.message + "<br />");
+                    
+                });
                 
             }
 

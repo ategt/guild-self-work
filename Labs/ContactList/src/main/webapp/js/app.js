@@ -40,6 +40,18 @@ $(document).ready(function (d) {
 
             },
             error: function (data, status) {
+                
+                
+                
+                var errors = data.responseJSON.errors;
+
+
+                $.each(errors, function(index, error){
+                    
+                    $("#add-contact-validation-errors").append(error.fieldname + ":" + error.message + "<br />");
+                    
+                });
+                
                 alert("error");
             }
 

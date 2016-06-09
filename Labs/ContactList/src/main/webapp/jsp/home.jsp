@@ -105,6 +105,7 @@
                         <div class="form-group">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-10">
+                                <div id="add-contact-validation-errors"></div>
                                 <input id="create-sumbit" type="submit" class="btn btn-default" />
                             </div>
                         </div>
