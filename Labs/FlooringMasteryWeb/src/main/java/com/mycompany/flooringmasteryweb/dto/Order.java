@@ -8,8 +8,6 @@ package com.mycompany.flooringmasteryweb.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.State;
-import com.mycompany.flooringmasteryweb.utilities.JsonDateDeserializer;
-import com.mycompany.flooringmasteryweb.utilities.JsonDateSerializer;
 import java.util.Date;
 
 /**
@@ -152,8 +150,6 @@ PerSquareFoot,MaterialCost,LaborCost,Tax,Total
     /**
      * @return the date
      */
-    @org.codehaus.jackson.map.annotate.JsonSerialize(using = JsonDateSerializer.class)
-    @org.codehaus.jackson.map.annotate.JsonDeserialize(using = JsonDateDeserializer.class)
     public Date getDate() {
         return date;
     }

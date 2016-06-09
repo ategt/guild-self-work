@@ -7,12 +7,10 @@ package com.mycompany.flooringmasteryweb.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.mycompany.flooringmasteryweb.utilities.JsonDateSerializer;
 import java.util.Date;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
