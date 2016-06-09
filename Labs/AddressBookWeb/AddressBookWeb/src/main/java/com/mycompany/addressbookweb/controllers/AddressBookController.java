@@ -9,6 +9,7 @@ import com.thesoftwareguild.interfaces.dto.Address;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +44,7 @@ public class AddressBookController {
     
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public Address createWithAjax(@RequestBody Address address) {
+    public Address createWithAjax(@Valid @RequestBody Address address) {
 
         return addressDao.create(address);
     }
@@ -59,7 +60,7 @@ public class AddressBookController {
 
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     @ResponseBody
-    public Address editSubmitWithAjax(@RequestBody Address address) {
+    public Address editSubmitWithAjax(@Valid @RequestBody Address address) {
 
         addressDao.update(address);
 

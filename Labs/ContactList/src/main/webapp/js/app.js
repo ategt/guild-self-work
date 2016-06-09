@@ -9,7 +9,6 @@ $(document).ready(function (d) {
 
     $('#create-sumbit').on('click', function (e) {
 
-        //alert("Button Works"); 
         e.preventDefault();
 
         var contactData = JSON.stringify({

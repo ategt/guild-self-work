@@ -18,54 +18,130 @@ $(document).ready(function () {
             streetName: $("#streetName").val(),
             city: $("#city").val(),
             state: $("#state").val(),
-            zip: $("#zip").val()
+            zip: $("#zip").val(),
+            id: 0
         });
 
 
-        firstName: $("#firstName").val('');
-        lastName: $("#lastName").val('');
-        streetNumber: $("#streetNumber").val('');
-        streetName: $("#streetName").val('');
-        city: $("#city").val('');
-        state: $("#state").val('');
-        zip: $("#zip").val('');
-                $.ajax({
-                    url: contextRoot + "/addressbook/",
-                    type: "POST",
-                    data: addressData,
-                    dataType: 'json',
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("Accept", "application/json");
-                        xhr.setRequestHeader("Content-type", "application/json");
-                    },
-                    success: function (data, status) {
+        $.ajax({
+            url: contextRoot + "/addressbook/",
+            type: "POST",
+            data: addressData,
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Content-type", "application/json");
+            },
+            success: function (data, status) {
 
-                        var tableRow = buildContactRow(data);
+                resetCreateFormColors();
+                 
+                var tableRow = buildContactRow(data);
 
-                        $('#address-table').append($(tableRow));
+                $('#address-table').append($(tableRow));
 
-                    },
-                    error: function (data, status) {
-                        alert("error");
-                    }
+                firstName: $("#firstName").val('');
+                lastName: $("#lastName").val('');
+                streetNumber: $("#streetNumber").val('');
+                streetName: $("#streetName").val('');
+                city: $("#city").val('');
+                state: $("#state").val('');
+                zip: $("#zip").val('');
 
+            },
+            error: function (data, status) {
+                var errors = data.responseJSON.errors;
+                var validationErrorMessage = "";
+
+                //resetCreateFormColors();
+
+
+                $(".color-container").removeClass("has-error");
+                $(".color-container").addClass("has-success");
+                
+                
+                $(".error-container").html("");
+                
+                
+                
+                //$("#createAddressForm").siblings().has("input").removeClass("has-error");
+                //$("#createAddressForm").siblings().filter(".form-group").removeClass("has-error");
+                //$("#createAddressForm").filter("input").addClass("has-success");
+                        
+                        //.each(); 
+                
+                
+                
+                
+                
+                
+                ////console.log(this));
+                //$("#createAddressForm").filter(":input").each(this.addClass("has-success"));
+                //$("#createAddressForm").filter(":input").each(this.addClass("has-success"));
+                //$createInputs;
+
+
+
+//        $('#first-name-input-group').removeClass("has-error");
+//        $('#first-name-input-group').removeClass("has-success");
+//
+//        $('#last-name-input-group').removeClass("has-error")
+
+                $.each(errors, function (index, error) {
+                    
+                    var errorFieldName = error.fieldName;
+                    validationErrorMessage += errorFieldName + ":" + error.message + "<br />";
+
+                    $("#" + errorFieldName + "-errors").html("");
+                    $("#" + errorFieldName + "-group").removeClass("has-error");
+                    $("#" + errorFieldName + "-group").removeClass("has-success");
+
+
+
+                    console.log("#" + errorFieldName + "-errors");
+                    
+                    $("#" + errorFieldName + "-errors").html(error.message);
+
+                    $("#" + errorFieldName + "-group").addClass("has-error");
+
+
+//                    if (errorFieldName === "firstName") {
+//                        $('#first-name-input-group').addClass("has-error");
+//                    } else {
+//                        $('#first-name-input-group').addClass("has-success");
+//                    }
+//
+//                    if (errorFieldName === "lastName") {
+//                        $('#last-name-input-group').addClass("has-error");
+//                    } else {
+//                        $('#last-name-input-group').addClass("has-success");
+//                    }
+//
+//                    if (errorFieldName === "email") {
+//                        $('#email-input-group').addClass("has-error");
+//                    } else {
+//                        $('#email-input-group').addClass("has-success");
+//                    }
+//
+//                    if (errorFieldName === "phone") {
+//                        $('#phone-input-group').addClass("has-error");
+//                    } else {
+//                        $('#phone-input-group').addClass("has-success");
+//                    }
 
                 });
+
+                $("#add-contact-validation-errors").html(validationErrorMessage);
+
+            }
+
+
+        });
 
 
     });
 
     function buildContactRow(data) {
-
-
-        var strTableRow = "  <tr>\n\
-                                <td><a href=\"addressbook/show/" + data.id + "\">" + data.firstName + "</a></td>\n\
-                                <td><a href=\"addressbook/show/" + data.id + "\">" + data.lastName + "</a></td>\n\
-                                <td><a href=\"addressbook/edit/" + data.id + "\">Edit</a></td>\n\
-                                <td><a href=\"addressbook/delete/" + data.id + "\">Delete</a></td>\n\
-                                                                                            \n\
-                            </tr>";
-
 
         var strFooter = "<tr id=\"address-row-" + data.id + "\" >\n\
                                 \n\
@@ -110,7 +186,7 @@ $(document).ready(function () {
                 $('#address-state').text(data.state);
                 $('#address-zipcode').text(data.zip);
 
-               // $('.edit-from-detail-button').data("address-id", data.id);
+                // $('.edit-from-detail-button').data("address-id", data.id);
 
             },
             error: function (data, status) {
@@ -141,7 +217,7 @@ $(document).ready(function () {
 
         var addressId = link.data('address-id');
 
-          $.ajax({
+        $.ajax({
             url: contextRoot + "/addressbook/" + addressId,
             type: "GET",
             dataType: 'json',
@@ -157,7 +233,7 @@ $(document).ready(function () {
                 $('#edit-address-state').val(data.state);
                 $('#edit-address-zipcode').val(data.zip);
                 $('#edit-id').val(data.id);
-                
+
 //                var lastContacted = data.lastContacted;
 //                if (data.lastContacted == null) {
 //                    lastContacted = new Date();
@@ -242,6 +318,16 @@ $(document).ready(function () {
 
 
 
+    function resetCreateFormColors() {
+        $("#createAddressForm").filter(":input").removeClass("has-error");
+        $("#createAddressForm").filter(":input").removeClass("has-success");
+        
+//        var createInputs = $("#createAddressForm").filter(":input");
+//
+//        $(createInputs).removeClass("has-error");
+//        $(createInputs).removeClass("has-success");
+
+    }
 
 
 
