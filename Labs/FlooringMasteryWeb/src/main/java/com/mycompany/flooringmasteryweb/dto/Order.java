@@ -7,6 +7,8 @@ package com.mycompany.flooringmasteryweb.dto;
 
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.State;
+import com.mycompany.flooringmasteryweb.utilities.JsonDateDeserializer;
+import com.mycompany.flooringmasteryweb.utilities.JsonDateSerializer;
 import java.util.Date;
 
 /**
@@ -26,7 +28,7 @@ public class Order {
     private Date date;          // file name
     private double laborCost;   // LaborCost
     private double area;        // Area
-    private double costPerSquareFoot; 
+    private double costPerSquareFoot;
     private double laborCostPerSquareFoot;
 
 //    -OrderNumber
@@ -41,15 +43,13 @@ public class Order {
 //    -LaborCost
 //    -Tax
 //    -Total 
-            
-            
-            /*
+    /*
     OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCost
 PerSquareFoot,MaterialCost,LaborCost,Tax,Total
         
-             */ /**
-             * @return the id
-             */
+     */ /**
+     * @return the id
+     */
 
     public int getId() {
         return id;
@@ -149,6 +149,8 @@ PerSquareFoot,MaterialCost,LaborCost,Tax,Total
     /**
      * @return the date
      */
+    @org.codehaus.jackson.map.annotate.JsonSerialize(using = JsonDateSerializer.class)
+    @org.codehaus.jackson.map.annotate.JsonDeserialize(using = JsonDateDeserializer.class)
     public Date getDate() {
         return date;
     }

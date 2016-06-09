@@ -174,11 +174,19 @@ $(document).ready(function () {
                 $('#edit-order-name').val(data.name);
                 $('#edit-order-state').val(data.state.stateName);
                 $('#edit-order-product').val(data.product.productName);
-                $('#edit-order-date').val(data.date);
                 $('#edit-order-area').val(data.area);
                 //$('#edit-order-id').val(data.id);
                 //$('#edit-order-zipcode').val(data.zip);
                 $('#edit-id').val(data.id);
+
+                
+                var orderDate= new Date(data.date);        
+                
+
+                $('#edit-order-date').val(data.date);
+              
+
+
 
 //                var lastContacted = data.lastContacted;
 //                if (data.lastContacted == null) {
@@ -261,42 +269,13 @@ $(document).ready(function () {
     });
 
 
-
-
-//    function formatMoney(n, c, d, t) {
-//        //var n = this,
-//               var c = isNaN(c = Math.abs(c)) ? 2 : c,
-//                d = d === undefined ? "." : d,
-//                t = t === undefined ? "," : t,
-//                s = n < 0 ? "-" : "",
-//                i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
-//                j = (j = i.length) > 3 ? j % 3 : 0;
-//        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-//    };
-
-// function formatMoney(n, c, d, t) {
-//        //var n = this,
-//               var valu = isNaN(c = Math.abs(c)) ? 2 : c;
-//                var d = ".";
-//                var comma = ",";
-//                var s = n < 0 ? "-" : "",
-//                i = parseInt(n = Math.abs(+n || 0).toFixed(valu)) + "",
-//                j = (j = i.length) > 3 ? j % 3 : 0;
-//        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-//    };
     
-    
-    
-function formatDollar(num) {
-    var p = num.toFixed(2).split(".");
-    return "$" + p[0].split("").reverse().reduce(function(acc, num, i, orig) {
-        return  num + (i && !(i % 3) ? "," : "") + acc;
-    }, "") + "." + p[1];
-}
-
-
-
-
+        function formatDollar(num) {
+            var p = num.toFixed(2).split(".");
+            return "$" + p[0].split("").reverse().reduce(function(acc, num, i, orig) {
+                return  num + (i && !(i % 3) ? "," : "") + acc;
+            }, "") + "." + p[1];
+        }
 
 
 });

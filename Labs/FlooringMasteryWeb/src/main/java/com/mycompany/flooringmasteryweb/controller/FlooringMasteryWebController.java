@@ -89,8 +89,11 @@ public class FlooringMasteryWebController {
 
     @RequestMapping(value = "/", method = RequestMethod.PUT)
     @ResponseBody
-    public OrderCommand update(@RequestBody OrderCommand orderCommand) {
+    public OrderCommand update(@Valid @RequestBody OrderCommand orderCommand, BindingResult bindingResult) {
 
+        if ( bindingResult.hasErrors() ) {
+            return null;
+        } else {
         Order order = orderDao.orderBuilder(orderCommand);
 
         Order orderTemp = order;
@@ -102,6 +105,7 @@ public class FlooringMasteryWebController {
         }
 
         return orderDao.resolveOrderCommand(orderTemp);
+        }
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -113,8 +117,11 @@ public class FlooringMasteryWebController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public OrderCommand createWithAjax(@RequestBody OrderCommand orderCommand) {
+    public OrderCommand createWithAjax(@Valid @RequestBody OrderCommand orderCommand, BindingResult bindingResult) {
 
+        if (bindingResult.hasErrors()){
+            return null;
+        } else {
         Order order = orderDao.orderBuilder(orderCommand);
 
         Order orderTemp = order;
@@ -126,6 +133,7 @@ public class FlooringMasteryWebController {
         }
 
         return orderDao.resolveOrderCommand(orderTemp);
+        }
     }
 
     @RequestMapping(value = "/createOrder", method = RequestMethod.POST)
