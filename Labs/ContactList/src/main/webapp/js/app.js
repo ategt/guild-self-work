@@ -47,23 +47,10 @@ $(document).ready(function (d) {
                 
                 resetCreateFormColors();
                 
-//                        $('#last-name-input-group').addClass("has-error");
-//                        $('#first-name-input-group').addClass("has-error");
-
-//
-//                $('#first-name-input').val('');
-//                $('#last-name-input').val('');
-//                $('#company-input').val('');
-//                $('#email-input').val('');
-//                $('#phone-input').val('');
-//                $('#last-contacted-input').val('');
-//has-success
                 $.each(errors, function (index, error) {
 
                     var errorFieldName = error.fieldName;
                     validationErrorMessage += errorFieldName + ":" + error.message + "<br />";
-                    //$(error.fieldName).addClass("has-error");
-
 
                     if (errorFieldName === "firstName") {
                         $('#first-name-input-group').addClass("has-error");
@@ -75,12 +62,6 @@ $(document).ready(function (d) {
                         $('#last-name-input-group').addClass("has-error");
                     } else {
                         $('#last-name-input-group').addClass("has-success");
-                    }
-
-                    if (errorFieldName === "company") {
-                        $('#company-input-group').addClass("has-error");
-                    } else {
-                        $('#company-input-group').addClass("has-success");
                     }
 
                     if (errorFieldName === "email") {
@@ -95,31 +76,11 @@ $(document).ready(function (d) {
                         $('#phone-input-group').addClass("has-success");
                     }
 
-                    if (errorFieldName === "lastContacted") {
-                        $('#lastContacted-input-group').addClass("has-error");
-                    } else {
-                        $('#lastContacted-input-group').addClass("has-success");
-                    }
-
-
-
-
                 });
 
                 $("#add-contact-validation-errors").html(validationErrorMessage);
 
 
-
-
-
-
-//                
-//                $('#contact-first-name').text(data.firstName);
-//                $('#contact-last-name').text(data.lastName);
-//                $('#contact-company').text(data.company);
-//                $('#contact-email').text(data.email);
-//                $('#contact-phone').text(data.phone);
-//                $('#contact-last-contacted').text(data.lastContacted);
             }
 
 
@@ -141,7 +102,7 @@ $(document).ready(function (d) {
             type: "GET",
             dataType: 'json',
             beforeSend: function (xhr) {
-                xhr.setRequestHeader("Accept", "application/json")
+                xhr.setRequestHeader("Accept", "application/json");
             },
             success: function (data, status) {
                 $('#contact-first-name').text(data.firstName);
@@ -174,7 +135,7 @@ $(document).ready(function (d) {
             type: "GET",
             dataType: 'json',
             beforeSend: function (xhr) {
-                xhr.setRequestHeader("Accept", "application/json")
+                xhr.setRequestHeader("Accept", "application/json");
             },
             success: function (data, status) {
                 $('#edit-contact-first-name').val(data.firstName);
@@ -279,9 +240,6 @@ $(document).ready(function (d) {
                 \n\
     </tr>";
 
-        //alert(strVar);
-
-//        <td><a href=\"contact/show/" + data.id + "\">" + data.firstName + "</a></td>\n\
         return strVar;
 
     }
