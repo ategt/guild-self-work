@@ -5,6 +5,7 @@
  */
 package com.mycompany.flooringmasteryweb.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.State;
 import com.mycompany.flooringmasteryweb.utilities.JsonDateDeserializer;
@@ -25,6 +26,8 @@ public class Order {
     private double taxRate;
     private double tax;         // Tax
     private double total;       // Total
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy", timezone = "EST")
     private Date date;          // file name
     private double laborCost;   // LaborCost
     private double area;        // Area

@@ -6,6 +6,7 @@
 package com.mycompany.flooringmasteryweb.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mycompany.flooringmasteryweb.utilities.JsonDateSerializer;
 import java.util.Date;
 import javax.validation.constraints.Min;
@@ -35,7 +36,8 @@ public class OrderCommand implements BasicOrder {
     @Size(min = 2, max = 45, message = "The Product For This Order Must Be Between 2 and 45 Characters")
     private String product;    // ProductType
 
-    @org.codehaus.jackson.map.annotate.JsonSerialize(using=JsonDateSerializer.class)
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy",timezone="EST")
     @NotNull(message="You Must Include A Date For This Order")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;          // file name
