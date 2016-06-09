@@ -78,5 +78,6 @@ public interface OrderDao {
 
     void update(Order order);
     
-     java.util.List<Order> searchByOrderNumber(Integer orderNumber);
+    java.util.List<Order> searchByOrderNumber(Integer orderNumber);
+    
 }

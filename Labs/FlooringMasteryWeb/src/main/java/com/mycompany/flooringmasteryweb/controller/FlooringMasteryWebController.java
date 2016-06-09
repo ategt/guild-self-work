@@ -69,6 +69,8 @@ public class FlooringMasteryWebController {
 //
 //        return orderDao.create(order);
 //    }
+    
+    
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Order showWithAjax(@PathVariable("id") Integer orderId) {
@@ -77,6 +79,8 @@ public class FlooringMasteryWebController {
 
         return contact;
     }
+    
+    
 //
 //    @RequestMapping(value = "/", method = RequestMethod.PUT)
 //    @ResponseBody

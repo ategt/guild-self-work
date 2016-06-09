@@ -128,14 +128,14 @@ $(document).ready(function () {
 
                 var stateObj = data.state;
                 var displayState = "Error - Data Invalid";
-                if (stateObj != null)
+                if (stateObj !== null)
                     displayState = stateObj.stateName;
                 
                 $('#order-state').text(displayState);
                 
-                                var productObj = data.state;
+                var productObj = data.product;
                 var displayProduct = "Error - Data Invalid";
-                if (productObj != null)
+                if (productObj !== null)
                     displayProduct = productObj.productName;
                 
 
@@ -189,24 +189,55 @@ $(document).ready(function () {
             type: "GET",
             dataType: 'json',
             beforeSend: function (xhr) {
-                xhr.setRequestHeader("Accept", "application/json")
+                xhr.setRequestHeader("Accept", "application/json");
             },
             success: function (data, status) {
                 $('#edit-order-name').val(data.name);
-                $('#edit-order-state').val(data.state.stateName);
-                $('#edit-order-product').val(data.product.productName);
+                //$('#edit-order-state').val(data.state.stateName);
+                //$('#edit-order-product').val(data.product.productName);
                 $('#edit-order-area').val(data.area);
                 //$('#edit-order-id').val(data.id);
                 //$('#edit-order-zipcode').val(data.zip);
                 $('#edit-id').val(data.id);
 
                 
-                var orderDate= new Date(data.date);        
+                
+                //var orderDate= new Date(data.date);        
                 
 
-                $('#edit-order-date').val(data.date);
-              
+                //$('#edit-order-date').val(data.date);
 
+
+                var dateStr = data.date;
+                var dateArray = dateStr.split("/");
+                var improvedDateStr = dateArray[2] + "-" + dateArray[0] + "-" + dateArray[1];
+                
+                var testx = $(".order-date-class");
+                var $test = $(".order-date-class");
+                
+                var $datepicker = $('#edit-order-date');
+                //$datepicker.datepicker();
+                
+                $datepicker.val(improvedDateStr);
+                
+                //
+                //$datepicker.datepicker('setDate', new Date());
+                //$("#edit-order-date").datepicker("setDate" , new Date());
+
+                var stateObj = data.state;
+                var displayState = "Error - Data Invalid";
+                if (stateObj !== null)
+                    displayState = stateObj.stateName;
+                
+                $('#edit-order-state').val(displayState);
+                
+                var productObj = data.product;
+                var displayProduct = "Error - Data Invalid";
+                if (productObj !== null)
+                    displayProduct = productObj.productName;
+                
+
+                $('#edit-order-product').val(displayProduct);
 
 
 //                var lastContacted = data.lastContacted;
@@ -289,14 +320,11 @@ $(document).ready(function () {
 
     });
 
-
-    
-        function formatDollar(num) {
+    function formatDollar(num) {
             var p = num.toFixed(2).split(".");
             return "$" + p[0].split("").reverse().reduce(function(acc, num, i, orig) {
                 return  num + (i && !(i % 3) ? "," : "") + acc;
             }, "") + "." + p[1];
         }
-
 
 });

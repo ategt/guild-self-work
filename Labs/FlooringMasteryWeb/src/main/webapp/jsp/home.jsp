@@ -418,7 +418,7 @@
                       <tr>
                           <th>Date:</th>
                           <td>
-                              <input type="date" pattern = "MM/dd/yyyy" id="edit-order-date" />
+                              <input type="date" pattern="MM/dd/yyyy" id="edit-order-date" class="order-date-class" />
                               <!--pattern="yyyy-MM-dd"-->
                           </td>
                       </tr>
