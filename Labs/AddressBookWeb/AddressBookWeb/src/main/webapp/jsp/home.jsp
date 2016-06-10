@@ -74,7 +74,7 @@
                             <div class="col-sm-10 error-container" id="firstName-errors" ></div>
                             <label for="firstName" class="col-sm-2 control-label" >First:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="firstName" id="firstName" placeholder="First Name" />
+                                <input class="form-control create-address-form" type="text" name="firstName" id="firstName" placeholder="First Name" />
                             </div>
                         </div>
                         <div class="form-group color-container" id="lastName-group" >
@@ -83,7 +83,7 @@
 
                             <label for="lastName" class="col-sm-2 control-label" >Last:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="lastName" id="lastName" placeholder="Last Name" />
+                                <input class="form-control create-address-form" type="text" name="lastName" id="lastName" placeholder="Last Name" />
                             </div>
                         </div>
                         <div class="form-group color-container" id="streetNumber-group" >
@@ -92,7 +92,7 @@
 
                             <label for="streetNumber" class="col-sm-2 control-label" >Street Number:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="streetNumber" id="streetNumber" placeholder="Street Number" />
+                                <input class="form-control create-address-form" type="text" name="streetNumber" id="streetNumber" placeholder="Street Number" />
                             </div>
                         </div>
                         <div class="form-group color-container" id="streetName-group">
@@ -101,7 +101,7 @@
 
                             <label for="streetName" class="col-sm-2 control-label" >Street Name:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="streetName" id="streetName" placeholder="Street Name" />
+                                <input class="form-control create-address-form" type="text" name="streetName" id="streetName" placeholder="Street Name" />
                             </div>
                         </div>
                         <div class="form-group color-container" id="city-group">
@@ -110,7 +110,7 @@
 
                             <label for="city" class="col-sm-2 control-label" >City:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="city" id="city" placeholder="City" />
+                                <input class="form-control create-address-form" type="text" name="city" id="city" placeholder="City" />
                             </div>
                         </div>
                         <div class="form-group color-container" id="state-group">
@@ -119,7 +119,7 @@
 
                             <label for="state" class="col-sm-2 control-label" >State:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="state" id="state" placeholder="State" />
+                                <input class="form-control create-address-form" type="text" name="state" id="state" placeholder="State" />
                             </div>
                         </div>
                         <div class="form-group color-container" id="zip-group">
@@ -128,7 +128,7 @@
 
                             <label for="zip" class="col-sm-2 control-label" >Zip:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="text" name="zip" id="zip" placeholder="Zip" />
+                                <input class="form-control create-address-form" type="text" name="zip" id="zip" placeholder="Zip" />
                             </div>
                         </div>
                         <div class="form-group">

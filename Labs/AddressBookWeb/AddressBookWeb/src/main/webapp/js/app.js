@@ -34,19 +34,19 @@ $(document).ready(function () {
             },
             success: function (data, status) {
 
-                resetCreateFormColors();
-                 
+                resetCreateForm();
+
                 var tableRow = buildContactRow(data);
 
                 $('#address-table').append($(tableRow));
 
-                firstName: $("#firstName").val('');
-                lastName: $("#lastName").val('');
-                streetNumber: $("#streetNumber").val('');
-                streetName: $("#streetName").val('');
-                city: $("#city").val('');
-                state: $("#state").val('');
-                zip: $("#zip").val('');
+//                firstName: $("#firstName").val('');
+//                lastName: $("#lastName").val('');
+//                streetNumber: $("#streetNumber").val('');
+//                streetName: $("#streetName").val('');
+//                city: $("#city").val('');
+//                state: $("#state").val('');
+//                zip: $("#zip").val('');
 
             },
             error: function (data, status) {
@@ -55,26 +55,27 @@ $(document).ready(function () {
 
                 //resetCreateFormColors();
 
+               resetCreateFormColors();
 
-                $(".color-container").removeClass("has-error");
+                //$(".color-container").removeClass("has-error");
                 $(".color-container").addClass("has-success");
-                
-                
+
+
                 $(".error-container").html("");
-                
-                
-                
+
+
+
                 //$("#createAddressForm").siblings().has("input").removeClass("has-error");
                 //$("#createAddressForm").siblings().filter(".form-group").removeClass("has-error");
                 //$("#createAddressForm").filter("input").addClass("has-success");
-                        
-                        //.each(); 
-                
-                
-                
-                
-                
-                
+
+                //.each(); 
+
+
+
+
+
+
                 ////console.log(this));
                 //$("#createAddressForm").filter(":input").each(this.addClass("has-success"));
                 //$("#createAddressForm").filter(":input").each(this.addClass("has-success"));
@@ -88,7 +89,7 @@ $(document).ready(function () {
 //        $('#last-name-input-group').removeClass("has-error")
 
                 $.each(errors, function (index, error) {
-                    
+
                     var errorFieldName = error.fieldName;
                     validationErrorMessage += errorFieldName + ":" + error.message + "<br />";
 
@@ -99,7 +100,7 @@ $(document).ready(function () {
 
 
                     console.log("#" + errorFieldName + "-errors");
-                    
+
                     $("#" + errorFieldName + "-errors").html(error.message);
 
                     $("#" + errorFieldName + "-group").addClass("has-error");
@@ -318,10 +319,32 @@ $(document).ready(function () {
 
 
 
+    function resetCreateForm() {
+        resetCreateFormColors();
+
+        $(".create-address-form").val('');
+        $(".error-container").html('');
+        $("#add-contact-validation-errors").html('');
+
+//        firstName: $("#firstName").val('');
+//        lastName: $("#lastName").val('');
+//        streetNumber: $("#streetNumber").val('');
+//        streetName: $("#streetName").val('');
+//        city: $("#city").val('');
+//        state: $("#state").val('');
+//        zip: $("#zip").val('');
+
+
+    }
+
     function resetCreateFormColors() {
-        $("#createAddressForm").filter(":input").removeClass("has-error");
-        $("#createAddressForm").filter(":input").removeClass("has-success");
-        
+        //$("#createAddressForm").filter(":input").removeClass("has-error");
+        //$("#createAddressForm").filter(":input").removeClass("has-success");
+
+
+        $(".color-container").removeClass("has-error");
+        $(".color-container").removeClass("has-success");
+
 //        var createInputs = $("#createAddressForm").filter(":input");
 //
 //        $(createInputs).removeClass("has-error");

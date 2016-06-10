@@ -57,6 +57,10 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
     }
 
     public Address create(Address address) {
+        if (address == null) {
+            return null;
+        }
+
         address.setId(nextId);
         nextId++;
 
@@ -82,15 +86,19 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
 
     public void update(Address address) {
 
+        if (address == null)
+            return;
+            
         Address foundAddress = null;
-
-        for (Address currentAddress : addresses) {
-            if (currentAddress.getId() == address.getId()) {
-                foundAddress = currentAddress;
-                break;
+        if (address.getId() != null) {
+            for (Address currentAddress : addresses) {
+                if (currentAddress.getId() == address.getId()) {
+                    foundAddress = currentAddress;
+                    break;
+                }
             }
-
         }
+
         addresses.remove(foundAddress);
         addresses.add(address);
 
@@ -98,7 +106,7 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
 
     }
 
-    public void delete(Integer id) {
+    public void delete(Integer id) {        
         Address found = null;
 
         for (Address currentAddress : addresses) {
@@ -147,6 +155,10 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
             PrintWriter out = new PrintWriter(new FileWriter(addressFile));
 
             for (Address address : addresses) {
+
+                if (address.getId() == null) {
+                    continue;
+                }
 
                 out.print(address.getId());
                 out.print(TOKEN);
@@ -202,18 +214,20 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
 
                     Address address = new Address();
 
-                    int id = Integer.parseInt(stringParts[0]);
-                    address.setId(id);
+                    try {
+                        int id = Integer.parseInt(stringParts[0]);
 
-                    address.setFirstName(fixNull(stringParts[1]));
-                    address.setLastName(fixNull(stringParts[2]));
-                    address.setStreetNumber(fixNull(stringParts[3]));
-                    address.setStreetName(fixNull(stringParts[4]));
-                    address.setState(fixNull(stringParts[5]));
-                    address.setCity(fixNull(stringParts[6]));
-                    address.setZip(fixNull(stringParts[7]));
+                        address.setId(id);
 
-                    /*
+                        address.setFirstName(fixNull(stringParts[1]));
+                        address.setLastName(fixNull(stringParts[2]));
+                        address.setStreetNumber(fixNull(stringParts[3]));
+                        address.setStreetName(fixNull(stringParts[4]));
+                        address.setState(fixNull(stringParts[5]));
+                        address.setCity(fixNull(stringParts[6]));
+                        address.setZip(fixNull(stringParts[7]));
+
+                        /*
                 address.setPoBox(fixNull(stringParts[8]));
                 address.setZipcode(fixNull(stringParts[9]));
 
@@ -229,8 +243,11 @@ public class AddressBookLambdaImpl implements com.thesoftwareguild.interfaces.da
                 out.print(TOKEN);
                 out.print(address.getZip());
                 
-                     */
-                    addressList.add(address);
+                         */
+                        addressList.add(address);
+                    } catch (NumberFormatException numberFormatException) {
+
+                    }
                 }
             }
 
