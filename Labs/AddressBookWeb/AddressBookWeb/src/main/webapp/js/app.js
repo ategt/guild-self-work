@@ -40,96 +40,23 @@ $(document).ready(function () {
 
                 $('#address-table').append($(tableRow));
 
-//                firstName: $("#firstName").val('');
-//                lastName: $("#lastName").val('');
-//                streetNumber: $("#streetNumber").val('');
-//                streetName: $("#streetName").val('');
-//                city: $("#city").val('');
-//                state: $("#state").val('');
-//                zip: $("#zip").val('');
-
             },
             error: function (data, status) {
                 var errors = data.responseJSON.errors;
                 var validationErrorMessage = "";
 
-                //resetCreateFormColors();
+                resetCreateFormColors();
 
-               resetCreateFormColors();
-
-                //$(".color-container").removeClass("has-error");
                 $(".color-container").addClass("has-success");
-
-
                 $(".error-container").html("");
-
-
-
-                //$("#createAddressForm").siblings().has("input").removeClass("has-error");
-                //$("#createAddressForm").siblings().filter(".form-group").removeClass("has-error");
-                //$("#createAddressForm").filter("input").addClass("has-success");
-
-                //.each(); 
-
-
-
-
-
-
-                ////console.log(this));
-                //$("#createAddressForm").filter(":input").each(this.addClass("has-success"));
-                //$("#createAddressForm").filter(":input").each(this.addClass("has-success"));
-                //$createInputs;
-
-
-
-//        $('#first-name-input-group').removeClass("has-error");
-//        $('#first-name-input-group').removeClass("has-success");
-//
-//        $('#last-name-input-group').removeClass("has-error")
 
                 $.each(errors, function (index, error) {
 
                     var errorFieldName = error.fieldName;
                     validationErrorMessage += errorFieldName + ":" + error.message + "<br />";
 
-                    $("#" + errorFieldName + "-errors").html("");
-                    $("#" + errorFieldName + "-group").removeClass("has-error");
-                    $("#" + errorFieldName + "-group").removeClass("has-success");
-
-
-
-                    console.log("#" + errorFieldName + "-errors");
-
-                    $("#" + errorFieldName + "-errors").html(error.message);
-
-                    $("#" + errorFieldName + "-group").addClass("has-error");
-
-
-//                    if (errorFieldName === "firstName") {
-//                        $('#first-name-input-group').addClass("has-error");
-//                    } else {
-//                        $('#first-name-input-group').addClass("has-success");
-//                    }
-//
-//                    if (errorFieldName === "lastName") {
-//                        $('#last-name-input-group').addClass("has-error");
-//                    } else {
-//                        $('#last-name-input-group').addClass("has-success");
-//                    }
-//
-//                    if (errorFieldName === "email") {
-//                        $('#email-input-group').addClass("has-error");
-//                    } else {
-//                        $('#email-input-group').addClass("has-success");
-//                    }
-//
-//                    if (errorFieldName === "phone") {
-//                        $('#phone-input-group').addClass("has-error");
-//                    } else {
-//                        $('#phone-input-group').addClass("has-success");
-//                    }
-
+                    updateErrorField(errorFieldName, error);
+                    
                 });
 
                 $("#add-contact-validation-errors").html(validationErrorMessage);
@@ -173,21 +100,13 @@ $(document).ready(function () {
             },
             success: function (data, status) {
 
-
                 $('#address-first-name').text(data.firstName);
-
-//                var adate = data.releaseDate;
-//
-//                adate = new Date(adate);
-
                 $('#address-last-name').text(data.lastName);
                 $('#address-street-name').text(data.streetName);
                 $('#address-street-number').text(data.streetNumber);
                 $('#address-city').text(data.city);
                 $('#address-state').text(data.state);
                 $('#address-zipcode').text(data.zip);
-
-                // $('.edit-from-detail-button').data("address-id", data.id);
 
             },
             error: function (data, status) {
@@ -199,20 +118,6 @@ $(document).ready(function () {
     });
 
     $('#editDetailModal').on('show.bs.modal', function (e) {
-
-//            firstName: $("#firstName").val(),
-//            lastName: $("#lastName").val(),
-//            streetNumber: $("#streetNumber").val(),
-//            streetName: $("#streetName").val(),
-//            city: $("#city").val(),
-//            state: $("#state").val(),
-//            zip: $("#zip").val()
-
-
-
-
-
-
 
         var link = $(e.relatedTarget);
 
@@ -234,14 +139,6 @@ $(document).ready(function () {
                 $('#edit-address-state').val(data.state);
                 $('#edit-address-zipcode').val(data.zip);
                 $('#edit-id').val(data.id);
-
-//                var lastContacted = data.lastContacted;
-//                if (data.lastContacted == null) {
-//                    lastContacted = new Date();
-//                }
-//
-//                $('#edit-contact-last-contacted').val(lastContacted.toLocaleDateString());
-
             },
             error: function (data, status) {
 
@@ -311,13 +208,7 @@ $(document).ready(function () {
             }
 
         });
-
-
     });
-
-
-
-
 
     function resetCreateForm() {
         resetCreateFormColors();
@@ -326,36 +217,21 @@ $(document).ready(function () {
         $(".error-container").html('');
         $("#add-contact-validation-errors").html('');
 
-//        firstName: $("#firstName").val('');
-//        lastName: $("#lastName").val('');
-//        streetNumber: $("#streetNumber").val('');
-//        streetName: $("#streetName").val('');
-//        city: $("#city").val('');
-//        state: $("#state").val('');
-//        zip: $("#zip").val('');
-
-
     }
 
     function resetCreateFormColors() {
-        //$("#createAddressForm").filter(":input").removeClass("has-error");
-        //$("#createAddressForm").filter(":input").removeClass("has-success");
-
-
         $(".color-container").removeClass("has-error");
         $(".color-container").removeClass("has-success");
-
-//        var createInputs = $("#createAddressForm").filter(":input");
-//
-//        $(createInputs).removeClass("has-error");
-//        $(createInputs).removeClass("has-success");
-
     }
 
-
-
-
-
+    function updateErrorField(errorFieldName, error) {
+        console.log(errorFieldName);
+        $("#" + errorFieldName + "-errors").html("");
+        $("#" + errorFieldName + "-group").removeClass("has-error");
+        $("#" + errorFieldName + "-group").removeClass("has-success");
+        $("#" + errorFieldName + "-errors").html(error.message);
+        $("#" + errorFieldName + "-group").addClass("has-error");
+    }
 
 
 
