@@ -180,6 +180,7 @@ public class AddressBookDbImpl implements com.thesoftwareguild.interfaces.dao.Ad
     }
 
     private static final String SQL_SEARCH_ADDRESS_BY_FIRST_NAME = "SELECT * FROM addresses WHERE first_name = ?";
+    private static final String SQL_SEARCH_ADDRESS_BY_FIRST_NAME_PARTIAL = "SELECT * FROM addresses WHERE first_name LIKE ?";
 
     @Override
     public List<Address> searchByFirstName(String firstName) {
@@ -187,11 +188,11 @@ public class AddressBookDbImpl implements com.thesoftwareguild.interfaces.dao.Ad
         List<Address> result = jdbcTemplate.query(SQL_SEARCH_ADDRESS_BY_FIRST_NAME, new AddressMapper(), firstName);
 
         if (result.isEmpty()) {
-            result = jdbcTemplate.query(SQL_SEARCH_ADDRESS_BY_FIRST_NAME, new AddressMapper(), firstName + "%");
+            result = jdbcTemplate.query(SQL_SEARCH_ADDRESS_BY_FIRST_NAME_PARTIAL, new AddressMapper(), firstName + "%");
         }
 
         if (result.isEmpty()) {
-            result = jdbcTemplate.query(SQL_SEARCH_ADDRESS_BY_FIRST_NAME, new AddressMapper(), "%" + firstName + "%");
+            result = jdbcTemplate.query(SQL_SEARCH_ADDRESS_BY_FIRST_NAME_PARTIAL, new AddressMapper(), "%" + firstName + "%");
         }
 
 //        List<Address> result = addresses

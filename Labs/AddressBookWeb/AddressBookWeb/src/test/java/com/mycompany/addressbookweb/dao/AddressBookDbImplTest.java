@@ -214,6 +214,7 @@ public class AddressBookDbImplTest {
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
 //    }
+    
     /**
      * Test of searchByLastName method, of class AddressBookDao.
      */
@@ -453,6 +454,246 @@ public class AddressBookDbImplTest {
         //assertEquals(expResult, result);
     }
 
+
+
+    /**
+     * Test of searchByFirstName method, of class AddressBookDao.
+     */
+    @Test
+    public void testSearchByFirstNameFlawed() {
+        System.out.println("searchByFirstName");
+        String FirstName = "DannnyFakeFirstNameGuy";
+        Address address = new Address();
+        address.setFirstName(FirstName);
+
+        AddressBookDao instance = ctx.getBean("addressDao", AddressBookDao.class);
+
+        try {
+            instance.create(address);
+            fail("It was not supposed to get here.");
+        } catch (org.springframework.dao.DataIntegrityViolationException integrityException) {
+
+        }
+    }
+
+    /**
+     * Test of searchByFirstName method, of class AddressBookDao.
+     */
+    @Test
+    public void testSearchByFirstName() {
+        System.out.println("searchByFirstName");
+        String FirstName = "DannnyFakeFirstNameGuy";
+        Address address = new Address();
+        address.setFirstName(FirstName);
+
+        //address.setFirstName("first_name");
+        address.setLastName("Last_name");
+        address.setStreetNumber("street_number");
+        address.setStreetName("street_name");
+        address.setCity("city");
+        address.setState("state");
+        address.setZip("zip");
+
+        AddressBookDao instance = ctx.getBean("addressDao", AddressBookDao.class);
+
+        instance.create(address);
+
+        List<Address> expResult = null;
+        List<Address> result = instance.searchByFirstName(FirstName);
+
+        assertTrue(result.size() > 0);
+        
+        for (Address testAddress : result) {
+            assertEquals(testAddress.getFirstName(), FirstName);
+        }
+
+        //assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of searchByFirstName method, of class AddressBookDao.
+     */
+    @Test
+    public void testSearchByFirstNameParts() {
+        System.out.println("searchByFirstName");
+        String FirstName = "DannnyFakeFirstNameGuy";
+        String FirstNameTest = "DannnyFakeFirstNam";
+        Address address = new Address();
+        address.setFirstName(FirstName);
+
+        //address.setFirstName("first_name");
+        address.setLastName("Last_name");
+        address.setStreetNumber("street_number");
+        address.setStreetName("street_name");
+        address.setCity("city");
+        address.setState("state");
+        address.setZip("zip");
+
+        AddressBookDao instance = ctx.getBean("addressDao", AddressBookDao.class);
+
+        instance.create(address);
+
+        List<Address> expResult = null;
+        List<Address> result = instance.searchByFirstName(FirstNameTest);
+
+        assertTrue(result.size() > 0);
+
+        for (Address testAddress : result) {
+            assertTrue(testAddress.getFirstName().contains(FirstNameTest));
+        }
+
+        //assertEquals(expResult, result);
+    }
+
+
+    /**
+     * Test of searchByFirstName method, of class AddressBookDao.
+     */
+    @Test
+    public void testSearchByFirstNamePartsB() {
+        System.out.println("searchByFirstName");
+        String FirstName = "DannnyFakeFirstNameGuy";
+        String FirstNameTest = "nyFakeFirstNam";
+        Address address = new Address();
+        address.setFirstName(FirstName);
+
+        //address.setFirstName("first_name");
+        address.setLastName("Last_name");
+        address.setStreetNumber("street_number");
+        address.setStreetName("street_name");
+        address.setCity("city");
+        address.setState("state");
+        address.setZip("zip");
+
+        AddressBookDao instance = ctx.getBean("addressDao", AddressBookDao.class);
+
+        instance.create(address);
+
+        List<Address> expResult = null;
+        List<Address> result = instance.searchByFirstName(FirstNameTest);
+
+        assertTrue(result.size() > 0);
+
+        for (Address testAddress : result) {
+            assertTrue(testAddress.getFirstName().contains(FirstNameTest));
+        }
+
+        //assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of searchByFirstName method, of class AddressBookDao.
+     */
+    @Test
+    public void testSearchByFirstNamePartsC() {
+        System.out.println("searchByFirstName");
+        String FirstName = "DannnyFakeFirstNameGuy";
+        String FirstNameTest = "nyFakeFirstNam";
+        Address address = new Address();
+        address.setFirstName(FirstName);
+
+        //address.setFirstName("first_name");
+        address.setLastName("Last_name");
+        address.setStreetNumber("street_number");
+        address.setStreetName("street_name");
+        address.setCity("city");
+        address.setState("state");
+        address.setZip("zip");
+
+        
+        Address addressB = new Address();
+        addressB.setFirstName("nottheanswer");
+
+        //addressB.setFirstName("first_name");
+        addressB.setLastName("Last_name");
+        addressB.setStreetNumber("street_number");
+        addressB.setStreetName("street_name");
+        addressB.setCity("city");
+        addressB.setState("state");
+        addressB.setZip("zip");
+
+        
+        
+        AddressBookDao instance = ctx.getBean("addressDao", AddressBookDao.class);
+
+        instance.create(address);
+        instance.create(addressB);
+
+        List<Address> expResult = null;
+        List<Address> result = instance.searchByFirstName(FirstNameTest);
+
+        assertTrue(result.size() > 0);
+
+        for (Address testAddress : result) {
+            assertTrue(testAddress.getFirstName().contains(FirstNameTest));
+        }
+
+        //assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of searchByFirstName method, of class AddressBookDao.
+     */
+    @Test
+    public void testSearchByFirstNamePartsD() {
+        System.out.println("searchByFirstName");
+        String FirstName = "DannnyFakeFirstNameGuy";
+        String FirstNameTest = "nyFakeFirstNam";
+        Address address = new Address();
+        address.setFirstName(FirstName);
+
+        //address.setFirstName("first_name");
+        address.setLastName("Last_name");
+        address.setStreetNumber("street_number");
+        address.setStreetName("street_name");
+        address.setCity("city");
+        address.setState("state");
+        address.setZip("zip");
+
+        
+        Address addressB = new Address();
+        addressB.setFirstName("nottheanswer");
+
+        //addressB.setFirstName("first_name");
+        addressB.setLastName("Last_name");
+        addressB.setStreetNumber("street_number");
+        addressB.setStreetName("street_name");
+        addressB.setCity("city");
+        addressB.setState("state");
+        addressB.setZip("zip");
+
+        
+        
+        AddressBookDao instance = ctx.getBean("addressDao", AddressBookDao.class);
+
+        instance.create(address);
+        instance.create(addressB);
+
+        
+        Address addressC = new Address();
+        addressC.setFirstName(FirstName);
+
+        //addressC.setFirstName("first_name");
+        addressC.setLastName("Last_name");
+        addressC.setStreetNumber("street_number");
+        addressC.setStreetName("street_name");
+        addressC.setCity("city");
+        addressC.setState("state");
+        addressC.setZip("zip");
+        instance.create(addressC);
+
+        
+        List<Address> expResult = null;
+        List<Address> result = instance.searchByFirstName(FirstNameTest);
+
+        assertTrue(result.size() > 1);
+
+        for (Address testAddress : result) {
+            assertTrue(testAddress.getFirstName().contains(FirstNameTest));
+        }
+
+        //assertEquals(expResult, result);
+    }
 
 
 //    /**
