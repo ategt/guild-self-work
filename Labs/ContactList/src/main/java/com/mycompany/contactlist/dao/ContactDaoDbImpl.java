@@ -82,12 +82,12 @@ public class ContactDaoDbImpl implements ContactDao {
     @Override
     public List<Contact> sortByLastName(List<Contact> contacts) {
 
-//        contacts.sort(
-//                new Comparator<Contact>() {
-//            public int compare(Contact c1, Contact c2) {
-//                return c1.getLastName().compareTo(c2.getLastName());
-//            }
-//        });
+        contacts.sort(
+                new Comparator<Contact>() {
+            public int compare(Contact c1, Contact c2) {
+                return c1.getLastName().compareTo(c2.getLastName());
+            }
+        });
 
         return contacts;
     }
