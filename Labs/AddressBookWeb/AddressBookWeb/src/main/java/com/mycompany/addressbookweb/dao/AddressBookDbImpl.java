@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collector;
 import static java.util.stream.Collectors.groupingBy;
+import javax.inject.Inject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Propagation;
@@ -48,6 +49,7 @@ public class AddressBookDbImpl implements com.thesoftwareguild.interfaces.dao.Ad
     private static final String SQL_GET_ADDRESS = "SELECT * FROM addresses WHERE id =?";
     private static final String SQL_GET_ADDRESS_LIST = "SELECT * FROM addresses";
 
+    @Inject
     public AddressBookDbImpl(JdbcTemplate jdbcTemplate) {
 
         this.jdbcTemplate = jdbcTemplate;
