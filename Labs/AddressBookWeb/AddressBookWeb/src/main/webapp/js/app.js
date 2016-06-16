@@ -36,9 +36,17 @@ $(document).ready(function () {
 
                 resetCreateForm();
 
-                var tableRow = buildContactRow(data);
+                var tableRow = buildAddressRow(data);
 
+                //$('#recently-added').prepend($(tableRow));
                 $('#address-table').append($(tableRow));
+
+
+//                a
+//                data - address - id = "${address.id}" data - toggle = "modal" data - target = "#showDetailModal"
+
+                $("#showDetailModal").modal();
+                populateModal(data.id);
 
             },
             error: function (data, status) {
@@ -56,7 +64,7 @@ $(document).ready(function () {
                     validationErrorMessage += errorFieldName + ":" + error.message + "<br />";
 
                     updateErrorField(errorFieldName, error);
-                    
+
                 });
 
                 $("#add-contact-validation-errors").html(validationErrorMessage);
@@ -69,7 +77,7 @@ $(document).ready(function () {
 
     });
 
-    function buildContactRow(data) {
+    function buildAddressRow(data) {
 
         var strFooter = "<tr id=\"address-row-" + data.id + "\" >\n\
                                 \n\
@@ -90,6 +98,13 @@ $(document).ready(function () {
         var link = $(e.relatedTarget);
 
         var addressId = link.data('address-id');
+
+        populateModal(addressId);
+
+    });
+
+
+    function populateModal(addressId) {
 
         $.ajax({
             url: contextRoot + "/addressbook/" + addressId,
@@ -115,7 +130,8 @@ $(document).ready(function () {
 
         });
 
-    });
+    }
+
 
     $('#editDetailModal').on('show.bs.modal', function (e) {
 
@@ -176,7 +192,7 @@ $(document).ready(function () {
             success: function (data, status) {
                 $('#editDetailModal').modal('hide');
 
-                var tableRow = buildDvdRow(data);
+                var tableRow = buildAddressRow(data);
 
                 $('#address-row-' + data.id).replaceWith($(tableRow));
 

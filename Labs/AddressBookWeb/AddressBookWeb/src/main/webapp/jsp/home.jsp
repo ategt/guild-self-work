@@ -37,7 +37,8 @@
                         <th>Last Name</th>
                         <th><i class="glyphicon glyphicon-edit"></i> Edit</th>
                         <th><i class="glyphicon glyphicon-remove"></i> Delete</th>
-                            <c:forEach items="${addresses}" var="address">
+
+                       <c:forEach items="${addresses}" var="address">
                             <!--                            <tr>
                                                             <td><a href="addressbook/show/${address.id}">${address.firstName}</a></td>
                                                             <td><a href="addressbook/show/${address.id}">${address.lastName}</a></td>

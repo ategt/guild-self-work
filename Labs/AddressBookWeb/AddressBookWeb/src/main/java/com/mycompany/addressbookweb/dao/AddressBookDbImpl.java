@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -94,7 +95,11 @@ public class AddressBookDbImpl implements com.thesoftwareguild.interfaces.dao.Ad
     public Address get(Integer id) {
         if (id == null)
             return null;
-        return jdbcTemplate.queryForObject(SQL_GET_ADDRESS, new AddressMapper(), id);
+        try {
+            return jdbcTemplate.queryForObject(SQL_GET_ADDRESS, new AddressMapper(), id);
+        } catch (org.springframework.dao.EmptyResultDataAccessException ex){
+            return null;
+        }
     }
 
     public void update(Address address) {
