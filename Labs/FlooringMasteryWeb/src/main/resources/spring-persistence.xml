@@ -16,6 +16,9 @@
 
     <!-- Bean definitions go here -->
     
+    <import resource="stateDao-context.xml" />
+    
+    
     <!--<bean id="applicationContextProvder" class="com.mycompany.flooringmasteryweb.aop.ApplicationContextProvider"/>-->
     <!--    <bean id="viewUtilities" class="com.mycompany.flooringmasteryweb.utilities.ViewUtilities" />-->
     <bean id="configDao" class="com.mycompany.flooringmasteryweb.dao.ConfigDao" />
@@ -23,9 +26,9 @@
     <bean id="productDao" class="com.mycompany.flooringmasteryweb.dao.ProductDao">
         <constructor-arg ref="configDao" />
     </bean>
-    <bean id="stateDao" class="com.mycompany.flooringmasteryweb.dao.StateDao">
+<!--    <bean id="stateDao" class="com.mycompany.flooringmasteryweb.dao.StateDao">
         <constructor-arg ref="configDao" />
-    </bean>
+    </bean>-->
     <bean id="orderDao" class="com.mycompany.flooringmasteryweb.dao.OrderDaoImpl">
         <constructor-arg ref="productDao" />
         <constructor-arg ref="stateDao" />
@@ -63,8 +66,7 @@
     </bean>
     
     <bean id="sourceObjectMapper" class="com.mycompany.flooringmasteryweb.utilities.CustomObjectMapper" />
-    -->
-<!--     set JSON date format to ISO-8601 e.g. 1970-01-01T00:00:00.000+0000 
+       set JSON date format to ISO-8601 e.g. 1970-01-01T00:00:00.000+0000 
 <bean id="sourceObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
 <bean id="acmObjectMapper" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
     <property name="targetObject" ref="sourceObjectMapper"/>

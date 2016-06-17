@@ -8,12 +8,15 @@ package com.mycompany.flooringmasteryweb.dao;
 import com.mycompany.flooringmasteryweb.dto.State;
 import com.mycompany.flooringmasteryweb.exceptions.ConfigurationFileCorruptException;
 import com.mycompany.flooringmasteryweb.exceptions.FileCreationException;
+import com.mycompany.flooringmasteryweb.utilities.TestUtils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -21,39 +24,27 @@ import static org.junit.Assert.*;
  */
 public class StateDaoDbImplTest {
 
-    ConfigDao configDao;
+    ApplicationContext ctx;
 
     public StateDaoDbImplTest() {
+        ctx = new ClassPathXmlApplicationContext("testDb-ApplicationContext.xml");
     }
 
     @Before
     public void setUp() {
 
-        java.io.File testFile = new java.io.File("StatesTestData.txt");
-        java.io.File backupTestFile = new java.io.File("StatesTestData-Backup.txt");
-        backupTestFile.deleteOnExit();
-        testFile.renameTo(backupTestFile);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
 
-        boolean isATest = true;
-        ConfigDao configDao = null;
+        String[] fakeStates = {"SG", "DQ", "SW", "FG", "GH", "DG", "IN", "OH", "KC" , "CA" };
 
-        try {
-            configDao = new ConfigDao();
-            configDao.get().setTaxesFile(testFile);
-        } catch (ConfigurationFileCorruptException | FileCreationException ex) {
-            Logger.getLogger(OrderDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
-        }
+        for (String fakeState : fakeStates) {
+            if (instance.get(fakeState) != null) {
+                State state = new State();
+                state.setState(fakeState);
+                instance.delete(state);
 
-        configDao.get().setInTestMode(isATest);
-        this.configDao = configDao;
+            }
 
-        StateDao instance = new StateDaoImpl(configDao);
-
-        // If There is already an instance of SG in the Dao, delete it.
-        State stateToDelete = instance.get("SG");
-        if (stateToDelete != null) {
-            instance.delete(stateToDelete);
         }
 
     }
@@ -66,55 +57,54 @@ public class StateDaoDbImplTest {
     public void testCreate() {
         System.out.println("create");
         State state = new State();
-        StateDao instance = new StateDaoImpl(configDao);
+        //StateDao instance = ctx.getBean("stateDao", StateDao.class);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = null;
         State result = instance.create(state);
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
     }
 
     @Test
     public void testCreateB() {
         System.out.println("create");
         State state = null;
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = null;
         State result = instance.create(state);
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
     }
-
 
     @Test
     public void testGetA() {
         System.out.println("get - null");
         String state = null;
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = null;
         State result = instance.get(null);
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
     }
- 
+
     @Test
     public void testGetC() {
         System.out.println("get - null");
         Object state = null;
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = null;
         State result = instance.get((String) state);
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
     }
 
     @Test
     public void testGetD() {
         System.out.println("get - null");
         Object object = null;
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = null;
-        
-        
+
         State state1 = new State();
         state1.setState("GH");
         instance.create(state1);
-        
+
         State state2 = new State();
         state2.setState("GZ");
         instance.create(state2);
@@ -122,43 +112,40 @@ public class StateDaoDbImplTest {
         State state3 = new State();
         state3.setState("GQ");
         instance.create(state3);
-        
+
         State state4 = new State();
         state4.setState("GR");
         instance.create(state4);
-        
+
         State result = instance.get((String) object);
-        assertEquals(expResult, result);
-        
-        
+        assertTrue(verifyState(expResult, result));
+
         instance.delete(state1);
         instance.delete(state2);
         instance.delete(state3);
         instance.delete(state4);
-        
-        
+
     }
 
-    @Test
-    public void testGetB() {
-        System.out.println("get - null");
-        String state = null;
-        configDao.get().setInTestMode(false);
-        StateDao instance = new StateDaoImpl(configDao);
-        State expResult = null;
-        State result = instance.get(null);
-        assertEquals(expResult, result);
-    }
-
+//    @Test
+//    public void testGetB() {
+//        System.out.println("get - null");
+//        String state = null;
+//        configDao.get().setInTestMode(false);
+//        StateDao instance = ctx.getBean("stateDao", StateDao.class);
+//        State expResult = null;
+//        State result = instance.get(null);
+//        assertTrue(verifyState(expResult, result));
+//    }
     @Test
     public void testCreateC() {
         System.out.println("create");
         State state = new State();
         state.setState("GH");
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = state;
         State result = instance.create(state);
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
     }
 
     @Test
@@ -166,21 +153,48 @@ public class StateDaoDbImplTest {
         System.out.println("create");
         State state = new State();
         state.setState("Z");
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = null;
         State result = instance.create(state);
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
     }
 
     @Test
     public void testCreateE() {
         System.out.println("create");
         State state = new State();
+        state.setStateTax(0.0d);
         state.setState("SW");
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = state;
         State result = instance.create(state, state.getState());
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
+    }
+
+    @Test
+    public void testCreateQ() {
+        System.out.println("create");
+        State state = new State();
+        state.setState("SW");
+        State stateB = new State();
+        stateB.setState("SW");
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
+        State expResult = state;
+        instance.create(state, state.getState());
+        State result = instance.create(stateB, state.getState());
+        assertNull(result);
+    }
+
+    @Test
+    public void testCreateR() {
+        System.out.println("create");
+        State state = new State();
+        state.setState("SW");
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
+        State expResult = state;
+        instance.create(state, state.getState());
+        State result = instance.create(state, state.getState());
+        assertNull(result);
     }
 
     @Test
@@ -188,10 +202,10 @@ public class StateDaoDbImplTest {
         System.out.println("create");
         State state = new State();
         state.setState("Mexico");
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = null;
         State result = instance.create(state, state.getState());
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
     }
 
     @Test
@@ -199,10 +213,10 @@ public class StateDaoDbImplTest {
         System.out.println("create");
         State state = new State();
         state.setState("HQ");
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = null;
         State result = instance.create(state, "HR");
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
     }
 
     @Test
@@ -215,13 +229,13 @@ public class StateDaoDbImplTest {
         State otherState = new State();
         otherState.setState("SG");
 
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
 
         State expResult = state;
         State result = instance.create(state);
         State otherResult = instance.create(otherState);
 
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
         assertEquals(null, otherResult);
 
         instance.delete(state);
@@ -231,21 +245,32 @@ public class StateDaoDbImplTest {
 
     @Test
     public void testDelete() {
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
+
+        if (instance.get("SG") != null) {
+            State state = new State();
+            state.setState("SG");
+            instance.delete(state);
+
+        }
+
         System.out.println("create");
         State state = new State();
         state.setState("SG");
-        StateDao instance = new StateDaoImpl(configDao);
         State expResult = state;
         State result = instance.create(state);
-        assertEquals(expResult, result);
+        //assertEquals(expResult, result);
+
+        assertTrue(verifyState(expResult, result));
 
         // Test get method.
         State returnedState = instance.get(state.getState());
-        assertEquals(returnedState, result);
+        //assertTrue(verifyState(returnedState, result));
+        assertTrue(verifyState(returnedState, result));
         instance.delete(state);
 
         returnedState = instance.get(state.getState());
-        assertEquals(returnedState, null);
+        assertNull(returnedState);
 
     }
 
@@ -254,14 +279,15 @@ public class StateDaoDbImplTest {
         System.out.println("create");
         State state = new State();
         state.setState("SG");
-        StateDao instance = new StateDaoImpl(configDao);
+        state.setStateTax(0.0d);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = state;
         State result = instance.create(state);
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
 
         // Test get method.
         State returnedState = instance.get(state.getState());
-        assertEquals(returnedState, result);
+        assertTrue(verifyState(returnedState, result));
         instance.delete(state);
 
         returnedState = instance.get(state.getState());
@@ -274,15 +300,15 @@ public class StateDaoDbImplTest {
         System.out.println("create");
         State state = new State();
         state.setState("SG");
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = state;
         String stateNameLowerCase = "sg";
         State result = instance.create(state);
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
 
         // Test get method.
         State returnedState = instance.get(stateNameLowerCase);
-        assertEquals(returnedState, result);
+        assertTrue(verifyState(returnedState, result));
         instance.delete(state);
 
         returnedState = instance.get(stateNameLowerCase);
@@ -295,15 +321,15 @@ public class StateDaoDbImplTest {
         System.out.println("create");
         State state = new State();
         state.setState("SG");
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
         State expResult = state;
         String stateNameLowerCase = "sG";
         State result = instance.create(state);
-        assertEquals(expResult, result);
+        assertTrue(verifyState(expResult, result));
 
         // Test get method.
         State returnedState = instance.get(stateNameLowerCase);
-        assertEquals(returnedState, result);
+        assertTrue(verifyState(returnedState, result));
         instance.delete(state);
 
         returnedState = instance.get(stateNameLowerCase);
@@ -316,7 +342,7 @@ public class StateDaoDbImplTest {
 
         State state = new State();
         state.setState("DQ");
-        StateDao instance = new StateDaoImpl(configDao);
+        StateDao instance = ctx.getBean("stateDao", StateDao.class);
 
         instance.create(state);
 
@@ -341,7 +367,7 @@ public class StateDaoDbImplTest {
     public void testEncodeAndDecode() {
 
         // The true parameter in the StateDao constructor signifies a test.
-        StateDao stateDao = new StateDaoImpl(configDao);
+        StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         State testState = new State();
 
         String stateName = "UK";
@@ -361,7 +387,7 @@ public class StateDaoDbImplTest {
         stateDao.update(testState);
 
         // Load a new instance of the StateDao.
-        StateDao secondDao = new StateDaoImpl(configDao);
+        StateDao secondDao = ctx.getBean("stateDao", StateDao.class);
 
         // Pull a state  using the id number recorded earlier.
         State thirdState = secondDao.get(stateName);
@@ -377,9 +403,25 @@ public class StateDaoDbImplTest {
 
         // Load a third instance of the Dao and verify that 
         // the state was deleted from the file.
-        StateDao thirdDao = new StateDaoImpl(configDao);
+        StateDao thirdDao = ctx.getBean("stateDao", StateDao.class);
         assertEquals(thirdDao.get(stateName), null);
 
     }
 
+    private Boolean verifyState(State state1, State state2) {
+        
+        if (state1 == null && state2 == null) {
+            return true;
+        }
+
+        if (state1 == null || state2 == null) {
+            return false;
+        }
+
+        assertEquals(state1.getStateName(), state2.getStateName());
+        assertEquals(state1.getStateTax(), state2.getStateTax(), 0.005);
+
+        return TestUtils.isStateEqual(state1, state2);
+
+    }
 }

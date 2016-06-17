@@ -143,14 +143,15 @@ public class StateDaoDbImpl implements StateDao {
     //@Override
     public State get(Integer id) {
 
-        if (id == null) {
+        //if (id == null) {
             return null;
-        }
-        try {
-            return jdbcTemplate.queryForObject(SQL_GET_STATE_ID, new StateMapper(), id);
-        } catch (org.springframework.dao.EmptyResultDataAccessException ex) {
-            return null;
-        }
+        //}
+        
+//        try {
+//            return jdbcTemplate.queryForObject(SQL_GET_STATE_ID, new StateMapper(), id);
+//        } catch (org.springframework.dao.EmptyResultDataAccessException ex) {
+//            return null;
+//        }
     }
 
     public State get(String name) {
@@ -215,7 +216,7 @@ public class StateDaoDbImpl implements StateDao {
             //state_name, state_abbreviation, tax_rate
             State state = new State();
 
-            state.setId(rs.getInt("id"));
+            //state.setId(rs.getInt("id"));
             state.setStateName(rs.getString("state_abbreviation"));
 //            state.setStateName(rs.getString("state_name"));
             //state.setReleaseDate(rs.getDate("state_abbreviation"));

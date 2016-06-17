@@ -14,6 +14,7 @@ import com.mycompany.flooringmasteryweb.dao.ProductDao;
 import com.mycompany.flooringmasteryweb.dao.StateDao;
 import com.mycompany.flooringmasteryweb.dto.BasicOrder;
 import com.mycompany.flooringmasteryweb.dto.OrderCommand;
+import com.mycompany.flooringmasteryweb.utilities.TestUtils;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -1690,7 +1691,10 @@ public class OrderDaoTest {
         assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
         assertEquals(builtOrder.getName(), unresolvedOrder.getName());
         assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
-        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+
+        //assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertTrue( TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()) );
+        
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
         assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
@@ -1797,7 +1801,7 @@ public class OrderDaoTest {
         assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
         assertEquals(builtOrder.getName(), unresolvedOrder.getName());
         assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
-        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertTrue( TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()) );
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
         assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
@@ -1876,7 +1880,7 @@ public class OrderDaoTest {
         assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
         assertEquals(builtOrder.getName(), unresolvedOrder.getName());
         assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
-        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertTrue( TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()) );
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
         assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
@@ -1955,7 +1959,7 @@ public class OrderDaoTest {
         assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
         assertEquals(builtOrder.getName(), unresolvedOrder.getName());
         assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
-        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertTrue( TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()) );
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
         assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
@@ -2040,7 +2044,7 @@ public class OrderDaoTest {
         assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
         assertEquals(builtOrder.getName(), unresolvedOrder.getName());
         assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
-        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertTrue( TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()) );
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
         assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
@@ -2125,7 +2129,7 @@ public class OrderDaoTest {
         assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
         assertEquals(builtOrder.getName(), unresolvedOrder.getName());
         assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
-        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertTrue( TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()) );
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
         assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
@@ -2210,7 +2214,7 @@ public class OrderDaoTest {
         assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
         assertEquals(builtOrder.getName(), unresolvedOrder.getName());
         assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
-        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertTrue( TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()) );
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
         assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
@@ -2295,7 +2299,7 @@ public class OrderDaoTest {
         assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
         assertEquals(builtOrder.getName(), unresolvedOrder.getName());
         assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
-        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertTrue( TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()) );
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
         assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
@@ -2380,7 +2384,7 @@ public class OrderDaoTest {
         assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
         assertEquals(builtOrder.getName(), unresolvedOrder.getName());
         assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
-        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertTrue( TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()) );
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
         assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
@@ -2465,7 +2469,7 @@ public class OrderDaoTest {
         assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
         assertEquals(builtOrder.getName(), unresolvedOrder.getName());
         assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
-        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertTrue( TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()) );
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
         assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
@@ -2550,7 +2554,7 @@ public class OrderDaoTest {
         assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
         assertEquals(builtOrder.getName(), unresolvedOrder.getName());
         assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
-        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertTrue( TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()) );
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
         assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
@@ -2636,7 +2640,7 @@ public class OrderDaoTest {
         assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
         assertEquals(builtOrder.getName(), unresolvedOrder.getName());
         assertEquals(builtOrder.getProduct(), unresolvedOrder.getProduct());
-        assertEquals(builtOrder.getState(), unresolvedOrder.getState());
+        assertTrue( TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()) );
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
         assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
