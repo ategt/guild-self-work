@@ -40,7 +40,7 @@ public class StateDaoDbImpl implements StateDao {
     private static final String SQL_GET_STATE = "SELECT * FROM states WHERE state_abbreviation = ?";
     private static final String SQL_GET_STATE_ID = "SELECT * FROM states WHERE id =?";
     private static final String SQL_GET_STATE_LIST = "SELECT * FROM states";
-    
+
 //    @Inject
 //    public StateLibraryDbImplementation(NoteDao noteDao) {
 //        this(false, noteDao);
@@ -88,21 +88,21 @@ public class StateDaoDbImpl implements StateDao {
 
             //state_name, state_abbreviation, tax_rate
             //first_name, last_name, street_number, street_name, city, state, zip
-            
             try {
-            jdbcTemplate.update(SQL_INSERT_STATE,
-                    null,
-                    state.getStateName(),
-                    state.getStateTax());
+                jdbcTemplate.update(SQL_INSERT_STATE,
+                        null,
+                        state.getStateName(),
+                        state.getStateTax());
+
+                Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+
+                state.setId(id);
+                return state;
 
             } catch (org.springframework.dao.DuplicateKeyException ex) {
                 return null;
             }
-            
-            Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
 
-            state.setId(id);
-            return state;
 //            if (!statesMap.containsKey(postalCode)) {
 //
 //                state.setState(postalCode);
@@ -191,9 +191,8 @@ public class StateDaoDbImpl implements StateDao {
 
         //int id = state.getId();
         //int id = state.getId();
-
         String name = state.getStateName();
-        
+
         jdbcTemplate.update(SQL_DELETE_STATE, name);
     }
 
@@ -240,16 +239,15 @@ public class StateDaoDbImpl implements StateDao {
         }
 
     }
-    
+
     private final class StateNameMapper implements RowMapper<String> {
 
         @Override
         public String mapRow(ResultSet rs, int i) throws SQLException {
 
             //state_name, state_abbreviation, tax_rate
-            
-            String stateName = rs.getString("state_name");
-            
+            String stateName = rs.getString("state_abbreviation");
+
 //            state.setId(rs.getInt("id"));
 //            state.setStateName(rs.getString("state_name"));
 //            //state.setReleaseDate(rs.getDate("state_abbreviation"));
@@ -263,7 +261,6 @@ public class StateDaoDbImpl implements StateDao {
 //            } catch (NullPointerException | NumberFormatException ex) {
 //                state.setStateTax(0.0d);
 //            }
-
 //            state.setDirectorsName(rs.getString("directors_name"));
 //            state.setStudio(rs.getString("studio"));
 //
