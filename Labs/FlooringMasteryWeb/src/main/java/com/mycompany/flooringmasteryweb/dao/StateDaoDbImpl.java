@@ -37,7 +37,7 @@ public class StateDaoDbImpl implements StateDao {
     //private static final String SQL_UPDATE_STATE = "UPDATE states SET state_name=?, state_abbreviation=?, tax_rate=? WHERE state_abbreviation=?";
     private static final String SQL_UPDATE_STATE = "UPDATE states SET tax_rate=? WHERE state_abbreviation=?";
     private static final String SQL_DELETE_STATE = "DELETE FROM states WHERE state_abbreviation =?";
-    private static final String SQL_GET_STATE = "SELECT * FROM states WHERE state_abbreviation =?";
+    private static final String SQL_GET_STATE = "SELECT * FROM states WHERE state_abbreviation = ?";
     private static final String SQL_GET_STATE_ID = "SELECT * FROM states WHERE id =?";
     private static final String SQL_GET_STATE_LIST = "SELECT * FROM states";
     
@@ -75,6 +75,7 @@ public class StateDaoDbImpl implements StateDao {
      * @return
      */
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public State create(String stateName, State state) {
         State returnedState = null;
 
@@ -87,15 +88,21 @@ public class StateDaoDbImpl implements StateDao {
 
             //state_name, state_abbreviation, tax_rate
             //first_name, last_name, street_number, street_name, city, state, zip
+            
+            try {
             jdbcTemplate.update(SQL_INSERT_STATE,
                     null,
                     state.getStateName(),
                     state.getStateTax());
 
+            } catch (org.springframework.dao.DuplicateKeyException ex) {
+                return null;
+            }
+            
             Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
 
             state.setId(id);
-
+            return state;
 //            if (!statesMap.containsKey(postalCode)) {
 //
 //                state.setState(postalCode);
@@ -182,9 +189,12 @@ public class StateDaoDbImpl implements StateDao {
             return;
         }
 
-        int id = state.getId();
+        //int id = state.getId();
+        //int id = state.getId();
 
-        jdbcTemplate.update(SQL_DELETE_STATE, id);
+        String name = state.getStateName();
+        
+        jdbcTemplate.update(SQL_DELETE_STATE, name);
     }
 
     private static final String SQL_GET_STATE_NAMES = "SELECT state_abbreviation FROM states";
