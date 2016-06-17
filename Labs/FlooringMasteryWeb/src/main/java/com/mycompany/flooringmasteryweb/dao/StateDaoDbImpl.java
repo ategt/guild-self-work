@@ -141,18 +141,18 @@ public class StateDaoDbImpl implements StateDao {
 //        return state;
 //    }
     //@Override
-    public State get(Integer id) {
-
-        //if (id == null) {
-            return null;
-        //}
-        
-//        try {
-//            return jdbcTemplate.queryForObject(SQL_GET_STATE_ID, new StateMapper(), id);
-//        } catch (org.springframework.dao.EmptyResultDataAccessException ex) {
+//    public State get(Integer id) {
+//
+//        //if (id == null) {
 //            return null;
-//        }
-    }
+//        //}
+//        
+////        try {
+////            return jdbcTemplate.queryForObject(SQL_GET_STATE_ID, new StateMapper(), id);
+////        } catch (org.springframework.dao.EmptyResultDataAccessException ex) {
+////            return null;
+////        }
+//    }
 
     public State get(String name) {
 

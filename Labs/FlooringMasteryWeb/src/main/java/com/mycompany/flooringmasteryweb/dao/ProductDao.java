@@ -7,305 +7,54 @@ package com.mycompany.flooringmasteryweb.dao;
 
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.ProductCommand;
-import com.mycompany.flooringmasteryweb.dto.State;
-import com.mycompany.flooringmasteryweb.dto.StateCommand;
-import com.mycompany.flooringmasteryweb.utilities.ProductFileIO;
-import com.mycompany.flooringmasteryweb.utilities.StateUtilities;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  *
  * @author apprentice
  */
-public class ProductDao {
+public interface ProductDao {
 
-    java.util.Map<String, Product> productsMap;
-    int nextId;
-    File productDataFile;
-    private ProductFileIO fileIo;
+    String bestGuessProductName(String inputName);
 
-    public ProductDao(ConfigDao configDao) {
+    ProductCommand buildCommandProduct(Product product);
 
-        this.fileIo = new com.mycompany.flooringmasteryweb.utilities.ProductFileIOImpl(this);
+    List<ProductCommand> buildCommandProductList(List<Product> products);
 
-        productDataFile = configDao.get().getProductFile();
+    Product create(Product product);
 
-        productsMap = fileIo.decode(productDataFile);
+    Product create(Product product, String productName);
 
-        if (productsMap == null) {
-            productsMap = new java.util.HashMap();
-            System.out.println("The list was empty, making a new one.");
-        }
+    Product create(String productName, Product product);
 
-    }
+    void delete(Product product);
 
-    public Product create(Product product) {
-        if (product != null) {
-            return create(product.getType(), product);
-        } else {
-            return null;
-        }
-    }
+    Product get(String name);
 
-    public Product create(Product product, String productName) {
-        return create(productName, product);
-    }
+    List<String> getList();
 
-    public Product create(String productName, Product product) {
+    List<Product> getListOfProducts();
 
-        if (product == null) {
-            return null;
-        } else if (product.getType() == null) {
-            return null;
-        } else if (productName.equals(product.getType())) {
+    List<String> guessProductName(String inputName);
 
-            String titleCaseName = com.mycompany.flooringmasteryweb.utilities.TextUtilities.toTitleCase(productName);
+    Product resolveCommandProduct(ProductCommand productCommand);
 
-            if (!productsMap.containsKey(titleCaseName)) {
-                productsMap.put(titleCaseName, product);
-                product.setType(titleCaseName);
-                fileIo.encode(productDataFile, getList());
+    int size();
 
-                return product;
-            } else {
-                return null;
-            }
-        } else {
-            return null;  // Look up how to throw exceptions and consider that instead.
-        }
-    }
+    List<ProductCommand> sortByProductCommandName(List<ProductCommand> products);
 
-    public Product get(String name) {
+    List<ProductCommand> sortByProductCommandNameRev(List<ProductCommand> products);
 
-        String input = null;
+    List<Product> sortByProductCost(List<Product> products);
 
-        if ( name == null)
-            return null;
-            
-        for (String productTest : productsMap.keySet()) {
-            if (name.equalsIgnoreCase(productTest)) {
-                input = productTest;
-                break;
-            }
-        }
-        return productsMap.get(input);
+    List<Product> sortByProductCostRev(List<Product> products);
 
-    }
+    List<Product> sortByProductName(List<Product> products);
 
-    public void update(Product product) {
-        Product foundProduct = productsMap.get(product.getType());
+    List<Product> sortByProductNameRev(List<Product> products);
 
-        if (foundProduct != null) {
+    void update(Product product);
 
-            if (foundProduct.getType().equals(product.getType())) {
-                productsMap.remove(foundProduct.getType());
-                productsMap.put(product.getType(), product);
-
-                fileIo.encode(productDataFile, getList());
-
-            } else {
-
-                System.out.println("Throwing a Product Not Found exception!!!!");
-                // Look up exception throwing and consider putting one here, too!
-            }
-        } else {
-            create(product);
-
-            //System.out.println("Throwing a Product is null exception!!!!");
-            // Look up exception throwing and consider putting one here, too!
-        }
-    }
-
-    public void delete(Product product) {
-
-        if (productsMap.containsKey(product.getType())) {
-            productsMap.remove(product.getType());
-            fileIo.encode(productDataFile, getList());
-
-        } else {
-            System.out.println("Throwing a Product Not Found exception!!!!");
-            // Look up exception throwing and consider putting one here, too!
-
-        }
-    }
-
-    public List<String> getList() {
-        return new ArrayList(productsMap.keySet());
-    }
-
-    public int size() {
-        return productsMap.size();
-    }
-
-    public boolean validProductName(String inputName) {
-        return (bestGuessProductName(inputName) != null);
-    }
-
-    public String bestGuessProductName(String inputName) {
-        if (inputName == null) {
-            return null;
-        }
-
-        List<String> productGuesses = guessProductName(inputName);
-
-        if (productGuesses.isEmpty()) {
-            return null;
-        }
-
-        return productGuesses.get(0);
-    }
-
-    public List<String> guessProductName(String inputName) {
-
-        if (inputName == null) {
-            return null;
-        }
-
-        if (getList() == null) {
-            return null;
-        }
-
-        List<String> productNames = getList().stream()
-                .filter(a -> a != null)
-                .filter(a -> a.equalsIgnoreCase(inputName))
-                .collect(Collectors.toList());
-
-        if (productNames.isEmpty()) {
-            productNames = getList().stream()
-                    .filter(a -> a != null)
-                    .filter(a -> a.toLowerCase().startsWith(inputName.toLowerCase()))
-                    .collect(Collectors.toList());
-        }
-
-        if (productNames.isEmpty()) {
-            productNames = getList().stream()
-                    .filter(a -> a != null)
-                    .filter(a -> a.toLowerCase().contains(inputName.toLowerCase()))
-                    .collect(Collectors.toList());
-        }
-
-        return productNames;
-    }
-
-    public List<Product> getListOfProducts() {
-
-        List<Product> products = getList().stream()
-                .map(name -> get(name))
-                .collect(Collectors.toList());
-
-        return products;
-    }
-
-    public List<Product> sortByProductName(List<Product> products) {
-
-        products.sort(
-                new Comparator<Product>() {
-            public int compare(Product c1, Product c2) {
-                return c1.getProductName().compareTo(c2.getProductName());
-            }
-        });
-
-        return products;
-    }
-
-    public List<Product> sortByProductNameRev(List<Product> products) {
-        List<Product> shallowCopy = sortByProductName(products).subList(0, products.size());
-        Collections.reverse(shallowCopy);
-        return shallowCopy;
-    }
-
-    public List<Product> sortByProductCost(List<Product> products) {
-
-        products.sort(
-                new Comparator<Product>() {
-            public int compare(Product c1, Product c2) {
-                return Double.compare(c1.getCost(), c2.getCost());
-            }
-        });
-
-        return products;
-    }
-
-    public List<Product> sortByProductCostRev(List<Product> products) {
-        List<Product> shallowCopy = sortByProductName(products).subList(0, products.size());
-        Collections.reverse(shallowCopy);
-        return shallowCopy;
-    }
-
-    public ProductCommand buildCommandProduct(Product product) {
-
-        ProductCommand productCommand = new ProductCommand();
-
-        String productName = product.getProductName();
-        productCommand.setProductName(productName);
-
-        Double productCost = product.getCost();
-        productCommand.setCost(productCost);
-
-        Double laborCost = product.getLaborCost();
-        productCommand.setLaborCost(laborCost);
-
-        return productCommand;
-    }
-
-    public Product resolveCommandProduct(ProductCommand productCommand) {
-
-        Product product = new Product();
-
-        String productName = productCommand.getProductName();
-        product.setProductName(productName);
-
-        Double productCost = productCommand.getCost();
-        product.setCost(productCost);
-
-        Double laborCost = productCommand.getLaborCost();
-        product.setLaborCost(laborCost);
-
-        return product;
-    }
-
-    public List<ProductCommand> buildCommandProductList(List<Product> products) {
-        List<ProductCommand> resultsList = new ArrayList();
-
-        for (Product product : products) {
-
-            resultsList.add(buildCommandProduct(product));
-
-        }
-
-        return resultsList;
-    }
-
-    public List<ProductCommand> sortByProductCommandName(List<ProductCommand> products) {
-
-        products.sort(
-                new Comparator<ProductCommand>() {
-            public int compare(ProductCommand c1, ProductCommand c2) {
-                return c1.getProductName().compareTo(c2.getProductName());
-            }
-        });
-
-        return products;
-    }
-
-    public List<ProductCommand> sortByProductCommandNameRev(List<ProductCommand> products) {
-        List<ProductCommand> shallowCopy = sortByProductCommandName(products).subList(0, products.size());
-        Collections.reverse(shallowCopy);
-        return shallowCopy;
-    }
-
+    boolean validProductName(String inputName);
+    
 }
