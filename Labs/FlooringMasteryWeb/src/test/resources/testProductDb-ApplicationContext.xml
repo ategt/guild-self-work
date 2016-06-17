@@ -38,7 +38,7 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <bean id="stateDao" class="com.mycompany.flooringmasteryweb.dao.ProductDaoDbImpl" > 
+    <bean id="productDao" class="com.mycompany.flooringmasteryweb.dao.ProductDaoDbImpl" > 
         <constructor-arg ref="jdbcTemplate" />
     </bean>
     
