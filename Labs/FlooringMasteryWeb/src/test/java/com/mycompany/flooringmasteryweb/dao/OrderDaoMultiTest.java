@@ -46,7 +46,7 @@ public class OrderDaoMultiTest {
     ConfigDao configDao;
 
     public OrderDaoMultiTest() {
-        ctx = new ClassPathXmlApplicationContext("testDb-ApplicationContext.xml");
+        ctx = new ClassPathXmlApplicationContext("testStateDb-ApplicationContext.xml");
     }
 
 //    ApplicationContext ctx;

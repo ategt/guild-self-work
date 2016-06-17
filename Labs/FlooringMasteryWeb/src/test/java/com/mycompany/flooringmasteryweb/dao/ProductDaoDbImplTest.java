@@ -33,32 +33,31 @@ public class ProductDaoDbImplTest {
         ctx = new ClassPathXmlApplicationContext("testProductDb-ApplicationContext.xml");
     }
 
-
     @Before
     public void setUp() {
-ProductDao instance = ctx.getBean("productDao", ProductDao.class);
+        ProductDao instance = ctx.getBean("productDao", ProductDao.class);
 
-        String[] fakeProducts = {  "Better Flooring",
-                                    "Worlds Best Floor",
-                                    "floor1",
-                                    "FLOOR5",
-                                    "BEST Product ever",
-                                    "best floor",
-                                    "Good floor",
-                                    "BETTER FLOOR",
-                                    "German Bamboo",
-                                    "Product1",
-                                    "Product2",
-                                    "Product7",
-                                    "Fancy New Product",
-                                    "Fake Product That I Have Not Used Yet" };
+        String[] fakeProducts = {"Better Flooring",
+            "Worlds Best Floor",
+            "floor1",
+            "FLOOR5",
+            "BEST Product ever",
+            "best floor",
+            "Good floor",
+            "BETTER FLOOR",
+            "German Bamboo",
+            "Product1",
+            "Product2",
+            "Product7",
+            "Fancy New Product",
+            "Fake Product That I Have Not Used Yet",
+            "Grass",
+            "Teststeel",
+            "Steel",
+            "Test Steel",
+            "Wood",
+            "Fake Product That I Have Not Used Yet"};
 
-        
-       
-
-        
-        
-        
         for (String fakeProduct : fakeProducts) {
             if (instance.get(fakeProduct) != null) {
                 Product product = new Product();
@@ -68,13 +67,12 @@ ProductDao instance = ctx.getBean("productDao", ProductDao.class);
             }
 
         }
-       
+
     }
 
     @After
     public void tearDown() {
 
-      
     }
 
     @Test
@@ -159,7 +157,6 @@ ProductDao instance = ctx.getBean("productDao", ProductDao.class);
         assertEquals("Best Product Ever", result.getType());
     }
 
-
     @Test
     public void testGetA() {
         // This test tests the overloaded method.
@@ -171,7 +168,7 @@ ProductDao instance = ctx.getBean("productDao", ProductDao.class);
         //Product expResult = product;
         Product ignored = instance.create(product, product.getType());
         Product result = instance.get(productName);
-        
+
         assertNull(result);
     }
 
@@ -244,11 +241,10 @@ ProductDao instance = ctx.getBean("productDao", ProductDao.class);
 
         // Test get method.
         Product returnedProduct = instance.get(product.getType());
-        
+
         //assertTrue(TestUtils.isProductEqual(returnedProduct, result));
-        
         assertTrue(TestUtils.isProductEqual(returnedProduct, result));
-        
+
         instance.delete(product);
 
         returnedProduct = instance.get(product.getType());
@@ -325,13 +321,11 @@ ProductDao instance = ctx.getBean("productDao", ProductDao.class);
 //        java.io.File tempFile = new java.io.File("ProductsTestData-temp.txt");
 //        // I change the name so the ProductDao can not find it.
 //        testFile.renameTo(tempFile);
-
         Product product = new Product();
         product.setType("best floor");
         ProductDao instance = ctx.getBean("productDao", ProductDao.class);
 
         //testFile.renameTo(tempFile);
-
         Product secondProduct = new Product();
         secondProduct.setType("Good floor");
 
@@ -349,7 +343,7 @@ ProductDao instance = ctx.getBean("productDao", ProductDao.class);
         // I fixed this problem by renaming the file and then
         // changing the name back after the test was over.
         List<String> names = instance.getList();
-                //.contains("Good Floor");
+        //.contains("Good Floor");
         assertTrue(instance.getList().contains("Good Floor"));
         assertTrue(instance.getList().contains("Better Floor"));
         assertTrue(instance.getList().contains("Best Floor"));
@@ -358,7 +352,6 @@ ProductDao instance = ctx.getBean("productDao", ProductDao.class);
 //        // work right.
 //        testFile.delete();
 //        tempFile.renameTo(testFile);
-
     }
 
     @Test

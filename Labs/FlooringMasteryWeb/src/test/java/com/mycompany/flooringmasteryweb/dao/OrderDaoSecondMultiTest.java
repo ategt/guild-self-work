@@ -80,9 +80,6 @@ public class OrderDaoSecondMultiTest {
     public void testCreate() {
         System.out.println("create");
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao instance = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -109,9 +106,6 @@ public class OrderDaoSecondMultiTest {
     public void testNullCreate() {
         System.out.println("create");
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao instance = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -129,9 +123,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testNullCreateB() {
         System.out.println("create");
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -171,9 +162,6 @@ public class OrderDaoSecondMultiTest {
     public void testNullDelete() {
         System.out.println("delete");
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao instance = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -199,9 +187,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testNullUpdate() {
         System.out.println("delete");
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -234,9 +219,6 @@ public class OrderDaoSecondMultiTest {
     public void testNullGet() {
         System.out.println("delete");
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao instance = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -264,9 +246,6 @@ public class OrderDaoSecondMultiTest {
     public void testNullGetB() {
         System.out.println("delete");
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao instance = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -279,9 +258,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testNullUpdateB() {
         System.out.println("update");
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -296,9 +272,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testCreateB() {
         System.out.println("create - null");
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -316,9 +289,6 @@ public class OrderDaoSecondMultiTest {
     public void testCreateC() {
         System.out.println("create - null");
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao instance = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -335,9 +305,6 @@ public class OrderDaoSecondMultiTest {
     public void testCreateD() {
         System.out.println("create - null");
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao instance = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -353,9 +320,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testCreateE() {
         System.out.println("create - null");
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -375,9 +339,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testGetAllOrderes() {
         System.out.println("getAllOrderes");
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -454,9 +415,6 @@ public class OrderDaoSecondMultiTest {
 
     @Test
     public void testEncodeAndDecode() {
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -555,9 +513,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testEncodeAndDecodeWithCommas() {
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -654,9 +609,6 @@ public class OrderDaoSecondMultiTest {
 
     @Test
     public void testEncodeAndDecodeWithDate() {
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -784,9 +736,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testToString() {
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -892,9 +841,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testToStringExtreme() {
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         //ProductDao productDao = new ProductDaoImpl(configDao);
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
 
@@ -990,9 +936,6 @@ public class OrderDaoSecondMultiTest {
 
     @Test
     public void testToStringEscapeAtEnd() {
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -1093,7 +1036,7 @@ public class OrderDaoSecondMultiTest {
 //        // I guess it is public, though.
 //        // I know what my luck looks like; best of luck future me.
 //        
-//        boolean isATest = true;
+//        
 //
 //        ConfigDao configDao = null;
 //
@@ -1104,7 +1047,7 @@ public class OrderDaoSecondMultiTest {
 //            fail("Throwing This Exception Should Not Be Possible.\n" + ex.getMessage());
 //        }
 //        
-//        configDao.get().setInTestMode(isATest);
+//        
 //        
 //        ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
 //        StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -1235,9 +1178,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testResolverA() {
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -1306,9 +1246,6 @@ public class OrderDaoSecondMultiTest {
 
     @Test
     public void testResolverB() {
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -1379,9 +1316,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testResolverC() {
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -1450,9 +1384,6 @@ public class OrderDaoSecondMultiTest {
 
     @Test
     public void testResolverD() {
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -1523,9 +1454,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testResolverF() {
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -1594,9 +1522,6 @@ public class OrderDaoSecondMultiTest {
 
     @Test
     public void testResolverEBackandForth() {
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -1705,9 +1630,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testResolverFBackandForth() {
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -1805,7 +1727,6 @@ public class OrderDaoSecondMultiTest {
         //assertTrue(TestUtils.isProductEqual(builtOrder.getProduct(), unresolvedOrder.getProduct()));
         assertTrue(TestUtils.isProductEqual(builtOrder.getProduct(), unresolvedOrder.getProduct()));
 
-        
         assertTrue(TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()));
         assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
         assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
@@ -1815,9 +1736,6 @@ public class OrderDaoSecondMultiTest {
 
     @Test
     public void testResolverGBackandForth() {
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -1895,9 +1813,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testResolverHBackandForth() {
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -1973,9 +1888,6 @@ public class OrderDaoSecondMultiTest {
 
     @Test
     public void testResolverIBackandForth() {
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -2059,9 +1971,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testResolverLBackandForth() {
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -2143,9 +2052,6 @@ public class OrderDaoSecondMultiTest {
 
     @Test
     public void testResolverJBackandForth() {
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -2229,9 +2135,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testResolverKBackandForth() {
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -2313,9 +2216,6 @@ public class OrderDaoSecondMultiTest {
 
     @Test
     public void testResolverNBackandForth() {
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
@@ -2399,9 +2299,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testResolverMBackandForth() {
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -2484,9 +2381,6 @@ public class OrderDaoSecondMultiTest {
     @Test
     public void testResolverOBackandForth() {
 
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
-
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao orderDao = new OrderDaoImpl(productDao, stateDao, configDao);
@@ -2568,9 +2462,6 @@ public class OrderDaoSecondMultiTest {
 
     @Test
     public void testResolverPBackandForth() {
-
-        boolean isATest = true;
-        configDao.get().setInTestMode(isATest);
 
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
