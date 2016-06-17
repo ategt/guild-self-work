@@ -37,14 +37,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * @author apprentice
  */
-public class OrderDaoTest {
+public class OrderDaoMultiTest {
 
     
     ApplicationContext ctx;
     java.io.File testFile = new java.io.File("/home/apprentice/_repos/adam.tegtmeier.self.work/Labs/FlooringMastery/OrdersTestData.txt");
     ConfigDao configDao;
 
-    public OrderDaoTest() {
+    public OrderDaoMultiTest() {
         ctx = new ClassPathXmlApplicationContext("testDb-ApplicationContext.xml");
     }
 
