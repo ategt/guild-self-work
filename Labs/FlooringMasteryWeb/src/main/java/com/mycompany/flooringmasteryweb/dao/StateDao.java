@@ -7,50 +7,21 @@ package com.mycompany.flooringmasteryweb.dao;
 
 import com.mycompany.flooringmasteryweb.dto.State;
 import com.mycompany.flooringmasteryweb.dto.StateCommand;
-import com.mycompany.flooringmasteryweb.utilities.StateFileIO;
-import com.mycompany.flooringmasteryweb.utilities.StateFileIOImplementation;
-import com.mycompany.flooringmasteryweb.utilities.StateUtilities;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  *
  * @author apprentice
  */
-public class StateDao {
+public interface StateDao {
 
-    private java.util.Map<String, State> statesMap;
-    private File stateDataFile = new File("StatesData.txt");
-    private StateFileIO fileIo;
+    StateCommand buildCommandState(State state);
 
-    public StateDao(ConfigDao configDao) {
+    List<StateCommand> buildCommandStateList(List<State> states);
 
-        this.fileIo = new StateFileIOImplementation(this);
-        stateDataFile = configDao.get().getTaxesFile();
+    State create(State state);
 
-        statesMap = fileIo.decode(stateDataFile);
-
-        if (statesMap == null) {
-            statesMap = new java.util.HashMap();
-            System.out.println("The list was empty, making a new one.");
-        }
-    }
-
-    public State create(State state) {
-        if (state == null) {
-            return null;
-        } else {
-            return create(state.getState(), state);
-        }
-    }
-
-    public State create(State state, String stateName) {
-        return create(stateName, state);
-    }
+    State create(State state, String stateName);
 
     /**
      * The state Name must be the two character state postal code abbreviation
@@ -60,191 +31,30 @@ public class StateDao {
      * @param state
      * @return
      */
-    public State create(String stateName, State state) {
-        State returnedState = null;
+    State create(String stateName, State state);
 
-        if (state.getState() == null) {
-        } else if (stateName == null) {
-        } else if (stateName.length() != 2) {
-        } else if (stateName.equals(state.getState())) {
+    void delete(State state);
 
-            String postalCode = stateName.toUpperCase();
+    State get(String name);
 
-            if (!statesMap.containsKey(postalCode)) {
+    List<String> getList();
 
-                state.setState(postalCode);
-                statesMap.put(postalCode, state);
+    List<State> getListOfStates();
 
-                fileIo.encode(stateDataFile, getList());
+    int size();
 
-                returnedState = state;
-            }
-        } else {
-            // Look up how to throw exceptions and consider that here.
-        }
-        return returnedState;
-    }
+    List<StateCommand> sortByStateFullName(List<StateCommand> states);
 
-    public State get(String name) {
+    List<StateCommand> sortByStateFullNameRev(List<StateCommand> states);
 
-        if (name == null) {
-            return null;
-        }
+    List<State> sortByStateName(List<State> states);
 
-        String input = null;
-        for (String stateTest : statesMap.keySet()) {
-            if (name.equalsIgnoreCase(stateTest)) {
-                input = stateTest;
-                break;
-            }
-        }
-        return statesMap.get(input);
-    }
+    List<State> sortByStateNameRev(List<State> states);
 
-    public void update(State state) {
+    List<State> sortByStateTax(List<State> states);
 
-        if (state != null) {
-            State foundState = statesMap.get(state.getState());
+    List<State> sortByStateTaxRev(List<State> states);
 
-            if (foundState != null) {
-
-                if (foundState.getState().equals(state.getState())) {
-                    statesMap.remove(foundState.getState());
-                    statesMap.put(state.getState(), state);
-
-                    fileIo.encode(stateDataFile, getList());
-                } else {
-                    System.out.println("Throwing a State Not Found exception!!!!");
-                    // Look up exception throwing and consider putting one here, too!
-                }
-            } else {
-                create(state);
-                //System.out.println("Throwing a State is null exception!!!!");
-                // Look up exception throwing and consider putting one here, too!
-            }
-        }
-    }
-
-    public void delete(State state) {
-
-        if (statesMap.containsKey(state.getState())) {
-            statesMap.remove(state.getState());
-            fileIo.encode(stateDataFile, getList());
-        } else {
-            System.out.println("Throwing a State Not Found exception!!!!");
-            // Look up exception throwing and consider putting one here, too!
-
-        }
-    }
-
-    public List<String> getList() {
-        return new ArrayList(statesMap.keySet());
-    }
-
-    public int size() {
-        return statesMap.size();
-    }
-
-    public List<State> getListOfStates() {
-
-        List<State> states = getList().stream()
-                .map(name -> get(name))
-                .collect(Collectors.toList());
-
-        return states;
-    }
-
-    public List<State> sortByStateName(List<State> states) {
-
-        states.sort(
-                new Comparator<State>() {
-            public int compare(State c1, State c2) {
-                return c1.getStateName().compareTo(c2.getStateName());
-            }
-        });
-
-        return states;
-    }
-
-    public List<State> sortByStateNameRev(List<State> states) {
-        List<State> shallowCopy = sortByStateName(states).subList(0, states.size());
-        Collections.reverse(shallowCopy);
-        return shallowCopy;
-    }
-
-    public List<State> sortByStateTax(List<State> states) {
-
-        states.sort(
-                new Comparator<State>() {
-            public int compare(State c1, State c2) {
-                return Double.compare(c1.getStateTax(), c2.getStateTax());
-            }
-        });
-
-        return states;
-    }
-
-    public List<State> sortByStateTaxRev(List<State> states) {
-        List<State> shallowCopy = sortByStateName(states).subList(0, states.size());
-        Collections.reverse(shallowCopy);
-        return shallowCopy;
-    }
-
-    public StateCommand buildCommandState(State state) {
-
-        StateCommand stateCommand = new StateCommand();
-
-        if (StateUtilities.validStateAbbr(state.getStateName())) {
-            String stateAbbreviation = state.getStateName();
-            String stateName = StateUtilities.stateFromAbbr(stateAbbreviation);
-
-            stateCommand.setStateAbbreviation(stateAbbreviation);
-            stateCommand.setStateName(stateName);
-
-            stateCommand.setStateTax(state.getStateTax());
-
-        } else if (StateUtilities.validStateInput(state.getStateName())) {
-            String guessedName = StateUtilities.bestGuessStateName(state.getStateName());
-            String stateAbbreviation = StateUtilities.abbrFromState(guessedName);
-
-            stateCommand.setStateAbbreviation(stateAbbreviation);
-            stateCommand.setStateName(guessedName);
-
-            stateCommand.setStateTax(state.getStateTax());
-
-        }
-
-        return stateCommand;
-    }
-
-    public List<StateCommand> buildCommandStateList(List<State> states) {
-        List<StateCommand> resultsList = new ArrayList();
-
-        for (State state : states) {
-
-            resultsList.add(buildCommandState(state));
-
-        }
-
-        return resultsList;
-    }
-
-    public List<StateCommand> sortByStateFullName(List<StateCommand> states) {
-
-        states.sort(
-                new Comparator<StateCommand>() {
-            public int compare(StateCommand c1, StateCommand c2) {
-                return c1.getStateName().compareTo(c2.getStateName());
-            }
-        });
-
-        return states;
-    }
-
-    public List<StateCommand> sortByStateFullNameRev(List<StateCommand> states) {
-        List<StateCommand> shallowCopy = sortByStateFullName(states).subList(0, states.size());
-        Collections.reverse(shallowCopy);
-        return shallowCopy;
-    }
-
+    void update(State state);
+    
 }
