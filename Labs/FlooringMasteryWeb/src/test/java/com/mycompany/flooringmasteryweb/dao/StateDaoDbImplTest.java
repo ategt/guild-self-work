@@ -27,7 +27,7 @@ public class StateDaoDbImplTest {
     ApplicationContext ctx;
 
     public StateDaoDbImplTest() {
-        ctx = new ClassPathXmlApplicationContext("testDb-ApplicationContext.xml");
+        ctx = new ClassPathXmlApplicationContext("testStateDb-ApplicationContext.xml");
     }
 
     @Before
