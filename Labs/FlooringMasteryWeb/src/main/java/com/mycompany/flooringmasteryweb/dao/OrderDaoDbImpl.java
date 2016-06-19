@@ -16,6 +16,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,113 +31,211 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import javax.inject.Inject;
 import org.springframework.context.ApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author apprentice
  */
-public class OrderDaoImpl implements OrderDao {
+public class OrderDaoDbImpl implements OrderDao {
 
-    private ApplicationContext ctx;
-
-    private List<Order> orders;
-    private int nextId;
-    private StateDao stateDao;
+    private JdbcTemplate jdbcTemplate;
     private ProductDao productDao;
-    private ConfigDao configDao;
-    private boolean isATest;
-    private com.mycompany.flooringmasteryweb.utilities.OrderDaoFileIO orderIo;
+    private StateDao stateDao;
+    
+    private static final String SQL_INSERT_ORDER = "INSERT INTO orders (customer_name, material_cost, tax_rate, total_tax, grand_total, date, labor_cost, area, cost_per_square_foot, labor_cost_per_square_foot, product_id, state_id ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+    private static final String SQL_UPDATE_ORDER = "UPDATE orders SET customer_name = ?, material_cost = ?, tax_rate = ?, total_tax = ?, grand_total = ?, date = ?, labor_cost = ?, area = ?, cost_per_square_foot = ?, labor_cost_per_square_foot = ?, product_id = ?, state_id WHERE id=?";
+    private static final String SQL_DELETE_ORDER = "DELETE FROM orders WHERE id =?";
+    private static final String SQL_GET_ORDER = "SELECT * FROM orders WHERE id =?";
+    private static final String SQL_GET_ORDER_LIST = "SELECT * FROM orders";
 
-    public OrderDaoImpl(ProductDao productDao, StateDao stateDao) {
-        this(productDao, stateDao, null);
-    }
-
-    public OrderDaoImpl(ProductDao productDao, StateDao stateDao, ConfigDao configDao) {
-
-        ctx = com.mycompany.flooringmasteryweb.aop.ApplicationContextProvider.getApplicationContext();
-
+    @Inject
+    public OrderDaoDbImpl(JdbcTemplate jdbcTemplate) {
         this.productDao = productDao;
         this.stateDao = stateDao;
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
-        if (configDao != null) {
-            this.configDao = configDao;
-            this.isATest = configDao.get().isInTestMode();
-        } else {
-            this.isATest = true;
+    //"INSERT INTO orders (customer_name, material_cost, tax_rate, total_tax, grand_total, date, labor_cost, area, cost_per_square_foot, labor_cost_per_square_foot, product_id, state_id ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Order create(Order order) {
+
+        if (order == null) {
+            return null;
         }
 
-        this.orderIo = new OrderDaoFileIOImplementation(this, stateDao, productDao);
+        if (order.getState() == null || order.getState().getStateName() == null) {
+            return null;
+        }
 
-        init(configDao);
+        if (order.getProduct() == null || order.getProduct().getProductName() == null) {
+            return null;
+        }
+
+        jdbcTemplate.update(SQL_INSERT_ORDER,
+                order.getName(),
+                order.getMaterialCost(),
+                order.getTaxRate(),
+                order.getTax(),
+                order.getTotal(),
+                order.getDate(),
+                order.getLaborCost(),
+                order.getArea(),
+                order.getCostPerSquareFoot(),
+                order.getLaborCostPerSquareFoot(),
+                order.getState().getStateName(),
+                order.getProduct().getProductName());
+
+        Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+
+        order.setId(id);
+
+        return order;
+    }
+
+    @Override
+    public Order get(Integer id) {
+
+        if (id == null) {
+            return null;
+        }
+        try {
+            return jdbcTemplate.queryForObject(SQL_GET_ORDER, new OrderMapper(), id);
+        } catch (org.springframework.dao.EmptyResultDataAccessException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public void update(Order order) {
+
+        if (order == null) {
+            return;
+        }
+
+        if (order.getId() > 0) {
+
+        if (order.getState() == null || order.getState().getStateName() == null) {
+            return;
+        }
+
+        if (order.getProduct() == null || order.getProduct().getProductName() == null) {
+            return;
+        }
+
+        jdbcTemplate.update(SQL_UPDATE_ORDER,
+                order.getName(),
+                order.getMaterialCost(),
+                order.getTaxRate(),
+                order.getTax(),
+                order.getTotal(),
+                order.getDate(),
+                order.getLaborCost(),
+                order.getArea(),
+                order.getCostPerSquareFoot(),
+                order.getLaborCostPerSquareFoot(),
+                order.getState().getStateName(),
+                order.getProduct().getProductName(),
+                order.getId());
+
+//            jdbcTemplate.update(SQL_UPDATE_ORDER,
+//                    order.getTitle(),
+//                    order.getReleaseDate(),
+//                    order.getRating(),
+//                    order.getDirectorsName(),
+//                    order.getStudio(),
+//                    order.getId());
+        }
 
     }
 
-    private void init(ConfigDao configDao1) {
-        try {
-
-            File directoryToSearch = null;
-            if (isATest) {
-                directoryToSearch = configDao1.get().getTestDirectory();
-            } else {
-                directoryToSearch = configDao1.get().getOrdersDirectory();
-            }
-
-            List<Order> loadedOrders = new ArrayList();
-            java.io.File[] orderFiles = lookForOrders(directoryToSearch);
-
-            for (java.io.File orderFile : orderFiles) {
-                if (!orderFile.getName().endsWith("00000000.txt")) {
-                    loadedOrders.addAll(orderIo.decode(orderFile));
-                }
-            }
-
-            java.util.Set<Integer> ids = new java.util.HashSet();
-            loadedOrders.stream().forEach(order -> {
-                ids.add(order.getId());
-            });
-
-            for (java.io.File orderFile : orderFiles) {
-                if (orderFile.getName().endsWith("00000000.txt")) {
-                    System.out.println("orderFile");
-                    for (Order order : orderIo.decode(orderFile)) {
-                        if (!ids.contains(order.getId())) {
-                            loadedOrders.add(order);
-                        }
-                    }
-                }
-            }
-
-            Set<Integer> orderNumbers = new HashSet();
-            for (Order order : loadedOrders) {
-                orderNumbers.add(order.getId());
-            }
-
-            if (orderNumbers.size() == loadedOrders.size()) {
-            } else {
-                System.out.println("ID Integrity Check Failed! \n " + orderNumbers.size() + " different order numbers but " + loadedOrders.size() + " orders.");
-            }
-
-            orders = loadedOrders;
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
+    @Override
+    public void delete(Order order) {
+        if (order == null) {
+            return;
         }
-        if (orders == null) {
-            orders = new ArrayList();
-            System.out.println("The list was empty, making a new one.");
+
+        int id = order.getId();
+
+        jdbcTemplate.update(SQL_DELETE_ORDER, id);
+    }
+
+    private final class OrderMapper implements RowMapper<Order> {
+
+        @Override
+        public Order mapRow(ResultSet rs, int i) throws SQLException {
+
+            Order order = new Order();
+
+    // customer_name, material_cost, tax_rate, total_tax, grand_total, date, labor_cost, area, cost_per_square_foot, labor_cost_per_square_foot, product_id, state_id ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+
+            
+            order.setId(rs.getInt("id"));
+order.setName(rs.getString("customer_name"));
+order.setMaterialCost(rs.getDouble("material_cost"));
+order.setTaxRate(rs.getDouble("tax_rate"));
+order.setTax(rs.getDouble("total_tax"));
+order.setCostPerSquareFoot(rs.getDouble("cost_per_square_foot"));
+order.setTotal(rs.getDouble("grand_total"));
+order.setLaborCostPerSquareFoot(rs.getDouble("labor_cost_per_square_foot"));
+order.setLaborCost(rs.getDouble("labor_cost"));
+
+String productName = rs.getString("product_id");
+
+Product product = productDao.get(productName);
+
+order.setProduct(product);
+
+String stateName = rs.getString("state_id");
+
+State state = stateDao.get(stateName);
+
+order.setState(state);
+
+
+
+//            order.setTitle(rs.getString("title"));
+//            order.setReleaseDate(rs.getDate("release_date"));
+//            order.setRating(rs.getString("rating"));
+//            order.setDirectorsName(rs.getString("directors_name"));
+//            order.setStudio(rs.getString("studio"));
+
+//            List<Note> notes = noteDao.getNotesForOrder(order);
+
+            order.setNotes(notes);
+
+            return order;
         }
-        nextId = determineNextId();
+
+    }
+
+    @Override
+    public List<Order> getAllOrders() {
+
+        return jdbcTemplate.query(SQL_GET_ORDER_LIST, new OrderMapper());
+    }
+
+    private static final String SQL_COUNT_ORDERS = "SELECT COUNT(*) FROM orders";
+
+    @Override
+    public int size() {
+        return jdbcTemplate.queryForObject(SQL_COUNT_ORDERS, Integer.class
+        );
     }
 
     @Override
     public Order create(Order order) {
-        
-        if ( order == null)
+
+        if (order == null) {
             return null;
-        
+        }
+
         order.setId(nextId);
         nextId++;
 
@@ -149,9 +249,10 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order get(Integer id) {
 
-        if (id == null)
+        if (id == null) {
             return null;
-        
+        }
+
         for (Order order : orders) {
             if (order != null) {
                 if (order.getId() == id) {
@@ -165,10 +266,11 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public void update(Order order) {
-        
-        if (order == null)
+
+        if (order == null) {
             return;
-        
+        }
+
         List<Order> foundOrders = new ArrayList();
 
         orders.stream()
@@ -385,7 +487,8 @@ public class OrderDaoImpl implements OrderDao {
             encode(file, searchByDate(date));
 
         } catch (IOException ex) {
-            Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderDao.class
+                    .getName()).log(Level.SEVERE, null, ex);
             System.out.println("Something just went quite wrong in the file creation/encoding method!! ");
         }
 
@@ -534,8 +637,10 @@ public class OrderDaoImpl implements OrderDao {
     private File determineFile(java.util.Date date) {
         try {
             return determineFile(configDao.get().getOrdersDirectory(), date);
+
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderDao.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -585,9 +690,11 @@ public class OrderDaoImpl implements OrderDao {
                     date = fmt.parse(simplifiedDateString);
                 } else {
                     System.out.println("Date String: " + dateString + "\nDate unparsable exception thrown here!!!!!\n");
+
                 }
             } catch (ParseException ex) {
-                Logger.getLogger(OrderDao.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(OrderDao.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
 
