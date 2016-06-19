@@ -178,17 +178,22 @@ public class OrderDaoDbImpl implements OrderDao {
 
             Order order = new Order();
 
-            // customer_name, material_cost, tax_rate, total_tax, grand_total, date, labor_cost, area, cost_per_square_foot, labor_cost_per_square_foot, product_id, state_id ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+            // customer_name, material_cost, tax_rate, total_tax, grand_total, date, labor_cost, area,
+            //cost_per_square_foot, labor_cost_per_square_foot, product_id, state_id 
+            //) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
             order.setId(rs.getInt("id"));
             order.setName(rs.getString("customer_name"));
             order.setMaterialCost(rs.getDouble("material_cost"));
             order.setTaxRate(rs.getDouble("tax_rate"));
             order.setTax(rs.getDouble("total_tax"));
-            order.setCostPerSquareFoot(rs.getDouble("cost_per_square_foot"));
             order.setTotal(rs.getDouble("grand_total"));
-            order.setLaborCostPerSquareFoot(rs.getDouble("labor_cost_per_square_foot"));
+            order.setDate(rs.getDate("date"));
             order.setLaborCost(rs.getDouble("labor_cost"));
+            order.setArea(rs.getDouble("area"));
 
+            order.setCostPerSquareFoot(rs.getDouble("cost_per_square_foot"));
+            order.setLaborCostPerSquareFoot(rs.getDouble("labor_cost_per_square_foot"));
+            
             String productName = rs.getString("product_id");
 
             Product product = productDao.get(productName);
