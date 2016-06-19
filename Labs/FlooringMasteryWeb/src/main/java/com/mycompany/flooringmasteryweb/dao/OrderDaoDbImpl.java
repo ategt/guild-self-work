@@ -47,7 +47,7 @@ public class OrderDaoDbImpl implements OrderDao {
     private JdbcTemplate jdbcTemplate;
     private ProductDao productDao;
     private StateDao stateDao;
-    
+
     private static final String SQL_INSERT_ORDER = "INSERT INTO orders (customer_name, material_cost, tax_rate, total_tax, grand_total, date, labor_cost, area, cost_per_square_foot, labor_cost_per_square_foot, product_id, state_id ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
     private static final String SQL_UPDATE_ORDER = "UPDATE orders SET customer_name = ?, material_cost = ?, tax_rate = ?, total_tax = ?, grand_total = ?, date = ?, labor_cost = ?, area = ?, cost_per_square_foot = ?, labor_cost_per_square_foot = ?, product_id = ?, state_id WHERE id=?";
     private static final String SQL_DELETE_ORDER = "DELETE FROM orders WHERE id =?";
@@ -121,28 +121,28 @@ public class OrderDaoDbImpl implements OrderDao {
 
         if (order.getId() > 0) {
 
-        if (order.getState() == null || order.getState().getStateName() == null) {
-            return;
-        }
+            if (order.getState() == null || order.getState().getStateName() == null) {
+                return;
+            }
 
-        if (order.getProduct() == null || order.getProduct().getProductName() == null) {
-            return;
-        }
+            if (order.getProduct() == null || order.getProduct().getProductName() == null) {
+                return;
+            }
 
-        jdbcTemplate.update(SQL_UPDATE_ORDER,
-                order.getName(),
-                order.getMaterialCost(),
-                order.getTaxRate(),
-                order.getTax(),
-                order.getTotal(),
-                order.getDate(),
-                order.getLaborCost(),
-                order.getArea(),
-                order.getCostPerSquareFoot(),
-                order.getLaborCostPerSquareFoot(),
-                order.getState().getStateName(),
-                order.getProduct().getProductName(),
-                order.getId());
+            jdbcTemplate.update(SQL_UPDATE_ORDER,
+                    order.getName(),
+                    order.getMaterialCost(),
+                    order.getTaxRate(),
+                    order.getTax(),
+                    order.getTotal(),
+                    order.getDate(),
+                    order.getLaborCost(),
+                    order.getArea(),
+                    order.getCostPerSquareFoot(),
+                    order.getLaborCostPerSquareFoot(),
+                    order.getState().getStateName(),
+                    order.getProduct().getProductName(),
+                    order.getId());
 
 //            jdbcTemplate.update(SQL_UPDATE_ORDER,
 //                    order.getTitle(),
@@ -166,6 +166,11 @@ public class OrderDaoDbImpl implements OrderDao {
         jdbcTemplate.update(SQL_DELETE_ORDER, id);
     }
 
+    @Override
+    public void purgeTestFiles() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     private final class OrderMapper implements RowMapper<Order> {
 
         @Override
@@ -173,51 +178,40 @@ public class OrderDaoDbImpl implements OrderDao {
 
             Order order = new Order();
 
-    // customer_name, material_cost, tax_rate, total_tax, grand_total, date, labor_cost, area, cost_per_square_foot, labor_cost_per_square_foot, product_id, state_id ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-
-            
+            // customer_name, material_cost, tax_rate, total_tax, grand_total, date, labor_cost, area, cost_per_square_foot, labor_cost_per_square_foot, product_id, state_id ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
             order.setId(rs.getInt("id"));
-order.setName(rs.getString("customer_name"));
-order.setMaterialCost(rs.getDouble("material_cost"));
-order.setTaxRate(rs.getDouble("tax_rate"));
-order.setTax(rs.getDouble("total_tax"));
-order.setCostPerSquareFoot(rs.getDouble("cost_per_square_foot"));
-order.setTotal(rs.getDouble("grand_total"));
-order.setLaborCostPerSquareFoot(rs.getDouble("labor_cost_per_square_foot"));
-order.setLaborCost(rs.getDouble("labor_cost"));
+            order.setName(rs.getString("customer_name"));
+            order.setMaterialCost(rs.getDouble("material_cost"));
+            order.setTaxRate(rs.getDouble("tax_rate"));
+            order.setTax(rs.getDouble("total_tax"));
+            order.setCostPerSquareFoot(rs.getDouble("cost_per_square_foot"));
+            order.setTotal(rs.getDouble("grand_total"));
+            order.setLaborCostPerSquareFoot(rs.getDouble("labor_cost_per_square_foot"));
+            order.setLaborCost(rs.getDouble("labor_cost"));
 
-String productName = rs.getString("product_id");
+            String productName = rs.getString("product_id");
 
-Product product = productDao.get(productName);
+            Product product = productDao.get(productName);
 
-order.setProduct(product);
+            order.setProduct(product);
 
-String stateName = rs.getString("state_id");
+            String stateName = rs.getString("state_id");
 
-State state = stateDao.get(stateName);
+            State state = stateDao.get(stateName);
 
-order.setState(state);
-
-
-
-//            order.setTitle(rs.getString("title"));
-//            order.setReleaseDate(rs.getDate("release_date"));
-//            order.setRating(rs.getString("rating"));
-//            order.setDirectorsName(rs.getString("directors_name"));
-//            order.setStudio(rs.getString("studio"));
-
-//            List<Note> notes = noteDao.getNotesForOrder(order);
-
-            order.setNotes(notes);
+            order.setState(state);
 
             return order;
         }
 
     }
 
-    @Override
     public List<Order> getAllOrders() {
+        return getList();
+    }
 
+    @Override
+    public List<Order> getList() {
         return jdbcTemplate.query(SQL_GET_ORDER_LIST, new OrderMapper());
     }
 
@@ -225,120 +219,24 @@ order.setState(state);
 
     @Override
     public int size() {
-        return jdbcTemplate.queryForObject(SQL_COUNT_ORDERS, Integer.class
-        );
+        return jdbcTemplate.queryForObject(SQL_COUNT_ORDERS, Integer.class);
     }
 
-    @Override
-    public Order create(Order order) {
-
-        if (order == null) {
-            return null;
-        }
-
-        order.setId(nextId);
-        nextId++;
-
-        orders.add(order);
-
-        encode(order);
-
-        return order;
-    }
-
-    @Override
-    public Order get(Integer id) {
-
-        if (id == null) {
-            return null;
-        }
-
-        for (Order order : orders) {
-            if (order != null) {
-                if (order.getId() == id) {
-                    return order;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public void update(Order order) {
-
-        if (order == null) {
-            return;
-        }
-
-        List<Order> foundOrders = new ArrayList();
-
-        orders.stream()
-                .filter(currentOrder -> currentOrder.getId() == order.getId())
-                .forEach(currentOrder -> {
-                    foundOrders.add(currentOrder);
-                });
-
-        foundOrders.stream()
-                .forEach(f -> {
-                    orders.remove(f);
-                    encode(f.getDate());
-                });
-
-        orders.add(order);
-        encode(extractDate("Orders_00000000.txt"));
-        encode(order);
-
-    }
-
-    @Override
-    public void delete(Order order) {
-
-        if (order == null) {
-            return;
-        }
-
-        Order found = null;
-
-        for (Order currentOrder : orders) {
-            if (currentOrder.getId() == order.getId()) {
-                if (currentOrder != null) {
-                    found = currentOrder;
-                    break;
-                }
-            }
-        }
-
-        Date oldDate = null;
-        if (found != null) {
-            oldDate = found.getDate();
-            orders.remove(found);
-        }
-
-        encode(extractDate("Orders_00000000.txt"));
-
-        encode(oldDate);
-
-    }
-
-    @Deprecated
-    @Override
-    public List<Order> getList() {
-        List<Order> copy = new ArrayList();
-        copy.addAll(orders);
-        return copy;
-    }
-
-    @Override
-    public int size() {
-        return orders.size();
-    }
-
+//    @Override
+//    public List<Order> getList() {
+//        List<Order> copy = new ArrayList();
+//        copy.addAll(orders);
+//        return copy;
+//    }
+//    @Override
+//    public int size() {
+//        return orders.size();
+//    }
     @Override
     public java.util.List<Order> searchByDate(java.util.Date date) {
         java.util.List<Order> specificOrders = new ArrayList();
 
-        orders.stream()
+        getAllOrders().stream()
                 .filter(o -> isSameDay(o.getDate(), date))
                 .forEach(o -> specificOrders.add(o));
 
@@ -347,7 +245,7 @@ order.setState(state);
 
     @Override
     public java.util.List<Order> searchByProduct(Product product) {
-        java.util.List<Order> specificOrders = orders.stream()
+        java.util.List<Order> specificOrders = getAllOrders().stream()
                 .filter(o -> o.getProduct() != null)
                 .filter(o -> o.getProduct() == product)
                 .collect(Collectors.toList());
@@ -357,7 +255,7 @@ order.setState(state);
 
     @Override
     public java.util.List<Order> searchByOrderNumber(Integer orderNumber) {
-        java.util.List<Order> specificOrders = orders.stream()
+        java.util.List<Order> specificOrders = getAllOrders().stream()
                 .filter(o -> Integer.toString(o.getId()).contains(orderNumber.toString()))
                 .collect(Collectors.toList());
 
@@ -366,7 +264,7 @@ order.setState(state);
 
     @Override
     public java.util.List<Order> searchByState(State state) {
-        java.util.List<Order> specificOrders = orders.stream()
+        java.util.List<Order> specificOrders = getAllOrders().stream()
                 .filter(o -> o.getState() != null)
                 .filter(o -> o.getState() == state)
                 .collect(Collectors.toList());
@@ -378,7 +276,7 @@ order.setState(state);
     public java.util.List<Integer> listOrderNumbers() {
         java.util.List<Integer> orderNumbers = new ArrayList();
 
-        orders.stream()
+        getAllOrders().stream()
                 .forEach(o -> orderNumbers.add(o.getId()));
 
         Collections.sort(orderNumbers);
@@ -393,7 +291,7 @@ order.setState(state);
 
         java.util.Map<String, java.util.Date> dateMap = new java.util.HashMap();
 
-        for (Order order : orders) {
+        for (Order order : getAllOrders()) {
             dateMap.putIfAbsent(fmt.format(order.getDate()), order.getDate());
         }
 
@@ -410,11 +308,11 @@ order.setState(state);
         java.util.List<Order> closeOrders = new ArrayList();
 
         if (orderName == null) {
-            specificOrders.addAll(orders);
+            specificOrders.addAll(getAllOrders());
             return specificOrders;
         }
 
-        for (Order order : orders) {
+        for (Order order : getAllOrders()) {
             if (orderName.equalsIgnoreCase(order.getName())) {
                 specificOrders.add(order);
             }
@@ -428,7 +326,7 @@ order.setState(state);
 
         if (closeOrders.isEmpty()) {
 
-            closeOrders = orders.stream()
+            closeOrders = getAllOrders().stream()
                     .filter(o -> o.getName() != null)
                     .filter(o -> o.getName().toLowerCase().contains(orderName.toLowerCase()))
                     .collect(Collectors.toList());
@@ -452,50 +350,6 @@ order.setState(state);
             return false;
         }
         return fmt.format(date1).equals(fmt.format(date2));
-    }
-
-    private int determineNextId() {
-        int highestId = 0;
-
-        for (Order order : orders) {
-            if (highestId < order.getId()) {
-                highestId = order.getId();
-            }
-        }
-
-        highestId++;
-        return highestId++;
-    }
-
-    private void encode(Order order) {
-        encode(order.getDate());
-    }
-
-    private void encode(java.util.Date date) {
-        try {
-            File file = null;
-            if (isATest) {
-                file = determineFile(configDao.get().getTestDirectory(), date); // testOrderDateFile;
-            } else {
-                file = determineFile(date);
-            }
-
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
-            encode(file, searchByDate(date));
-
-        } catch (IOException ex) {
-            Logger.getLogger(OrderDao.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Something just went quite wrong in the file creation/encoding method!! ");
-        }
-
-    }
-
-    private void encode(java.io.File orderFile, List<Order> groupOfOrders) throws IOException {
-        orderIo.encode(new PrintWriter(new FileWriter(orderFile)), groupOfOrders);
     }
 
     @Override
@@ -634,45 +488,6 @@ order.setState(state);
         }
     }
 
-    private File determineFile(java.util.Date date) {
-        try {
-            return determineFile(configDao.get().getOrdersDirectory(), date);
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(OrderDao.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    private File determineFile(File ordersDirectory, java.util.Date date) throws FileNotFoundException {
-        String dateString;
-
-        String orderDirectoryPath = "";
-
-        if (ordersDirectory.isDirectory()) {
-            orderDirectoryPath = ordersDirectory.getAbsolutePath();
-        } else if (ordersDirectory.isFile()) {
-            orderDirectoryPath = ordersDirectory.getParent();
-        } else {
-        }
-
-        java.util.Date defaultDate = extractDate("Orders_00000000.txt");
-
-        if (date == null || isSameDay(date, defaultDate)) {
-            dateString = "00000000";
-        } else {
-            java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("MMddyyyy");
-            dateString = fmt.format(date);
-        }
-
-        String prefix = "Orders_";
-        String extension = ".txt";
-        String dateFilePath = orderDirectoryPath + "/" + prefix + dateString + extension;
-
-        return new File(dateFilePath.replaceAll("//", "/"));
-    }
-
     public Date extractDate(String dateString) {
         Date date = null;
         if (dateString.toLowerCase().contains("test")) {
@@ -699,16 +514,6 @@ order.setState(state);
         }
 
         return date;
-    }
-
-    @Override
-    public void purgeTestFiles() {
-
-        java.io.File[] testFiles = lookForOrders(configDao.get().getTestDirectory());
-        for (java.io.File testFile : testFiles) {
-            testFile.deleteOnExit();
-
-        }
     }
 
     public Order orderBuilder(BasicOrder basicOrder) {
