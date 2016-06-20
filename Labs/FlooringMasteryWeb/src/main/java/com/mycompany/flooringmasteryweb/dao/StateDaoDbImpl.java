@@ -404,6 +404,9 @@ public class StateDaoDbImpl implements StateDao {
     @Override
     public StateCommand buildCommandState(State state) {
 
+        if (state == null)
+            return null;
+        
         StateCommand stateCommand = new StateCommand();
 
         if (StateUtilities.validStateAbbr(state.getStateName())) {

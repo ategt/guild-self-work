@@ -88,10 +88,14 @@ public class AdminProductPanelWebController {
             return "editProduct";
 
         } else {
-            
+
             Product product = productDao.resolveCommandProduct(productCommand);
 
-            productDao.update(product);
+            if (productDao.get(product.getProductName()) == null) {
+                productDao.create(product);
+            } else {
+                productDao.update(product);
+            }
 
             return "redirect:/adminProductPanel/";
         }

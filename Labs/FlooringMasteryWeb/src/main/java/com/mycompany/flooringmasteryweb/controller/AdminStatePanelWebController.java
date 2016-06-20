@@ -84,9 +84,9 @@ public class AdminStatePanelWebController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(@ModelAttribute StateCommand stateCommand, BindingResult bindingResult, Map model) {
 
-        boolean stateValid  = StateUtilities.validStateInput(stateCommand.getStateName());
+        boolean stateValid = StateUtilities.validStateInput(stateCommand.getStateName());
         boolean taxValid = true;
-        
+
         if (!stateValid) {
             bindingResult.rejectValue("stateName", "error.user", "That State Does Not Exist.");
         }
@@ -105,22 +105,26 @@ public class AdminStatePanelWebController {
 
             model.put("stateCommand", stateCommand);
             model.put("states", stateList());
-            
+
             model.put("stateError", !stateValid);
             model.put("taxError", !taxValid);
-            
+
             return "editState";
-            
+
         } else {
             String enteredName = stateCommand.getStateName();
             String guessedName = StateUtilities.bestGuessStateName(enteredName);
             String stateName = StateUtilities.abbrFromState(guessedName);
-            
+
             State state = new State();
             state.setStateTax(stateCommand.getStateTax());
             state.setStateName(stateName);
-          
-            stateDao.update(state);
+
+            if (stateDao.get(state.getStateName()) == null) {
+                stateDao.create(state);
+            } else {
+                stateDao.update(state);
+            }
 
             return "redirect:/adminStatePanel/";
         }

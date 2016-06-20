@@ -17,11 +17,25 @@
     <!-- Bean definitions go here -->
     
     
+    <tx:annotation-driven />
     
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/flooring_master" />
+        <property name="username" value="root" />
+        <property name="password" value="apprentice" />
+        <property name="initialSize" value="5" />
+        <property name="maxActive" value="10" />
+    </bean>
     
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
 
-    <import resource="test-SQLBase-applicationContext.xml" />
     
-    <import resource="testProductDb-ApplicationContext.xml" />
-        
+    
 </beans>
