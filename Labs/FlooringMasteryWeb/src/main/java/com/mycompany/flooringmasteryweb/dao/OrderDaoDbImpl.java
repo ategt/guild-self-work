@@ -55,7 +55,7 @@ public class OrderDaoDbImpl implements OrderDao {
     private static final String SQL_GET_ORDER_LIST = "SELECT * FROM orders";
 
     @Inject
-    public OrderDaoDbImpl(JdbcTemplate jdbcTemplate) {
+    public OrderDaoDbImpl(JdbcTemplate jdbcTemplate, StateDao stateDao, ProductDao productDao) {
         this.productDao = productDao;
         this.stateDao = stateDao;
         this.jdbcTemplate = jdbcTemplate;
@@ -78,6 +78,8 @@ public class OrderDaoDbImpl implements OrderDao {
             return null;
         }
 
+        try {
+        
         jdbcTemplate.update(SQL_INSERT_ORDER,
                 order.getName(),
                 order.getMaterialCost(),
@@ -89,14 +91,18 @@ public class OrderDaoDbImpl implements OrderDao {
                 order.getArea(),
                 order.getCostPerSquareFoot(),
                 order.getLaborCostPerSquareFoot(),
-                order.getState().getStateName(),
-                order.getProduct().getProductName());
+                order.getProduct().getProductName(),
+                order.getState().getStateName() );
 
         Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
 
         order.setId(id);
 
         return order;
+        
+        } catch (org.springframework.dao.DataIntegrityViolationException ex){
+            return null;
+        }
     }
 
     @Override
