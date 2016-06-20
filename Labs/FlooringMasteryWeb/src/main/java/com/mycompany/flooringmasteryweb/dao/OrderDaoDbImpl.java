@@ -49,7 +49,7 @@ public class OrderDaoDbImpl implements OrderDao {
     private StateDao stateDao;
 
     private static final String SQL_INSERT_ORDER = "INSERT INTO orders (customer_name, material_cost, tax_rate, total_tax, grand_total, date, labor_cost, area, cost_per_square_foot, labor_cost_per_square_foot, product_id, state_id ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-    private static final String SQL_UPDATE_ORDER = "UPDATE orders SET customer_name = ?, material_cost = ?, tax_rate = ?, total_tax = ?, grand_total = ?, date = ?, labor_cost = ?, area = ?, cost_per_square_foot = ?, labor_cost_per_square_foot = ?, product_id = ?, state_id WHERE id=?";
+    private static final String SQL_UPDATE_ORDER = "UPDATE orders SET customer_name = ?, material_cost = ?, tax_rate = ?, total_tax = ?, grand_total = ?, date = ?, labor_cost = ?, area = ?, cost_per_square_foot = ?, labor_cost_per_square_foot = ?, product_id = ?, state_id = ? WHERE id=?";
     private static final String SQL_DELETE_ORDER = "DELETE FROM orders WHERE id =?";
     private static final String SQL_GET_ORDER = "SELECT * FROM orders WHERE id =?";
     private static final String SQL_GET_ORDER_LIST = "SELECT * FROM orders";
@@ -79,28 +79,28 @@ public class OrderDaoDbImpl implements OrderDao {
         }
 
         try {
-        
-        jdbcTemplate.update(SQL_INSERT_ORDER,
-                order.getName(),
-                order.getMaterialCost(),
-                order.getTaxRate(),
-                order.getTax(),
-                order.getTotal(),
-                order.getDate(),
-                order.getLaborCost(),
-                order.getArea(),
-                order.getCostPerSquareFoot(),
-                order.getLaborCostPerSquareFoot(),
-                order.getProduct().getProductName(),
-                order.getState().getStateName() );
 
-        Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+            jdbcTemplate.update(SQL_INSERT_ORDER,
+                    order.getName(),
+                    order.getMaterialCost(),
+                    order.getTaxRate(),
+                    order.getTax(),
+                    order.getTotal(),
+                    order.getDate(),
+                    order.getLaborCost(),
+                    order.getArea(),
+                    order.getCostPerSquareFoot(),
+                    order.getLaborCostPerSquareFoot(),
+                    order.getProduct().getProductName(),
+                    order.getState().getStateName());
 
-        order.setId(id);
+            Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
 
-        return order;
-        
-        } catch (org.springframework.dao.DataIntegrityViolationException ex){
+            order.setId(id);
+
+            return order;
+
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
             return null;
         }
     }
@@ -135,21 +135,41 @@ public class OrderDaoDbImpl implements OrderDao {
                 return;
             }
 
-            jdbcTemplate.update(SQL_UPDATE_ORDER,
-                    order.getName(),
-                    order.getMaterialCost(),
-                    order.getTaxRate(),
-                    order.getTax(),
-                    order.getTotal(),
-                    order.getDate(),
-                    order.getLaborCost(),
-                    order.getArea(),
-                    order.getCostPerSquareFoot(),
-                    order.getLaborCostPerSquareFoot(),
-                    order.getState().getStateName(),
-                    order.getProduct().getProductName(),
-                    order.getId());
+            try {
 
+                jdbcTemplate.update(SQL_UPDATE_ORDER,
+                        order.getName(),
+                        order.getMaterialCost(),
+                        order.getTaxRate(),
+                        order.getTax(),
+                        order.getTotal(),
+                        order.getDate(),
+                        order.getLaborCost(),
+                        order.getArea(),
+                        order.getCostPerSquareFoot(),
+                        order.getLaborCostPerSquareFoot(),
+                        order.getProduct().getProductName(),
+                        order.getState().getStateName(),
+                        order.getId());
+
+            } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+                return;
+            }
+
+//"UPDATE orders SET 
+//customer_name = ?,
+//material_cost = ?,
+//tax_rate = ?,
+//total_tax = ?, 
+//grand_total = ?,
+//date = ?, 
+//labor_cost = ?,
+//area = ?,
+//cost_per_square_foot = ?,
+//labor_cost_per_square_foot = ?,
+//product_id = ?,
+//state_id = ?
+//        WHERE id=?";            
 //            jdbcTemplate.update(SQL_UPDATE_ORDER,
 //                    order.getTitle(),
 //                    order.getReleaseDate(),
@@ -199,7 +219,7 @@ public class OrderDaoDbImpl implements OrderDao {
 
             order.setCostPerSquareFoot(rs.getDouble("cost_per_square_foot"));
             order.setLaborCostPerSquareFoot(rs.getDouble("labor_cost_per_square_foot"));
-            
+
             String productName = rs.getString("product_id");
 
             Product product = productDao.get(productName);

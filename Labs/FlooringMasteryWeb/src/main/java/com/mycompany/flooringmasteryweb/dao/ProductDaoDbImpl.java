@@ -10,6 +10,7 @@ import com.mycompany.flooringmasteryweb.dto.ProductCommand;
 import com.mycompany.flooringmasteryweb.dto.Product;
 import com.mycompany.flooringmasteryweb.dto.ProductCommand;
 import com.mycompany.flooringmasteryweb.utilities.ProductFileIO;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,9 +39,9 @@ import org.springframework.transaction.annotation.Transactional;
  * @author apprentice
  */
 public class ProductDaoDbImpl implements ProductDao {
-    
+
     private JdbcTemplate jdbcTemplate;
-    
+
     private static final String SQL_INSERT_PRODUCT = "INSERT INTO products ( product_name, labor_cost, material_cost ) VALUES ( ?, ?, ? )";
     //private static final String SQL_UPDATE_PRODUCT = "UPDATE products SET product_name=?, labor_cost=?, material_cost=? WHERE product_name=?";
     private static final String SQL_UPDATE_PRODUCT = "UPDATE products SET labor_cost=?, material_cost=? WHERE product_name=?";
@@ -48,12 +49,12 @@ public class ProductDaoDbImpl implements ProductDao {
     private static final String SQL_GET_PRODUCT = "SELECT * FROM products WHERE product_name = ?";
     private static final String SQL_GET_PRODUCT_ID = "SELECT * FROM products WHERE product_name =?";
     private static final String SQL_GET_PRODUCT_LIST = "SELECT * FROM products";
-    
+
     @Inject
     public ProductDaoDbImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-    
+
     @Override
     public Product create(Product product) {
         if (product != null) {
@@ -62,7 +63,7 @@ public class ProductDaoDbImpl implements ProductDao {
             return null;
         }
     }
-    
+
     @Override
     public Product create(Product product, String productName) {
         return create(productName, product);
@@ -95,28 +96,28 @@ public class ProductDaoDbImpl implements ProductDao {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Product create(String productName, Product product) {
-        
+
         if (product == null) {
             return null;
         } else if (product.getType() == null) {
             return null;
         } else if (productName.equals(product.getType())) {
-            
+
             String titleCaseName = com.mycompany.flooringmasteryweb.utilities.TextUtilities.toTitleCase(productName);
-            
+
             product.setProductName(titleCaseName);
-            
+
             try {
                 jdbcTemplate.update(SQL_INSERT_PRODUCT,
                         product.getProductName(),
                         product.getLaborCost(),
                         product.getCost());
-                
+
                 Integer id = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-                
+
                 product.setId(id);
                 return product;
-                
+
             } catch (org.springframework.dao.DuplicateKeyException ex) {
                 return null;
             }
@@ -134,16 +135,16 @@ public class ProductDaoDbImpl implements ProductDao {
             return null;  // Look up how to throw exceptions and consider that instead.
         }
     }
-    
+
     @Override
     public Product get(String name) {
-        
+
         String input = null;
-        
+
         if (name == null) {
             return null;
         }
-        
+
         try {
             return jdbcTemplate.queryForObject(SQL_GET_PRODUCT, new ProductMapper(), name);
         } catch (org.springframework.dao.EmptyResultDataAccessException ex) {
@@ -158,30 +159,30 @@ public class ProductDaoDbImpl implements ProductDao {
 //        }
 //        return productsMap.get(input);
     }
-    
+
     @Override
     public void update(Product product) {
-        
+
         if (product == null) {
             return;
         }
 
-        if ( get(product.getProductName()) == null ) {
+        if (get(product.getProductName()) == null) {
             create(product);
         } else {
-        
-        //if (product.getId() > 0) {
-        jdbcTemplate.update(SQL_UPDATE_PRODUCT,
-                product.getLaborCost(),
-                product.getCost(),
-                product.getProductName());
-        //}
+
+            //if (product.getId() > 0) {
+            jdbcTemplate.update(SQL_UPDATE_PRODUCT,
+                    product.getLaborCost(),
+                    product.getCost(),
+                    product.getProductName());
+            //}
         }
     }
-    
+
     @Override
     public void delete(Product product) {
-        
+
         if (product == null) {
             return;
         }
@@ -189,8 +190,11 @@ public class ProductDaoDbImpl implements ProductDao {
         //int id = product.getId();
         //int id = product.getId();
         String name = product.getProductName();
-        
-        jdbcTemplate.update(SQL_DELETE_PRODUCT, name);
+        try {
+            jdbcTemplate.update(SQL_DELETE_PRODUCT, name);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+
+        }
 
 //        if (productsMap.containsKey(product.getType())) {
 //            productsMap.remove(product.getType());
@@ -202,31 +206,31 @@ public class ProductDaoDbImpl implements ProductDao {
 //
 //        }
     }
-    
+
     private static final String SQL_GET_PRODUCT_NAMES = "SELECT product_name FROM products";
-    
+
     @Override
     public List<String> getList() {
         return jdbcTemplate.query(SQL_GET_PRODUCT_NAMES, new ProductNameMapper());
 
         // return new ArrayList(productsMap.keySet());
     }
-    
+
     private static final String SQL_GET_PRODUCT_NAMES_SIZE = "SELECT COUNT(product_name) FROM products";
-    
+
     @Override
     public int size() {
         return jdbcTemplate.queryForObject(SQL_GET_PRODUCT_NAMES_SIZE, Integer.class);
     }
-    
+
     private final class ProductMapper implements RowMapper<Product> {
-        
+
         @Override
         public Product mapRow(ResultSet rs, int i) throws SQLException {
 
             //product_name, product_name, tax_rate
             Product product = new Product();
-            
+
             product.setLaborCost(rs.getDouble("labor_cost"));
             product.setProductName(rs.getString("product_name"));
             product.setCost(rs.getDouble("material_cost"));
@@ -248,11 +252,11 @@ public class ProductDaoDbImpl implements ProductDao {
             //product.setNotes(notes);
             return product;
         }
-        
+
     }
-    
+
     private final class ProductNameMapper implements RowMapper<String> {
-        
+
         @Override
         public String mapRow(ResultSet rs, int i) throws SQLException {
 
@@ -279,177 +283,177 @@ public class ProductDaoDbImpl implements ProductDao {
             //product.setNotes(notes);
             return productName;
         }
-        
+
     }
-    
+
     @Override
     public boolean validProductName(String inputName) {
         return (bestGuessProductName(inputName) != null);
     }
-    
+
     @Override
     public String bestGuessProductName(String inputName) {
         if (inputName == null) {
             return null;
         }
-        
+
         List<String> productGuesses = guessProductName(inputName);
-        
+
         if (productGuesses.isEmpty()) {
             return null;
         }
-        
+
         return productGuesses.get(0);
     }
-    
+
     @Override
     public List<String> guessProductName(String inputName) {
-        
+
         if (inputName == null) {
             return null;
         }
-        
+
         if (getList() == null) {
             return null;
         }
-        
+
         List<String> productNames = getList().stream()
                 .filter(a -> a != null)
                 .filter(a -> a.equalsIgnoreCase(inputName))
                 .collect(Collectors.toList());
-        
+
         if (productNames.isEmpty()) {
             productNames = getList().stream()
                     .filter(a -> a != null)
                     .filter(a -> a.toLowerCase().startsWith(inputName.toLowerCase()))
                     .collect(Collectors.toList());
         }
-        
+
         if (productNames.isEmpty()) {
             productNames = getList().stream()
                     .filter(a -> a != null)
                     .filter(a -> a.toLowerCase().contains(inputName.toLowerCase()))
                     .collect(Collectors.toList());
         }
-        
+
         return productNames;
     }
-    
+
     @Override
     public List<Product> getListOfProducts() {
-        
+
         List<Product> products = getList().stream()
                 .map(name -> get(name))
                 .collect(Collectors.toList());
-        
+
         return products;
     }
-    
+
     @Override
     public List<Product> sortByProductName(List<Product> products) {
-        
+
         products.sort(
                 new Comparator<Product>() {
             public int compare(Product c1, Product c2) {
                 return c1.getProductName().compareTo(c2.getProductName());
             }
         });
-        
+
         return products;
     }
-    
+
     @Override
     public List<Product> sortByProductNameRev(List<Product> products) {
         List<Product> shallowCopy = sortByProductName(products).subList(0, products.size());
         Collections.reverse(shallowCopy);
         return shallowCopy;
     }
-    
+
     @Override
     public List<Product> sortByProductCost(List<Product> products) {
-        
+
         products.sort(
                 new Comparator<Product>() {
             public int compare(Product c1, Product c2) {
                 return Double.compare(c1.getCost(), c2.getCost());
             }
         });
-        
+
         return products;
     }
-    
+
     @Override
     public List<Product> sortByProductCostRev(List<Product> products) {
         List<Product> shallowCopy = sortByProductName(products).subList(0, products.size());
         Collections.reverse(shallowCopy);
         return shallowCopy;
     }
-    
+
     @Override
     public ProductCommand buildCommandProduct(Product product) {
-        
+
         ProductCommand productCommand = new ProductCommand();
-        
+
         String productName = product.getProductName();
         productCommand.setProductName(productName);
-        
+
         Double productCost = product.getCost();
         productCommand.setCost(productCost);
-        
+
         Double laborCost = product.getLaborCost();
         productCommand.setLaborCost(laborCost);
-        
+
         return productCommand;
     }
-    
+
     @Override
     public Product resolveCommandProduct(ProductCommand productCommand) {
-        
+
         Product product = new Product();
-        
+
         String productName = productCommand.getProductName();
         product.setProductName(productName);
-        
+
         Double productCost = productCommand.getCost();
         product.setCost(productCost);
-        
+
         Double laborCost = productCommand.getLaborCost();
         product.setLaborCost(laborCost);
-        
+
         return product;
     }
-    
+
     @Override
     public List<ProductCommand> buildCommandProductList(List<Product> products) {
         List<ProductCommand> resultsList = new ArrayList();
-        
+
         for (Product product : products) {
-            
+
             resultsList.add(buildCommandProduct(product));
-            
+
         }
-        
+
         return resultsList;
     }
-    
+
     @Override
     public List<ProductCommand> sortByProductCommandName(List<ProductCommand> products) {
-        
+
         products.sort(
                 new Comparator<ProductCommand>() {
             public int compare(ProductCommand c1, ProductCommand c2) {
                 return c1.getProductName().compareTo(c2.getProductName());
             }
         });
-        
+
         return products;
     }
-    
+
     @Override
     public List<ProductCommand> sortByProductCommandNameRev(List<ProductCommand> products) {
         List<ProductCommand> shallowCopy = sortByProductCommandName(products).subList(0, products.size());
         Collections.reverse(shallowCopy);
         return shallowCopy;
     }
-    
+
 }

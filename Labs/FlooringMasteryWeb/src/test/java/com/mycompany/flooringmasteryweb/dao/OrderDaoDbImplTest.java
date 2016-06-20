@@ -30,6 +30,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -60,7 +62,7 @@ public class OrderDaoDbImplTest {
         //OrderDao instance = new OrderDaoImpl(productDao, stateDao, configDao);
         OrderDao instance = ctx.getBean("orderDao", OrderDao.class);
 
-        Order order = new Order();
+        Order order = orderFactory();
         Order expResult = order;
         Order result = instance.create(order);
         assertEquals(expResult, result);
@@ -71,7 +73,7 @@ public class OrderDaoDbImplTest {
 
         // Test get method.
         Order returnedOrder = instance.get(id);
-        assertEquals(returnedOrder, result);
+        assertTrue(verifyOrder(returnedOrder, result));
         instance.delete(order);
 
         returnedOrder = instance.get(id);
@@ -104,7 +106,7 @@ public class OrderDaoDbImplTest {
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao instance = ctx.getBean("orderDao", OrderDao.class);
 
-        Order order = new Order();
+        Order order = orderFactory();
         Order expResult = order;
         Order result = instance.create(order);
         assertEquals(expResult, result);
@@ -122,7 +124,7 @@ public class OrderDaoDbImplTest {
 
         // Test get method.
         Order returnedOrder = instance.get(id);
-        assertEquals(returnedOrder, result);
+        assertTrue(verifyOrder(returnedOrder, result));
         instance.delete(order);
 
         returnedOrder = instance.get(id);
@@ -142,7 +144,7 @@ public class OrderDaoDbImplTest {
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao instance = ctx.getBean("orderDao", OrderDao.class);
 
-        Order order = new Order();
+        Order order = orderFactory();
         Order expResult = order;
         Order result = instance.create(order);
         assertEquals(expResult, result);
@@ -153,7 +155,8 @@ public class OrderDaoDbImplTest {
 
         // Test get method.
         Order returnedOrder = instance.get(id);
-        assertEquals(returnedOrder, result);
+        //assertEquals(returnedOrder, result);
+        assertTrue(verifyOrder(returnedOrder, result));
         instance.delete(null);
         instance.delete(order);
         returnedOrder = instance.get(id);
@@ -168,7 +171,7 @@ public class OrderDaoDbImplTest {
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao instance = ctx.getBean("orderDao", OrderDao.class);
 
-        Order order = new Order();
+        Order order = orderFactory();
         Order expResult = order;
         Order result = instance.create(order);
         assertEquals(expResult, result);
@@ -179,7 +182,7 @@ public class OrderDaoDbImplTest {
 
         // Test get method.
         Order returnedOrder = instance.get(id);
-        assertEquals(returnedOrder, result);
+        assertTrue(verifyOrder(returnedOrder, result));
         instance.update(null);
         instance.delete(order);
         returnedOrder = instance.get(id);
@@ -199,7 +202,7 @@ public class OrderDaoDbImplTest {
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao instance = ctx.getBean("orderDao", OrderDao.class);
 
-        Order order = new Order();
+        Order order = orderFactory();
         Order expResult = order;
         Order result = instance.create(order);
         assertEquals(expResult, result);
@@ -320,12 +323,12 @@ public class OrderDaoDbImplTest {
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao instance = ctx.getBean("orderDao", OrderDao.class);
 
-        Order orderOne = new Order();
-        Order orderTwo = new Order();
-        Order orderThree = new Order();
-        Order orderFour = new Order();
+        Order orderOne = orderFactory();
+        Order orderTwo = orderFactory();
+        Order orderThree = orderFactory();
+        Order orderFour = orderFactory();
 
-        Date date = new Date();
+        Date firstDate = new Date();
         Date secondDate = new Date();
         Date thirdDate = new Date();
 
@@ -344,7 +347,25 @@ public class OrderDaoDbImplTest {
             fail("Parse Exception - " + ex.getMessage());
         }
 
-        orderOne.setDate(date);
+        try {
+            firstDate = fmt.parse(fmt.format(firstDate));
+        } catch (ParseException ex) {
+            fail("Parse Exception - " + ex.getMessage());
+        }
+
+        try {
+            thirdDate = fmt.parse(fmt.format(thirdDate));
+        } catch (ParseException ex) {
+            fail("Parse Exception - " + ex.getMessage());
+        }
+
+        try {
+            fourthDate = fmt.parse(fmt.format(fourthDate));
+        } catch (ParseException ex) {
+            fail("Parse Exception - " + ex.getMessage());
+        }
+
+        orderOne.setDate(firstDate);
         orderTwo.setDate(secondDate);
         orderThree.setDate(thirdDate);
         orderFour.setDate(fourthDate);
@@ -357,20 +378,29 @@ public class OrderDaoDbImplTest {
 //        int expSizeResult = 4;
 //        int sizeResult = instance.size();
 //        assertEquals(expSizeResult, sizeResult);
-        assertTrue(instance.getList().contains(orderOne));
-        assertTrue(instance.getList().contains(orderTwo));
-        assertTrue(instance.getList().contains(orderThree));
-        assertTrue(instance.getList().contains(orderFour));
+        //assertTrue(instance.getList().contains(orderOne));
+        
+//        assertTrue(instance.getList().contains(orderOne));
+//        assertTrue(instance.getList().contains(orderTwo));
+//        assertTrue(instance.getList().contains(orderThree));
+//        assertTrue(instance.getList().contains(orderFour));
 
-        List<Order> result = instance.searchByDate(date);
+        List<Order> testList = instance.getList();
+
+        assertTrue(isOrderInList(orderOne, instance.getList()));
+        assertTrue(isOrderInList(orderTwo, instance.getList()));
+        assertTrue(isOrderInList(orderThree, instance.getList()));
+        assertTrue(isOrderInList(orderFour, instance.getList()));
+
+        List<Order> result = instance.searchByDate(firstDate);
 
         assertEquals(false, result.isEmpty());
         //assertEquals(2, result.size());
 
-        assertEquals(true, result.contains(orderOne));
-        assertEquals(true, result.contains(orderTwo));
-        assertEquals(false, result.contains(orderThree));
-        assertEquals(false, result.contains(orderFour));
+        assertEquals(true, isOrderInList(orderOne, result));
+        assertEquals(true, isOrderInList(orderTwo, result));
+        assertEquals(false, isOrderInList(orderThree, result));
+        assertEquals(false, isOrderInList(orderFour, result));
 
         instance.delete(orderOne);
         instance.delete(orderTwo);
@@ -398,15 +428,15 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        Order order = new Order();
+        Order order = orderFactory();
 
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(order);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = order.getId();
 
-        // Verify that the note object that the create method passed back
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         assertEquals(order, returnedOrder);
 
@@ -453,13 +483,13 @@ public class OrderDaoDbImplTest {
         StateDao secondStateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao secondOrderDao = ctx.getBean("orderDao", OrderDao.class);
 
-        // Pull a note  using the id number recorded earlier.
+        // Pull a order  using the id number recorded earlier.
         Order thirdOrder = secondOrderDao.get(id);
 
         assertTrue(thirdOrder != null);
 
         // Check that the update method saved the new text.
-        //assertEquals("This Is a test note.", thirdOrder.getNoteString());
+        //assertEquals("This Is a test order.", thirdOrder.getOrderString());
         assertEquals(name, thirdOrder.getName());
         assertEquals(ohio.getState(), thirdOrder.getState().getState());
         assertEquals(taxRate, thirdOrder.getTaxRate(), 1e-8);
@@ -472,11 +502,11 @@ public class OrderDaoDbImplTest {
         assertEquals(tax, thirdOrder.getTax(), 1e-8);
         assertEquals(total, thirdOrder.getTotal(), 1e-8);
 
-        // Delete the test note.
+        // Delete the test order.
         secondOrderDao.delete(thirdOrder);
 
         // Load a third instance of the Dao and verify that 
-        // the note was deleted from the file.
+        // the order was deleted from the file.
         ProductDao thirdProductDao = ctx.getBean("productDao", ProductDao.class);
         StateDao thirdStateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao thirdOrderDao = ctx.getBean("orderDao", OrderDao.class);
@@ -495,15 +525,15 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        Order order = new Order();
+        Order order = orderFactory();
 
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(order);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = order.getId();
 
-        // Verify that the note object that the create method passed back
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         assertEquals(order, returnedOrder);
 
@@ -550,13 +580,13 @@ public class OrderDaoDbImplTest {
         StateDao secondStateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao secondOrderDao = ctx.getBean("orderDao", OrderDao.class);
 
-        // Pull a note  using the id number recorded earlier.
+        // Pull a order  using the id number recorded earlier.
         Order thirdOrder = secondOrderDao.get(id);
 
         assertTrue(thirdOrder != null);
 
         // Check that the update method saved the new text.
-        //assertEquals("This Is a test note.", thirdOrder.getNoteString());
+        //assertEquals("This Is a test order.", thirdOrder.getOrderString());
         assertEquals(name, thirdOrder.getName());
         assertEquals(ohio.getState(), thirdOrder.getState().getState());
         assertEquals(taxRate, thirdOrder.getTaxRate(), 1e-8);
@@ -569,11 +599,11 @@ public class OrderDaoDbImplTest {
         assertEquals(tax, thirdOrder.getTax(), 1e-8);
         assertEquals(total, thirdOrder.getTotal(), 1e-8);
 
-        // Delete the test note.
+        // Delete the test order.
         secondOrderDao.delete(thirdOrder);
 
         // Load a third instance of the Dao and verify that 
-        // the note was deleted from the file.
+        // the order was deleted from the file.
         ProductDao thirdProductDao = ctx.getBean("productDao", ProductDao.class);
         StateDao thirdStateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao thirdOrderDao = ctx.getBean("orderDao", OrderDao.class);
@@ -592,15 +622,15 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        Order order = new Order();
+        Order order = orderFactory();
 
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(order);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = order.getId();
 
-        // Verify that the note object that the create method passed back
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         assertEquals(order, returnedOrder);
 
@@ -653,7 +683,7 @@ public class OrderDaoDbImplTest {
         StateDao secondStateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao secondOrderDao = ctx.getBean("orderDao", OrderDao.class);
 
-        // Pull a note  using the id number recorded earlier.
+        // Pull a order  using the id number recorded earlier.
         Order thirdOrder = secondOrderDao.get(id);
 
         String thirdOrderString = secondOrderDao.toString(thirdOrder, System.lineSeparator());
@@ -682,7 +712,7 @@ public class OrderDaoDbImplTest {
         assertTrue(thirdOrder != null);
 
         // Check that the update method saved the new text.
-        //assertEquals("This Is a test note.", thirdOrder.getNoteString());
+        //assertEquals("This Is a test order.", thirdOrder.getOrderString());
         assertEquals(name, thirdOrder.getName());
         assertEquals(ohio.getState(), thirdOrder.getState().getState());
         assertEquals(taxRate, thirdOrder.getTaxRate(), 1e-8);
@@ -695,11 +725,11 @@ public class OrderDaoDbImplTest {
         assertEquals(tax, thirdOrder.getTax(), 1e-8);
         assertEquals(total, thirdOrder.getTotal(), 1e-8);
 
-        // Delete the test note.
+        // Delete the test order.
         secondOrderDao.delete(thirdOrder);
 
         // Load a third instance of the Dao and verify that 
-        // the note was deleted from the file.
+        // the order was deleted from the file.
         ProductDao thirdProductDao = ctx.getBean("productDao", ProductDao.class);
         StateDao thirdStateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao thirdOrderDao = ctx.getBean("orderDao", OrderDao.class);
@@ -718,7 +748,7 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        Order order = new Order();
+        Order order = orderFactory();
 
         // Create the file in the Dao.
         //Order returnedOrder = orderDao.create(order);
@@ -826,7 +856,7 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        Order order = new Order();
+        Order order = orderFactory();
 
         // Create the file in the Dao.
         //Order returnedOrder = orderDao.create(order);
@@ -919,7 +949,7 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        Order order = new Order();
+        Order order = orderFactory();
 
         // Create the file in the Dao.
         //Order returnedOrder = orderDao.create(order);
@@ -1031,15 +1061,15 @@ public class OrderDaoDbImplTest {
 //
 //        // The true parameter in the Order Dao constructor signifies a test.
 //        //OrderDao orderDao = new OrderDao(true);
-//        Order order = new Order();
+//        Order order = orderFactory();
 //
 //        // Create the file in the Dao.
 //        Order returnedOrder = orderDao.create(order);
 //
-//        // Record the notes id number.
+//        // Record the orders id number.
 //        int id = order.getId();
 //
-//        // Verify that the note object that the create method passed back
+//        // Verify that the order object that the create method passed back
 //        // was the same one it was given.
 //        assertEquals(order, returnedOrder);
 //
@@ -1125,7 +1155,7 @@ public class OrderDaoDbImplTest {
 //        assertTrue(thirdOrder != null);
 //
 //        // Check that the update method saved the new text.
-//        //assertEquals("This Is a test note.", thirdOrder.getNoteString());
+//        //assertEquals("This Is a test order.", thirdOrder.getOrderString());
 //        assertEquals(name, thirdOrder.getName());
 //        assertEquals(ohio.getState(), thirdOrder.getState().getState());
 //        assertEquals(taxRate, thirdOrder.getTaxRate(), 1e-8);
@@ -1138,11 +1168,11 @@ public class OrderDaoDbImplTest {
 //        assertEquals(tax, thirdOrder.getTax(), 1e-8);
 //        assertEquals(total, thirdOrder.getTotal(), 1e-8);
 //
-//        // Delete the test note.
+//        // Delete the test order.
 //        secondOrderDao.delete(thirdOrder);
 //
 //        // Load a third instance of the Dao and verify that 
-//        // the note was deleted from the file.
+//        // the order was deleted from the file.
 //        ProductDao thirdProductDao = ctx.getBean("productDao", ProductDao.class);
 //        StateDao thirdStateDao = ctx.getBean("stateDao", StateDao.class);
 //        OrderDao thirdOrderDao = new OrderDao(thirdProductDao, thirdStateDao, configDao);
@@ -1160,15 +1190,15 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        Order order = new Order();
+        Order order = orderFactory();
 
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(order);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = order.getId();
 
-        // Verify that the note object that the create method passed back
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         assertEquals(order, returnedOrder);
 //khhgyujgkjh
@@ -1188,10 +1218,10 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(order);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = order.getId();
 
-        // Verify that the note object that the create method passed back
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         assertEquals(order, returnedOrder);
 
@@ -1252,15 +1282,15 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        Order order = new Order();
+        Order order = orderFactory();
 
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(order);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = order.getId();
 
-        // Verify that the note object that the create method passed back
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         assertEquals(order, returnedOrder);
 
@@ -1321,15 +1351,15 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        Order order = new Order();
+        Order order = orderFactory();
 
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(order);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = order.getId();
 
-        // Verify that the note object that the create method passed back
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         assertEquals(order, returnedOrder);
 
@@ -1390,15 +1420,15 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        Order order = new Order();
+        Order order = orderFactory();
 
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(order);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = order.getId();
 
-        // Verify that the note object that the create method passed back
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         assertEquals(order, returnedOrder);
 
@@ -1459,15 +1489,15 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        Order order = new Order();
+        Order order = orderFactory();
 
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(order);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = order.getId();
 
-        // Verify that the note object that the create method passed back
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         assertEquals(order, returnedOrder);
 
@@ -1528,8 +1558,8 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -1567,7 +1597,7 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(builtOrder);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = builtOrder.getId();
 
 //        double taxRate = 3.25;
@@ -1635,8 +1665,8 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -1674,7 +1704,7 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(builtOrder);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = builtOrder.getId();
 
 //        double taxRate = 3.25;
@@ -1742,8 +1772,8 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -1781,7 +1811,7 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(builtOrder);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = builtOrder.getId();
 
         BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
@@ -1818,8 +1848,8 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -1857,7 +1887,7 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(builtOrder);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = builtOrder.getId();
 
         BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
@@ -1894,8 +1924,8 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -1933,7 +1963,7 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(builtOrder);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = builtOrder.getId();
 
         BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
@@ -1976,8 +2006,8 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -2015,7 +2045,7 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(builtOrder);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = builtOrder.getId();
 
         BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
@@ -2058,8 +2088,8 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -2097,7 +2127,7 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(builtOrder);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = builtOrder.getId();
 
         BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
@@ -2140,8 +2170,8 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -2179,7 +2209,7 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(builtOrder);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = builtOrder.getId();
 
         BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
@@ -2222,8 +2252,8 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -2261,7 +2291,7 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(builtOrder);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = builtOrder.getId();
 
         BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
@@ -2304,8 +2334,8 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -2343,7 +2373,7 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(builtOrder);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = builtOrder.getId();
 
         BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
@@ -2386,8 +2416,8 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -2425,7 +2455,7 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(builtOrder);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = builtOrder.getId();
 
         BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
@@ -2468,8 +2498,8 @@ public class OrderDaoDbImplTest {
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -2507,7 +2537,7 @@ public class OrderDaoDbImplTest {
         // Create the file in the Dao.
         Order returnedOrder = orderDao.create(builtOrder);
 
-        // Record the notes id number.
+        // Record the orders id number.
         int id = builtOrder.getId();
 
         BasicOrder basicOrder = orderDao.resolveOrderCommand(builtOrder);
@@ -2542,17 +2572,18 @@ public class OrderDaoDbImplTest {
 
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     private Order orderFactory() {
 
-        //Order order = new Order();
+        //Order order = orderFactory();
         ProductDao productDao = ctx.getBean("productDao", ProductDao.class);
         StateDao stateDao = ctx.getBean("stateDao", StateDao.class);
         OrderDao orderDao = ctx.getBean("orderDao", OrderDao.class);
 
         // The true parameter in the Order Dao constructor signifies a test.
         //OrderDao orderDao = new OrderDao(true);
-        //Order order = new Order();
-        // Verify that the note object that the create method passed back
+        //Order order = orderFactory();
+        // Verify that the order object that the create method passed back
         // was the same one it was given.
         //assertEquals(order, returnedOrder);
         com.mycompany.flooringmasteryweb.dto.State ohio = new com.mycompany.flooringmasteryweb.dto.State();
@@ -2562,10 +2593,13 @@ public class OrderDaoDbImplTest {
         if (stateDao.get(ohio.getStateName()) == null) {
             stateDao.create(ohio);
         } else {
-            stateDao.delete(ohio);
-            if ( null == stateDao.create(ohio) ) {
-                fail("Something is up in state creation.");
-            } 
+
+            stateDao.update(ohio);
+
+//            stateDao.delete(ohio);
+//            if ( null == stateDao.create(ohio) ) {
+//                fail("Something is up in state creation.");
+//            } 
         }
 
         com.mycompany.flooringmasteryweb.dto.Product product = new com.mycompany.flooringmasteryweb.dto.Product();
@@ -2573,21 +2607,17 @@ public class OrderDaoDbImplTest {
         product.setCost(5);
         product.setLaborCost(3);
 
-
         if (productDao.get(product.getProductName()) == null) {
             productDao.create(product);
         } else {
-            productDao.delete(product);
-            if ( null == productDao.create(product) ) {
-                fail("Something is up in product creation.");
-            } 
+            productDao.update(product);
+//            productDao.delete(product);
+//            if ( null == productDao.create(product) ) {
+//                fail("Something is up in product creation.");
+//            } 
         }
 
-
-
-
         //productDao.create(product);
-
         // Make some data for the dto.
         // 1,Wise,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
         String name = "SWC Guild, Test.";
@@ -2610,6 +2640,84 @@ public class OrderDaoDbImplTest {
         Order builtOrder = orderDao.orderBuilder(orderCommand);
 
         return builtOrder;
+    }
+
+    private Boolean isOrderInList(Order order, List<Order> orderList) {
+
+        Order testedOrder = getTheOrderFromTheList(order, orderList);
+
+        return verifyOrder(testedOrder, order);
+
+    }
+
+    private Boolean verifyOrder(Order unresolvedOrder, Order builtOrder) {
+       
+        if (unresolvedOrder == null && builtOrder == null )
+            return true;
+        
+        if (unresolvedOrder == null || builtOrder == null )
+            return false;
+        
+        assertEquals(unresolvedOrder.getId(), builtOrder.getId());
+        assertNotNull(unresolvedOrder);
+        assertNotNull(builtOrder);
+
+        assertEquals(builtOrder.getArea(), unresolvedOrder.getArea(), 0.0005);
+        assertEquals(builtOrder.getClass(), unresolvedOrder.getClass());
+        assertEquals(builtOrder.getCostPerSquareFoot(), unresolvedOrder.getCostPerSquareFoot(), 0.0005);
+        
+        
+        //assertEquals(builtOrder.getDate(), unresolvedOrder.getDate());
+        assertTrue(isSameDay(builtOrder.getDate(), unresolvedOrder.getDate()));
+
+        
+        assertEquals(builtOrder.getId(), unresolvedOrder.getId());
+        assertEquals(builtOrder.getLaborCost(), unresolvedOrder.getLaborCost(), 0.0005);
+        assertEquals(builtOrder.getLaborCostPerSquareFoot(), unresolvedOrder.getLaborCostPerSquareFoot(), 0.0005);
+        assertEquals(builtOrder.getMaterialCost(), unresolvedOrder.getMaterialCost(), 0.0005);
+        assertEquals(builtOrder.getName(), unresolvedOrder.getName());
+        assertTrue(TestUtils.isProductEqual(builtOrder.getProduct(), unresolvedOrder.getProduct()));
+        assertTrue(TestUtils.isStateEqual(builtOrder.getState(), unresolvedOrder.getState()));
+        assertEquals(builtOrder.getTax(), unresolvedOrder.getTax(), 0.0005);
+        assertEquals(builtOrder.getTaxRate(), unresolvedOrder.getTaxRate(), 0.0005);
+        assertEquals(builtOrder.getTotal(), unresolvedOrder.getTotal(), 0.0005);
+
+        return (true);
+
+    }
+
+        private static boolean isSameDay(java.util.Date date1, java.util.Date date2) {
+        if (date1 == null && date2 == null) {
+            return true;
+        }
+        java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("yyyyMMdd");
+
+        if (date1 == null || date2 == null) {
+            return false;
+        }
+        return fmt.format(date1).equals(fmt.format(date2));
+    }
+
+
+    private Order getTheOrderFromTheList(Order order, List<Order> orderList) {
+
+        if (order == null) {
+            return null;
+        }
+
+        Integer id = order.getId();
+
+        Order choosenOrder = null;
+
+        for (Order testOrder : orderList) {
+            if (testOrder.getId() == id) {
+                choosenOrder = testOrder;
+                break;
+            }
+
+        }
+
+        return choosenOrder;
     }
 
 }
