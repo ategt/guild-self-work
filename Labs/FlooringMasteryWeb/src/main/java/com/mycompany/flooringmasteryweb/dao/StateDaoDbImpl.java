@@ -30,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public class StateDaoDbImpl implements StateDao {
 
-    //private NoteDao noteDao;
     private JdbcTemplate jdbcTemplate;
 
     private static final String SQL_INSERT_STATE = "INSERT INTO states ( state_name, state_abbreviation, tax_rate ) VALUES ( ?, ?, ? )";
@@ -41,15 +40,10 @@ public class StateDaoDbImpl implements StateDao {
     private static final String SQL_GET_STATE_ID = "SELECT * FROM states WHERE id =?";
     private static final String SQL_GET_STATE_LIST = "SELECT * FROM states";
 
-//    @Inject
-//    public StateLibraryDbImplementation(NoteDao noteDao) {
-//        this(false, noteDao);
-//    }
     @Inject
     public StateDaoDbImpl(JdbcTemplate jdbcTemplate) {
 
         this.jdbcTemplate = jdbcTemplate;
-        //this.noteDao = noteDao;
     }
 
     @Override
@@ -194,7 +188,13 @@ public class StateDaoDbImpl implements StateDao {
         //int id = state.getId();
         String name = state.getStateName();
 
+        try {
         jdbcTemplate.update(SQL_DELETE_STATE, name);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            
+        }
+
+
     }
 
     private static final String SQL_GET_STATE_NAMES = "SELECT state_abbreviation FROM states";

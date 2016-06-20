@@ -31,7 +31,7 @@ public class ProductDaoDbImplTest {
     ApplicationContext ctx;
 
     public ProductDaoDbImplTest() {
-        ctx = new ClassPathXmlApplicationContext("testProductDb-ApplicationContext.xml");
+        ctx = new ClassPathXmlApplicationContext("testProductDb-DedicatedApplicationContext.xml");
     }
 
     @Before
