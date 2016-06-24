@@ -27,7 +27,7 @@ public class FileUploadController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/")
     public String provideUploadInfo(Model model) {
-        File rootFolder = new File(Application.ROOT);
+        File rootFolder = new File("/");
         List<String> fileNames = Arrays.stream(rootFolder.listFiles())
                 .map(f -> f.getName())
                 .collect(Collectors.toList());
@@ -58,7 +58,7 @@ public class FileUploadController {
         if (!file.isEmpty()) {
             try {
                 BufferedOutputStream stream = new BufferedOutputStream(
-                        new FileOutputStream(new File(Application.ROOT + "/" + name)));
+                        new FileOutputStream(new File("/" + name)));
                 FileCopyUtils.copy(file.getInputStream(), stream);
                 stream.close();
                 redirectAttributes.addFlashAttribute("message",
