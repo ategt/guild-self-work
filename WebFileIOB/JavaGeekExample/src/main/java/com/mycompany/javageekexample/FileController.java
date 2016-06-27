@@ -31,9 +31,10 @@ import org.springframework.web.multipart.MultipartFile;
 //import com.javacodegeeks.snippets.enterprise.fileupload.model.File;
 //import com.javacodegeeks.snippets.enterprise.fileupload.validator.FileValidator;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/file.htm")
+@RequestMapping("/fileControl")
 public class FileController {
 
     @Autowired
@@ -44,7 +45,7 @@ public class FileController {
         binder.setValidator(validator);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, value="/")
     public String getForm(Model model) {
         java.io.File fileImagesDir = new java.io.File("./uploadedImages");
         if (!fileImagesDir.exists()) {
@@ -87,7 +88,7 @@ public class FileController {
         return "fileView";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, value="/")
     public String fileUploaded(Model model, @Validated File file,
             BindingResult result) {
 
@@ -148,5 +149,78 @@ public class FileController {
             }
         }
         return returnVal;
+    }
+
+    @RequestMapping(value = "/upload/", method = RequestMethod.GET)
+    public String ajaxFilePreUploaded(Model model){
+        return "fileDrop";
+    }
+    
+    
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public Boolean ajaxFileUploaded(Model model, @Validated File file,
+            BindingResult result) {
+
+        String filePath = "";
+
+        //String returnVal = "successFile";
+        if (result.hasErrors()) {
+
+            //returnVal = "fileView";
+            return false;
+        } else {
+            InputStream inputStream = null;
+            try {
+                MultipartFile multipartFile = file.getFile();
+                //multipartFile.
+                // IOUtils.copy(byteArrayInputStream, new FileOutputStream(outputFileName));
+
+                inputStream = multipartFile.getInputStream();
+
+                java.io.File fileImagesDir = new java.io.File("./uploadedImages");
+                if (!fileImagesDir.exists()) {
+                    fileImagesDir.mkdir();
+                }
+
+                java.io.File outputFile = new java.io.File("test.file");
+                filePath = outputFile.getAbsolutePath();
+                OutputStream outputStream = new FileOutputStream(outputFile);
+                IOUtils.copy(inputStream, outputStream);
+                model.addAttribute("filePath", filePath);
+
+                String originalName = multipartFile.getOriginalFilename();
+                String contentType = multipartFile.getContentType();
+                Long fileSize = multipartFile.getSize();
+                String multipartFileName = multipartFile.getName();
+
+                model.addAttribute("originalName", originalName);
+                model.addAttribute("contentType", contentType);
+                model.addAttribute("fileSize", fileSize);
+                model.addAttribute("multipartFileName", multipartFileName);
+
+                java.io.File saveFile = null;
+                if (fileImagesDir.isDirectory()) {
+                    saveFile = new java.io.File(fileImagesDir.getAbsolutePath() + "/" + originalName);
+                }
+
+                InputStream secondInputStream = multipartFile.getInputStream();
+                IOUtils.copy(secondInputStream, new FileOutputStream(saveFile));
+                String savedPath = saveFile.getAbsolutePath();
+                model.addAttribute("savedPath", savedPath);
+
+
+            } catch (IOException ex) {
+                Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    inputStream.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return true;
+       // return returnVal;
     }
 }

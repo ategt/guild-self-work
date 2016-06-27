@@ -3,8 +3,28 @@
 
 <html>
 
+    <head>
+
+        <style>
+
+            #dragandrophandler
+            {
+                border:2px dotted black;
+                width:400px;
+/*                color:#92AAB0;*/
+                /*text-align:left;vertical-align:middle;*/
+                padding:10px 10px 10px 10px;
+                margin-bottom:10px;
+                /*font-size:200%;*/
+            }
+
+        </style>
+
+    </head>
+
     <body> 
 
+        <div id="dragandrophandler">
         <h2>Spring MVC - Uploading a file.. </h2>
         <form:form method="POST" commandName="file"	enctype="multipart/form-data">
 
@@ -13,48 +33,15 @@
             <input type="submit" value="upload" />
             <form:errors path="file" cssStyle="color: #ff0000;" />
 
-            <fieldset id="zone">
-                <legend>Drop a file inside...</legend>
-                <p>Or click here to <em>Browse</em>...</p>
-            </fieldset>
-
         </form:form>
 
-
-
+        </div>
+        
         <script>
-
-            // We can deal with iframe uploads using this URL:
-            var options = {iframe: {url: ''}};
-// 'zone' is an ID but you can also give a DOM node:
-            var zone = new FileDrop('zone', options);
-
-// Do something when a user chooses or drops a file:
-            zone.event('send', function (files) {
-// FileList might contain multiple items.
-                files.each(function (file) {
-
-
-                    file.event('done', function (xhr) {
-                        // Here, 'this' points to fd.File instance.
-                        alert(xhr.responseText);
-                    });
-
-// Send the file:
-                    file.sendTo('file.htm');
-                });
-            });
-
-
-            zone.event('iframeDone', function (xhr) {
-                alert(xhr.responseText);
-            });
-
-
+            var contextRoot = "${pageContext.request.contextPath}";
         </script>
 
-        
-          <script src="${pageContext.request.contextPath}/js/filedrop.min.js"></script>
-            <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/dropfile.js"></script>
     </body>
 </html>
