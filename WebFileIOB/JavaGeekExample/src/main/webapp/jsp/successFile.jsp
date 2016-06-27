@@ -9,6 +9,11 @@
 <body>
 <h2>Spring MVC - Uploading a file.. </h2>
 <p>Your file is successfully uploaded.</p>
-<p>${filePath}</p>
+<p>Path: ${filePath}</p>
+<p>Original Name: ${originalName}</p>
+<p>Content Type: ${contentType}</p>
+<p>File Size: ${fileSize}</p>
+<p>File Name: ${multipartFileName}</p>
+
 </body>
 </html>

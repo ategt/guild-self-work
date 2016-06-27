@@ -20,5 +20,10 @@ public class FileValidator implements Validator {
 		  if (file.getFile().getSize() == 0) {
 		   errors.rejectValue("file", "valid.file");
 		  }
+                  
+                  // The Maximum File upload size is 5 GB.
+                  if (file.getFile().getSize() > 5368709120L) {
+		   errors.rejectValue("file", "valid.file");
+		  }
 	}
 }

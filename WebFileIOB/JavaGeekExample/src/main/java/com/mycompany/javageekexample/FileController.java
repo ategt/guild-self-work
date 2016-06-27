@@ -69,6 +69,18 @@ public class FileController {
                 IOUtils.copy(inputStream, outputStream);
                 model.addAttribute("filePath", filePath);
 
+                String originalName = multipartFile.getOriginalFilename();
+                String contentType = multipartFile.getContentType();
+                Long fileSize = multipartFile.getSize();
+                String multipartFileName = multipartFile.getName();
+                
+                model.addAttribute("originalName", originalName);
+                model.addAttribute("contentType", contentType);
+                model.addAttribute("fileSize", fileSize);
+                model.addAttribute("multipartFileName", multipartFileName);
+
+                
+                
             } catch (IOException ex) {
                 Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
