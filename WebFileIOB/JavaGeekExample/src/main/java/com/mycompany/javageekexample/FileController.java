@@ -3,9 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.mycompany.javageekexample;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,31 +31,54 @@ import org.springframework.validation.BindingResult;
 @RequestMapping("/file.htm")
 public class FileController {
 
-	@Autowired
-	FileValidator validator;
+    @Autowired
+    FileValidator validator;
 
-	@InitBinder
-	private void initBinder(WebDataBinder binder) {
-		binder.setValidator(validator);
-	}
+    @InitBinder
+    private void initBinder(WebDataBinder binder) {
+        binder.setValidator(validator);
+    }
 
-	@RequestMapping(method = RequestMethod.GET)
-	public String getForm(Model model) {
-		File fileModel = new File();
-		model.addAttribute("file", fileModel);
-		return "fileView";
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    public String getForm(Model model) {
+        File fileModel = new File();
+        model.addAttribute("file", fileModel);
+        return "fileView";
+    }
 
-	@RequestMapping(method = RequestMethod.POST)
-	public String fileUploaded(Model model, @Validated File file,
-			BindingResult result) {
+    @RequestMapping(method = RequestMethod.POST)
+    public String fileUploaded(Model model, @Validated File file,
+            BindingResult result) {
 
-		String returnVal = "successFile";
-		if (result.hasErrors()) {
-			returnVal = "fileView";
-		} else {			
-			MultipartFile multipartFile = file.getFile();
-		}
-		return returnVal;
-	}
+        String filePath = "";
+
+        String returnVal = "successFile";
+        if (result.hasErrors()) {
+            returnVal = "fileView";
+        } else {
+            InputStream inputStream = null;
+            try {
+                MultipartFile multipartFile = file.getFile();
+                //multipartFile.
+                // IOUtils.copy(byteArrayInputStream, new FileOutputStream(outputFileName));
+
+                inputStream = multipartFile.getInputStream();
+                java.io.File outputFile = new java.io.File("test.file");
+                filePath = outputFile.getAbsolutePath();
+                OutputStream outputStream = new FileOutputStream(outputFile);
+                IOUtils.copy(inputStream, outputStream);
+                model.addAttribute("filePath", filePath);
+
+            } catch (IOException ex) {
+                Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    inputStream.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return returnVal;
+    }
 }

@@ -8,6 +8,7 @@
 <html>
 <body>
 <h2>Spring MVC - Uploading a file.. </h2>
-Your file is successfully uploaded.
+<p>Your file is successfully uploaded.</p>
+<p>${filePath}</p>
 </body>
 </html>
