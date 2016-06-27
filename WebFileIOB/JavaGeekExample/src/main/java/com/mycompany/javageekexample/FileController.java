@@ -5,10 +5,15 @@
  */
 package com.mycompany.javageekexample;
 
+import java.io.FileFilter;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
@@ -41,8 +46,44 @@ public class FileController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String getForm(Model model) {
-        File fileModel = new File();
-        model.addAttribute("file", fileModel);
+        java.io.File fileImagesDir = new java.io.File("./uploadedImages");
+        if (!fileImagesDir.exists()) {
+            fileImagesDir.mkdir();
+        }
+
+        java.io.File[] images = fileImagesDir.listFiles(new FileFilter() {
+
+            private final String[] okFileExtensions
+                    = new String[]{"jpg", "jpeg", "png", "gif"};
+
+            public boolean accept(java.io.File pathname) {
+                for (String extension : okFileExtensions) {
+                    if (pathname.getName().toLowerCase().endsWith(extension)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+        });
+
+        //List<java.io.File> imageList = new ArrayList();
+        //images
+        model.addAttribute("images", images);
+
+        File imageFolder = new File();
+
+//        File rootFolder = new File(Application.ROOT);
+//		List<String> fileNames = Arrays.stream(rootFolder.listFiles())
+//			.map(f -> f.getName())
+//			.collect(Collectors.toList());
+//
+//		model.addAttribute("files",
+//			Arrays.stream(rootFolder.listFiles())
+//					.sorted(Comparator.comparingLong(f -> -1 * f.lastModified()))
+//					.map(f -> f.getName())
+//					.collect(Collectors.toList())
+//		);
         return "fileView";
     }
 
@@ -63,6 +104,12 @@ public class FileController {
                 // IOUtils.copy(byteArrayInputStream, new FileOutputStream(outputFileName));
 
                 inputStream = multipartFile.getInputStream();
+
+                java.io.File fileImagesDir = new java.io.File("./uploadedImages");
+                if (!fileImagesDir.exists()) {
+                    fileImagesDir.mkdir();
+                }
+
                 java.io.File outputFile = new java.io.File("test.file");
                 filePath = outputFile.getAbsolutePath();
                 OutputStream outputStream = new FileOutputStream(outputFile);
@@ -73,14 +120,23 @@ public class FileController {
                 String contentType = multipartFile.getContentType();
                 Long fileSize = multipartFile.getSize();
                 String multipartFileName = multipartFile.getName();
-                
+
                 model.addAttribute("originalName", originalName);
                 model.addAttribute("contentType", contentType);
                 model.addAttribute("fileSize", fileSize);
                 model.addAttribute("multipartFileName", multipartFileName);
 
-                
-                
+                java.io.File saveFile = null;
+                if (fileImagesDir.isDirectory()) {
+                    saveFile = new java.io.File(fileImagesDir.getAbsolutePath() + "/" + originalName);
+                }
+
+                InputStream secondInputStream = multipartFile.getInputStream();
+                IOUtils.copy(secondInputStream, new FileOutputStream(saveFile));
+                String savedPath = saveFile.getAbsolutePath();
+                model.addAttribute("savedPath", savedPath);
+
+
             } catch (IOException ex) {
                 Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
