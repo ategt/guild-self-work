@@ -25,9 +25,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class FileUploadController {
 
-    @RequestMapping(method = RequestMethod.GET, value = "/")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String provideUploadInfo(Model model) {
-        File rootFolder = new File("/");
+        File rootFolder = new File(Application.ROOT);
+        //File rootFolder = new File("/");
         List<String> fileNames = Arrays.stream(rootFolder.listFiles())
                 .map(f -> f.getName())
                 .collect(Collectors.toList());
@@ -42,7 +43,7 @@ public class FileUploadController {
         return "uploadForm";
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/")
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     public String handleFileUpload(@RequestParam("name") String name,
             @RequestParam("file") MultipartFile file,
             RedirectAttributes redirectAttributes) {
@@ -58,7 +59,7 @@ public class FileUploadController {
         if (!file.isEmpty()) {
             try {
                 BufferedOutputStream stream = new BufferedOutputStream(
-                        new FileOutputStream(new File("/" + name)));
+                        new FileOutputStream(new File(Application.ROOT + "/" + name)));
                 FileCopyUtils.copy(file.getInputStream(), stream);
                 stream.close();
                 redirectAttributes.addFlashAttribute("message",
