@@ -12,7 +12,7 @@
                 border:2px dotted black;
                 width:400px;
                 height:400px;
-/*                color:#92AAB0;*/
+                /*color:#92AAB0;*/
                 /*text-align:left;vertical-align:middle;*/
                 padding:10px 10px 10px 10px;
                 margin-bottom:10px;
@@ -26,7 +26,7 @@
     <body> 
 
         <h2>Spring MVC - Uploading a file.. </h2>
-        <form:form method="POST" commandName="file"	enctype="multipart/form-data">
+        <form:form method="POST" commandName="file" enctype="multipart/form-data">
 
             Upload your file please: 
             <input type="file" name="file" />
@@ -37,9 +37,8 @@
 
         <div id="dragandrophandler">
         </div>
-             <br><br>
+        <br><br>
         <div id="status1"></div>
-
         
         <script>
             var contextRoot = "${pageContext.request.contextPath}";
