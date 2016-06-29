@@ -6,25 +6,34 @@
          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
+
+                                                
+
+    <b:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+    <http pattern="/login" security="none" />
+    <!--<http pattern="/" security="none" />-->
+    <http pattern="/css/**" security="none" />
+    <http pattern="/js/**" security="none" />
+
+
     <http auto-config="true" use-expressions="false">
-        <form-login login-processing-url="j_spring_security_check"
+        <csrf disabled="true" />
+        <form-login login-processing-url="/j_spring_security_check"
                     login-page="/login"
                     authentication-failure-url="/login?login_error=1"
         />
-        
-        <logout logout-success-url="/" />
-        
+        <intercept-url pattern="/" access="ROLE_ADMIN" >
+        <logout logout-url="/logout" logout-success-url="/" />
     </http>
-    
     <authentication-manager>
         <authentication-provider>
+            <password-encoder ref="encoder" />
             <jdbc-user-service id="userService" data-source-ref="dataSource"
                                user-by-username-query="select username, password, enabled from user where username=?"
-                               authorities-by-username-query="select u.usernaem, a.authority 
-                                                              from authorites a inner join user u on a.user_id = u.id
+                               authorities-by-username-query="select u.username, a.authority 
+                                                              from authorities a inner join user u on a.user_id = u.id
                                                               where u.username = ?"
             />
         </authentication-provider>
     </authentication-manager>
-    
 </b:beans>
